@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Account' : 'Create New Account' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="accountForm" class="account-form">
+    <!-- Username -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" placeholder="Enter username">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="accountForm.get('username')?.invalid">
+        {{ getErrorMessage('username') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Enter email">
+      <mat-icon matPrefix>email</mat-icon>
+      <mat-error *ngIf="accountForm.get('email')?.invalid">
+        {{ getErrorMessage('email') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password (only for create) -->
+    <mat-form-field *ngIf="!isEditMode" appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" placeholder="Enter password">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-error *ngIf="accountForm.get('password')?.invalid">
+        {{ getErrorMessage('password') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Role -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+      <mat-icon matPrefix>security</mat-icon>
+      <mat-error *ngIf="accountForm.get('role')?.invalid">
+        {{ getErrorMessage('role') }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="accountForm.invalid">
+    {{ isEditMode ? 'Save Changes' : 'Create Account' }}
+  </button>
+</mat-dialog-actions>

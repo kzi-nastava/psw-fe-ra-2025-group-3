@@ -2,11 +2,13 @@
     <div>
         <p>Explorer</p>
         <div id="buttons">
+            <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/accounts"> My Accounts </button>
             <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours"> My Tours </button>
             <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">Login</button>
             <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
             <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>
             <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['equipment']">Manage equipment</button>
+
         </div>
     </div>
 </mat-toolbar>
