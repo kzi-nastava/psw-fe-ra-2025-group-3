@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Tour' : 'Create New Tour' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="tourForm" class="tour-form">
+    <!-- Tour Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tour Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter tour name">
+      <mat-icon matPrefix>explore</mat-icon>
+      <mat-error *ngIf="tourForm.get('name')?.invalid">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea 
+        matInput 
+        formControlName="description" 
+        rows="4"
+        placeholder="Enter detailed tour description">
+      </textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-error *ngIf="tourForm.get('description')?.invalid">
+        {{ getErrorMessage('description') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Difficulty -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Difficulty</mat-label>
+      <mat-select formControlName="difficulty">
+        <mat-option *ngFor="let diff of difficulties" [value]="diff.value">
+          {{ diff.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>terrain</mat-icon>
+    </mat-form-field>
+
+    <!-- Price (edit mode only) -->
+    <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
+      <mat-label>Price (RSD)</mat-label>
+      <input matInput type="number" formControlName="price" min="0" step="100">
+      <mat-icon matPrefix>attach_money</mat-icon>
+      <mat-error *ngIf="tourForm.get('price')?.invalid">
+        {{ getErrorMessage('price') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Tags -->
+    <div class="tags-section">
+      <label class="tags-label">Tags</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Add tags</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Tag selection">
+          <mat-chip-row 
+            *ngFor="let tag of tags" 
+            (removed)="removeTag(tag)"
+            [editable]="false">
+            {{ tag }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input 
+          placeholder="Enter tag and press Enter"
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addTag($event)">
+        <mat-icon matPrefix>label</mat-icon>
+      </mat-form-field>
+      <mat-hint class="tags-hint">
+        Press Enter or comma to add a tag. Maximum 10 tags.
+      </mat-hint>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSubmit()"
+    [disabled]="tourForm.invalid">
+    {{ isEditMode ? 'Save Changes' : 'Create Tour' }}
+  </button>
+</mat-dialog-actions>
