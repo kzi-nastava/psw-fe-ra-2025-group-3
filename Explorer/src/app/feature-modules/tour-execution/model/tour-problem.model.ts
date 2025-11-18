@@ -25,3 +25,18 @@ export enum ProblemPriority {
   High = 2,
   Critical = 3
 }
+
+export interface TourProblemCreateDto {
+  tourId: number;
+  category: ProblemCategory;
+  priority: ProblemPriority;
+  description: string;
+  time: Date;
+}
+
+export interface TourProblemUpdateDto {
+  category: ProblemCategory;
+  priority: ProblemPriority;
+  description: string;
+  time: Date;
+}

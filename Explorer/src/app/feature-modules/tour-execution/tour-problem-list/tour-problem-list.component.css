@@ -4,43 +4,195 @@
   margin: 0 auto;
 }
 
-h2 {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+h2 {
+  margin: 0;
   color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header button {
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.header button:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
 }
 
 .no-problems {
   text-align: center;
-  padding: 40px;
-  background-color: #f5f5f5;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 16px;
+  border: 2px dashed rgba(102, 126, 234, 0.3);
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #667eea;
+  margin-bottom: 16px;
+}
+
+.no-problems p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.no-problems button {
   border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .problems-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 20px;
+  margin-top: 20px;
 }
 
 .problem-card {
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.problem-card:hover {
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+  transform: translateY(-4px);
+  border-color: #667eea;
+}
+
+mat-card-header {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 16px;
+}
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-card-subtitle {
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
 }
 
 .priority-badge {
-  float: right;
   padding: 4px 12px;
   border-radius: 12px;
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 mat-card-content {
   flex-grow: 1;
+  padding: 16px;
+}
+
+.description {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  color: #424242;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f3f5;
+}
+
+.metadata small {
+  color: #757575;
+  font-size: 12px;
 }
 
 mat-card-actions {
   justify-content: flex-end;
+  padding: 12px 16px;
+  background: #fafbfc;
+  border-top: 1px solid #f1f3f5;
+  gap: 8px;
+}
+
+mat-card-actions button {
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+mat-card-actions button[color="primary"] {
+  color: #667eea;
+}
+
+mat-card-actions button[color="primary"]:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+mat-card-actions button[color="warn"]:hover {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .header button {
+    width: 100%;
+  }
+
+  .problems-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h2 {
+    font-size: 24px;
+    text-align: center;
+  }
 }

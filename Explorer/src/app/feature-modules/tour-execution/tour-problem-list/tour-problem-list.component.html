@@ -1,34 +1,57 @@
 <div class="container">
-  <h2>Moji Prijavljeni Problemi</h2>
-
-  <div *ngIf="problems.length === 0" class="no-problems">
-    <p>Nemate prijavljenih problema.</p>
+  <div class="header">
+    <h2>My Reported Problems</h2>
+    <button mat-raised-button color="primary" (click)="onAddNew()" *ngIf="!showForm">
+      <mat-icon>add</mat-icon>
+      Report New Problem
+    </button>
   </div>
 
-  <div *ngIf="problems.length > 0" class="problems-grid">
+  <app-tour-problem-form 
+    *ngIf="showForm"
+    [problem]="selectedProblem"
+    [isEditMode]="isEditMode"
+    (problemCreated)="onProblemCreated($any($event))"
+    (problemUpdated)="onProblemUpdated($any($event))"
+    (formCanceled)="onFormCanceled()">
+  </app-tour-problem-form>
+
+  <div *ngIf="problems.length === 0 && !showForm" class="no-problems">
+    <mat-icon class="empty-icon">report_problem</mat-icon>
+    <p>You have no reported problems.</p>
+    <button mat-raised-button color="primary" (click)="onAddNew()">
+      Report First Problem
+    </button>
+  </div>
+
+  <div *ngIf="problems.length > 0 && !showForm" class="problems-grid">
     <mat-card *ngFor="let problem of problems" class="problem-card">
       <mat-card-header>
         <mat-card-title>
-          Tour ID: {{problem.tourId}}
+          Tour #{{problem.tourId}}
           <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
             {{getPriorityName(problem.priority)}}
           </span>
         </mat-card-title>
         <mat-card-subtitle>
-          {{getCategoryName(problem.category)}} | {{problem.time | date: 'short'}}
+          {{getCategoryName(problem.category)}} | {{problem.time | date: 'dd/MM/yyyy HH:mm'}}
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
-        <p>{{problem.description}}</p>
+        <p class="description">{{problem.description}}</p>
+        <div class="metadata">
+          <small>Reported: {{problem.createdAt | date: 'short'}}</small>
+          <small *ngIf="problem.updatedAt">Modified: {{problem.updatedAt | date: 'short'}}</small>
+        </div>
       </mat-card-content>
 
       <mat-card-actions>
         <button mat-button color="primary" (click)="onEdit(problem)">
-          <mat-icon>edit</mat-icon> Izmeni
+          <mat-icon>edit</mat-icon> Edit
         </button>
         <button mat-button color="warn" (click)="onDelete(problem.id)">
-          <mat-icon>delete</mat-icon> Obriši
+          <mat-icon>delete</mat-icon> Delete
         </button>
       </mat-card-actions>
     </mat-card>

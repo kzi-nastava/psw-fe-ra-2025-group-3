@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TourProblemService } from '../tour-problem.service';
-import { TourProblem, ProblemCategory, ProblemPriority } from '../model/tour-problem.model';
+import { TourProblem, ProblemCategory, ProblemPriority, TourProblemCreateDto, TourProblemUpdateDto } from '../model/tour-problem.model';
 
 @Component({
   selector: 'app-tour-problem-list',
@@ -9,7 +9,9 @@ import { TourProblem, ProblemCategory, ProblemPriority } from '../model/tour-pro
 })
 export class TourProblemListComponent implements OnInit {
   problems: TourProblem[] = [];
-  displayedColumns: string[] = ['id', 'tourId', 'category', 'priority', 'description', 'time', 'actions'];
+  showForm: boolean = false;
+  selectedProblem: TourProblem | null = null;
+  isEditMode: boolean = false;
 
   constructor(private tourProblemService: TourProblemService) { }
 
@@ -24,6 +26,7 @@ export class TourProblemListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading problems:', err);
+        alert('Error loading problems!');
       }
     });
   }
@@ -38,31 +41,87 @@ export class TourProblemListComponent implements OnInit {
 
   getPriorityColor(priority: ProblemPriority): string {
     switch (priority) {
-      case ProblemPriority.Low: return 'green';
-      case ProblemPriority.Medium: return 'orange';
-      case ProblemPriority.High: return 'red';
-      case ProblemPriority.Critical: return 'darkred';
-      default: return 'black';
+      case ProblemPriority.Low: return '#4caf50';
+      case ProblemPriority.Medium: return '#ff9800';
+      case ProblemPriority.High: return '#f44336';
+      case ProblemPriority.Critical: return '#b71c1c';
+      default: return '#9e9e9e';
     }
+  }
+
+  onAddNew(): void {
+    this.selectedProblem = null;
+    this.isEditMode = false;
+    this.showForm = true;
   }
 
   onEdit(problem: TourProblem): void {
-    console.log('Edit problem:', problem);
-    // TODO: Navigate to edit form
+    this.selectedProblem = problem;
+    this.isEditMode = true;
+    this.showForm = true;
   }
 
   onDelete(id: number): void {
-    if (confirm('Da li ste sigurni da želite da obrišete ovu prijavu? Ova akcija se ne može poništiti.')) {
+   if (confirm('Are you sure you want to delete this report? This action cannot be undone.'))  {
       this.tourProblemService.deleteProblem(id).subscribe({
         next: () => {
           this.loadProblems();
-          alert('Problem uspešno obrisan!');
+         alert('Problem successfully deleted!');
         },
         error: (err) => {
           console.error('Error deleting problem:', err);
-          alert('Greška pri brisanju problema!');
+          alert('Error deleting problem!');
         }
       });
     }
+  }
+
+ 
+  onProblemCreated(event: TourProblemCreateDto): void {
+    console.log('=== ON PROBLEM CREATED ===');
+    console.log('Received data:', event);
+    
+    this.tourProblemService.createProblem(event).subscribe({
+      next: (response) => {
+        console.log('SUCCESS! Response:', response);
+        this.loadProblems();
+        this.showForm = false;
+        alert('Problem successfully reported!');
+      },
+      error: (err) => {
+        console.error('ERROR creating problem:', err);
+        console.error('Error details:', err.error);
+        console.error('Error status:', err.status);
+        alert('Error creating problem!');
+      }
+    });
+  }
+
+  onProblemUpdated(event: TourProblemUpdateDto): void {
+    console.log('=== ON PROBLEM UPDATED ===');
+    console.log('Received data:', event);
+    
+    if (this.selectedProblem) {
+      this.tourProblemService.updateProblem(this.selectedProblem.id, event).subscribe({
+        next: (response) => {
+          console.log('SUCCESS! Response:', response);
+          this.loadProblems();
+          this.showForm = false;
+          this.selectedProblem = null;
+          alert('Problem successfully updated!');
+        },
+        error: (err) => {
+          console.error('ERROR updating problem:', err);
+          console.error('Error details:', err.error);
+          alert('Error updating problem!');
+        }
+      });
+    }
+  }
+
+  onFormCanceled(): void {
+    this.showForm = false;
+    this.selectedProblem = null;
+    this.isEditMode = false;
   }
 }
