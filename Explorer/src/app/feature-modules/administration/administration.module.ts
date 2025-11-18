@@ -6,6 +6,7 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountListComponent } from './account-list/account-list.component';
 import { AccountFormComponent } from './account-form/account-form.component';
+import { MonumentListComponent } from './monuments/monument-list/monument-list.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { AccountFormComponent } from './account-form/account-form.component';
     EquipmentFormComponent,
     EquipmentComponent,
     AccountListComponent,
-    AccountFormComponent
+    AccountFormComponent,
+    MonumentListComponent
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,8 @@ import { RegistrationComponent } from '../auth/registration/registration.compone
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component'; //Task 8, Sprint 1
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component'; // Task 1, Sprint 1
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
+import { MonumentListComponent } from 'src/app/feature-modules/administration/monuments/monument-list/monument-list.component';
+
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -19,7 +21,8 @@ const routes: Routes = [
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },//Task 1, Sprint 1
 
 
-  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  {path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard]}
 
 ];
 

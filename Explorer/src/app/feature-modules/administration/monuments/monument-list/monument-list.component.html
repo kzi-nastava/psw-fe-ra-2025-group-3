@@ -1,0 +1,31 @@
+<h2>Spomenici</h2>
+
+<p *ngIf="loading">Učitavanje...</p>
+<p *ngIf="error">{{ error }}</p>
+
+<table *ngIf="!loading && !error && monuments.length > 0; else emptyState">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Naziv</th>
+      <th>Godina</th>
+      <th>Status</th>
+      <th>Lat</th>
+      <th>Lon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of monuments">
+      <td>{{ m.id }}</td>
+      <td>{{ m.name }}</td>
+      <td>{{ m.year }}</td>
+      <td>{{ m.status }}</td>
+      <td>{{ m.latitude }}</td>
+      <td>{{ m.longitude }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #emptyState>
+  <p *ngIf="!loading && !error">Nema spomenika u bazi.</p>
+</ng-template>
