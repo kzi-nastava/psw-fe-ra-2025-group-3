@@ -1,0 +1,36 @@
+<div class="container">
+  <h2>Moji Prijavljeni Problemi</h2>
+
+  <div *ngIf="problems.length === 0" class="no-problems">
+    <p>Nemate prijavljenih problema.</p>
+  </div>
+
+  <div *ngIf="problems.length > 0" class="problems-grid">
+    <mat-card *ngFor="let problem of problems" class="problem-card">
+      <mat-card-header>
+        <mat-card-title>
+          Tour ID: {{problem.tourId}}
+          <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+            {{getPriorityName(problem.priority)}}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{getCategoryName(problem.category)}} | {{problem.time | date: 'short'}}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>{{problem.description}}</p>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="onEdit(problem)">
+          <mat-icon>edit</mat-icon> Izmeni
+        </button>
+        <button mat-button color="warn" (click)="onDelete(problem.id)">
+          <mat-icon>delete</mat-icon> Obriši
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
