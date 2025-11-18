@@ -30,7 +30,6 @@ export interface TourCreateDto {
 }
 
 export interface TourUpdateDto {
-  id?: number;
   name: string;
   description: string;
   difficulty: TourDifficulty;
