@@ -1,0 +1,61 @@
+.profile-container {
+    padding: 32px;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+mat-form-field {
+    width: 100%;
+    font-size: 15px;
+}
+
+mat-label {
+    font-weight: 500;
+}
+
+.edit-toggle, .save-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.save-button {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px solid #f1f3f5;
+}
+
+button[mat-raised-button] {
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+button[mat-raised-button]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+button[mat-raised-button][color="primary"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+        margin: 20px 16px;
+    }
+}
