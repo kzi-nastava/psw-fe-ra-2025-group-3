@@ -6,13 +6,15 @@ import { EquipmentComponent } from 'src/app/feature-modules/administration/equip
 import { AuthGuard } from '../auth/auth.guard';
 import { RegistrationComponent } from '../auth/registration/registration.component';
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component'; //Task 8, Sprint 1
+import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard],},
-  {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]} //Task 8, Sprint 1
+  {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]}, //Task 8, Sprint 1
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
