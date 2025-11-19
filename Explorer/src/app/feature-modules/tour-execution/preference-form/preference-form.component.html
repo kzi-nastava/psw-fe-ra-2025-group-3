@@ -1,0 +1,82 @@
+<div class="preference-form-container">
+  <h3>{{ shouldEdit ? 'Izmeni preference' : 'Kreiraj preference' }}</h3>
+  
+  <form [formGroup]="preferenceForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Težina ture -->
+    <div class="form-group">
+      <label>Težina ture:</label>
+      <mat-radio-group formControlName="difficulty">
+        <mat-radio-button *ngFor="let diff of difficulties" [value]="diff.value">
+          {{ diff.label }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Šetnja -->
+    <div class="form-group">
+      <label>Šetnja (0-3):</label>
+      <mat-radio-group formControlName="walkingRating">
+        <mat-radio-button *ngFor="let rating of getRatingArray(3)" [value]="rating">
+          {{ rating }} {{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Bicikl -->
+    <div class="form-group">
+      <label>Bicikl (0-3):</label>
+      <mat-radio-group formControlName="bicycleRating">
+        <mat-radio-button *ngFor="let rating of getRatingArray(3)" [value]="rating">
+          {{ rating }} {{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Auto -->
+    <div class="form-group">
+      <label>Auto (0-3):</label>
+      <mat-radio-group formControlName="carRating">
+        <mat-radio-button *ngFor="let rating of getRatingArray(3)" [value]="rating">
+          {{ rating }} {{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Čamac -->
+    <div class="form-group">
+      <label>Čamac (0-3):</label>
+      <mat-radio-group formControlName="boatRating">
+        <mat-radio-button *ngFor="let rating of getRatingArray(3)" [value]="rating">
+          {{ rating }} {{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Tagovi -->
+    <div class="form-group">
+      <label>Tagovi (odaberi najmanje jedan):</label>
+      <div class="tags-container">
+        <mat-chip-listbox>
+          <mat-chip-option 
+            *ngFor="let tag of availableTags" 
+            [selected]="isTagSelected(tag)"
+            (click)="toggleTag(tag)">
+            {{ tag }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <p class="selected-tags">Odabrani tagovi: {{ selectedTags.join(', ') || 'Nijedan' }}</p>
+    </div>
+
+    <!-- Dugmići -->
+    <div class="form-actions">
+      <button type="submit" mat-raised-button color="primary">
+        {{ shouldEdit ? 'Sačuvaj izmene' : 'Kreiraj' }}
+      </button>
+      <button type="button" mat-raised-button (click)="onCancel()">
+        Otkaži
+      </button>
+    </div>
+  </form>
+</div>
