@@ -1,0 +1,95 @@
+#tourist-equipment {
+    margin: 20px;
+}
+
+h2 {
+    color: #3f51b5;
+    font-size: 24px;
+}
+
+.equipment-counter {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #e8eaf6;
+    border-radius: 4px;
+}
+
+.equipment-counter p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #3f51b5;
+}
+
+.notification {
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.notification.success {
+    background-color: #c8e6c9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.notification.error {
+    background-color: #ffcdd2;
+    color: #c62828;
+    border: 1px solid #e57373;
+}
+
+.equipment-list {
+    margin-top: 20px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #757575;
+    font-size: 18px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead tr {
+    background-color: #3f51b5;
+    color: #ffffff;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #3f51b5;
+}
+
+tbody tr.owned-equipment {
+    background-color: #e8f5e9 !important;
+    font-weight: 500;
+}
+
+button {
+    margin-left: 10px;
+}
+
+mat-tab-group {
+    margin-top: 20px;
+}

@@ -13,6 +13,9 @@ import { PreferenceOverviewComponent } from './preference-overview/preference-ov
 import { PreferenceFormComponent } from './preference-form/preference-form.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
+import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
+import { MatTabsModule } from '@angular/material/tabs';      
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
 
 
@@ -21,7 +24,8 @@ import { MatChipsModule } from '@angular/material/chips';
     TourProblemListComponent,
     TourProblemFormComponent,
     PreferenceOverviewComponent,
-    PreferenceFormComponent
+    PreferenceFormComponent,
+    TouristEquipmentComponent
   ],
   imports: [
     CommonModule,
@@ -33,10 +37,13 @@ import { MatChipsModule } from '@angular/material/chips';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    MatChipsModule    
+    MatChipsModule,
+    MatTabsModule,     
+    MatCheckboxModule      
   ],
   exports: [
-    TourProblemListComponent 
+    TourProblemListComponent,
+    TouristEquipmentComponent 
   ]
 })
 export class TourExecutionModule { }
