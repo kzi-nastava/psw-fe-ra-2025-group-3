@@ -9,11 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
+import { PreferenceOverviewComponent } from './preference-overview/preference-overview.component';
+
+
 
 @NgModule({
   declarations: [
     TourProblemListComponent,
-    TourProblemFormComponent
+    TourProblemFormComponent,
+    PreferenceOverviewComponent
   ],
   imports: [
     CommonModule,

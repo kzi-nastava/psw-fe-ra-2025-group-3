@@ -1,0 +1,63 @@
+<div id="preference">
+    <p>Moje preference</p>
+    <hr>
+    
+    <div *ngIf="isLoading">
+        <p>Učitavanje...</p>
+    </div>
+
+    <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm">
+        <p>Nemate postavljene preference.</p>
+        <button color="primary" (click)="onAddClicked()" mat-raised-button>
+            Kreiraj preference
+        </button>
+    </div>
+
+    <div id="preference-details" *ngIf="!isLoading && hasPreference && !shouldRenderPreferenceForm">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parametar</th>
+                    <th>Vrednost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Težina ture:</strong></td>
+                    <td>{{ getDifficultyText(preference!.difficulty) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Šetnja:</strong></td>
+                    <td>{{ getRatingStars(preference!.walkingRating) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Bicikl:</strong></td>
+                    <td>{{ getRatingStars(preference!.bicycleRating) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Auto:</strong></td>
+                    <td>{{ getRatingStars(preference!.carRating) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Čamac:</strong></td>
+                    <td>{{ getRatingStars(preference!.boatRating) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Tagovi:</strong></td>
+                    <td>{{ preference!.tags.join(', ') }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 20px;">
+            <button color="primary" (click)="onEditClicked()" mat-raised-button>
+                <mat-icon>edit</mat-icon> Izmeni
+            </button>
+            <button color="warn" (click)="deletePreference()" mat-raised-button style="margin-left: 10px;">
+                <mat-icon>delete</mat-icon> Obriši
+            </button>
+        </div>
+    </div>
+  
+    
+</div>
