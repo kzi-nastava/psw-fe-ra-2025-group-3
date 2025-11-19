@@ -4,11 +4,19 @@
         <div id="buttons">
             <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/accounts"> My Accounts </button>
             <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours"> My Tours </button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">My Equipment</button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/preferences"> My Preferences </button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems"> 
+              My Problems</button>
+            
             <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">Login</button>
             <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
             <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>
             <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['equipment']">Manage equipment</button>
             <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['administration/award-events']"> Manage Awards </button>
+            <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">App ratings</button>
+            <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">My app rating</button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">My app rating</button>
 
         </div>
     </div>

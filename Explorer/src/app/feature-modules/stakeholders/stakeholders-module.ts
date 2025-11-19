@@ -5,10 +5,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { AppRatingListComponent } from './app-rating-list/app-rating-list.component';
+import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
 
 @NgModule({
   declarations: [
-    ProfileComponent
+    ProfileComponent,
+    AppRatingListComponent,
+    MyAppRatingComponent
   ],
   imports: [
     CommonModule,
