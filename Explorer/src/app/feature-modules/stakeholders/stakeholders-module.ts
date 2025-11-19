@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRatingListComponent } from './app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
+import { ClubsModule } from './clubs/clubs.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    ClubsModule
   ],
   exports: [
     ProfileComponent
