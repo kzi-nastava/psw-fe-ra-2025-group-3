@@ -9,11 +9,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
+import { PreferenceOverviewComponent } from './preference-overview/preference-overview.component';
+import { PreferenceFormComponent } from './preference-form/preference-form.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatChipsModule } from '@angular/material/chips';
+
+
 
 @NgModule({
   declarations: [
     TourProblemListComponent,
-    TourProblemFormComponent
+    TourProblemFormComponent,
+    PreferenceOverviewComponent,
+    PreferenceFormComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +31,9 @@ import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule     
+    MatSelectModule,
+    MatRadioModule,
+    MatChipsModule    
   ],
   exports: [
     TourProblemListComponent 
