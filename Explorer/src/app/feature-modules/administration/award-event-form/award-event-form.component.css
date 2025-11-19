@@ -1,0 +1,45 @@
+.award-event-form-card {
+    padding: 20px;
+    background-color: #f0f2f5; 
+}
+
+.award-event-form-card mat-card-header {
+    background-color: #673ab7; 
+    color: white;
+    padding: 16px;
+    margin: -20px -20px 20px -20px; 
+}
+
+.award-event-form-card mat-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.award-event-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+mat-form-field {
+    width: 100%; 
+}
+
+.date-time-group {
+    display: flex;
+    gap: 15px; 
+    width: 100%;
+}
+
+.date-field {
+    flex: 3; 
+}
+
+.time-field {
+    flex: 1.5; 
+}
+
+mat-dialog-actions {
+    margin-top: 20px;
+    padding: 0;
+}

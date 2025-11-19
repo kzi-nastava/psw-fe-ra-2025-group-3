@@ -1,51 +1,32 @@
-<div id="award-events">
+<div class="award-events-container">
     <h2>Upravljanje Godišnjim Dodelama Nagrada</h2>
     <hr>
-    <div id="award-events-details">
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Naziv Dodele</th>
-                    <th>Godina</th>
-                    <th>Status</th>
-                    <th>Početak Glasanja</th>
-                    <th>Kraj Glasanja</th>
-                    <th>Akcije</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let ae of awardEvents">
-                    <td>{{ ae.name }}</td>
-                    <td>{{ ae.year }}</td>
-                    <td>{{ ae.status }}</td>
-                    <td>{{ ae.votingStartDate | date: 'mediumDate' }}</td>
-                    <td>{{ ae.votingEndDate | date: 'mediumDate' }}</td>
-                    <td>
-                        <button color="accent" (click)="deleteAwardEvent(ae.id)" mat-icon-button>
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                        <button color="primary" (click)="onEditClicked(ae)" mat-icon-button>
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <button color="primary" (click)="onAddClicked()" mat-icon-button>
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <div>
-        <xp-award-event-form 
-            *ngIf="shouldRenderAwardEventForm" 
-            [shouldEdit]="shouldEdit" 
-            [awardEvent]="selectedAwardEvent" 
-            (awardEventUpdated)="getAwardEvents()">
-        </xp-award-event-form>
-    </div>
+
+    <button mat-raised-button color="primary" class="add-button" (click)="onAddClicked()">
+        <mat-icon>add</mat-icon> Kreiraj Novu Dodelu
+    </button>
+
+    <div class="award-events-list">
+        <mat-card *ngFor="let ae of awardEvents" class="award-event-card">
+            <mat-card-header>
+                <mat-card-title>{{ ae.name }}</mat-card-title>
+                <mat-card-subtitle>Godina: {{ ae.year }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p><strong>Status:</strong> <span class="status-chip">{{ ae.status }}</span></p>
+                <p><strong>Opis:</strong> {{ ae.description }}</p>
+                <p><strong>Glasanje:</strong> {{ ae.votingStartDate | date: 'mediumDate' }} - {{ ae.votingEndDate | date: 'mediumDate' }}</p>
+            </mat-card-content>
+            <mat-card-actions class="card-actions">
+                <button mat-icon-button color="primary" (click)="onEditClicked(ae)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="accent" (click)="deleteAwardEvent(ae.id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <p *ngIf="awardEvents.length === 0" class="no-data-message">Nema dostupnih dodela nagrada.</p>
     </div>
 </div>
