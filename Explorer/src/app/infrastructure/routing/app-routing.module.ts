@@ -8,6 +8,7 @@ import { RegistrationComponent } from '../auth/registration/registration.compone
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component'; //Task 8, Sprint 1
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component'; // Task 1, Sprint 1
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
+import { AwardEventsComponent } from 'src/app/feature-modules/administration/award-events/award-events.component'; // Task 4, Sprint 1
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -17,7 +18,7 @@ const routes: Routes = [
   {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]}, //Task 8, Sprint 1
 
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },//Task 1, Sprint 1
-
+  { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] }, // Task 4, Sprint 1
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
 

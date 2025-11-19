@@ -1,0 +1,51 @@
+<div id="award-events">
+    <h2>Upravljanje Godišnjim Dodelama Nagrada</h2>
+    <hr>
+    <div id="award-events-details">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Naziv Dodele</th>
+                    <th>Godina</th>
+                    <th>Status</th>
+                    <th>Početak Glasanja</th>
+                    <th>Kraj Glasanja</th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ae of awardEvents">
+                    <td>{{ ae.name }}</td>
+                    <td>{{ ae.year }}</td>
+                    <td>{{ ae.status }}</td>
+                    <td>{{ ae.votingStartDate | date: 'mediumDate' }}</td>
+                    <td>{{ ae.votingEndDate | date: 'mediumDate' }}</td>
+                    <td>
+                        <button color="accent" (click)="deleteAwardEvent(ae.id)" mat-icon-button>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button color="primary" (click)="onEditClicked(ae)" mat-icon-button>
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <button color="primary" (click)="onAddClicked()" mat-icon-button>
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div>
+        <xp-award-event-form 
+            *ngIf="shouldRenderAwardEventForm" 
+            [shouldEdit]="shouldEdit" 
+            [awardEvent]="selectedAwardEvent" 
+            (awardEventUpdated)="getAwardEvents()">
+        </xp-award-event-form>
+    </div>
+    </div>
+</div>
