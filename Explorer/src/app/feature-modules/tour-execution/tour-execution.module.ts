@@ -10,6 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
 import { PreferenceOverviewComponent } from './preference-overview/preference-overview.component';
+import { PreferenceFormComponent } from './preference-form/preference-form.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 
@@ -17,7 +20,8 @@ import { PreferenceOverviewComponent } from './preference-overview/preference-ov
   declarations: [
     TourProblemListComponent,
     TourProblemFormComponent,
-    PreferenceOverviewComponent
+    PreferenceOverviewComponent,
+    PreferenceFormComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +31,9 @@ import { PreferenceOverviewComponent } from './preference-overview/preference-ov
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule     
+    MatSelectModule,
+    MatRadioModule,
+    MatChipsModule    
   ],
   exports: [
     TourProblemListComponent 

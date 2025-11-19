@@ -58,6 +58,12 @@
             </button>
         </div>
     </div>
-  
+    <div *ngIf="shouldRenderPreferenceForm">
+        <xp-preference-form 
+            [shouldEdit]="shouldEdit" 
+            [preference]="preference"
+            (preferenceUpdated)="getPreference(); shouldRenderPreferenceForm = false;">
+        </xp-preference-form>
+    </div>
     
 </div>
