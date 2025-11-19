@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AdministrationService } from '../../administration.service';
 import { Monument } from '../../model/monument.model';
-import { MonumentService } from '../../monument.service';
+import { PagedResults } from 'src/app/shared/model/paged-results.model';
 
 @Component({
   selector: 'xp-monument-list',
@@ -10,31 +11,47 @@ import { MonumentService } from '../../monument.service';
 export class MonumentListComponent implements OnInit {
 
   monuments: Monument[] = [];
-  loading = false;
-  error: string | null = null;
+  selectedMonument: Monument;
+  shouldRenderMonumentForm: boolean = false;
+  shouldEdit: boolean = false;
 
-  constructor(private monumentService: MonumentService) {}
+  constructor(private service: AdministrationService) { }
 
   ngOnInit(): void {
-    this.loadMonuments();
+    this.getMonuments();
   }
 
-  loadMonuments(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.monumentService.getMonuments(0, 100).subscribe({
-      next: (page) => {
-        // PROVERI kako se zove polje u PagedResults:
-        // pogledaj u EquipmentComponent da li koriste page.results ili page.items
-        this.monuments = page.results;   // ako se zove drugačije, samo zameni
-        this.loading = false;
+  getMonuments(): void {
+    this.service.getMonuments().subscribe({
+      next: (result: PagedResults<Monument>) => {
+        this.monuments = result.results;
       },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Greška pri učitavanju spomenika.';
-        this.loading = false;
+      error: () => {
       }
     });
+  }
+
+  deleteMonument(id: number): void {
+    this.service.deleteMonument(id).subscribe({
+      next: () => this.getMonuments()
+    });
+  }
+
+  onEditClicked(monument: Monument): void {
+    this.selectedMonument = monument;
+    this.shouldRenderMonumentForm = true;
+    this.shouldEdit = true;
+  }
+
+  onAddClicked(): void {
+    this.shouldEdit = false;
+    this.shouldRenderMonumentForm = true;
+    this.selectedMonument = undefined as any; 
+  }
+
+  onMonumentUpdated(): void {
+    this.getMonuments();
+    this.shouldRenderMonumentForm = false;
+    this.shouldEdit = false;
   }
 }

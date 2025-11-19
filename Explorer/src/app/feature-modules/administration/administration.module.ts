@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AccountListComponent } from './account-list/account-list.component';
 import { AccountFormComponent } from './account-form/account-form.component';
 import { MonumentListComponent } from './monuments/monument-list/monument-list.component';
+import { MonumentFormComponent } from './monument-form/monument-form.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { MonumentListComponent } from './monuments/monument-list/monument-list.c
     EquipmentComponent,
     AccountListComponent,
     AccountFormComponent,
-    MonumentListComponent
+    MonumentListComponent,
+    MonumentFormComponent
   ],
   imports: [
     CommonModule,

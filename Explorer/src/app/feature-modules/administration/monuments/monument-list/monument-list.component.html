@@ -1,31 +1,68 @@
-<h2>Spomenici</h2>
+<div id="monuments">
+  <p>Monuments</p>
+  <hr>
 
-<p *ngIf="loading">Učitavanje...</p>
-<p *ngIf="error">{{ error }}</p>
+  <div id="monument-details">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Year</th>
+            <th>Status</th>
+            <th>Lat</th>
+            <th>Lon</th>
+            <th></th>
+          </tr>
+        </thead>
 
-<table *ngIf="!loading && !error && monuments.length > 0; else emptyState">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Naziv</th>
-      <th>Godina</th>
-      <th>Status</th>
-      <th>Lat</th>
-      <th>Lon</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let m of monuments">
-      <td>{{ m.id }}</td>
-      <td>{{ m.name }}</td>
-      <td>{{ m.year }}</td>
-      <td>{{ m.status }}</td>
-      <td>{{ m.latitude }}</td>
-      <td>{{ m.longitude }}</td>
-    </tr>
-  </tbody>
-</table>
+        <tbody>
+          <tr *ngFor="let m of monuments">
+            <td>{{ m.name }}</td>
+            <td>{{ m.description }}</td>
+            <td>{{ m.year }}</td>
+            <td>{{ m.status }}</td>
+            <td>{{ m.latitude }}</td>
+            <td>{{ m.longitude }}</td>
+            <td>
+              <button
+                color="accent"
+                (click)="deleteMonument(m.id || 0)"
+                mat-icon-button>
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                color="primary"
+                (click)="onEditClicked(m)"
+                mat-icon-button>
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </tr>
 
-<ng-template #emptyState>
-  <p *ngIf="!loading && !error">Nema spomenika u bazi.</p>
-</ng-template>
+          <!-- plus dugme u posebnom redu -->
+          <tr>
+            <td colspan="7">
+              <button
+                color="primary"
+                (click)="onAddClicked()"
+                mat-icon-button>
+                <mat-icon>add</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <xp-monument-form
+        *ngIf="shouldRenderMonumentForm"
+        [shouldEdit]="shouldEdit"
+        [monument]="selectedMonument"
+        (monumentUpdated)="onMonumentUpdated()">
+      </xp-monument-form>
+    </div>
+  </div>
+</div>

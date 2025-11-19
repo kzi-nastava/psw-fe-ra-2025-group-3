@@ -1,5 +1,5 @@
 export interface Monument {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   year: number;

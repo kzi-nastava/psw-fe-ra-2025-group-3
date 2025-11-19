@@ -1,0 +1,60 @@
+<form [formGroup]="monumentForm">
+  <div>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" type="text" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        formControlName="description">
+      </textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Year</mat-label>
+      <input matInput formControlName="year" type="number" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Active">Active</mat-option>
+        <mat-option value="Inactive">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Latitude</mat-label>
+      <input matInput formControlName="latitude" type="number" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Longitude</mat-label>
+      <input matInput formControlName="longitude" type="number" />
+    </mat-form-field>
+
+    <button
+      *ngIf="!shouldEdit"
+      color="primary"
+      type="submit"
+      (click)="addMonument()"
+      mat-raised-button>
+      Done
+    </button>
+
+    <button
+      *ngIf="shouldEdit"
+      color="primary"
+      type="submit"
+      (click)="updateMonument()"
+      mat-raised-button>
+      Done
+    </button>
+  </div>
+</form>
