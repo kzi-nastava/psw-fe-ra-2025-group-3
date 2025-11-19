@@ -10,6 +10,7 @@ import { AccountListComponent } from 'src/app/feature-modules/administration/acc
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component'; //Task 9, Sprint 1
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execution/preference-overview/preference-overview.component';  //Task 11, Sprint 1
+import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component'; // Task 10, Sprint 1
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -25,9 +26,9 @@ const routes: Routes = [
   {path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard]}, //Task 9, Sprint 1
 
 
-   {path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard]} // Preference - Task 11, Sprint 1
+   {path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard]}, // Preference - Task 11, Sprint 1
 
-
+   {path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]} // Tourist Equipment - Task 10, Sprint 1
 
 
 ];

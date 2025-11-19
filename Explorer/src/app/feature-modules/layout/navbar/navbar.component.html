@@ -4,6 +4,7 @@
         <div id="buttons">
             <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/accounts"> My Accounts </button>
             <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours"> My Tours </button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">My Equipment</button>
             <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/preferences"> My Preferences </button>
             <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems"> 
               My Problems</button>
