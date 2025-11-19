@@ -9,6 +9,8 @@
             <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>
             <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['equipment']">Manage equipment</button>
             <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">App ratings</button>
+            <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">My app rating</button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">My app rating</button>
 
         </div>
     </div>

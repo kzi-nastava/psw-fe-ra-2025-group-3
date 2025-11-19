@@ -9,6 +9,8 @@ import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-l
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component'; // Task 1, Sprint 1
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component'; //Task 6, Sprint 1
+import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-app-rating/my-app-rating.component'; //Task 6, Sprint 1
+
 
 
 const routes: Routes = [
@@ -21,6 +23,8 @@ const routes: Routes = [
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },//Task 1, Sprint 1
 
   {path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard]}, //Task 6, Sprint 1
+  {path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: {role: 'author'}}, //Task 6, Sprint 1
+  {path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: {role: 'tourist'}}, //Task 6, Sprint 1
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
 
