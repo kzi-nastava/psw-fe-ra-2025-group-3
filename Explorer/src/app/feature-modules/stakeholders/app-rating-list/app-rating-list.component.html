@@ -1,0 +1,32 @@
+<div id="app-ratings">
+  <p>Application ratings</p>
+  <hr>
+
+  <div id="ratings-details">
+    <table *ngIf="ratings && ratings.length > 0; else noRatings">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Rating</th>
+          <th>Comment</th>
+          <th>Created at</th>
+          <th>Updated at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of ratings">
+          <td>{{ r.username }}</td>
+          <td>{{ r.rating }}</td>
+          <td>{{ r.comment }}</td>
+          <td>{{ r.createdAt | date:'short' }}</td>
+          <td>{{ r.updatedAt ? (r.updatedAt | date:'short') : '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noRatings>
+      <p>No ratings yet.</p>
+    </ng-template>
+  </div>
+</div>
+

@@ -1,0 +1,66 @@
+#my-rating {
+  margin-top: 20px;
+  margin-left: 20px;
+  max-width: 400px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+label {
+  margin-bottom: 4px;
+}
+
+textarea {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.meta {
+  margin-top: 16px;
+  font-size: 12px;
+  color: #555;
+}
+
+/* ⭐ STAR RATING STYLE */
+.stars {
+  display: flex;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.star {
+  font-size: 30px;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.15s ease-in-out, transform 0.1s;
+}
+
+.star.selected {
+  color: #ffc107;
+}
+
+.star:hover {
+  transform: scale(1.15);
+}
+
+.current-rating {
+  font-size: 13px;
+  color: #555;
+  margin-top: 2px;
+}

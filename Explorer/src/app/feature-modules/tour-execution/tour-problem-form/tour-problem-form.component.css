@@ -1,0 +1,110 @@
+.form-card {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+mat-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px 32px;
+  margin: 0;
+}
+
+mat-card-title {
+  color: white !important;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+mat-card-content {
+  padding: 24px 32px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 15px;
+}
+
+mat-label {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+mat-hint {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #f1f3f5;
+  background: #fafbfc;
+  padding: 20px 0;
+}
+
+.form-actions button {
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.form-actions button[mat-raised-button] {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.form-actions button[mat-raised-button]:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.form-actions button[mat-button] {
+  color: #667eea;
+}
+
+@media (max-width: 600px) {
+  .form-card {
+    margin: 10px;
+  }
+
+  mat-card-header {
+    padding: 20px 24px;
+  }
+
+  mat-card-title {
+    font-size: 20px;
+  }
+
+  mat-card-content {
+    padding: 20px 24px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    padding: 16px 0;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
