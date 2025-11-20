@@ -1,13 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
 import { EquipmentFormComponent } from './equipment-form/equipment-form.component';
 import { EquipmentComponent } from './equipment/equipment.component';
-import { MaterialModule } from 'src/app/infrastructure/material/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AccountListComponent } from './account-list/account-list.component';
 import { AccountFormComponent } from './account-form/account-form.component';
 import { AwardEventsComponent } from './award-events/award-events.component';
 import { AwardEventFormComponent } from './award-event-form/award-event-form.component';
+
+import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+
+
+import { FacilityListComponent } from './facility-list/facility-list.component';
+import { FacilityFormComponent } from './facility-form/facility-form.component';
+import { FacilityEditComponent } from './facility-edit/facility-edit.component';
+
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -25,12 +35,18 @@ import { MatChipsModule } from '@angular/material/chips';
     AccountListComponent,
     AccountFormComponent,
     AwardEventsComponent,
-    AwardEventFormComponent
+    AwardEventFormComponent,
+
+   
+    FacilityListComponent,
+    FacilityFormComponent,
+    FacilityEditComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
+
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -39,7 +55,10 @@ import { MatChipsModule } from '@angular/material/chips';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatChipsModule
+    MatChipsModule,
+
+  
+    RouterModule
   ],
   exports: [
     EquipmentComponent,
@@ -47,7 +66,12 @@ import { MatChipsModule } from '@angular/material/chips';
     AccountListComponent,
     AccountFormComponent,
     AwardEventsComponent,     
-    AwardEventFormComponent
+    AwardEventFormComponent,
+
+    
+    FacilityListComponent,
+    FacilityFormComponent,
+    FacilityEditComponent
   ]
 })
 export class AdministrationModule { }

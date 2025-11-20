@@ -22,7 +22,7 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,   
     LayoutModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -44,4 +44,4 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

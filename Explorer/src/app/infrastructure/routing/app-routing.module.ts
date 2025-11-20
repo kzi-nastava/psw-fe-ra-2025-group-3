@@ -16,31 +16,39 @@ import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execut
 import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component'; // Task 10, Sprint 1
 
 
+import { FacilityListComponent } from 'src/app/feature-modules/administration/facility-list/facility-list.component';
+import { FacilityFormComponent } from 'src/app/feature-modules/administration/facility-form/facility-form.component';
+import { FacilityEditComponent } from 'src/app/feature-modules/administration/facility-edit/facility-edit.component';
+
 const routes: Routes = [
-  {path: 'home', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegistrationComponent},
-  {path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard],},
-  {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]}, //Task 8, Sprint 1
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegistrationComponent },
 
-  { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },//Task 1, Sprint 1
+  { path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
+  { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] }, //Task 8, Sprint 1
 
-  {path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard]}, //Task 6, Sprint 1
-  {path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: {role: 'author'}}, //Task 6, Sprint 1
-  {path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: {role: 'tourist'}}, //Task 6, Sprint 1
-
-  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-  {path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard]}, //Task 9, Sprint 1
+  { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] }, // Task 1, Sprint 1
 
 
-  {path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard]}, // Preference - Task 11, Sprint 1
+  { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
+  { path: 'administration/facilities/new', component: FacilityFormComponent, canActivate: [AuthGuard] },
+  { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
 
-  {path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]}, // Tourist Equipment - Task 10, Sprint 1
+  { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] }, //Task 6, Sprint 1
+  { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } }, //Task 6, Sprint 1
+  { path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //Task 6, Sprint 1
+
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] }, //Task 9, Sprint 1
+
+  { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },  //Task 11, Sprint 1
+
+  { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard] }, // Task 10, Sprint 1
 
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] }, // Task 4, Sprint 1
 
-  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
-
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

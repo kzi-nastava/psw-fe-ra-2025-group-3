@@ -1,0 +1,34 @@
+<h2>Izmeni objekat</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Naziv</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Latitude</mat-label>
+    <input matInput type="number" formControlName="latitude">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Longitude</mat-label>
+    <input matInput type="number" formControlName="longitude">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Kategorija</mat-label>
+    <mat-select formControlName="category">
+      <mat-option value="WC">WC</mat-option>
+      <mat-option value="Restoran">Restoran</mat-option>
+      <mat-option value="Parking">Parking</mat-option>
+      <mat-option value="Ostalo">Ostalo</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">
+    Sačuvaj izmene
+  </button>
+
+</form>

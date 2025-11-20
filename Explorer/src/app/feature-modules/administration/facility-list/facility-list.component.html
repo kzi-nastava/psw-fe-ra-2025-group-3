@@ -1,0 +1,35 @@
+
+<h1>Turistički objekti</h1>
+
+<button routerLink="/admin/facilities/new">Dodaj objekat</button>
+
+<div *ngIf="loading">Učitavanje...</div>
+
+<div *ngIf="!loading && facilities.length === 0">
+  <p>Nema nijednog objekta.</p>
+</div>
+
+<table *ngIf="facilities.length > 0">
+  <thead>
+    <tr>
+      <th>Naziv</th>
+      <th>Kategorija</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th>Akcije</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let f of facilities">
+      <td>{{ f.name }}</td>
+      <td>{{ f.category }}</td>
+      <td>{{ f.latitude }}</td>
+      <td>{{ f.longitude }}</td>
+      <td>
+        <button [routerLink]="['/admin/facilities/edit', f.id]">Izmeni</button>
+        <button (click)="deleteFacility(f.id)">Obriši</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
