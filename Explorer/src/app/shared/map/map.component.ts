@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { MapService } from './map.service';
 
 @Component({
   selector: 'xp-map',
@@ -9,7 +10,7 @@ import * as L from 'leaflet';
 export class MapComponent implements AfterViewInit {
     private map: any;
 
-    constructor() {}
+    constructor(private mapService: MapService) {}
 
     private initMap(): void {
         this.map = L.map('map', {
@@ -28,6 +29,19 @@ export class MapComponent implements AfterViewInit {
         tiles.addTo(this.map);
 
         this.registerOnClick();
+        this.search();
+    }
+
+    search(): void {
+        this.mapService.search('Strazilovska 19, Novi Sad').subscribe({
+            next: (result) => {
+                L.marker([result[0].lat, result[0].lon])
+                .addTo(this.map)
+                .bindPopup('Pozdrav iz Strazilovske 19.')
+                .openPopup();
+            },
+            error: () => {},
+        });
     }
 
     registerOnClick(): void {
@@ -35,11 +49,12 @@ export class MapComponent implements AfterViewInit {
             const coord = e.latlng;
             const lat = coord.lat;
             const lng = coord.lng;
-            console.log(
-                'You clicked the map at latitude: ' + lat + ' and longitude: ' + lng
-            );
-            new L.Marker([lat, lng]).addTo(this.map);
-        })
+            this.mapService.reverseSearch(lat, lng).subscribe((res) => {
+                
+            });
+            const mp = new L.Marker([lat, lng]).addTo(this.map);
+            alert(mp.getLatLng());
+        });
     }
 
     ngAfterViewInit(): void {
