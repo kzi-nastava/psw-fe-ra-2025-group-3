@@ -8,12 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppRatingListComponent } from './app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
 import { ClubsModule } from './clubs/clubs.module';
+import { MeetupListComponent } from './meetups/meetup-list/meetup-list.component';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     AppRatingListComponent,
-    MyAppRatingComponent
+    MyAppRatingComponent,
+    MeetupListComponent
   ],
   imports: [
     CommonModule,

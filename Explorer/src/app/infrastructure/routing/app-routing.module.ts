@@ -14,6 +14,7 @@ import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-ap
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component'; //Task 9, Sprint 1
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execution/preference-overview/preference-overview.component';  //Task 11, Sprint 1
 import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component'; // Task 10, Sprint 1
+import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component'; // Task 13, Sprint 1
 
 
 const routes: Routes = [
@@ -38,6 +39,8 @@ const routes: Routes = [
   {path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]}, // Tourist Equipment - Task 10, Sprint 1
 
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] }, // Task 4, Sprint 1
+
+  {path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
 

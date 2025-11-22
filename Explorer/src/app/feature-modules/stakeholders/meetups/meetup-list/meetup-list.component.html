@@ -1,0 +1,30 @@
+<div class="meetup-list-container">
+  <h1>Meetups</h1>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Loading meetups...</p>
+  </div>
+
+  <div *ngIf="!isLoading && meetups.length === 0" class="empty-state">
+    <h2>No meetups available</h2>
+    <p>There are currently no meetups to display.</p>
+  </div>
+
+  <div *ngIf="!isLoading && meetups.length > 0" class="meetups-grid">
+    <div *ngFor="let meetup of meetups" class="meetup-card">
+      <div class="meetup-header">
+        <h3>{{ meetup.title }}</h3>
+      </div>
+
+      <div class="meetup-content">
+        <p class="datetime">
+          <strong>Date:</strong> {{ meetup.dateTime | date:'short' }}
+        </p>
+        <p class="location">
+          <strong>Location:</strong> {{ meetup.latitude }}, {{ meetup.longitude }}
+        </p>
+        <p class="description">{{ meetup.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
