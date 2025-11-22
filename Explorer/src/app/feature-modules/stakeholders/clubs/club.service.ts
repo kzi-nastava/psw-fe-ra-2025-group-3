@@ -41,13 +41,13 @@ export class ClubService {
   uploadFeaturedImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('files', file);
-    return this.http.post(this.imagesUrl + '/upload-single', formData, { responseType: 'text' });
+    return this.http.post(this.imagesUrl + '/upload-single/club', formData, { responseType: 'text' });
   }
 
   uploadGalleryImages(files: File[]): Observable<string[]> {
     const formData = new FormData();
     files.forEach(f => formData.append('files', f));
-    return this.http.post<string[]>(this.imagesUrl + '/upload-multiple', formData);
+    return this.http.post<string[]>(this.imagesUrl + '/upload-multiple/club', formData);
   }
 
   buildImageUrl(relativeUrl: string): string {
