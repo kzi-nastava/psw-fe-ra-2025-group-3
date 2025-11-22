@@ -26,9 +26,29 @@ export class MapComponent implements AfterViewInit {
             }
         );
         tiles.addTo(this.map);
+
+        this.registerOnClick();
+    }
+
+    registerOnClick(): void {
+        this.map.on('click', (e: any) => {
+            const coord = e.latlng;
+            const lat = coord.lat;
+            const lng = coord.lng;
+            console.log(
+                'You clicked the map at latitude: ' + lat + ' and longitude: ' + lng
+            );
+            new L.Marker([lat, lng]).addTo(this.map);
+        })
     }
 
     ngAfterViewInit(): void {
+        let DefaultIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
+        });
+
+        L.Marker.prototype.options.icon = DefaultIcon;
+        
         this.initMap();
     }
 }
