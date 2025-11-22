@@ -15,6 +15,7 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-module';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
     TourExecutionModule,
     AuthModule,
     HttpClientModule,
-    StakeholdersModule
+    StakeholdersModule,
+    MarkdownModule.forRoot()
   ],
   providers: [
     {

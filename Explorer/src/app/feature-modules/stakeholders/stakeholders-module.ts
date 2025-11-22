@@ -5,15 +5,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AppRatingListComponent } from './app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
 import { ClubsModule } from './clubs/clubs.module';
+import { MeetupListComponent } from './meetups/meetup-list/meetup-list.component';
+import { MeetupFormComponent } from './meetups/meetup-form/meetup-form.component';
+import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     AppRatingListComponent,
-    MyAppRatingComponent
+    MyAppRatingComponent,
+    MeetupListComponent,
+    MeetupFormComponent,
+    MeetupDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +29,9 @@ import { ClubsModule } from './clubs/clubs.module';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ClubsModule
+    MatDialogModule,
+    ClubsModule,
+    MarkdownModule.forChild()
   ],
   exports: [
     ProfileComponent
