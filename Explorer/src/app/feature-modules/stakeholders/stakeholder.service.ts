@@ -12,16 +12,19 @@ import { AccountRegistrationDto } from './model/account-registration.dto';
 export class StakeholderService {
 
   private readonly baseUrl = environment.apiHost + 'stakeholders/person';
+  private readonly profileUrl = environment.apiHost + 'profile';
 
   constructor(private http: HttpClient) {}
 
   
+   // GET PROFILE – koristi profileUrl
   getProfile(): Observable<Person> {
-    return this.http.get<Person>(`${this.baseUrl}`);
+    return this.http.get<Person>(`${this.profileUrl}`);
   }
 
+  // UPDATE PROFILE – koristi profileUrl
   updateProfile(profile: Person): Observable<Person> {
-    return this.http.put<Person>(`${this.baseUrl}`, profile);
+    return this.http.put<Person>(`${this.profileUrl}`, profile);
   }
 
    // GET ALL – vraća listu PersonDto
