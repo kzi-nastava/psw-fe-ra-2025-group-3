@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapService } from './map.service';
 
+
 @Component({
   selector: 'xp-map',
   templateUrl: './map.component.html',
@@ -30,6 +31,32 @@ export class MapComponent implements AfterViewInit {
 
         this.registerOnClick();
         this.search();
+        this.setRoute();
+    }
+
+    setRoute(): void {
+        const routeControl = L.Routing.control({
+            waypoints: [
+                L.latLng(45.2396, 19.8227),
+                L.latLng(45.247549, 19.833369),
+                L.latLng(45.246189, 19.851093)
+            ],
+            router: L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1'
+            })
+        }).addTo(this.map);
+
+        routeControl.on('routesfound', function(e) {
+            const routes = e.routes;
+            const summary = routes[0].summary;
+            alert(
+                'Total distance is ' +
+                summary.totalDistance / 1000 +
+                ' km and total time is ' +
+                Math.round((summary.totalTime % 3600) / 60) +
+                ' minutes'
+            );
+        });
     }
 
     search(): void {
