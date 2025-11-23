@@ -16,6 +16,8 @@ import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execut
 import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component'; // Task 10, Sprint 1
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component'; // Task 13, Sprint 1
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component'; // Task 13, Sprint 1
+import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
+import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
 
 
 const routes: Routes = [
@@ -44,7 +46,8 @@ const routes: Routes = [
   {path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
   {path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
 
-  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]}
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
 
 ];
 

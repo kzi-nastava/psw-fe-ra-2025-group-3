@@ -1,0 +1,109 @@
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+  min-width: 450px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 15px;
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 12px;
+  color: #667eea;
+}
+
+mat-label {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Dialog container i surface */
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  width: 400px !important; /* širina dialoga */
+  max-width: 90vw !important; /* za mobilne uređaje */
+}
+
+/* Dialog title */
+::ng-deep .mat-mdc-dialog-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+/* Dialog content sa scroll-om */
+::ng-deep .mat-mdc-dialog-content {
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  max-height: 60vh !important; /* maksimalna visina */
+  overflow-y: auto !important; /* scroll ako je sadržaj veći */
+  box-sizing: border-box;
+}
+
+/* Dialog actions (sticky dugme) */
+::ng-deep .mat-mdc-dialog-actions {
+  padding: 20px 32px !important;
+  margin: 0 !important;
+  border-top: 2px solid #f1f3f5;
+  background: #fafbfc;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* Dugmad u actions */
+::ng-deep .mat-mdc-dialog-actions button {
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button] {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Responsivni stilovi za mobilne uređaje */
+@media (max-width: 600px) {
+  .account-form {
+    min-width: auto;
+  }
+
+  ::ng-deep .mat-mdc-dialog-title {
+    font-size: 20px !important;
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions {
+    padding: 16px 24px !important;
+    flex-direction: column;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions button {
+    width: 100%;
+  }
+}

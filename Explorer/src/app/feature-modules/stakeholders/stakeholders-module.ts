@@ -13,6 +13,16 @@ import { MeetupListComponent } from './meetups/meetup-list/meetup-list.component
 import { MeetupFormComponent } from './meetups/meetup-form/meetup-form.component';
 import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { ProfileListComponent } from './profile-list/profile-list.component';
+import { MatIconModule } from '@angular/material/icon';
+// Angular Material moduli
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +31,10 @@ import { MarkdownModule } from 'ngx-markdown';
     MyAppRatingComponent,
     MeetupListComponent,
     MeetupFormComponent,
-    MeetupDetailsComponent
+    MeetupDetailsComponent,
+    ProfileFormComponent,
+    ProfileListComponent
+    
   ],
   imports: [
     CommonModule,
@@ -31,10 +44,18 @@ import { MarkdownModule } from 'ngx-markdown';
     MatButtonModule,
     MatDialogModule,
     ClubsModule,
-    MarkdownModule.forChild()
+    MarkdownModule.forChild(),
+    MatIconModule,
+    MatSelectModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   exports: [
-    ProfileComponent
+    ProfileComponent,
+    ProfileFormComponent,
+    ProfileListComponent
   ]
 })
 export class StakeholdersModule { }

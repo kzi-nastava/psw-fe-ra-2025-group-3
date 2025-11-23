@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>Create New Person</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="profileForm" class="profile-form">
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter first name">
+      <mat-icon matPrefix>badge</mat-icon>
+      <mat-error *ngIf="profileForm.get('name')?.invalid">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Surname -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname" placeholder="Enter last name">
+      <mat-icon matPrefix>badge</mat-icon>
+      <mat-error *ngIf="profileForm.get('surname')?.invalid">
+        {{ getErrorMessage('surname') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Username -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" placeholder="Enter username">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="profileForm.get('username')?.invalid">
+        {{ getErrorMessage('username') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" placeholder="Enter password">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-error *ngIf="profileForm.get('password')?.invalid">
+        {{ getErrorMessage('password') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Enter email">
+      <mat-icon matPrefix>email</mat-icon>
+      <mat-error *ngIf="profileForm.get('email')?.invalid">
+        {{ getErrorMessage('email') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Biography -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Biography</mat-label>
+      <textarea matInput formControlName="biography" rows="3" placeholder="Optional"></textarea>
+      <mat-icon matPrefix>description</mat-icon>
+    </mat-form-field>
+
+    <!-- Quote -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Quote</mat-label>
+      <input matInput formControlName="quote" placeholder="Optional">
+      <mat-icon matPrefix>format_quote</mat-icon>
+    </mat-form-field>
+
+    <!-- Role -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+      <mat-icon matPrefix>security</mat-icon>
+      <mat-error *ngIf="profileForm.get('role')?.invalid">
+        {{ getErrorMessage('role') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Active Checkbox -->
+    <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="profileForm.invalid">
+    Create Person
+  </button>
+</mat-dialog-actions>

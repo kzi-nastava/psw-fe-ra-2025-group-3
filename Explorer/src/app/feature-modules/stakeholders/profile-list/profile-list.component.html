@@ -1,0 +1,90 @@
+<div class="profile-list-container">
+
+  <div class="header">
+    <h1>Persons</h1>
+    <button mat-raised-button color="primary" (click)="openForm('create')">
+      <mat-icon>add</mat-icon>
+      Create New Person
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && persons.length === 0" class="empty-state">
+    <mat-icon>person_off</mat-icon>
+    <h2>No persons found</h2>
+    <p>The system currently has no persons listed.</p>
+    <button mat-raised-button color="primary" (click)="openForm('create')">
+      <mat-icon>add</mat-icon>
+      Create First Person
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && persons.length > 0" class="profiles-grid">
+
+    <mat-card *ngFor="let person of displayedPersons" class="profile-card">
+
+      <mat-card-header>
+        <mat-card-title>
+          {{ person.name }} {{ person.surname }}
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <span class="status-badge" [ngClass]="person.isActive ? 'status-active' : 'status-blocked'">
+            {{ getStatusText(person) }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="profile-details">
+
+          <!-- PROFILE PICTURE -->
+          <div class="detail-item" *ngIf="person.profilePictureUrl">
+            <img [src]="person.profilePictureUrl" alt="Profile Picture" class="profile-picture">
+          </div>
+
+          <!-- EMAIL -->
+          <div class="detail-item" *ngIf="person.email">
+            <mat-icon>email</mat-icon>
+            <span>{{ person.email }}</span>
+          </div>
+
+          <!-- BIOGRAPHY -->
+          <div class="detail-item" *ngIf="person.biography">
+            <mat-icon>description</mat-icon>
+            <span>{{ person.biography }}</span>
+          </div>
+
+          <!-- QUOTE -->
+          <div class="detail-item" *ngIf="person.quote">
+            <mat-icon>format_quote</mat-icon>
+            <i>"{{ person.quote }}"</i>
+          </div>
+
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="block(person)" [disabled]="!person.isActive">
+          <mat-icon>block</mat-icon>
+          Block
+        </button>
+
+        <button mat-button color="accent" (click)="unblock(person)" [disabled]="person.isActive">
+          <mat-icon>lock_open</mat-icon>
+          Unblock
+        </button>
+
+      </mat-card-actions>
+
+    </mat-card>
+  </div>
+
+  <div *ngIf="hasMore()" class="show-more-container">
+    <button mat-raised-button (click)="showMore()">Show More</button>
+  </div>
+
+</div>

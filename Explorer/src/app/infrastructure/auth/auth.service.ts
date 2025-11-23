@@ -14,7 +14,14 @@ import { Registration } from './model/registration.model';
   providedIn: 'root'
 })
 export class AuthService {
-  user$ = new BehaviorSubject<User>({username: "", id: 0, role: "" });
+  user$ = new BehaviorSubject<User>({
+  id: 0,
+  username: "",
+  role: "",
+  email: "",
+  password: "",
+  isActive: false
+});
 
   constructor(private http: HttpClient,
     private tokenStorage: TokenStorage,
@@ -45,7 +52,10 @@ export class AuthService {
   logout(): void {
     this.router.navigate(['/home']).then(_ => {
       this.tokenStorage.clear();
-      this.user$.next({username: "", id: 0, role: "" });
+      this.user$.next({username: "", id: 0, role: "",
+  email: "",
+  password: "",
+  isActive: false});
       }
     );
   }
@@ -59,15 +69,20 @@ export class AuthService {
   }
 
   private setUser(): void {
-    const jwtHelperService = new JwtHelperService();
-    const accessToken = this.tokenStorage.getAccessToken() || "";
-    const user: User = {
-      id: +jwtHelperService.decodeToken(accessToken).id,
-      username: jwtHelperService.decodeToken(accessToken).username,
-      role: jwtHelperService.decodeToken(accessToken)[
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-      ],
-    };
-    this.user$.next(user);
-  }
+  const jwtHelperService = new JwtHelperService();
+  const accessToken = this.tokenStorage.getAccessToken() || "";
+  const decoded = jwtHelperService.decodeToken(accessToken);
+
+  const user: User = {
+    id: +decoded.id,
+    username: decoded.username,
+    role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+    email: decoded.email || "",           // ako postoji u tokenu
+    password: "",                          // lozinku nikad ne čuvaj u frontendu
+    isActive: decoded.isActive ?? true     // koristi vrednost iz tokena ako postoji
+  };
+
+  this.user$.next(user);
+}
+
 }
