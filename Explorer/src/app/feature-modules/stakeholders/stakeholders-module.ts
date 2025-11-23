@@ -17,10 +17,8 @@ import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.
 import { MarkdownModule } from 'ngx-markdown';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ProfileListComponent } from './profile-list/profile-list.component';
-import { MatIconModule } from '@angular/material/icon';
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
-import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
