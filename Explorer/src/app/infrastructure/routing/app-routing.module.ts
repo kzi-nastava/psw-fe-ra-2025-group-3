@@ -21,6 +21,7 @@ import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profi
 
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
