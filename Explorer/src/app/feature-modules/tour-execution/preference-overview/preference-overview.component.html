@@ -1,18 +1,21 @@
 <div id="preference">
-    <p>Moje preference</p>
+    <p>Moje Preference</p>
     <hr>
     
-    <div *ngIf="isLoading">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-8">
         <p>Učitavanje...</p>
     </div>
-
-    <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm">
+    
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm" class="empty-state">
         <p>Nemate postavljene preference.</p>
         <button color="primary" (click)="onAddClicked()" mat-raised-button>
             Kreiraj preference
         </button>
     </div>
-
+    
+    <!-- Preference Details -->
     <div id="preference-details" *ngIf="!isLoading && hasPreference && !shouldRenderPreferenceForm">
         <table>
             <thead>
@@ -23,41 +26,46 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Težina ture:</strong></td>
+                    <td>Težina ture</td>
                     <td>{{ getDifficultyText(preference!.difficulty) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Šetnja:</strong></td>
+                    <td>Šetnja</td>
                     <td>{{ getRatingStars(preference!.walkingRating) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Bicikl:</strong></td>
+                    <td>Bicikl</td>
                     <td>{{ getRatingStars(preference!.bicycleRating) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Auto:</strong></td>
+                    <td>Auto</td>
                     <td>{{ getRatingStars(preference!.carRating) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Čamac:</strong></td>
+                    <td>Čamac</td>
                     <td>{{ getRatingStars(preference!.boatRating) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Tagovi:</strong></td>
+                    <td>Tagovi</td>
                     <td>{{ preference!.tags.join(', ') }}</td>
                 </tr>
             </tbody>
         </table>
-
-        <div style="margin-top: 20px;">
+        
+        <!-- Action Buttons -->
+        <div>
             <button color="primary" (click)="onEditClicked()" mat-raised-button>
-                <mat-icon>edit</mat-icon> Izmeni
+                <mat-icon>edit</mat-icon>
+                Izmeni
             </button>
-            <button color="warn" (click)="deletePreference()" mat-raised-button style="margin-left: 10px;">
-                <mat-icon>delete</mat-icon> Obriši
+            <button color="warn" (click)="deletePreference()" mat-raised-button>
+                <mat-icon>delete</mat-icon>
+                Obriši
             </button>
         </div>
     </div>
+    
+    <!-- Preference Form -->
     <div *ngIf="shouldRenderPreferenceForm">
         <xp-preference-form 
             [shouldEdit]="shouldEdit" 
@@ -65,5 +73,4 @@
             (preferenceUpdated)="getPreference(); shouldRenderPreferenceForm = false;">
         </xp-preference-form>
     </div>
-    
 </div>

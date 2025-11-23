@@ -1,26 +1,62 @@
-<mat-toolbar color="primary">
-    <div>
-        <p>Explorer</p>
-        <div id="buttons">
-            <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/profiles"> My Profiles </button>
-            <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours"> My Tours </button>
-                        <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">My Equipment</button>
-                        <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/preferences"> My Preferences </button>
-                        <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems"> 
-                            My Problems</button>
-                        <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs">Clubs</button>
-                        <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs/my">Your Clubs</button>
-                        <button *ngIf="user && (user.role === 'tourist' || user.role === 'author')" mat-button routerLink="/meetups">Meetups</button>
-            
-            <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">Login</button>
-            <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
-            <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>
-            <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['equipment']">Manage equipment</button>
-            <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['administration/award-events']"> Manage Awards </button>
-            <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">App ratings</button>
-            <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">My app rating</button>
-            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">My app rating</button>
-
-        </div>
+<mat-toolbar class="explorer-navbar">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <a routerLink="/home" class="navbar-brand">
+      <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="brand-logo">
+      <div class="brand-text-container">
+        <span class="brand-text-main">TRAVEL</span>
+        <span class="brand-text-sub">VISTA</span>
+      </div>
+    </a>
+    
+    <!-- Navigation Buttons -->
+    <div class="navbar-buttons">
+      <!-- Role-specific buttons -->
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/accounts">
+        My Accounts
+      </button>
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/equipment">
+        Manage Equipment
+      </button>
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">
+        App Ratings
+      </button>
+      
+      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours">
+        My Tours
+      </button>
+      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">
+        My App Rating
+      </button>
+      
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">
+        My Equipment
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/preferences">
+        My Preferences
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems">
+        My Problems
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">
+        My App Rating
+      </button>
+      
+      <!-- Auth & Home buttons with icons -->
+      <button mat-flat-button class="btn-home" routerLink="/home">
+        <img src="assets/icons/home.png" alt="Home" class="btn-icon-img">
+        <span>Home</span>
+      </button>
+      
+      <button *ngIf="!user || user.username === ''" mat-flat-button class="btn-login" routerLink="/login">
+        <img src="assets/icons/user.png" alt="Login" class="btn-icon-img">
+        <span>Login</span>
+      </button>
+      
+      <button *ngIf="user && user.username !== ''" mat-flat-button class="btn-logout" (click)="onLogout()">
+        <img src="assets/icons/user.png" alt="Logout" class="btn-icon-img">
+        <span>Logout</span>
+      </button>
     </div>
+  </div>
 </mat-toolbar>
