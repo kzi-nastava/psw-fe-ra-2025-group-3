@@ -1,0 +1,39 @@
+<div class="meetup-list-container">
+  <div class="header">
+    <h1>Meetups</h1>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      Create Meetup
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Loading meetups...</p>
+  </div>
+
+  <div *ngIf="!isLoading && meetups.length === 0" class="empty-state">
+    <h2>No meetups available</h2>
+    <p>There are currently no meetups to display.</p>
+  </div>
+
+  <div *ngIf="!isLoading && meetups.length > 0" class="meetups-grid">
+    <div *ngFor="let meetup of meetups" class="meetup-card">
+      <div class="meetup-header" (click)="viewDetails(meetup.id)">
+        <h3>{{ meetup.title }}</h3>
+      </div>
+
+      <div class="meetup-content" (click)="viewDetails(meetup.id)">
+        <p class="datetime">
+          <strong>Date:</strong> {{ meetup.dateTime | date:'short' }}
+        </p>
+        <p class="location">
+          <strong>Location:</strong> {{ meetup.latitude }}, {{ meetup.longitude }}
+        </p>
+      </div>
+
+      <div class="meetup-actions" *ngIf="isCreator(meetup)">
+        <button mat-button color="primary" (click)="openEditDialog(meetup)">Edit</button>
+        <button mat-button color="warn" (click)="deleteMeetup(meetup)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

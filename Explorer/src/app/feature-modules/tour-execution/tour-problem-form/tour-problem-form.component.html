@@ -54,16 +54,55 @@
         <mat-hint>Minimum 10 characters</mat-hint>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Problem Time</mat-label>
-        <input matInput 
-               type="datetime-local" 
-               formControlName="time"
-               [max]="maxDate">
-        <mat-error *ngIf="problemForm.get('time')?.hasError('required')">
-          Problem time is required
+      <div class="custom-datetime-picker">
+        <label class="datetime-label">Problem Date & Time</label>
+        
+        <div class="datetime-grid">
+          <mat-form-field appearance="outline" class="datetime-field">
+            <mat-label>Day</mat-label>
+            <mat-select formControlName="day">
+              <mat-option *ngFor="let d of days" [value]="d">{{d}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="datetime-field">
+            <mat-label>Month</mat-label>
+            <mat-select formControlName="month">
+              <mat-option *ngFor="let m of months" [value]="m.value">{{m.label}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="datetime-field">
+            <mat-label>Year</mat-label>
+            <mat-select formControlName="year">
+              <mat-option *ngFor="let y of years" [value]="y">{{y}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="datetime-field">
+            <mat-label>Hour</mat-label>
+            <mat-select formControlName="hour">
+              <mat-option *ngFor="let h of hours" [value]="h">{{h | number:'2.0-0'}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="datetime-field">
+            <mat-label>Minute</mat-label>
+            <mat-select formControlName="minute">
+              <mat-option *ngFor="let m of minutes" [value]="m">{{m | number:'2.0-0'}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-error *ngIf="isDateTimeInvalid()" class="datetime-error">
+          Please select a valid date and time
         </mat-error>
-      </mat-form-field>
+
+        <div *ngIf="futureTimeError" class="future-time-error">
+          <mat-icon>warning</mat-icon>
+          <span>Problem time cannot be in the future. Please select a past or current time.</span>
+        </div>
+      </div>
 
       <div class="form-actions">
         <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid">

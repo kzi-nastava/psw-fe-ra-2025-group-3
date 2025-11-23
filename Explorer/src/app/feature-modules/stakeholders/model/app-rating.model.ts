@@ -12,3 +12,8 @@ export interface AppRatingRequest {
   rating: number;
   comment?: string | null;
 }
+
+export interface PagedResult<T> {
+  results: T[];
+  totalCount: number;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { AppRatingRequest, AppRatingResponse } from './model/app-rating.model';
+import { AppRatingRequest, AppRatingResponse, PagedResult } from './model/app-rating.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,9 @@ export class AppRatingService {
 
   constructor(private http: HttpClient) { }
 
-  getAllRatings(): Observable<AppRatingResponse[]> {
-    return this.http.get<AppRatingResponse[]>(this.adminBaseUrl);
+  getAllRatings(page: number = 1, pageSize: number = 6): Observable<PagedResult<AppRatingResponse>> {
+    return this.http.get<PagedResult<AppRatingResponse>>(
+      `${this.adminBaseUrl}?page=${page}&pageSize=${pageSize}`);
   }
 
   private getUserBaseUrl(role: 'author' | 'tourist'): string {

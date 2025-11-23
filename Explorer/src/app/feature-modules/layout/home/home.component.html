@@ -1,2 +1,214 @@
-<p><b>Home component</b></p>
-<xp-map></xp-map>
+<div class="landing-page">
+  
+  <!-- ============================================================
+       HERO SECTION - Main hook for Tourists
+       ============================================================ -->
+  <section class="hero-section">
+    <div class="hero-backgrounds">
+      <div class="hero-background" 
+           *ngFor="let image of backgroundImages; let i = index"
+           [class.active]="i === currentBackgroundIndex"
+           [style.background-image]="'url(' + image + ')'">
+      </div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <!-- Left side - Text content -->
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Your Next
+          <span class="title-highlight">Adventure</span>
+          Starts Here
+        </h1>
+        
+        <p class="hero-description">
+          Connect with local guides and discover authentic experiences. 
+          Every journey is unique, every story is yours.
+        </p>
+
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-xl" routerLink="/login">
+            <span>Explore Tours</span>
+            <span class="btn-icon">✈</span>
+          </button>
+          <button class="btn btn-secondary-outline btn-xl" routerLink="/register">
+            <span>Become a Guide</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right side - Illustration -->
+      <div class="hero-illustration">
+        <img src="assets/images/layout.png" alt="Travel Adventure" class="illustration-image">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VALUE PROPOSITION - For Tourists
+       ============================================================ -->
+  <section class="value-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-logo-badge">
+          <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="section-logo">
+          <span class="logo-badge-text">WHY TRAVEL VISTA</span>
+        </div>
+        <h2 class="section-title-large">Travel Differently</h2>
+        <p class="section-description-enhanced">
+          Discover what makes Travel Vista the platform for authentic travel experiences
+        </p>
+      </div>
+
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-image-wrapper">
+            <img src="assets/images/slika1.jpg" alt="Local Guides" class="value-image">
+          </div>
+          <div class="value-content">
+            <h3 class="value-title">Connect With Local Guides</h3>
+            <p class="value-text">
+              Meet passionate locals who share their city's hidden gems and authentic stories
+            </p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-image-wrapper">
+            <img src="assets/images/slika2.jpg" alt="Unique Experiences" class="value-image">
+          </div>
+          <div class="value-content">
+            <h3 class="value-title">Unique Experiences</h3>
+            <p class="value-text">
+              Go beyond typical tourist spots and discover places only locals know about
+            </p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-image-wrapper">
+            <img src="assets/images/slika3.jpg" alt="Your Way" class="value-image">
+          </div>
+          <div class="value-content">
+            <h3 class="value-title">Travel Your Way</h3>
+            <p class="value-text">
+              Flexible tours designed around your interests, schedule, and travel style
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOR GUIDES SECTION - Hook for Tour Authors
+       ============================================================ -->
+  <section class="guides-section">
+    <div class="guides-background-image"></div>
+    <div class="guides-overlay"></div>
+    <div class="container guides-container">
+      <div class="guides-content">
+        <div class="guides-visual">
+          <div class="guides-image-container guides-logo-container">
+            <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="guides-main-logo">
+          </div>
+          <div class="guides-visual-text">
+            <div class="passion-icon">
+              <img src="assets/icons/icon4.png" alt="Passion" class="passion-icon-img">
+            </div>
+            <h3 class="guides-visual-title">Share Your Passion</h3>
+            <p class="guides-visual-description">
+              Transform your local expertise into a rewarding career. 
+              Guide travelers through the stories only you can tell.
+            </p>
+          </div>
+        </div>
+
+        <div class="guides-text">
+          <div class="guides-header">
+            <span class="section-badge light"> FOR LOCAL EXPERTS</span>
+            <h2 class="section-title text-white">Become a Travel Vista Guide</h2>
+            <p class="guides-intro">
+              Your city has countless untold stories. Share them with curious travelers 
+              and turn your passion into a thriving side business or full-time career.
+            </p>
+          </div>
+          
+          <div class="guides-features">
+            <div class="feature-highlight">
+              <div class="feature-icon-large">
+                <img src="assets/icons/icon1.png" alt="Create Tours" class="feature-icon-img">
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-highlight-title">Create Your Tours</h3>
+                <p class="feature-highlight-text">
+                  Design unique experiences around your favorite neighborhoods, 
+                  hidden gems, and local secrets that tourists never find.
+                </p>
+              </div>
+            </div>
+
+            <div class="feature-highlight">
+              <div class="feature-icon-large">
+                <img src="assets/icons/icon2.png" alt="Connect" class="feature-icon-img">
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-highlight-title">Connect With Travelers</h3>
+                <p class="feature-highlight-text">
+                  Meet fascinating people from around the world who are eager 
+                  to see your city through a local's eyes.
+                </p>
+              </div>
+            </div>
+
+            <div class="feature-highlight">
+              <div class="feature-icon-large">
+                <img src="assets/icons/icon3.png" alt="Build Reputation" class="feature-icon-img">
+              </div>
+              <div class="feature-content">
+                <h3 class="feature-highlight-title">Build Your Reputation</h3>
+                <p class="feature-highlight-text">
+                  Gather reviews, grow your following, and become a recognized 
+                  expert in your city's travel scene.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="guides-cta-section">
+            <button class="btn btn-white btn-xl" routerLink="/register">
+              <span>Start Your Journey</span>
+              <span class="btn-icon">→</span>
+            </button>
+            <p class="cta-subtext">Join hundreds of guides already sharing their cities on Travel Vista</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="landing-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo-wrapper">
+            <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="footer-logo-img">
+            <div class="footer-logo-text">
+              <span class="footer-logo-main">TRAVEL VISTA</span>
+              <span class="footer-tagline">Discover. Explore. Experience.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2025 Travel Vista. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
