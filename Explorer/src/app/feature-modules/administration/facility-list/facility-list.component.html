@@ -1,7 +1,8 @@
 
 <h1>Turistički objekti</h1>
 
-<button routerLink="/admin/facilities/new">Dodaj objekat</button>
+<button routerLink="/administration/facilities/new">Dodaj objekat</button>
+
 
 <div *ngIf="loading">Učitavanje...</div>
 
@@ -27,7 +28,8 @@
       <td>{{ f.latitude }}</td>
       <td>{{ f.longitude }}</td>
       <td>
-        <button [routerLink]="['/admin/facilities/edit', f.id]">Izmeni</button>
+        <button [routerLink]="['/administration/facilities/edit', f.id]">Izmeni</button>
+
         <button (click)="deleteFacility(f.id)">Obriši</button>
       </td>
     </tr>
