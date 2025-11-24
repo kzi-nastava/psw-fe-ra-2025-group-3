@@ -21,6 +21,7 @@ import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profi
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
