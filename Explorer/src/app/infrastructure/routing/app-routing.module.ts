@@ -14,6 +14,10 @@ import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-ap
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component'; //Task 9, Sprint 1
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execution/preference-overview/preference-overview.component';  //Task 11, Sprint 1
 import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component'; // Task 10, Sprint 1
+import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component'; // Task 13, Sprint 1
+import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component'; // Task 13, Sprint 1
+import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
+import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
 
 
 import { FacilityListComponent } from 'src/app/feature-modules/administration/facility-list/facility-list.component';
@@ -21,9 +25,14 @@ import { FacilityFormComponent } from 'src/app/feature-modules/administration/fa
 import { FacilityEditComponent } from 'src/app/feature-modules/administration/facility-edit/facility-edit.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegistrationComponent },
+
+  {path: '', component: HomeComponent},
+  {path: 'home', component: HomeComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegistrationComponent},
+  {path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard],},
+  {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]}, //Task 8, Sprint 1
+
 
   { path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] }, //Task 8, Sprint 1
@@ -48,7 +57,14 @@ const routes: Routes = [
 
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] }, // Task 4, Sprint 1
 
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
+
+  {path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
+  {path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
+
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
+
+
 ];
 
 @NgModule({

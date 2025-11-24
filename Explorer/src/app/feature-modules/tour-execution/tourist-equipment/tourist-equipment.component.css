@@ -1,95 +1,300 @@
 #tourist-equipment {
-    margin: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-4);
 }
+
 
 h2 {
-    color: #3f51b5;
-    font-size: 24px;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: var(--color-secondary-800);
+  margin-bottom: var(--spacing-4);
 }
 
-.equipment-counter {
-    margin: 20px 0;
-    padding: 10px;
-    background-color: #e8eaf6;
-    border-radius: 4px;
-}
-
-.equipment-counter p {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 500;
-    color: #3f51b5;
+#tourist-equipment hr {
+  border: none;
+  border-top: 3px solid var(--color-primary-500);
+  margin-bottom: var(--spacing-6);
+  border-radius: var(--border-radius-sm);
 }
 
 .notification {
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    font-weight: 500;
+  padding: var(--spacing-4) var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  border-left: 4px solid;
+  box-shadow: var(--shadow-sm);
+  animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .notification.success {
-    background-color: #c8e6c9;
-    color: #2e7d32;
-    border: 1px solid #81c784;
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--color-success-dark);
+  border-color: var(--color-success);
 }
 
 .notification.error {
-    background-color: #ffcdd2;
-    color: #c62828;
-    border: 1px solid #e57373;
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--color-error-dark);
+  border-color: var(--color-error);
 }
+
+
+.equipment-counter {
+  margin: var(--spacing-6) 0;
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, rgba(224, 247, 250, 0.6), rgba(255, 255, 255, 0.8));
+  border-radius: var(--border-radius-xl);
+  border: 2px solid var(--color-primary-500);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.equipment-counter:hover {
+  border-color: var(--color-primary-600);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.equipment-counter p {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary-800);
+  text-align: center;
+}
+
+::ng-deep #tourist-equipment mat-tab-group {
+  margin-top: var(--spacing-6);
+}
+
+::ng-deep #tourist-equipment .mat-mdc-tab-labels {
+  background: linear-gradient(135deg, var(--color-neutral-50), var(--color-neutral-0));
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+  padding: var(--spacing-2);
+}
+
+::ng-deep #tourist-equipment .mat-mdc-tab {
+  min-width: 160px;
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-700);
+}
+
+::ng-deep #tourist-equipment .mat-mdc-tab.mdc-tab--active {
+  color: var(--color-primary-800);
+}
+
+::ng-deep #tourist-equipment .mat-mdc-tab-header {
+  border-bottom: 3px solid var(--color-primary-500);
+}
+
+::ng-deep #tourist-equipment .mdc-tab-indicator__content--underline {
+  border-color: var(--color-primary-500);
+  border-width: 3px;
+}
+
+::ng-deep #tourist-equipment .mat-mdc-tab-body-content {
+  padding: var(--spacing-6) 0;
+}
+
+
 
 .equipment-list {
-    margin-top: 20px;
-}
-
-.empty-message {
-    text-align: center;
-    padding: 40px;
-    color: #757575;
-    font-size: 18px;
+  margin-top: var(--spacing-6);
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
 }
 
+/* Table Header */
 thead tr {
-    background-color: #3f51b5;
-    color: #ffffff;
-    text-align: left;
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-secondary-800));
+  color: var(--color-neutral-0);
 }
 
-th, td {
-    padding: 12px 15px;
+thead th {
+  padding: var(--spacing-4) var(--spacing-6);
+  text-align: left;
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Table Body */
+tbody td {
+  padding: var(--spacing-4) var(--spacing-6);
+  color: var(--color-neutral-800);
+  border-bottom: 1px solid var(--color-neutral-200);
 }
 
 tbody tr {
-    border-bottom: 1px solid #dddddd;
+  transition: all var(--transition-fast);
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 188, 212, 0.05);
+  transform: scale(1.01);
 }
 
 tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+  background-color: var(--color-neutral-50);
 }
 
 tbody tr:last-of-type {
-    border-bottom: 2px solid #3f51b5;
+  border-bottom: 3px solid var(--color-primary-500);
 }
 
+/* Owned Equipment Row */
 tbody tr.owned-equipment {
-    background-color: #e8f5e9 !important;
-    font-weight: 500;
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.08)) !important;
+  font-weight: 600;
+  border-left: 4px solid var(--color-success);
 }
 
-button {
-    margin-left: 10px;
+tbody tr.owned-equipment:hover {
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.12)) !important;
 }
 
-mat-tab-group {
-    margin-top: 20px;
+
+::ng-deep table mat-checkbox .mdc-checkbox {
+  --mdc-checkbox-selected-checkmark-color: var(--color-neutral-0);
+  --mdc-checkbox-selected-focus-icon-color: var(--color-primary-600);
+  --mdc-checkbox-selected-hover-icon-color: var(--color-primary-600);
+  --mdc-checkbox-selected-icon-color: var(--color-primary-500);
+  --mdc-checkbox-selected-pressed-icon-color: var(--color-primary-700);
+  --mdc-checkbox-unselected-focus-icon-color: var(--color-neutral-600);
+  --mdc-checkbox-unselected-hover-icon-color: var(--color-primary-500);
+  --mdc-checkbox-unselected-icon-color: var(--color-neutral-500);
+}
+
+::ng-deep table mat-checkbox {
+  transform: scale(1.1);
+}
+
+
+table button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-normal);
+  margin: 0;
+}
+
+table button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+::ng-deep table button.mat-mdc-raised-button.mat-warn {
+  --mdc-filled-button-container-color: var(--color-error) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+}
+
+::ng-deep table button.mat-mdc-raised-button.mat-warn:hover {
+  --mdc-filled-button-container-color: var(--color-error-dark) !important;
+}
+
+.empty-message {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-4);
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  background: linear-gradient(135deg, rgba(224, 247, 250, 0.3), rgba(255, 255, 255, 0.5));
+  border-radius: var(--border-radius-2xl);
+  border: 2px dashed var(--color-neutral-400);
+  margin: var(--spacing-6) 0;
+}
+
+.empty-message p {
+  margin: 0;
+}
+
+
+@media (max-width: 768px) {
+  #tourist-equipment {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+  
+  h2 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .equipment-counter {
+    padding: var(--spacing-4);
+  }
+  
+  .equipment-counter p {
+    font-size: var(--font-size-lg);
+  }
+  
+  table {
+    font-size: var(--font-size-sm);
+  }
+  
+  thead th,
+  tbody td {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  
+  /* Hide description column on mobile */
+  table th:nth-child(3),
+  table td:nth-child(3) {
+    display: none;
+  }
+  
+  /* Show only on "Moja oprema" tab */
+  mat-tab:last-child table th:nth-child(2),
+  mat-tab:last-child table td:nth-child(2) {
+    display: table-cell;
+  }
+  
+  table button {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+  
+  ::ng-deep #tourist-equipment .mat-mdc-tab {
+    min-width: 120px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .equipment-counter p {
+    font-size: var(--font-size-base);
+  }
+  
+  .notification {
+    font-size: var(--font-size-sm);
+  }
 }
