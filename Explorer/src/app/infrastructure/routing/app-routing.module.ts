@@ -49,7 +49,7 @@ const routes: Routes = [
 
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-  {path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard]} // Task 3, Sprint 1
+  {path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard]}, // Task 3, Sprint 1
 
   {path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
   {path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1

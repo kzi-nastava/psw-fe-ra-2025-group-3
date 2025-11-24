@@ -20,22 +20,17 @@ export class MonumentFormComponent implements OnChanges {
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     year: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    status: new FormControl<string | null>('Active', [Validators.required]),
     latitude: new FormControl<number | null>(null, [Validators.required]),
     longitude: new FormControl<number | null>(null, [Validators.required]),
   });
 
   ngOnChanges(): void {
-    this.monumentForm.reset({
-      status: 'Active'
-    });
-
+    this.monumentForm.reset();   
     if (this.shouldEdit && this.monument) {
       this.monumentForm.patchValue({
         name: this.monument.name,
         description: this.monument.description,
         year: this.monument.year,
-        status: this.monument.status,
         latitude: this.monument.latitude,
         longitude: this.monument.longitude
       });
@@ -49,7 +44,7 @@ export class MonumentFormComponent implements OnChanges {
       name: this.monumentForm.value.name || '',
       description: this.monumentForm.value.description || '',
       year: this.monumentForm.value.year ?? 0,
-      status: (this.monumentForm.value.status as string) || 'Active',
+      status: 'Active',
       latitude: this.monumentForm.value.latitude ?? 0,
       longitude: this.monumentForm.value.longitude ?? 0
     };
@@ -67,7 +62,7 @@ export class MonumentFormComponent implements OnChanges {
       name: this.monumentForm.value.name || '',
       description: this.monumentForm.value.description || '',
       year: this.monumentForm.value.year ?? 0,
-      status: (this.monumentForm.value.status as string) || 'Active',
+      status: this.monument.status,
       latitude: this.monumentForm.value.latitude ?? 0,
       longitude: this.monumentForm.value.longitude ?? 0
     };

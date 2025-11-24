@@ -32,10 +32,16 @@ export class MonumentListComponent implements OnInit {
   }
 
   deleteMonument(id: number): void {
-    this.service.deleteMonument(id).subscribe({
-      next: () => this.getMonuments()
-    });
+  const confirmed = confirm('Are you sure you want to delete this monument?');
+
+  if (!confirmed) {
+    return; // korisnik je kliknuo Cancel
   }
+
+  this.service.deleteMonument(id).subscribe({
+    next: () => this.getMonuments()
+  });
+}
 
   onEditClicked(monument: Monument): void {
     this.selectedMonument = monument;
