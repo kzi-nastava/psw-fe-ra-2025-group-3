@@ -54,7 +54,7 @@ export class MonumentListComponent implements OnInit {
   // OTVARANJE FORME U DIALOGU 
   openForm(mode: 'create' | 'edit', monument?: Monument): void {
     const dialogRef = this.dialog.open(MonumentFormComponent, {
-      width: '500px',
+      width: '750px',
       data: {
         mode,
         monument: monument ?? null

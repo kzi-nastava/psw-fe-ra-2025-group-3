@@ -43,7 +43,11 @@ mat-label {
 ::ng-deep .mat-mdc-dialog-content {
   padding: 24px 32px !important;
   margin: 0 !important;
-  max-height: none !important;
+
+
+  max-height: 70vh !important; 
+  overflow-y: auto !important;
+  box-sizing: border-box;
 }
 
 ::ng-deep .mat-mdc-dialog-actions {
