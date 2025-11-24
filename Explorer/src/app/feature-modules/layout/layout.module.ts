@@ -6,12 +6,14 @@ import { MapTestComponent } from './map-test/map-test.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TouristMapComponent } from './tourist-map/tourist-map.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     NavbarComponent,
-    MapTestComponent
+    MapTestComponent,
+    TouristMapComponent
   ],
   imports: [
     CommonModule,

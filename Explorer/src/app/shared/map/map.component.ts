@@ -21,7 +21,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
 
@@ -75,13 +75,17 @@ export class MapComponent implements AfterViewInit, OnChanges {
     private loadAllPoints(): void {
         this.points.forEach(p => {            
             var marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+            if (p.name) {
+            marker.bindPopup(p.name);
+            } else {
             var address = '';
             this.mapService.reverseSearch(p.lat, p.lng).subscribe((res) => {
                 address = res.address.road + ' ' + res.address.city;
                 marker.bindPopup(address);
 
                 
-            });
+                });
+            }
             if (this.mode === 'edit-object') {
                 marker.dragging?.enable();
                 marker.on('dragend', (event: L.LeafletEvent) => {
