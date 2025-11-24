@@ -59,7 +59,7 @@ export class BlogFormComponent implements OnInit {
   addImage(url: string = ''): void {
     if (this.images.length < 10) {
       const imageGroup = this.fb.group({
-        imageUrl: [url, [Validators.required, Validators.pattern('https?://.+')]]
+        imageUrl: [url, [Validators.pattern('https?://.+')]]
       });
       this.images.push(imageGroup);
     } else {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MarkdownModule } from 'ngx-markdown';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -25,6 +26,7 @@ import { BlogFormComponent } from './blog-form/blog-form.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MarkdownModule.forChild(),
     // Material modules
     MatCardModule,
     MatButtonModule,

@@ -50,7 +50,7 @@
       <!-- Blog Content -->
       <mat-card-content>
         <h2 class="blog-title">{{ blog.title }}</h2>
-        <p class="blog-description">{{ truncateText(blog.description, 120) }}</p>
+        <div class="blog-description" markdown>{{ truncateMarkdown(blog.description, 120) }}</div>
         
         <!-- Image Count Badge -->
         <div class="blog-meta">

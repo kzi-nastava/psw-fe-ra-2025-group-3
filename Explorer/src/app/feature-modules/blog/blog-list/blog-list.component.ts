@@ -74,7 +74,27 @@ export class BlogListComponent implements OnInit {
       year: 'numeric'
     });
   }
-
+  truncateMarkdown(text: string, maxLength: number = 120): string {
+  if (!text) return '';
+  
+  // Ukloni Markdown sintaksu PRE truncate-a da bi dobio tačnu dužinu
+  const plainText = text
+    .replace(/#+\s/g, '')           // Ukloni # za headinge
+    .replace(/\*\*/g, '')            // Ukloni ** za bold
+    .replace(/\*/g, '')              // Ukloni * za italic
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Ukloni linkove
+  
+  if (plainText.length <= maxLength) {
+    return text; // Vrati original Markdown
+  }
+  
+  // Truncate na reči
+  const truncated = plainText.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  const finalText = lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
+  
+  return finalText + '...';
+  }
   getImageUrl(blog: Blog): string {
     if (blog.images && blog.images.length > 0) {
       return blog.images[0].imageUrl;
