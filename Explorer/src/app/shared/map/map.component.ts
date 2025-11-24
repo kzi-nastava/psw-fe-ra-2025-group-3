@@ -2,6 +2,7 @@ import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { MapService } from './map.service';
+import { environment } from 'src/env/environment';
 
 
 @Component({
@@ -15,11 +16,12 @@ export class MapComponent implements AfterViewInit {
     private routeControl: L.Routing.Control | undefined;
 
     // select-route-points mod??? Tutor 2.5 1.
-    @Input() mode: 'select-point' | 'route-view';
+    @Input() mode: 'object-view' | 'route-view' | 'edit-object';
     @Input() center: [number, number] = [45.2396, 19.8227];
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
+    @Input() points: { lat: number; lng: number }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
 
@@ -42,14 +44,14 @@ export class MapComponent implements AfterViewInit {
         );
         tiles.addTo(this.map);
 
-        if (this.mode !== 'route-view') {
-            this.setInitialPointMarker();
-            this.registerOnClick();
-        }
+        if (this.mode === 'object-view' || this.mode === 'edit-object') 
+            this.loadAllPoints();
 
-        if (this.mode !== 'select-point' && this.waypoints && this.waypoints.length >= 2) {
+        if (this.mode === 'route-view') 
             this.setRoute();
-        }
+
+        this.setInitialPointMarker();
+        this.registerOnClick();
     }
 
     private setInitialPointMarker(): void {
@@ -60,8 +62,39 @@ export class MapComponent implements AfterViewInit {
         }
 
         this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { draggable: true}).addTo(this.map);
+
+        this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+            const marker = event.target as L.Marker;
+            const pos = marker.getLatLng();
+            this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+        })
+
         this.map.setView([this.initialPoint.lat, this.initialPoint.lng], this.zoom);
     }
+
+    private loadAllPoints(): void {
+        this.points.forEach(p => {            
+            var marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+            var address = '';
+            this.mapService.reverseSearch(p.lat, p.lng).subscribe((res) => {
+                address = res.address.road + ' ' + res.address.city;
+                marker.bindPopup(address);
+
+                
+            });
+            if (this.mode === 'edit-object') {
+                marker.dragging?.enable();
+                marker.on('dragend', (event: L.LeafletEvent) => {
+                    marker = event.target as L.Marker;
+                    const pos = marker.getLatLng();
+                    this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+                });
+
+                this.clickMarker = marker;
+            }
+        })
+    }
+    
 
     setRoute(): void {
         if (this.routeControl) {
@@ -73,11 +106,8 @@ export class MapComponent implements AfterViewInit {
 
         const routeControl = L.Routing.control({
             waypoints: wp,
-            router: (L as any).Routing.osrmv1({
-                serviceUrl: 'https://router.project-osrm.org/route/v1'
-            }),
-            addWaypoints: false,
-            routeWhileDragging: false,            
+            router: (L as any).Routing.mapbox(environment.mapboxApiKey, {profile: 'mapbox/walking'}),
+            addWaypoints: true,           
         }).addTo(this.map);
 
         routeControl.on('routeselected', () => {
@@ -86,10 +116,18 @@ export class MapComponent implements AfterViewInit {
 
             const markers = plan._markers || [];
             markers.forEach((m: L.Marker) => {
+                var address = "";
+                this.mapService.reverseSearch(m.getLatLng().lat, m.getLatLng().lng).subscribe((res) => {
+                    address = res.address.road + ' ' + res.address.city;
+                    console.log(res);
+                    console.log(address);
+                    (m as any).dragging && (m as any).dragging.disable();
+                    m.bindPopup(address);
+                })
+
                 m.off('drag');
                 m.off('dragstart');
                 m.off('dragend');
-                (m as any).dragging && (m as any).dragging.disable();
             });
         });
 
@@ -129,12 +167,20 @@ export class MapComponent implements AfterViewInit {
                 error: () => { }
             });
 
-            if (this.clickMarker) {
+            if (this.mode === 'edit-object') {
                 this.map.removeLayer(this.clickMarker);
+                this.clickMarker = undefined;
             }
 
             if (!this.clickMarker) {
-                this.clickMarker = L.marker([lat, lng], { draggable: true }).addTo(this.map);
+                this.clickMarker = L.marker([lat, lng], { draggable: true }).addTo(this.map)                
+                .openPopup();
+
+                var address
+                this.mapService.reverseSearch(lat, lng).subscribe((res) => {
+                    address = res.address.road + ' ' + res.address.city;
+                    this.clickMarker?.bindPopup(address);
+                })
 
                 this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
                     const marker = event.target as L.Marker;
