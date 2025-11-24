@@ -10,8 +10,8 @@ export class MapTestComponent {
 
     testPoints = [
         { lat: 45.2396, lng: 19.8227 },
-        // { lat: 45.247549, lng: 19.833369 },
-        // { lat: 45.246189, lng: 19.851093 }
+        { lat: 45.247549, lng: 19.833369 },
+        { lat: 45.246189, lng: 19.851093 }
     ];
 
     onPointSelected(point: { lat: number; lng: number }) {

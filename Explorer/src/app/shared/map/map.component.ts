@@ -107,7 +107,7 @@ export class MapComponent implements AfterViewInit {
         const routeControl = L.Routing.control({
             waypoints: wp,
             router: (L as any).Routing.mapbox(environment.mapboxApiKey, {profile: 'mapbox/walking'}),
-            addWaypoints: true,           
+            addWaypoints: false,           
         }).addTo(this.map);
 
         routeControl.on('routeselected', () => {
