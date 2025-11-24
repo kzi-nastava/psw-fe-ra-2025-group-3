@@ -3,7 +3,12 @@ export interface Monument {
   name: string;
   description: string;
   year: number;
-  status: string;      // "Active" | "Inactive"
+  status: MonumentStatus;      // "Active" | "Inactive"
   latitude: number;
   longitude: number;
+}
+
+export enum MonumentStatus {
+  Active = 1,  
+  Inactive = 0 
 }

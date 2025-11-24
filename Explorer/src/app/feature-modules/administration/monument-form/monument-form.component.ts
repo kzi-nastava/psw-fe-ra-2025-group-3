@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdministrationService } from '../administration.service';
-import { Monument } from '../model/monument.model';
+import { Monument, MonumentStatus } from '../model/monument.model';
 
 @Component({
   selector: 'xp-monument-form',
@@ -12,6 +12,7 @@ import { Monument } from '../model/monument.model';
 })
 export class MonumentFormComponent implements OnInit {
 
+  MonumentStatus = MonumentStatus;
   monumentForm: FormGroup;
   isEditMode: boolean = false;
 
@@ -85,7 +86,7 @@ export class MonumentFormComponent implements OnInit {
         name: formValue.name,
         description: formValue.description,
         year: formValue.year,
-        status: 'Active',   // default
+        status: MonumentStatus.Active,
         latitude: formValue.latitude,
         longitude: formValue.longitude
       };

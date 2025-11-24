@@ -34,8 +34,8 @@
         <mat-card-title>{{ m.name }}</mat-card-title>
         <mat-card-subtitle>
           <span class="status-badge"
-                [ngClass]="m.status === 'Active' ? 'status-active' : 'status-inactive'">
-            {{ m.status }}
+                [ngClass]="m.status === 1 ? 'status-active' : 'status-inactive'">
+            {{ m.status === 1 ? 'Active' : 'Inactive' }}
           </span>
         </mat-card-subtitle>
       </mat-card-header>

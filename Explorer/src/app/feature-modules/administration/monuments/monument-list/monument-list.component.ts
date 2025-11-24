@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
-import { Monument } from '../../model/monument.model';
+import { Monument, MonumentStatus } from '../../model/monument.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MonumentFormComponent } from '../../monument-form/monument-form.component';
@@ -12,6 +12,7 @@ import { MonumentFormComponent } from '../../monument-form/monument-form.compone
 })
 export class MonumentListComponent implements OnInit {
 
+  MonumentStatus = MonumentStatus;
   monuments: Monument[] = [];
   isLoading: boolean = false;
 
