@@ -21,6 +21,7 @@ import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetup
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component'; // Task 13, Sprint 1
 import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
 import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
+import { MapTestComponent } from 'src/app/feature-modules/layout/map-test/map-test.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
+  {path: 'map-test', component: MapTestComponent},
   {path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard],},
   {path: 'author/tours', component: TourListComponent,canActivate: [AuthGuard]}, //Task 8, Sprint 1
 
