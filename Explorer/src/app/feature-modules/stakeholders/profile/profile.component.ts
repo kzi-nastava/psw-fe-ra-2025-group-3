@@ -64,6 +64,7 @@ export class ProfileComponent implements OnInit {
     }
 
     const updatedProfile: Person = {
+      id: 0,
       userId: 0, 
       name: this.profileForm.value.name || '',
       surname: this.profileForm.value.surname || '',

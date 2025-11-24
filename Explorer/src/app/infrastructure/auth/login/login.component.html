@@ -1,5 +1,8 @@
 <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to continue your journey</p>
+        
         <mat-form-field>
             <mat-label>Username</mat-label>
             <input matInput formControlName="username" type="text"/>
@@ -8,9 +11,7 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password"/>
         </mat-form-field>
-    <button color="primary" type="submit" mat-raised-button>Login</button>
-    <p>Don't have an account yet?<a href="/register">Sign Up</a></p>
+        <button color="primary" type="submit" mat-raised-button>Login</button>
+        <p>Don't have an account yet?<a href="/register">Sign Up</a></p>
     </div>
 </form>
-
-

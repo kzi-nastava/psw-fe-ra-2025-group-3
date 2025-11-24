@@ -1,7 +1,7 @@
 <div id="tourist-equipment">
   <h2>Moja Oprema</h2>
   <hr>
-
+  
   <!-- Notifikacije -->
   <div *ngIf="successMessage" class="notification success">
     {{ successMessage }}
@@ -9,12 +9,12 @@
   <div *ngIf="errorMessage" class="notification error">
     {{ errorMessage }}
   </div>
-
+  
   <!-- Brojač -->
   <div class="equipment-counter">
     <p>Posedujete {{ ownedEquipmentCount }} stavki opreme</p>
   </div>
-
+  
   <!-- Tabovi -->
   <mat-tab-group [(selectedIndex)]="selectedTabIndex">
     
@@ -45,7 +45,7 @@
         </table>
       </div>
     </mat-tab>
-
+    
     <!-- Tab: Moja oprema -->
     <mat-tab label="Moja oprema">
       <div class="equipment-list">
@@ -77,6 +77,6 @@
         </table>
       </div>
     </mat-tab>
-
+    
   </mat-tab-group>
 </div>

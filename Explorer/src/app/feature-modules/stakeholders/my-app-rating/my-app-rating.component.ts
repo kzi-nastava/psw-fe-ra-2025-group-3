@@ -15,7 +15,6 @@ export class MyAppRatingComponent implements OnInit {
   existingRating: AppRatingResponse | null = null;
   role!: 'author' | 'tourist';
 
-  // Zvezdice
   stars: number[] = [1, 2, 3, 4, 5];
 
   constructor(
@@ -51,7 +50,6 @@ export class MyAppRatingComponent implements OnInit {
     });
   }
 
-  // Klik na zvezdicu
   setRating(value: number): void {
     this.form.get('rating')?.setValue(value);
   }

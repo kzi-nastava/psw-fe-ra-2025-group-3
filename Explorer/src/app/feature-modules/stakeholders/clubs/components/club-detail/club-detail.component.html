@@ -1,0 +1,35 @@
+<div class="club-detail-container" *ngIf="club as c; else loadingTpl">
+  <div class="header">
+    <h1>{{ c.name }}</h1>
+
+    <div class="actions" *ngIf="isOwner()">
+      <button mat-stroked-button color="primary" (click)="openEditDialog()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button mat-stroked-button color="warn" (click)="deleteClub()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <div class="featured-image" *ngIf="featuredImageUrl as url">
+    <img [src]="url" alt="Featured image" />
+  </div>
+
+  <p class="description">{{ c.description }}</p>
+
+  <div class="gallery" *ngIf="galleryUrls.length > 0">
+    <h2>Gallery</h2>
+    <div class="gallery-grid">
+      <img *ngFor="let url of galleryUrls" [src]="url" alt="Club image" />
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

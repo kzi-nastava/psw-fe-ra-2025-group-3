@@ -1,5 +1,8 @@
 <form [formGroup]="registrationForm" (ngSubmit)="register()">
     <div>
+        <h2>Join Travel Vista</h2>
+        <p class="subtitle">Start your adventure today</p>
+        
         <mat-form-field>
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" type="text"/>
@@ -20,8 +23,7 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password"/>
         </mat-form-field>
-    <button color="primary" type="submit" mat-raised-button>Register</button>
+        <button color="primary" type="submit" mat-raised-button>Register</button>
+        <p>Already have an account?<a href="/login">Log In</a></p>
     </div>
 </form>
-
-

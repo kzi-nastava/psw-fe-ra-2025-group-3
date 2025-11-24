@@ -1,4 +1,5 @@
 export interface Person {
+    id:number,
     userId: number;
     name: string;
     surname: string;
@@ -6,4 +7,5 @@ export interface Person {
     profilePictureUrl?: string;
     biography?: string;
     quote?: string;
+    isActive?: boolean;
 }

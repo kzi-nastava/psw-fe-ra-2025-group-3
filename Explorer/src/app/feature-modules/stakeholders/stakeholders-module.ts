@@ -4,25 +4,60 @@ import { ProfileComponent } from './profile/profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AppRatingListComponent } from './app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from './my-app-rating/my-app-rating.component';
+import { ClubsModule } from './clubs/clubs.module';
+import { MeetupListComponent } from './meetups/meetup-list/meetup-list.component';
+import { MeetupFormComponent } from './meetups/meetup-form/meetup-form.component';
+import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.component';
+import { MarkdownModule } from 'ngx-markdown';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { ProfileListComponent } from './profile-list/profile-list.component';
+// Angular Material moduli
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
     ProfileComponent,
     AppRatingListComponent,
-    MyAppRatingComponent
+    MyAppRatingComponent,
+    MeetupListComponent,
+    MeetupFormComponent,
+    MeetupDetailsComponent,
+    ProfileFormComponent,
+    ProfileListComponent
+    
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatCardModule,   
+    MatIconModule,  
+    MatButtonModule,
+    MatDialogModule,
+    ClubsModule,
+    MarkdownModule.forChild(),
+    MatIconModule,
+    MatSelectModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   exports: [
-    ProfileComponent
+    ProfileComponent,
+    ProfileFormComponent,
+    ProfileListComponent
   ]
 })
 export class StakeholdersModule { }
