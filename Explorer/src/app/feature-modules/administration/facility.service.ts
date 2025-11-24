@@ -8,7 +8,8 @@ import { Facility } from './model/facility.model';
 })
 export class FacilityService {
 
-  private apiUrl = 'http://localhost:5000/api/facilities'; // promeni kad znaš backend URL
+  private apiUrl = 'https://localhost:44333/api/facilities';
+
 
   constructor(private http: HttpClient) {}
 
