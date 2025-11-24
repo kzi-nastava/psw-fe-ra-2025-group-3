@@ -7,6 +7,27 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
+.profile-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #f1f3f5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
 form {
     display: flex;
     flex-direction: column;
