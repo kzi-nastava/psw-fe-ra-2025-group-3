@@ -11,7 +11,8 @@
                         <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs">Clubs</button>
                         <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs/my">Your Clubs</button>
                         <button *ngIf="user && (user.role === 'tourist' || user.role === 'author')" mat-button routerLink="/meetups">Meetups</button>
-            
+            <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/blogs">My Blogs</button>
+            <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/blogs">My Blogs</button>
             <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">Login</button>
             <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
             <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>

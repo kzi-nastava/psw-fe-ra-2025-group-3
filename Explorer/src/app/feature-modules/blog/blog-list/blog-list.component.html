@@ -1,0 +1,73 @@
+<!-- src/app/feature-modules/blog/blog-list/blog-list.component.html -->
+
+<div class="blog-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>article</mat-icon>
+      My Blogs
+    </h1>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create New Blog
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && blogs.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">description</mat-icon>
+    <h2>No blogs yet</h2>
+    <p>Create your first blog to share your travel experiences!</p>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create First Blog
+    </button>
+  </div>
+
+  <!-- Blog Grid -->
+  <div *ngIf="!isLoading && blogs.length > 0" class="blog-grid">
+    <mat-card *ngFor="let blog of blogs" class="blog-card">
+      <!-- Blog Image -->
+      <div class="blog-image-container">
+        <img 
+          mat-card-image 
+          [src]="getImageUrl(blog)" 
+          [alt]="blog.title"
+          class="blog-image">
+        <div class="image-overlay">
+          <span class="blog-date">
+            <mat-icon>calendar_today</mat-icon>
+            {{ formatDate(blog.creationDate) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Blog Content -->
+      <mat-card-content>
+        <h2 class="blog-title">{{ blog.title }}</h2>
+        <p class="blog-description">{{ truncateText(blog.description, 120) }}</p>
+        
+        <!-- Image Count Badge -->
+        <div class="blog-meta">
+          <span class="image-count">
+            <mat-icon>photo_library</mat-icon>
+            {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+          </span>
+        </div>
+      </mat-card-content>
+
+      <!-- Actions -->
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="openEditDialog(blog)">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
