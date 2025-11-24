@@ -1,0 +1,19 @@
+<div class="map-test-wrapper">
+  <h2>Test mapa</h2>
+
+  <!-- Test biranja tačke -->
+  <!-- <xp-map
+    [mode]="'select-point'"
+    (pointSelected)="onPointSelected($event)">
+  </xp-map>
+
+  <p *ngIf="selectedPoint">
+    Izabrana tačka: {{ selectedPoint.lat }}, {{ selectedPoint.lng }}
+  </p> -->
+
+  <!-- Test prikaza ture -->
+  <xp-map
+    [mode]="'route-view'"
+    [waypoints]="testWaypoints">
+  </xp-map>
+</div>

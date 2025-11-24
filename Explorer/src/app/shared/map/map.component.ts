@@ -1,57 +1,104 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet-routing-machine';
 import { MapService } from './map.service';
 
 
 @Component({
-  selector: 'xp-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+    selector: 'xp-map',
+    templateUrl: './map.component.html',
+    styleUrls: ['./map.component.css']
 })
 export class MapComponent implements AfterViewInit {
     private map: any;
+    private clickMarker: L.Marker | undefined;
+    private routeControl: L.Routing.Control | undefined;
+
+    // select-route-points mod??? Tutor 2.5 1.
+    @Input() mode: 'select-point' | 'route-view';
+    @Input() center: [number, number] = [45.2396, 19.8227];
+    @Input() zoom = 15;
+    @Input() initialPoint?: { lat: number; lng: number };
+    @Input() waypoints: { lat: number; lng: number }[] = [];
+
+    @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
+
 
     constructor(private mapService: MapService) {}
 
     private initMap(): void {
         this.map = L.map('map', {
-            center: [45.2396, 19.8227],
-            zoom: 15,
+            center: this.center,
+            zoom: this.zoom,
             attributionControl: false,
         });
 
         const tiles = L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
-                maxZoom: 19,
+                maxZoom: 22,
                 minZoom: 3,
             }
         );
         tiles.addTo(this.map);
 
-        this.registerOnClick();
-        this.search();
-        this.setRoute();
+        if (this.mode !== 'route-view') {
+            this.setInitialPointMarker();
+            this.registerOnClick();
+        }
+
+        if (this.mode !== 'select-point' && this.waypoints && this.waypoints.length >= 2) {
+            this.setRoute();
+        }
+    }
+
+    private setInitialPointMarker(): void {
+        if (!this.map || !this.initialPoint) return;
+
+        if (this.clickMarker) {
+            this.map.removeLayer(this.clickMarker);
+        }
+
+        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { draggable: true}).addTo(this.map);
+        this.map.setView([this.initialPoint.lat, this.initialPoint.lng], this.zoom);
     }
 
     setRoute(): void {
+        if (this.routeControl) {
+            this.map.removeControl(this.routeControl);
+            this.routeControl = undefined;
+        }
+
+        const wp = this.waypoints.map(p => L.latLng(p.lat, p.lng));
+
         const routeControl = L.Routing.control({
-            waypoints: [
-                L.latLng(45.2396, 19.8227),
-                L.latLng(45.247549, 19.833369),
-                L.latLng(45.246189, 19.851093)
-            ],
-            router: L.Routing.osrmv1({
+            waypoints: wp,
+            router: (L as any).Routing.osrmv1({
                 serviceUrl: 'https://router.project-osrm.org/route/v1'
-            })
+            }),
+            addWaypoints: false,
+            routeWhileDragging: false,            
         }).addTo(this.map);
 
-        routeControl.on('routesfound', function(e) {
+        routeControl.on('routeselected', () => {
+            const plan = (routeControl as any).getPlan?.();
+            if (!plan) return;
+
+            const markers = plan._markers || [];
+            markers.forEach((m: L.Marker) => {
+                m.off('drag');
+                m.off('dragstart');
+                m.off('dragend');
+                (m as any).dragging && (m as any).dragging.disable();
+            });
+        });
+
+        routeControl.on('routesfound', function(e: any) {
             const routes = e.routes;
             const summary = routes[0].summary;
-            alert(
+            console.log(
                 'Total distance is ' +
-                summary.totalDistance / 1000 +
+                Math.round(summary.totalDistance) / 1000 +
                 ' km and total time is ' +
                 Math.round((summary.totalTime % 3600) / 60) +
                 ' minutes'
@@ -59,8 +106,8 @@ export class MapComponent implements AfterViewInit {
         });
     }
 
-    search(): void {
-        this.mapService.search('Strazilovska 19, Novi Sad').subscribe({
+    search(address: string): void {
+        this.mapService.search(address).subscribe({
             next: (result) => {
                 L.marker([result[0].lat, result[0].lon])
                 .addTo(this.map)
@@ -72,15 +119,33 @@ export class MapComponent implements AfterViewInit {
     }
 
     registerOnClick(): void {
-        this.map.on('click', (e: any) => {
+        this.map.on('click', (e: L.LeafletMouseEvent) => {
             const coord = e.latlng;
             const lat = coord.lat;
             const lng = coord.lng;
-            this.mapService.reverseSearch(lat, lng).subscribe((res) => {
-                
+
+            this.mapService.reverseSearch(lat, lng).subscribe({
+                next: () => { },
+                error: () => { }
             });
-            const mp = new L.Marker([lat, lng]).addTo(this.map);
-            alert(mp.getLatLng());
+
+            if (this.clickMarker) {
+                this.map.removeLayer(this.clickMarker);
+            }
+
+            if (!this.clickMarker) {
+                this.clickMarker = L.marker([lat, lng], { draggable: true }).addTo(this.map);
+
+                this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                    const marker = event.target as L.Marker;
+                    const pos = marker.getLatLng();
+                    this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+                });
+            } else {
+                this.clickMarker.setLatLng([lat, lng]);
+            }
+
+            this.pointSelected.emit({ lat, lng });
         });
     }
 

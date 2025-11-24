@@ -21,11 +21,11 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@auth0/angular-jwt": "^5.1.2",
-    "marked": "^4.3.0",
-    "ngx-markdown": "^16.0.0",
     "@types/leaflet": "^1.9.21",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
+    "marked": "^4.3.0",
+    "ngx-markdown": "^16.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
