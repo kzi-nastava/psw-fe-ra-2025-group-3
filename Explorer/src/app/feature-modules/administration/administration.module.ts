@@ -23,6 +23,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatChipsModule } from '@angular/material/chips'; 
 
+import { SharedModule } from 'src/app/shared/shared.module';
+
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatChipsModule
+    MatChipsModule,
+    SharedModule
   ],
   exports: [
     EquipmentComponent,

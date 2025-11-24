@@ -16,6 +16,8 @@ export class MonumentFormComponent implements OnInit {
   monumentForm: FormGroup;
   isEditMode: boolean = false;
 
+  mapPoints: { lat: number; lng: number }[] = [];
+
   constructor(
     private fb: FormBuilder,
     private service: AdministrationService,
@@ -31,6 +33,7 @@ export class MonumentFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.isEditMode && this.data.monument) {
       const m = this.data.monument;
+
       this.monumentForm.patchValue({
         name: m.name,
         description: m.description,
@@ -38,6 +41,10 @@ export class MonumentFormComponent implements OnInit {
         latitude: m.latitude,
         longitude: m.longitude
       });
+
+      if (m.latitude != null && m.longitude != null) {
+      this.mapPoints = [{ lat: m.latitude, lng: m.longitude }];
+    }
     }
   }
 
@@ -49,6 +56,16 @@ export class MonumentFormComponent implements OnInit {
       latitude: [null, [Validators.required]],
       longitude: [null, [Validators.required]],
     });
+  }
+
+  // xp-map emituje { lat, lng }
+  onPointSelected(point: { lat: number; lng: number }): void {
+    this.monumentForm.patchValue({
+      latitude: point.lat,
+      longitude: point.lng
+    });
+
+    
   }
 
   onSubmit(): void {
@@ -66,7 +83,7 @@ export class MonumentFormComponent implements OnInit {
         name: formValue.name,
         description: formValue.description,
         year: formValue.year,
-        status: this.data.monument.status,   // zadržavamo postojeći status
+        status: this.data.monument.status,
         latitude: formValue.latitude,
         longitude: formValue.longitude
       };
@@ -76,9 +93,7 @@ export class MonumentFormComponent implements OnInit {
           this.showSuccess('Monument successfully updated');
           this.dialogRef.close(true);
         },
-        error: () => {
-          this.showError('Error updating monument');
-        }
+        error: () => this.showError('Error updating monument')
       });
 
     } else {
@@ -96,9 +111,7 @@ export class MonumentFormComponent implements OnInit {
           this.showSuccess('Monument successfully created');
           this.dialogRef.close(true);
         },
-        error: () => {
-          this.showError('Error creating monument');
-        }
+        error: () => this.showError('Error creating monument')
       });
     }
   }
@@ -107,18 +120,12 @@ export class MonumentFormComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  private showSuccess(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
+  private showSuccess(msg: string) {
+    this.snackBar.open(msg, 'Close', { duration: 3000, panelClass: ['success-snackbar'] });
   }
 
-  private showError(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-      panelClass: ['error-snackbar']
-    });
+  private showError(msg: string) {
+    this.snackBar.open(msg, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
   }
 
   getErrorMessage(fieldName: string): string {
