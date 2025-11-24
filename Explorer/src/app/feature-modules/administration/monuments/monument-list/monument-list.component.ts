@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
 import { Monument } from '../../model/monument.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
+import { MatDialog } from '@angular/material/dialog';
+import { MonumentFormComponent } from '../../monument-form/monument-form.component';
 
 @Component({
   selector: 'xp-monument-list',
@@ -11,53 +13,66 @@ import { PagedResults } from 'src/app/shared/model/paged-results.model';
 export class MonumentListComponent implements OnInit {
 
   monuments: Monument[] = [];
-  selectedMonument: Monument;
-  shouldRenderMonumentForm: boolean = false;
-  shouldEdit: boolean = false;
+  isLoading: boolean = false;
 
-  constructor(private service: AdministrationService) { }
+  constructor(
+    private service: AdministrationService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getMonuments();
   }
 
   getMonuments(): void {
+    this.isLoading = true;
+
     this.service.getMonuments().subscribe({
       next: (result: PagedResults<Monument>) => {
         this.monuments = result.results;
+        this.isLoading = false;
       },
       error: () => {
+        this.isLoading = false;
       }
     });
   }
 
   deleteMonument(id: number): void {
-  const confirmed = confirm('Are you sure you want to delete this monument?');
+    const confirmed = confirm('Are you sure you want to delete this monument?');
 
-  if (!confirmed) {
-    return; // korisnik je kliknuo Cancel
+    if (!confirmed) {
+      return;
+    }
+
+    this.service.deleteMonument(id).subscribe({
+      next: () => this.getMonuments()
+    });
   }
 
-  this.service.deleteMonument(id).subscribe({
-    next: () => this.getMonuments()
-  });
-}
+  // OTVARANJE FORME U DIALOGU 
+  openForm(mode: 'create' | 'edit', monument?: Monument): void {
+    const dialogRef = this.dialog.open(MonumentFormComponent, {
+      width: '500px',
+      data: {
+        mode,
+        monument: monument ?? null
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // result može biti npr. true kad je snimanje uspelo
+        this.getMonuments();
+      }
+    });
+  }
 
   onEditClicked(monument: Monument): void {
-    this.selectedMonument = monument;
-    this.shouldRenderMonumentForm = true;
-    this.shouldEdit = true;
+    this.openForm('edit', monument);
   }
 
   onAddClicked(): void {
-    this.shouldEdit = false;
-    this.shouldRenderMonumentForm = true;
-    this.selectedMonument = undefined as any; 
-  }
-
-  onMonumentUpdated(): void {
-    this.getMonuments();
-    this.shouldRenderMonumentForm = false;
-    this.shouldEdit = false;
+    this.openForm('create');
   }
 }

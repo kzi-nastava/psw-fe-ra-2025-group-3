@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdministrationService } from '../administration.service';
 import { Monument } from '../model/monument.model';
 
@@ -8,67 +10,122 @@ import { Monument } from '../model/monument.model';
   templateUrl: './monument-form.component.html',
   styleUrls: ['./monument-form.component.css']
 })
-export class MonumentFormComponent implements OnChanges {
+export class MonumentFormComponent implements OnInit {
 
-  @Input() monument: Monument | null = null;
-  @Input() shouldEdit: boolean = false;
-  @Output() monumentUpdated = new EventEmitter<void>();
+  monumentForm: FormGroup;
+  isEditMode: boolean = false;
 
-  constructor(private service: AdministrationService) { }
+  constructor(
+    private fb: FormBuilder,
+    private service: AdministrationService,
+    private snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<MonumentFormComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { mode: 'create' | 'edit'; monument: Monument | null }
+  ) {
+    this.isEditMode = data.mode === 'edit';
+    this.monumentForm = this.createForm();
+  }
 
-  monumentForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    year: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    latitude: new FormControl<number | null>(null, [Validators.required]),
-    longitude: new FormControl<number | null>(null, [Validators.required]),
-  });
-
-  ngOnChanges(): void {
-    this.monumentForm.reset();   
-    if (this.shouldEdit && this.monument) {
+  ngOnInit(): void {
+    if (this.isEditMode && this.data.monument) {
+      const m = this.data.monument;
       this.monumentForm.patchValue({
-        name: this.monument.name,
-        description: this.monument.description,
-        year: this.monument.year,
-        latitude: this.monument.latitude,
-        longitude: this.monument.longitude
+        name: m.name,
+        description: m.description,
+        year: m.year,
+        latitude: m.latitude,
+        longitude: m.longitude
       });
     }
   }
 
-  addMonument(): void {
-    if (this.monumentForm.invalid) return;
-
-    const monument: Monument = {
-      name: this.monumentForm.value.name || '',
-      description: this.monumentForm.value.description || '',
-      year: this.monumentForm.value.year ?? 0,
-      status: 'Active',
-      latitude: this.monumentForm.value.latitude ?? 0,
-      longitude: this.monumentForm.value.longitude ?? 0
-    };
-
-    this.service.addMonument(monument).subscribe({
-      next: () => this.monumentUpdated.emit()
+  private createForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      year: [null, [Validators.required, Validators.min(0)]],
+      latitude: [null, [Validators.required]],
+      longitude: [null, [Validators.required]],
     });
   }
 
-  updateMonument(): void {
-    if (!this.monument || this.monumentForm.invalid) return;
+  onSubmit(): void {
+    if (this.monumentForm.invalid) {
+      this.monumentForm.markAllAsTouched();
+      this.showError('Please fill in all required fields correctly');
+      return;
+    }
 
-    const monument: Monument = {
-      id: this.monument.id,
-      name: this.monumentForm.value.name || '',
-      description: this.monumentForm.value.description || '',
-      year: this.monumentForm.value.year ?? 0,
-      status: this.monument.status,
-      latitude: this.monumentForm.value.latitude ?? 0,
-      longitude: this.monumentForm.value.longitude ?? 0
-    };
+    const formValue = this.monumentForm.getRawValue();
 
-    this.service.updateMonument(monument).subscribe({
-      next: () => this.monumentUpdated.emit()
+    if (this.isEditMode && this.data.monument) {
+      const monument: Monument = {
+        id: this.data.monument.id,
+        name: formValue.name,
+        description: formValue.description,
+        year: formValue.year,
+        status: this.data.monument.status,   // zadržavamo postojeći status
+        latitude: formValue.latitude,
+        longitude: formValue.longitude
+      };
+
+      this.service.updateMonument(monument).subscribe({
+        next: () => {
+          this.showSuccess('Monument successfully updated');
+          this.dialogRef.close(true);
+        },
+        error: () => {
+          this.showError('Error updating monument');
+        }
+      });
+
+    } else {
+      const monument: Monument = {
+        name: formValue.name,
+        description: formValue.description,
+        year: formValue.year,
+        status: 'Active',   // default
+        latitude: formValue.latitude,
+        longitude: formValue.longitude
+      };
+
+      this.service.addMonument(monument).subscribe({
+        next: () => {
+          this.showSuccess('Monument successfully created');
+          this.dialogRef.close(true);
+        },
+        error: () => {
+          this.showError('Error creating monument');
+        }
+      });
+    }
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
     });
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      panelClass: ['error-snackbar']
+    });
+  }
+
+  getErrorMessage(fieldName: string): string {
+    const field = this.monumentForm.get(fieldName);
+
+    if (field?.hasError('required')) return 'This field is required';
+    if (field?.hasError('min')) return 'Value must be positive';
+
+    return '';
   }
 }
