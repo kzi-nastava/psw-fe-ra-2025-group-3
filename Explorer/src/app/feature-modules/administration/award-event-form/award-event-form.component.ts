@@ -15,6 +15,7 @@ export class AwardEventFormComponent implements OnInit {
 
   awardEvent: AwardEvent;
   shouldEdit: boolean = false;
+  errorMessage: string = '';
 
   awardEventForm = new FormGroup({
     id: new FormControl(-1),
@@ -65,6 +66,7 @@ export class AwardEventFormComponent implements OnInit {
   }
 
   addAwardEvent(): void {
+    this.errorMessage = '';
 
     const formStartDate: Date = this.awardEventForm.value.votingStartDate!;
     const formEndDate: Date = this.awardEventForm.value.votingEndDate!;
@@ -89,9 +91,9 @@ export class AwardEventFormComponent implements OnInit {
         next: () => {
           this.dialogRef.close(true); 
         },
-        error: (error) => {
-          console.error('Greška pri izmeni dodele:', error);
-          alert('Došlo je do greške pri izmeni. Proverite konzolu.');
+        error: (err: any) => {
+          const message = err.error.detail || 'An error occurred while creating the award event.';
+          this.errorMessage = message;
         }
       });
     } else {
@@ -99,9 +101,9 @@ export class AwardEventFormComponent implements OnInit {
         next: () => {
           this.dialogRef.close(true); 
         },
-        error: (error) => {
-          console.error('Greška pri kreiranju dodele:', error);
-          alert('Došlo je do greške pri kreiranju. Proverite konzolu i unete podatke (npr. godina mora biti jedinstvena).');
+        error: (err: any) => {
+          const message = err.error.detail || 'An error occurred while updating the award event.';
+          this.errorMessage = message;
         }
       });
     }
