@@ -26,6 +26,9 @@
       <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/facilities">
         Manage Facilities
       </button>
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/monuments">
+        Manage Monuments
+      </button>
       <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">
         App Ratings
       </button>
