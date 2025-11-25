@@ -10,25 +10,42 @@
     </a>
     
     <!-- Navigation Buttons -->
-    <div class="navbar-buttons">
+<div class="navbar-buttons">
       <!-- Role-specific buttons -->
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/accounts">
-        My Accounts
+      
+      <!-- Administrator buttons -->
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/profiles">
+        My Profiles
       </button>
       <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/equipment">
         Manage Equipment
+      </button>
+      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/award-events">
+        Manage Awards
       </button>
       <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">
         App Ratings
       </button>
       
+      <!-- Author buttons -->
       <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours">
         My Tours
       </button>
       <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">
         My App Rating
       </button>
+
+
+      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/profile">
+        My Profile
+      </button>
+
+      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/meetups">
+        Meetups
+
+      </button>
       
+      <!-- Tourist buttons -->
       <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">
         My Equipment
       </button>
@@ -38,8 +55,20 @@
       <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems">
         My Problems
       </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs">
+        Clubs
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs/my">
+        Your Clubs
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/meetups">
+        Meetups
+      </button>
       <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">
         My App Rating
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/profile">
+        My Profile
       </button>
       
       <!-- Auth & Home buttons with icons -->

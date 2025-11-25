@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Person } from './model/person.model';
 import { environment } from 'src/env/environment';
-import { User } from '../../infrastructure/auth/model/user.model';
 import { AccountRegistrationDto } from './model/account-registration.dto';
 
 @Injectable({
@@ -11,43 +10,44 @@ import { AccountRegistrationDto } from './model/account-registration.dto';
 })
 export class StakeholderService {
 
+
+  private readonly profileUrl = environment.apiHost + 'stakeholders/person';
+  
   private readonly baseUrl = environment.apiHost + 'stakeholders/person';
-  private readonly profileUrl = environment.apiHost + 'profile';
 
   constructor(private http: HttpClient) {}
 
-  
-   // GET PROFILE – koristi profileUrl
+  // GET PROFILE
   getProfile(): Observable<Person> {
-    return this.http.get<Person>(`${this.profileUrl}`);
+    return this.http.get<Person>(this.profileUrl);
   }
 
-  // UPDATE PROFILE – koristi profileUrl
+  // UPDATE PROFILE
   updateProfile(profile: Person): Observable<Person> {
-    return this.http.put<Person>(`${this.profileUrl}`, profile);
+    return this.http.put<Person>(this.profileUrl, profile);
   }
 
-   // GET ALL – vraća listu PersonDto
+  // GET ALL
   getAllPersons(): Observable<Person[]> {
     return this.http.get<Person[]>(`${this.baseUrl}/all`);
   }
 
-  // GET BY ID – vraća jedan PersonDto
+  // GET BY ID
   getPersonById(id: number): Observable<Person> {
     return this.http.get<Person>(`${this.baseUrl}/${id}`);
   }
 
-  // CREATE – kreira PersonDto
+  // CREATE
   createPerson(dto: AccountRegistrationDto): Observable<Person> {
-  return this.http.post<Person>(this.baseUrl, dto);
-}
+    return this.http.post<Person>(this.baseUrl, dto);
+  }
 
-  // BLOCK – vraća PersonDto
+  // BLOCK
   blockPerson(id: number): Observable<Person> {
     return this.http.put<Person>(`${this.baseUrl}/${id}/block`, {});
   }
 
-  // UNBLOCK – vraća PersonDto
+  // UNBLOCK
   unblockPerson(id: number): Observable<Person> {
     return this.http.put<Person>(`${this.baseUrl}/${id}/unblock`, {});
   }

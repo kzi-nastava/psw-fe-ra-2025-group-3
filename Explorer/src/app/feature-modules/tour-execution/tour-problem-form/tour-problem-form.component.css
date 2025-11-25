@@ -140,6 +140,37 @@ mat-hint {
   height: 20px;
 }
 
+.tour-not-found-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: #FFF3E0;
+  border: 1px solid #FF9800;
+  border-radius: var(--border-radius-md);
+  color: #E65100;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.tour-not-found-error mat-icon {
+  color: #FF9800;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .form-actions {
   display: flex;
   gap: var(--spacing-3);
@@ -164,9 +195,14 @@ mat-hint {
   background: linear-gradient(135deg, #00897B, #00695C);
 }
 
-.form-actions button[mat-raised-button]:hover {
+.form-actions button[mat-raised-button]:hover:not(:disabled) {
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
+}
+
+.form-actions button[mat-raised-button]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .form-actions button[mat-button] {
@@ -206,4 +242,5 @@ mat-hint {
   .form-actions button {
     width: 100%;
   }
+  
 }
