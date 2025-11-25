@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Monument } from '../../administration/model/monument.model';
+import { Facility } from '../../administration/model/facility.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { TouristMapService, TouristPositionDto } from './tourist-map.service';
 
@@ -12,6 +13,7 @@ export class TouristMapComponent implements OnInit {
 
   isLoading = false;
   monuments: Monument[] = [];
+  facilities: Facility[] = [];
   points: { lat: number; lng: number; name?: string }[] = [];
   selectedPoint: { lat: number; lng: number; name?: string } | null = null;
   initialPoint: { lat: number; lng: number } | undefined;
@@ -59,13 +61,40 @@ export class TouristMapComponent implements OnInit {
             name: m.name
           }));
 
-        this.isLoading = false;
+        this.loadFacilities();
       },
       error: () => {
         this.isLoading = false;
       }
     });
   }
+
+  private loadFacilities(): void {
+  this.touristMapService.getFacilities().subscribe({
+    next: (result: Facility[]) => {
+      console.log('raw facilities result:', result);
+
+      this.facilities = result || [];
+
+      const facilityPoints = this.facilities
+        .filter(f => f.latitude != null && f.longitude != null)
+        .map(f => ({
+          lat: f.latitude,
+          lng: f.longitude,
+          name: f.name
+        }));
+
+      this.points = [...this.points, ...facilityPoints];
+
+      console.log('this.points', this.points);
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Failed to load facilities', err);
+      this.isLoading = false;
+    }
+  });
+}
 
   onPointSelected(point: { lat: number; lng: number }): void {
     this.selectedPoint = point;

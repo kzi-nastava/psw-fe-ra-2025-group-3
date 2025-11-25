@@ -8,28 +8,31 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
 
-      
+      <!-- Naziv -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Naziv objekta</mat-label>
         <input matInput formControlName="name">
         <mat-icon matPrefix>location_on</mat-icon>
       </mat-form-field>
 
-      
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Latitude</mat-label>
-        <input matInput type="number" formControlName="latitude">
-        <mat-icon matPrefix>explore</mat-icon>
-      </mat-form-field>
+      <!-- LOKACIJA PREKO MAPE -->
+      <div class="full-width" *ngIf="dataLoaded">
+        <mat-label>Lokacija</mat-label>
 
-      
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Longitude</mat-label>
-        <input matInput type="number" formControlName="longitude">
-        <mat-icon matPrefix>explore</mat-icon>
-      </mat-form-field>
+        <xp-map
+          [mode]="'edit-object'"
+          [points]="mapPoints"
+          (pointSelected)="onPointSelected($event)">
+        </xp-map>
 
-     
+        <div class="coords-preview">
+          Izabrano:
+          {{ form.value.latitude }},
+          {{ form.value.longitude }}
+        </div>
+      </div>
+
+      <!-- Kategorija -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Kategorija</mat-label>
         <mat-select formControlName="category">
