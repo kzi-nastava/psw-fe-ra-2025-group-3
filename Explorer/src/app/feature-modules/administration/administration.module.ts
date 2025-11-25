@@ -12,21 +12,18 @@ import { AwardEventFormComponent } from './award-event-form/award-event-form.com
 
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 
-
 import { FacilityListComponent } from './facility-list/facility-list.component';
-import { FacilityFormComponent } from './facility-form/facility-form.component';
 import { FacilityEditComponent } from './facility-edit/facility-edit.component';
-
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button'; 
-import { MatIconModule } from '@angular/material/icon'; 
-import { MatFormFieldModule } from '@angular/material/form-field'; 
-import { MatInputModule } from '@angular/material/input'; 
-import { MatChipsModule } from '@angular/material/chips'; 
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -37,10 +34,8 @@ import { MatChipsModule } from '@angular/material/chips';
     AwardEventsComponent,
     AwardEventFormComponent,
 
-   
     FacilityListComponent,
-    FacilityFormComponent,
-    FacilityEditComponent
+    FacilityEditComponent    // ✔ ostaje samo edit
   ],
   imports: [
     CommonModule,
@@ -57,7 +52,6 @@ import { MatChipsModule } from '@angular/material/chips';
     MatInputModule,
     MatChipsModule,
 
-  
     RouterModule
   ],
   exports: [
@@ -68,9 +62,7 @@ import { MatChipsModule } from '@angular/material/chips';
     AwardEventsComponent,     
     AwardEventFormComponent,
 
-    
     FacilityListComponent,
-    FacilityFormComponent,
     FacilityEditComponent
   ]
 })

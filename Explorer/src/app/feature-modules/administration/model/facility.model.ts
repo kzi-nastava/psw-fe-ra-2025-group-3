@@ -3,5 +3,5 @@ export interface Facility {
   name: string;
   latitude: number;
   longitude: number;
-  category: 'WC' | 'Restoran' | 'Parking' | 'Ostalo';
+  category: number;   // <-- MORA BITI NUMBER
 }

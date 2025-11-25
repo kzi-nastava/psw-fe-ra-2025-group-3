@@ -1,38 +1,67 @@
-<h2>Kreiraj novi objekat</h2>
+<mat-card class="facility-form-card">
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-card-header>
+    <mat-card-title>Create Facility</mat-card-title>
+  </mat-card-header>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Naziv</mat-label>
-    <input matInput formControlName="name">
-    <mat-error *ngIf="form.get('name')?.invalid">Naziv je obavezan.</mat-error>
-  </mat-form-field>
+  <mat-card-content>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Latitude</mat-label>
-    <input matInput type="number" formControlName="latitude">
-    <mat-error *ngIf="form.get('latitude')?.invalid">Unesite validnu vrednost.</mat-error>
-  </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="facility-form-fields">
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Longitude</mat-label>
-    <input matInput type="number" formControlName="longitude">
-    <mat-error *ngIf="form.get('longitude')?.invalid">Unesite validnu vrednost.</mat-error>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          Name is required.
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Kategorija</mat-label>
-    <mat-select formControlName="category">
-      <mat-option value="WC">WC</mat-option>
-      <mat-option value="Restoran">Restoran</mat-option>
-      <mat-option value="Parking">Parking</mat-option>
-      <mat-option value="Ostalo">Ostalo</mat-option>
-    </mat-select>
-    <mat-error *ngIf="form.get('category')?.invalid">Odaberite kategoriju.</mat-error>
-  </mat-form-field>
+      <div class="coord-group">
+        <mat-form-field appearance="outline" class="coord-field">
+          <mat-label>Latitude</mat-label>
+          <input matInput formControlName="latitude">
+          <mat-error *ngIf="form.get('latitude')?.hasError('required')">
+            Latitude is required.
+          </mat-error>
+          <mat-error *ngIf="form.get('latitude')?.hasError('pattern')">
+            Must be a number.
+          </mat-error>
+        </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-    Sačuvaj
-  </button>
+        <mat-form-field appearance="outline" class="coord-field">
+          <mat-label>Longitude</mat-label>
+          <input matInput formControlName="longitude">
+          <mat-error *ngIf="form.get('longitude')?.hasError('required')">
+            Longitude is required.
+          </mat-error>
+          <mat-error *ngIf="form.get('longitude')?.hasError('pattern')">
+            Must be a number.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-</form>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option [value]="0">WC</mat-option>
+          <mat-option [value]="1">Restaurant</mat-option>
+          <mat-option [value]="2">Parking</mat-option>
+          <mat-option [value]="3">Other</mat-option>
+
+        </mat-select>
+        <mat-error *ngIf="form.get('category')?.hasError('required')">
+          Category is required.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting || form.invalid">
+        Save
+      </button>
+
+      <p class="error-text" *ngIf="backendError">{{ backendError }}</p>
+
+    </form>
+
+  </mat-card-content>
+
+</mat-card>

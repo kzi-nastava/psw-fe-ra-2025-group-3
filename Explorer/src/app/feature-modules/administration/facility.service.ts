@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Facility } from './model/facility.model';
+import { FacilityCreate } from './model/facility-create.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FacilityService {
 
-  private apiUrl = 'https://localhost:44333/api/facilities';
+  private apiUrl = 'https://localhost:44333/api/administration/facilities';
 
 
   constructor(private http: HttpClient) {}
@@ -17,9 +18,10 @@ export class FacilityService {
     return this.http.get<Facility[]>(this.apiUrl);
   }
 
-  create(facility: Facility): Observable<Facility> {
-    return this.http.post<Facility>(this.apiUrl, facility);
-  }
+ 
+  create(facility: FacilityCreate): Observable<Facility> {
+  return this.http.post<Facility>(this.apiUrl, facility);
+}
 
   update(facility: Facility): Observable<Facility> {
     return this.http.put<Facility>(`${this.apiUrl}/${facility.id}`, facility);

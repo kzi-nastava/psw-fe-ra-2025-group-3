@@ -12,12 +12,13 @@ import { Facility } from '../model/facility.model';
 export class FacilityEditComponent implements OnInit {
 
   id!: number;
+  isEditMode = false;
 
   form = this.fb.group({
     name: ['', Validators.required],
     latitude: ['', Validators.required],
     longitude: ['', Validators.required],
-    category: ['', Validators.required]
+    category: ['', Validators.required]  // forma radi sa stringovima
   });
 
   constructor(
@@ -28,19 +29,28 @@ export class FacilityEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    // CREATE MODE → nema id u ruti
+    if (!idParam) {
+      this.isEditMode = false;
+      return;   // ne učitavaj ništa iz servisa, id ne postoji
+    }
+
+    // EDIT MODE
+    this.isEditMode = true;
+    this.id = Number(idParam);
 
     this.facilityService.getAll().subscribe((facilities: Facility[]) => {
       const facility = facilities.find(f => f.id === this.id);
       if (!facility) return;
 
-    this.form.patchValue({
-  name: facility.name,
-  latitude: facility.latitude.toString(),
-  longitude: facility.longitude.toString(),
-  category: facility.category
-});
-
+      this.form.patchValue({
+        name: facility.name,
+        latitude: facility.latitude.toString(),
+        longitude: facility.longitude.toString(),
+        category: facility.category.toString()
+      });
     });
   }
 
@@ -48,14 +58,22 @@ export class FacilityEditComponent implements OnInit {
     if (this.form.invalid) return;
 
     const payload = {
-      id: this.id,
       name: this.form.value.name!,
       latitude: Number(this.form.value.latitude),
       longitude: Number(this.form.value.longitude),
-      category: this.form.value.category!
+      category: Number(this.form.value.category)
     };
 
-    this.facilityService.update(payload as any).subscribe(() => {
+    // UPDATE
+    if (this.isEditMode) {
+      this.facilityService.update({ id: this.id, ...payload }).subscribe(() => {
+        this.router.navigate(['/administration/facilities']);
+      });
+      return;
+    }
+
+    // CREATE
+    this.facilityService.create(payload).subscribe(() => {
       this.router.navigate(['/administration/facilities']);
     });
   }

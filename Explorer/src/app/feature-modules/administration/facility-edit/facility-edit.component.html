@@ -1,4 +1,5 @@
-<h2>Izmeni objekat</h2>
+<h2 *ngIf="isEditMode">Izmeni objekat</h2>
+<h2 *ngIf="!isEditMode">Dodaj objekat</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -20,15 +21,15 @@
   <mat-form-field appearance="outline" class="w-100">
     <mat-label>Kategorija</mat-label>
     <mat-select formControlName="category">
-      <mat-option value="WC">WC</mat-option>
-      <mat-option value="Restoran">Restoran</mat-option>
-      <mat-option value="Parking">Parking</mat-option>
-      <mat-option value="Ostalo">Ostalo</mat-option>
+      <mat-option [value]="0">WC</mat-option>
+      <mat-option [value]="1">Restoran</mat-option>
+      <mat-option [value]="2">Parking</mat-option>
+      <mat-option [value]="3">Ostalo</mat-option>
     </mat-select>
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit">
-    Sačuvaj izmene
+    Sačuvaj
   </button>
 
 </form>

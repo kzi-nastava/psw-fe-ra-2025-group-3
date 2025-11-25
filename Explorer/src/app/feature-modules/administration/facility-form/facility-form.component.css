@@ -1,0 +1,37 @@
+.facility-form-card {
+  padding: 20px;
+  background-color: #f0f2f5;
+}
+
+mat-card-header {
+  background-color: #006d77;
+  color: white;
+  padding: 16px;
+  margin: -20px -20px 20px -20px;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.facility-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.coord-group {
+  display: flex;
+  gap: 15px;
+}
+
+.coord-field {
+  flex: 1;
+}
+
+.error-text {
+  color: #d00000;
+  font-weight: 500;
+  margin-top: 10px;
+}
