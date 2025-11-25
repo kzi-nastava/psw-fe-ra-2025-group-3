@@ -45,3 +45,5 @@ Thumbs.db
 .vscode/
 ../.idea/
 package-lock.json
+
+*.env
