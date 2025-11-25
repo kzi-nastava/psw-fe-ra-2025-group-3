@@ -8,11 +8,30 @@
       
       <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
         <mat-label>Tour ID</mat-label>
-        <input matInput type="number" formControlName="tourId" placeholder="Enter tour ID">
+        <input matInput type="text" formControlName="tourId" placeholder="Enter tour ID" pattern="[0-9]*">
+        
+        <!-- Spinner dok proverava -->
+        <mat-icon *ngIf="checkingTour" matSuffix class="spin-icon">hourglass_empty</mat-icon>
+        
+        <!-- Check ikonica ako postoji -->
+        <mat-icon *ngIf="!checkingTour && tourExists" matSuffix style="color: #4caf50;">check_circle</mat-icon>
+        
+        <!-- X ikonica ako ne postoji -->
+        <mat-icon *ngIf="!checkingTour && tourNotFoundError" matSuffix style="color: #f44336;">cancel</mat-icon>
+        
         <mat-error *ngIf="problemForm.get('tourId')?.hasError('required')">
           Tour ID is required
         </mat-error>
+        <mat-error *ngIf="problemForm.get('tourId')?.hasError('pattern')">
+          Tour ID must be a valid number
+        </mat-error>
       </mat-form-field>
+
+      <!-- Poruka o grešci -->
+      <div *ngIf="tourNotFoundError && !isEditMode" class="tour-not-found-error">
+        <mat-icon>error</mat-icon>
+        <span>Tour with ID {{problemForm.get('tourId')?.value}} does not exist. Please enter a valid tour ID.</span>
+      </div>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Problem Category</mat-label>
@@ -105,7 +124,7 @@
       </div>
 
       <div class="form-actions">
-        <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid">
+        <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid || (!isEditMode && tourNotFoundError) || (!isEditMode && checkingTour)">
           <mat-icon>check</mat-icon>
           {{ isEditMode ? 'Save Changes' : 'Report Problem' }}
         </button>
