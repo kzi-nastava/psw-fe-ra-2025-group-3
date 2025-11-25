@@ -1,37 +1,63 @@
+<div class="container animate-fade-in-up">
 
-<h1>Turistički objekti</h1>
+  <div class="list-header flex-between mb-6">
+    <h1>Turistički objekti</h1>
 
-<button routerLink="/administration/facilities/new">Dodaj objekat</button>
+    <button 
+      class="btn btn-primary"
+      routerLink="/administration/facilities/new">
+      ➕ Dodaj objekat
+    </button>
+  </div>
 
+  <div *ngIf="loading" class="text-center">
+    <mat-spinner></mat-spinner>
+  </div>
 
-<div *ngIf="loading">Učitavanje...</div>
+  <div *ngIf="!loading && facilities.length === 0" class="empty-box card text-center">
+    <p>Nema nijednog objekta.</p>
+  </div>
 
-<div *ngIf="!loading && facilities.length === 0">
-  <p>Nema nijednog objekta.</p>
+  <div *ngIf="facilities.length > 0" class="card">
+
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Naziv</th>
+          <th>Kategorija</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let f of facilities">
+          <td>{{ f.name }}</td>
+          <td>
+            <span class="badge badge-primary">
+              {{ getCategoryLabel(f.category) }}
+            </span>
+          </td>
+          <td>{{ f.latitude }}</td>
+          <td>{{ f.longitude }}</td>
+          <td class="actions">
+
+            <button class="btn btn-secondary btn-sm"
+              [routerLink]="['/administration/facilities/edit', f.id]">
+              ✏ Izmeni
+            </button>
+
+            <button class="btn btn-outline-light btn-sm delete-btn"
+              (click)="deleteFacility(f.id)">
+              🗑 Obriši
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
 </div>
-
-<table *ngIf="facilities.length > 0">
-  <thead>
-    <tr>
-      <th>Naziv</th>
-      <th>Kategorija</th>
-      <th>Latitude</th>
-      <th>Longitude</th>
-      <th>Akcije</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let f of facilities">
-      <td>{{ f.name }}</td>
-      <td>{{ f.category }}</td>
-      <td>{{ f.latitude }}</td>
-      <td>{{ f.longitude }}</td>
-      <td>
-        <button [routerLink]="['/administration/facilities/edit', f.id]">Izmeni</button>
-
-        <button (click)="deleteFacility(f.id)">Obriši</button>
-      </td>
-    </tr>
-  </tbody>
-</table>

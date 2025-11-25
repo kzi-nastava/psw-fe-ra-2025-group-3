@@ -37,4 +37,15 @@ export class FacilityListComponent implements OnInit {
       this.loadFacilities();
     });
   }
+
+  // 🔥 DODATO — ovo je nedostajalo
+  getCategoryLabel(category: number): string {
+    switch (category) {
+      case 0: return 'WC';
+      case 1: return 'Restoran';
+      case 2: return 'Parking';
+      case 3: return 'Ostalo';
+      default: return 'Nepoznato';
+    }
+  }
 }
