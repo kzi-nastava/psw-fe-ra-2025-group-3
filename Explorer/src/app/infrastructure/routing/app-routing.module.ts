@@ -21,9 +21,9 @@ import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetup
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component'; // Task 13, Sprint 1
 import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
 import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
+import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 import { MapTestComponent } from 'src/app/feature-modules/layout/map-test/map-test.component';
 import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/tourist-map.component';
-
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -59,8 +59,11 @@ const routes: Routes = [
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
-  { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: {role: 'tourist'}}
+  
+  {path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: {role: 'author'}},
+  {path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: {role: 'tourist'}},
 
+  { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: {role: 'tourist'}}
 
 ];
 

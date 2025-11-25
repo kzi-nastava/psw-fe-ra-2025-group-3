@@ -34,6 +34,9 @@
       <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">
         My App Rating
       </button>
+      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/blogs">
+        My Blogs
+      </button>
 
 
       <button *ngIf="user && user.role === 'author'" mat-button routerLink="/profile">
@@ -69,6 +72,9 @@
       </button>
       <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/profile">
         My Profile
+      </button>
+      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/blogs">
+        My Blogs
       </button>
       
       <!-- Auth & Home buttons with icons -->
