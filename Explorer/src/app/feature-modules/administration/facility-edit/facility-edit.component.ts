@@ -18,7 +18,7 @@ export class FacilityEditComponent implements OnInit {
     name: ['', Validators.required],
     latitude: ['', Validators.required],
     longitude: ['', Validators.required],
-    category: ['', Validators.required]  // forma radi sa stringovima
+    category: ['', Validators.required]  
   });
 
   constructor(
@@ -31,13 +31,13 @@ export class FacilityEditComponent implements OnInit {
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
 
-    // CREATE MODE → nema id u ruti
+   
     if (!idParam) {
       this.isEditMode = false;
-      return;   // ne učitavaj ništa iz servisa, id ne postoji
+      return;   
     }
 
-    // EDIT MODE
+   
     this.isEditMode = true;
     this.id = Number(idParam);
 
@@ -64,7 +64,7 @@ export class FacilityEditComponent implements OnInit {
       category: Number(this.form.value.category)
     };
 
-    // UPDATE
+    
     if (this.isEditMode) {
       this.facilityService.update({ id: this.id, ...payload }).subscribe(() => {
         this.router.navigate(['/administration/facilities']);
@@ -72,7 +72,7 @@ export class FacilityEditComponent implements OnInit {
       return;
     }
 
-    // CREATE
+    
     this.facilityService.create(payload).subscribe(() => {
       this.router.navigate(['/administration/facilities']);
     });

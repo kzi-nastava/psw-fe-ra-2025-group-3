@@ -8,28 +8,28 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
 
-      <!-- Naziv -->
+      
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Naziv objekta</mat-label>
         <input matInput formControlName="name">
         <mat-icon matPrefix>location_on</mat-icon>
       </mat-form-field>
 
-      <!-- Latitude -->
+      
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Latitude</mat-label>
         <input matInput type="number" formControlName="latitude">
         <mat-icon matPrefix>explore</mat-icon>
       </mat-form-field>
 
-      <!-- Longitude -->
+      
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Longitude</mat-label>
         <input matInput type="number" formControlName="longitude">
         <mat-icon matPrefix>explore</mat-icon>
       </mat-form-field>
 
-      <!-- Kategorija -->
+     
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Kategorija</mat-label>
         <mat-select formControlName="category">

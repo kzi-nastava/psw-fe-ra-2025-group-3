@@ -3,5 +3,5 @@ export interface Facility {
   name: string;
   latitude: number;
   longitude: number;
-  category: number;   // <-- MORA BITI NUMBER
+  category: number;   
 }

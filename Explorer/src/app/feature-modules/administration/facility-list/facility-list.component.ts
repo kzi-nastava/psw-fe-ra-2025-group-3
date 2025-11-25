@@ -38,7 +38,7 @@ export class FacilityListComponent implements OnInit {
     });
   }
 
-  // 🔥 DODATO — ovo je nedostajalo
+  
   getCategoryLabel(category: number): string {
     switch (category) {
       case 0: return 'WC';

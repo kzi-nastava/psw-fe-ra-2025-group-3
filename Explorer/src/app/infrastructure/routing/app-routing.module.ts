@@ -40,29 +40,29 @@ const routes: Routes = [
 
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },
 
-  // ⭐ FACILITY ROUTES
+  
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
 
-  // ⭐ RATINGS
+  
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
   { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
-  // ⭐ PROFILE
+ 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
 
-  // ⭐ TOUR EXECUTION
+ 
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard] },
 
-  // ⭐ AWARD EVENTS
+ 
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] },
 
-  // ⭐ MEETUPS
+ 
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
   { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },
 ];
