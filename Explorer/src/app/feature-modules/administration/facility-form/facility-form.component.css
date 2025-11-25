@@ -1,0 +1,24 @@
+.form-card {
+  padding: var(--spacing-8);
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.submit-btn {
+  margin-top: var(--spacing-6);
+  width: 100%;
+}
+
+.error-text {
+  color: var(--color-error);
+  font-weight: 600;
+  margin-top: var(--spacing-4);
+}

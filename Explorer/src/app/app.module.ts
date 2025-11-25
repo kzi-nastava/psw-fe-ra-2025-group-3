@@ -23,7 +23,7 @@ import { MarkdownModule } from 'ngx-markdown';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,   
     LayoutModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -46,4 +46,4 @@ import { MarkdownModule } from 'ngx-markdown';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
