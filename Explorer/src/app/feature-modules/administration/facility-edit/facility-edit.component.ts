@@ -14,6 +14,12 @@ export class FacilityEditComponent implements OnInit {
   id!: number;
   isEditMode = false;
 
+  // da znamo kad da prikažemo xp-map
+  dataLoaded = false;
+
+  // marker(i) na mapi
+  mapPoints: { lat: number; lng: number }[] = [];
+
   form = this.fb.group({
     name: ['', Validators.required],
     latitude: ['', Validators.required],
@@ -31,19 +37,23 @@ export class FacilityEditComponent implements OnInit {
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
 
-   
+    // CREATE mod
     if (!idParam) {
       this.isEditMode = false;
+      this.dataLoaded = true;   // odmah možemo prikazati mapu praznu
       return;   
     }
 
-   
+    // EDIT mod
     this.isEditMode = true;
     this.id = Number(idParam);
 
     this.facilityService.getAll().subscribe((facilities: Facility[]) => {
       const facility = facilities.find(f => f.id === this.id);
-      if (!facility) return;
+      if (!facility) {
+        this.dataLoaded = true; // da se ne zaglavi UI
+        return;
+      }
 
       this.form.patchValue({
         name: facility.name,
@@ -51,7 +61,27 @@ export class FacilityEditComponent implements OnInit {
         longitude: facility.longitude.toString(),
         category: facility.category.toString()
       });
+
+      // postavi postojeći marker na mapu
+      if (facility.latitude != null && facility.longitude != null) {
+        this.mapPoints = [{
+          lat: facility.latitude,
+          lng: facility.longitude
+        }];
+      }
+
+      this.dataLoaded = true;   // tek sad renderuj mapu
     });
+  }
+
+  // xp-map emituje { lat, lng } – isto kao kod monumenta
+  onPointSelected(point: { lat: number; lng: number }): void {
+    this.form.patchValue({
+      latitude: point.lat.toString(),
+      longitude: point.lng.toString()
+    });
+
+    this.mapPoints = [{ lat: point.lat, lng: point.lng }];
   }
 
   onSubmit(): void {
@@ -64,7 +94,6 @@ export class FacilityEditComponent implements OnInit {
       category: Number(this.form.value.category)
     };
 
-    
     if (this.isEditMode) {
       this.facilityService.update({ id: this.id, ...payload }).subscribe(() => {
         this.router.navigate(['/administration/facilities']);
@@ -72,7 +101,6 @@ export class FacilityEditComponent implements OnInit {
       return;
     }
 
-    
     this.facilityService.create(payload).subscribe(() => {
       this.router.navigate(['/administration/facilities']);
     });
