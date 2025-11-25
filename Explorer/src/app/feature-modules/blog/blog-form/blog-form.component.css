@@ -1,0 +1,237 @@
+.blog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+  min-width: 650px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 15px;
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 12px;
+  color: #667eea;
+}
+
+mat-label {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Images Section */
+.images-section {
+  margin-top: 12px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+}
+
+.images-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.images-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.images-label mat-icon {
+  color: #667eea;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.images-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.image-item {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.image-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.image-form-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.image-url-field {
+  flex: 1;
+  margin: 0;
+}
+
+.image-form-group button {
+  margin-top: 8px;
+}
+
+/* Image Preview */
+.image-preview {
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+  border: 2px solid #e2e8f0;
+}
+
+.image-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.images-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #718096;
+  font-style: italic;
+}
+
+.images-hint mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #667eea;
+}
+
+/* Dialog Styling */
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+::ng-deep .mat-mdc-dialog-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  border-radius: 0 !important;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+
+::ng-deep .mat-mdc-dialog-actions {
+  padding: 20px 32px !important;
+  margin: 0 !important;
+  border-top: 2px solid #f1f3f5;
+  background: #fafbfc;
+  border-radius: 0 !important;
+  gap: 12px;
+}
+
+::ng-deep .mat-mdc-dialog-actions button {
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button] {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Scrollbar Styling */
+.blog-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blog-form::-webkit-scrollbar-track {
+  background: #f1f3f5;
+  border-radius: 4px;
+}
+
+.blog-form::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.blog-form::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .blog-form {
+    min-width: auto;
+  }
+
+  .images-section {
+    padding: 16px;
+  }
+
+  .image-form-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .image-form-group button {
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+
+  ::ng-deep .mat-mdc-dialog-title {
+    font-size: 20px !important;
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions {
+    padding: 16px 24px !important;
+    flex-direction: column;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions button {
+    width: 100%;
+  }
+}

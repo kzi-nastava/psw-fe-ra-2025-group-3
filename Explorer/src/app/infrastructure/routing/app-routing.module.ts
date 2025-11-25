@@ -25,6 +25,7 @@ import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app
 import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-app-rating/my-app-rating.component';
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
 import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
+import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
 
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component';
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execution/preference-overview/preference-overview.component';
@@ -32,6 +33,8 @@ import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-executio
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
+
+import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 
 const routes: Routes = [
 
@@ -65,6 +68,7 @@ const routes: Routes = [
   // Profile
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
+  { path: 'administration/profile-form', component: ProfileFormComponent, canActivate: [AuthGuard] },
 
   // Tourist-only features
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
@@ -77,6 +81,10 @@ const routes: Routes = [
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
   { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },
+
+  // Blogs (Author & Tourist)
+  { path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'author' } },
+  { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
 ];
 

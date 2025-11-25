@@ -1,32 +1,55 @@
 <div class="award-events-container">
-    <h2>Upravljanje Godišnjim Dodelama Nagrada</h2>
-    <hr>
-
-    <button mat-raised-button color="primary" class="add-button" (click)="onAddClicked()">
-        <mat-icon>add</mat-icon> Kreiraj Novu Dodelu
-    </button>
+    <h2 class="page-title">Manage Annual Awards</h2>
+    
+    <div class="action-bar">
+        <button mat-raised-button color="primary" class="add-button btn-lg" (click)="onAddClicked()">
+            <mat-icon>add</mat-icon> Create New Award
+        </button>
+    </div>
 
     <div class="award-events-list">
         <mat-card *ngFor="let ae of awardEvents" class="award-event-card">
-            <mat-card-header>
-                <mat-card-title>{{ ae.name }}</mat-card-title>
-                <mat-card-subtitle>Godina: {{ ae.year }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <p><strong>Status:</strong> <span class="status-chip">{{ ae.status }}</span></p>
-                <p><strong>Opis:</strong> {{ ae.description }}</p>
-                <p><strong>Glasanje:</strong> {{ ae.votingStartDate | date: 'mediumDate' }} - {{ ae.votingEndDate | date: 'mediumDate' }}</p>
+            
+            <div class="card-header-gradient">
+                <div class="header-content">
+                    <mat-card-title class="card-title">{{ ae.name }}</mat-card-title>
+                    <mat-card-subtitle class="card-subtitle">Year: {{ ae.year }}</mat-card-subtitle>
+                </div>
+                <div class="status-badge" [ngClass]="{'status-draft': ae.status === 'Draft', 'status-active': ae.status !== 'Draft'}">
+                    {{ ae.status }}
+                </div>
+            </div>
+
+            <mat-card-content class="card-body">
+                <div class="info-row">
+                    <mat-icon class="info-icon">description</mat-icon>
+                    <div class="date-group">
+                        <span>Description:</span>
+                        <p class="info-text">{{ ae.description }}</p>
+                    </div>                 
+                </div>
+                
+                <div class="info-row">
+                    <mat-icon class="info-icon">event</mat-icon>
+                    <div class="date-group">
+                        <span>Voting Period:</span>
+                        <span class="date-value">{{ ae.votingStartDate | date: 'mediumDate' }} - {{ ae.votingEndDate | date: 'mediumDate' }}</span>
+                    </div>
+                </div>
             </mat-card-content>
+
             <mat-card-actions class="card-actions">
-                <button mat-icon-button color="primary" (click)="onEditClicked(ae)">
+                <button mat-icon-button color="primary" (click)="onEditClicked(ae)" matTooltip="Edit">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="accent" (click)="deleteAwardEvent(ae.id)">
+                <button mat-icon-button color="warn" (click)="deleteAwardEvent(ae.id)" matTooltip="Delete">
                     <mat-icon>delete</mat-icon>
                 </button>
             </mat-card-actions>
         </mat-card>
 
-        <p *ngIf="awardEvents.length === 0" class="no-data-message">Nema dostupnih dodela nagrada.</p>
+        <div *ngIf="awardEvents.length === 0" class="no-data-container">
+            <p class="text-muted">No award events found.</p>
+        </div>
     </div>
 </div>
