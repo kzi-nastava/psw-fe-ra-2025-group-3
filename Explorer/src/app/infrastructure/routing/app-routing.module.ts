@@ -8,6 +8,9 @@ import { RegistrationComponent } from '../auth/registration/registration.compone
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component'; //Task 8, Sprint 1
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component'; // Task 1, Sprint 1
 import { ProfileComponent } from 'src/app/feature-modules/stakeholders/profile/profile.component';
+
+import { MonumentListComponent } from 'src/app/feature-modules/administration/monuments/monument-list/monument-list.component'; // Task 3, Sprint 1
+
 import { AwardEventsComponent } from 'src/app/feature-modules/administration/award-events/award-events.component'; // Task 4, Sprint 1
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component'; //Task 6, Sprint 1
 import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-app-rating/my-app-rating.component'; //Task 6, Sprint 1
@@ -19,6 +22,7 @@ import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/mee
 import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
 import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profile-list/profile-list.component';
 import { MapTestComponent } from 'src/app/feature-modules/layout/map-test/map-test.component';
+import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/tourist-map.component';
 
 
 const routes: Routes = [
@@ -46,11 +50,17 @@ const routes: Routes = [
 
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] }, // Task 4, Sprint 1
 
+
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  {path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard]}, // Task 3, Sprint 1
+
   {path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
   {path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard]}, // Task 13, Sprint 1
 
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
+  { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: {role: 'tourist'}}
+
 
 ];
 

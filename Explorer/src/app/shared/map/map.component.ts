@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { MapService } from './map.service';
@@ -10,7 +10,7 @@ import { environment } from 'src/env/environment';
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnChanges {
     private map: any;
     private clickMarker: L.Marker | undefined;
     private routeControl: L.Routing.Control | undefined;
@@ -21,7 +21,7 @@ export class MapComponent implements AfterViewInit {
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
 
@@ -75,13 +75,17 @@ export class MapComponent implements AfterViewInit {
     private loadAllPoints(): void {
         this.points.forEach(p => {            
             var marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+            if (p.name) {
+            marker.bindPopup(p.name);
+            } else {
             var address = '';
             this.mapService.reverseSearch(p.lat, p.lng).subscribe((res) => {
                 address = res.address.road + ' ' + res.address.city;
                 marker.bindPopup(address);
 
                 
-            });
+                });
+            }
             if (this.mode === 'edit-object') {
                 marker.dragging?.enable();
                 marker.on('dragend', (event: L.LeafletEvent) => {
@@ -167,7 +171,7 @@ export class MapComponent implements AfterViewInit {
                 error: () => { }
             });
 
-            if (this.mode === 'edit-object') {
+            if (this.mode === 'edit-object' && this.clickMarker) {
                 this.map.removeLayer(this.clickMarker);
                 this.clickMarker = undefined;
             }
@@ -204,4 +208,10 @@ export class MapComponent implements AfterViewInit {
         
         this.initMap();
     }
+    ngOnChanges(changes: SimpleChanges): void {
+    // Ako je promenjena početna tačka i mapa je već inicijalizovana – postavi marker
+    if (changes['initialPoint'] && this.map && this.initialPoint) {
+        this.setInitialPointMarker();
+    }
+}
 }

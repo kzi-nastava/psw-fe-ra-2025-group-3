@@ -1,0 +1,99 @@
+.monument-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+  min-width: 450px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 15px;
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 12px;
+  color: #667eea;
+}
+
+mat-label {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Dialog stil - isto kao kod naloga */
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+::ng-deep .mat-mdc-dialog-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding: 24px 32px !important;
+  margin: 0 !important;
+
+
+  max-height: 70vh !important; 
+  overflow-y: auto !important;
+  box-sizing: border-box;
+}
+
+::ng-deep .mat-mdc-dialog-actions {
+  padding: 20px 32px !important;
+  margin: 0 !important;
+  border-top: 2px solid #f1f3f5;
+  background: #fafbfc;
+  gap: 12px;
+}
+
+::ng-deep .mat-mdc-dialog-actions button {
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button] {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .monument-form {
+    min-width: auto;
+  }
+
+  ::ng-deep .mat-mdc-dialog-title {
+    font-size: 20px !important;
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-content {
+    padding: 20px 24px !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions {
+    padding: 16px 24px !important;
+    flex-direction: column;
+  }
+
+  ::ng-deep .mat-mdc-dialog-actions button {
+    width: 100%;
+  }
+}
