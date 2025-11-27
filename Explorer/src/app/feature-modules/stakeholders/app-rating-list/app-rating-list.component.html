@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="header">
+    <h2>Application ratings</h2>
+  </div>
+
+  <div *ngIf="totalCount === 0" class="no-ratings">
+    <mat-icon class="empty-icon">star_border</mat-icon>
+    <p>No ratings have been submitted yet.</p>
+  </div>
+
+  <div *ngIf="totalCount > 0" class="ratings-grid">
+    <mat-card *ngFor="let r of ratings" class="rating-card">
+      <mat-card-header>
+        <mat-card-title>
+          <span class="username">
+            {{ r.username || ('User #' + r.userId) }}
+          </span>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <span class="rating-stars">
+            <ng-container *ngFor="let s of [1, 2, 3, 4, 5]">
+              <mat-icon class="star" [ngClass]="{ filled: s <= r.rating }">
+                {{ s <= r.rating ? 'star' : 'star_border' }}
+              </mat-icon>
+            </ng-container>
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="comment" *ngIf="r.comment; else noComment">
+          “{{ r.comment }}”
+        </p>
+
+        <ng-template #noComment>
+          <p class="comment no-comment">No comment provided.</p>
+        </ng-template>
+
+        <div class="metadata">
+          <small>Created: {{ r.createdAt | date: 'short' }}</small>
+          <small *ngIf="r.updatedAt">
+            Updated: {{ r.updatedAt | date: 'short' }}
+          </small>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="pagination" *ngIf="totalCount > pageSize">
+    <button mat-stroked-button (click)="prevPage()" [disabled]="page === 1">
+      Previous
+    </button>
+
+    <span class="page-info">
+      Page {{ page }} / {{ maxPage }}
+    </span>
+
+    <button mat-stroked-button (click)="nextPage()" [disabled]="page >= maxPage">
+      Next
+    </button>
+  </div>
+</div>

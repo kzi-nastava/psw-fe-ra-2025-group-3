@@ -1,4 +1,471 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================================
+   TRAVEL VISTA - Globalni CSS Stilovi
+   
+   Centralizovani stilovi za konzistentan izgled aplikacije.
+   Teal/Cyan tema za travel/adventure osećaj.
+   ============================================================================ */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* ============================================================================
+   CSS PROMENLJIVE
+   ============================================================================ */
+
+:root {
+  /* Primarna paleta - Teal/Cyan */
+  --color-primary-500: #00BCD4;     /* Glavna boja - CTA dugmad, linkovi */
+  --color-primary-600: #00ACC1;     /* Gradijent */
+  --color-primary-700: #0097A7;     /* Navbar */
+  --color-primary-800: #00838F;     /* Naslovi H3, H4 */
+  
+  --color-secondary-500: #009688;   /* Sekundarna boja */
+  --color-secondary-800: #00695C;   /* Naslovi H1, H2 */
+  
+  /* Neutralne boje */
+  --color-neutral-0: #FFFFFF;       /* Bela - kartice */
+  --color-neutral-50: #FAFAFA;      /* Body pozadina */
+  --color-neutral-100: #F5F5F5;     /* Svetla pozadina */
+  --color-neutral-800: #424242;     /* Body tekst */
+  --color-neutral-900: #212121;     /* Naslovi */
+  
+  /* Statusne boje */
+  --color-success: #4CAF50;
+  --color-error: #F44336;
+  --color-warning: #FFC107;
+  --color-info: #2196F3;
+  
+  /* Tipografija */
+  --font-family-primary: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  --font-family-display: 'Poppins', 'Inter', sans-serif;
+  
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.25rem;      /* 20px */
+  --font-size-xl: 1.5rem;       /* 24px */
+  --font-size-2xl: 1.875rem;    /* 30px */
+  --font-size-3xl: 2.25rem;     /* 36px */
+  --font-size-4xl: 3rem;        /* 48px */
+  
+  /* Spacing - 8px bazni sistem */
+  --spacing-1: 0.25rem;     /* 4px */
+  --spacing-2: 0.5rem;      /* 8px */
+  --spacing-3: 0.75rem;     /* 12px */
+  --spacing-4: 1rem;        /* 16px */
+  --spacing-6: 1.5rem;      /* 24px */
+  --spacing-8: 2rem;        /* 32px */
+  --spacing-12: 3rem;       /* 48px */
+  --spacing-16: 4rem;       /* 64px */
+  
+  /* Border radius */
+  --border-radius-sm: 0.25rem;    /* 4px */
+  --border-radius-md: 0.5rem;     /* 8px */
+  --border-radius-lg: 0.75rem;    /* 12px */
+  --border-radius-xl: 1rem;       /* 16px */
+  --border-radius-2xl: 1.5rem;    /* 24px */
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* ============================================================================
+   RESET & BASE
+   ============================================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+}
+
+/* ============================================================================
+   TIPOGRAFIJA
+   ============================================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-neutral-900);
+  margin-bottom: var(--spacing-4);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: var(--color-secondary-800);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  color: var(--color-secondary-800);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary-800);
+}
+
+p {
+  margin-bottom: var(--spacing-4);
+  line-height: 1.7;
+}
+
+a {
+  color: var(--color-primary-500);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-700);
+}
+
+/* ============================================================================
+   LAYOUT UTILITIES
+   ============================================================================ */
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* FlexBox */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.items-center { align-items: center; }
+
+/* Grid */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-6);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-6);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-6);
+}
+
+/* Gap utilities */
+.gap-2 { gap: var(--spacing-2); }
+.gap-4 { gap: var(--spacing-4); }
+.gap-6 { gap: var(--spacing-6); }
+.gap-8 { gap: var(--spacing-8); }
+
+/* ============================================================================
+   SPACING UTILITIES
+   ============================================================================ */
+
+.m-0 { margin: 0; }
+.mt-4 { margin-top: var(--spacing-4); }
+.mb-4 { margin-bottom: var(--spacing-4); }
+.mb-6 { margin-bottom: var(--spacing-6); }
+.mb-8 { margin-bottom: var(--spacing-8); }
+
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.p-4 { padding: var(--spacing-4); }
+.p-6 { padding: var(--spacing-6); }
+.p-8 { padding: var(--spacing-8); }
+
+.px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
+.py-4 { padding-top: var(--spacing-4); padding-bottom: var(--spacing-4); }
+.py-8 { padding-top: var(--spacing-8); padding-bottom: var(--spacing-8); }
+
+/* ============================================================================
+   TEXT UTILITIES
+   ============================================================================ */
+
+.text-center { text-align: center; }
+.text-primary { color: var(--color-primary-500); }
+.text-white { color: var(--color-neutral-0); }
+.text-muted { color: var(--color-neutral-800); }
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: var(--color-neutral-0);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary-500), var(--color-secondary-800));
+  color: var(--color-neutral-0);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline-light {
+  background: transparent;
+  color: var(--color-neutral-0);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-lg {
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--font-size-base);
+}
+
+.btn-xl {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.125rem;
+}
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+
+.card {
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ============================================================================
+   BADGES
+   ============================================================================ */
+
+.badge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.badge-primary {
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+}
+
+.badge-success {
+  background: var(--color-success);
+  color: var(--color-neutral-0);
+}
+
+.badge-error {
+  background: var(--color-error);
+  color: var(--color-neutral-0);
+}
+
+/* ============================================================================
+   VISIBILITY
+   ============================================================================ */
+
+.hidden {
+  display: none;
+}
+
+.hide-mobile {
+  display: block;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* ============================================================================
+   ANGULAR MATERIAL OVERRIDES
+   ============================================================================ */
+
+/* Toolbar */
+::ng-deep .mat-toolbar.mat-primary {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-secondary-800)) !important;
+  color: var(--color-neutral-0) !important;
+}
+
+/* Buttons */
+::ng-deep .mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--color-primary-500) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+}
+
+/* Form Fields */
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: #E0F7FA !important;
+  border-radius: var(--border-radius-lg) !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  background-color: #B2EBF2 !important;
+}
+
+::ng-deep .mat-mdc-floating-label {
+  color: var(--color-secondary-800) !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--color-primary-800) !important;
+  font-weight: 600;
+}
+
+::ng-deep .mat-mdc-input-element {
+  color: var(--color-neutral-900) !important;
+  font-weight: 500;
+}
+
+::ng-deep .mdc-text-field--filled .mdc-line-ripple::after {
+  border-bottom-color: var(--color-primary-500) !important;
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-500);
+  border-radius: var(--border-radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-600);
+}
+
+/* ============================================================================
+   RESPONZIVNOST
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .flex-row {
+    flex-direction: column;
+  }
+  
+  .hide-mobile {
+    display: none;
+  }
+  
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  h2 {
+    font-size: var(--font-size-2xl);
+  }
+}

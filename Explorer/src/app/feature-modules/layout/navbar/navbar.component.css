@@ -1,10 +1,334 @@
-div {
-    width: 100%;
-    display: flex;
-    gap: 10px;
+/* ============================================================================
+   NAVBAR COMPONENT STYLES - Travel Vista Theme
+   ============================================================================ */
+
+/* Main Toolbar Override */
+:host ::ng-deep .mat-toolbar {
+  background: linear-gradient(135deg, #00838F, #004D40) !important;
+  color: #FFFFFF !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: 110px;
 }
 
-#buttons {
-    width: auto;
-    margin-left: auto;
+.explorer-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 110px;
+}
+
+/* ============================================================================
+   BRAND / LOGO STYLES
+   ============================================================================ */
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  opacity: 0.95;
+  transform: scale(1.02);
+}
+
+.brand-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .brand-logo {
+  transform: rotate(5deg);
+}
+
+.brand-text-container {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-text-main {
+  font-family: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #FFFFFF, #B2EBF2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-text-sub {
+  font-family: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  letter-spacing: 8px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================================================================
+   NAVIGATION BUTTONS
+   ============================================================================ */
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* All mat-button styling */
+:host ::ng-deep .mat-mdc-button {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .mat-mdc-button:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #FFFFFF !important;
+}
+
+/* Button Icon Images */
+.btn-icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-right: 8px;
+  transition: transform 0.2s ease;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Home Button - Accent style */
+.btn-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+}
+
+.btn-home:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.btn-home:hover .btn-icon-img {
+  transform: scale(1.1);
+}
+
+/* Login Button - Primary CTA */
+.btn-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #26C6DA, #00ACC1) !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+  transition: all 0.2s ease !important;
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, #4DD0E1, #26C6DA) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-login:hover .btn-icon-img {
+  transform: scale(1.1);
+}
+
+/* Logout Button */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(244, 67, 54, 0.1) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(244, 67, 54, 0.4) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  font-size: 1rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-logout:hover {
+  background: rgba(244, 67, 54, 0.2) !important;
+  border-color: rgba(244, 67, 54, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+.btn-logout:hover .btn-icon-img {
+  transform: scale(1.1);
+}
+
+/* Logout Button */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+}
+
+.btn-logout:hover {
+  background: rgba(244, 67, 54, 0.15) !important;
+  border-color: rgba(244, 67, 54, 0.5) !important;
+}
+
+.btn-logout:hover .btn-icon-img {
+  transform: scale(1.1);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+  .navbar-buttons {
+    gap: 4px;
+  }
+  
+  :host ::ng-deep .mat-mdc-button {
+    padding: 0 12px !important;
+    font-size: 0.8rem;
+  }
+  
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .btn-icon-img {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+  }
+  
+  .brand-logo {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .brand-text-main {
+    font-size: 1.7rem;
+  }
+  
+  .brand-text-sub {
+    font-size: 1.1rem;
+    letter-spacing: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  
+  .navbar-buttons {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .btn-icon-img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .brand-logo {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .brand-text-main {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+  
+  .brand-text-sub {
+    font-size: 0.95rem;
+    letter-spacing: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-text-container {
+    display: none;
+  }
+  
+  .brand-logo {
+    width: 75px;
+    height: 75px;
+  }
+  
+  /* Hide text on very small screens, show only icons */
+  .btn-home span,
+  .btn-login span,
+  .btn-logout span {
+    display: none;
+  }
+  
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 10px !important;
+    min-width: 48px;
+  }
+  
+  .btn-icon-img {
+    margin-right: 0;
+    width: 24px;
+    height: 24px;
+  }
 }

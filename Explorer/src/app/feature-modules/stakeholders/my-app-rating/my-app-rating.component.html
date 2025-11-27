@@ -1,0 +1,73 @@
+<div class="rating-wrapper">
+  <mat-card class = "rating-card">
+    
+    <div class="rating-header">
+      <h2>Rate application</h2>
+    </div>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSave()">
+
+        <div class="field-row">
+          <label>Rating (1–5)</label>
+
+          <div class="stars">
+            <span
+              *ngFor="let v of stars"
+              class="star"
+              [class.selected]="v <= form.get('rating')?.value"
+              (click)="setRating(v)"
+            >
+              ★
+            </span>
+          </div>
+
+          <div class="current-rating" *ngIf="form.get('rating')?.value">
+            {{ form.get('rating')?.value }}/5
+          </div>
+
+          <div class="error" *ngIf="form.get('rating')?.touched && form.get('rating')?.invalid">
+            Rating is required and must be between 1 and 5.
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Comment (optional)</mat-label>
+          <textarea
+            matInput
+            rows="4"
+            formControlName="comment">
+          </textarea>
+
+          <mat-error *ngIf="form.get('comment')?.hasError('maxlength')">
+            Comment cannot be longer than 1000 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="buttons">
+          <button mat-raised-button color="primary" type="submit">
+            {{ existingRating ? 'Update rating' : 'Create rating' }}
+          </button>
+
+          <button
+            *ngIf="existingRating"
+            mat-raised-button
+            color="warn"
+            type="button"
+            (click)="onDelete()">
+            Delete rating
+          </button>
+        </div>
+
+        <div class="meta" *ngIf="existingRating">
+          <p>Created at: {{ existingRating.createdAt | date:'short' }}</p>
+          <p *ngIf="existingRating.updatedAt">
+            Last updated: {{ existingRating.updatedAt | date:'short' }}
+          </p>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>

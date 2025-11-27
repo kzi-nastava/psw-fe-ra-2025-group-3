@@ -1,0 +1,76 @@
+<div id="preference">
+    <p>Moje Preference</p>
+    <hr>
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-8">
+        <p>Učitavanje...</p>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm" class="empty-state">
+        <p>Nemate postavljene preference.</p>
+        <button color="primary" (click)="onAddClicked()" mat-raised-button>
+            Kreiraj preference
+        </button>
+    </div>
+    
+    <!-- Preference Details -->
+    <div id="preference-details" *ngIf="!isLoading && hasPreference && !shouldRenderPreferenceForm">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parametar</th>
+                    <th>Vrednost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Težina ture</td>
+                    <td>{{ getDifficultyText(preference!.difficulty) }}</td>
+                </tr>
+                <tr>
+                    <td>Šetnja</td>
+                    <td>{{ getRatingStars(preference!.walkingRating) }}</td>
+                </tr>
+                <tr>
+                    <td>Bicikl</td>
+                    <td>{{ getRatingStars(preference!.bicycleRating) }}</td>
+                </tr>
+                <tr>
+                    <td>Auto</td>
+                    <td>{{ getRatingStars(preference!.carRating) }}</td>
+                </tr>
+                <tr>
+                    <td>Čamac</td>
+                    <td>{{ getRatingStars(preference!.boatRating) }}</td>
+                </tr>
+                <tr>
+                    <td>Tagovi</td>
+                    <td>{{ preference!.tags.join(', ') }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Action Buttons -->
+        <div>
+            <button color="primary" (click)="onEditClicked()" mat-raised-button>
+                <mat-icon>edit</mat-icon>
+                Izmeni
+            </button>
+            <button color="warn" (click)="deletePreference()" mat-raised-button>
+                <mat-icon>delete</mat-icon>
+                Obriši
+            </button>
+        </div>
+    </div>
+    
+    <!-- Preference Form -->
+    <div *ngIf="shouldRenderPreferenceForm">
+        <xp-preference-form 
+            [shouldEdit]="shouldEdit" 
+            [preference]="preference"
+            (preferenceUpdated)="getPreference(); shouldRenderPreferenceForm = false;">
+        </xp-preference-form>
+    </div>
+</div>

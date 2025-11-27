@@ -1,0 +1,78 @@
+<mat-card class="award-event-form-card">
+    <mat-card-header>
+        <mat-card-title>{{ shouldEdit ? 'Edit Award Event' : 'Create New Award Event' }}</mat-card-title>
+    </mat-card-header>
+    
+    <div *ngIf="errorMessage" class="error-container">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+    </div>
+
+    <mat-card-content>
+        <form [formGroup]="awardEventForm" (ngSubmit)="addAwardEvent()" class="award-event-form-fields">
+            
+            <!-- Name -->
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+                <mat-error *ngIf="awardEventForm.get('name')?.errors?.['required']">Name is required.</mat-error>
+            </mat-form-field>
+
+            <!-- Description -->
+            <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="3"></textarea>
+                <mat-error *ngIf="awardEventForm.get('description')?.errors?.['required']">Description is required.</mat-error>
+            </mat-form-field>
+            
+            <!-- Year -->
+            <mat-form-field appearance="outline">
+                <mat-label>Award Year</mat-label>
+                <input matInput type="number" formControlName="year">
+                <mat-error *ngIf="awardEventForm.get('year')?.errors?.['required']">Year is required.</mat-error>
+                <mat-error *ngIf="awardEventForm.get('year')?.errors?.['min'] || awardEventForm.get('year')?.errors?.['max']">Year must be between 2000 and 2100.</mat-error>
+            </mat-form-field>
+
+            <!-- Voting Start (Date & Time) -->
+            <div class="date-time-group">
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="pickerStart" formControlName="votingStartDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStart></mat-datepicker>
+                    <mat-error *ngIf="awardEventForm.get('votingStartDate')?.errors?.['required']">Start date is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="time-field">
+                    <mat-label>Start Time</mat-label>
+                    <input matInput type="time" formControlName="votingStartTime"> 
+                    <mat-error *ngIf="awardEventForm.get('votingStartTime')?.errors?.['required']">Start time is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Voting End (Date & Time) -->
+            <div class="date-time-group">
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="pickerEnd" formControlName="votingEndDate">
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                    <mat-error *ngIf="awardEventForm.get('votingEndDate')?.errors?.['required']">End date is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="time-field">
+                    <mat-label>End Time</mat-label>
+                    <input matInput type="time" formControlName="votingEndTime">
+                    <mat-error *ngIf="awardEventForm.get('votingEndTime')?.errors?.['required']">End time is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <mat-dialog-actions align="end">
+                <button mat-button type="button" (click)="onCancel()">Cancel</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!awardEventForm.valid">
+                    {{ shouldEdit ? 'Save Changes' : 'Create Event' }}
+                </button>
+            </mat-dialog-actions>
+        </form>
+    </mat-card-content>
+</mat-card>

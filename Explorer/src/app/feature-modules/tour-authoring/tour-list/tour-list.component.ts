@@ -1,0 +1,183 @@
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TourService } from '../tour.service';
+import { Tour, TourStatus, TourDifficulty } from '../model/tour.model';
+import { TourFormComponent } from '../tour-form/tour-form.component';
+
+@Component({
+  selector: 'app-tour-list',
+  templateUrl: './tour-list.component.html',
+  styleUrls: ['./tour-list.component.css']
+})
+export class TourListComponent implements OnInit {
+  tours: Tour[] = [];
+  displayedTours: Tour[] = [];
+  toursPerPage: number = 6;
+  currentPage: number = 1;
+  isLoading: boolean = false;
+
+  constructor(
+    private tourService: TourService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTours();
+  }
+
+  loadTours(): void {
+    this.isLoading = true;
+    this.tourService.getMyTours().subscribe({
+      next: (result) => {
+        console.log('API Response:', result);
+        this.tours = result || [];
+        this.updateDisplayedTours();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading tours:', error);
+        this.showError('Error loading tours');
+        this.tours = [];
+        this.displayedTours = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  updateDisplayedTours(): void {
+    if (!this.tours || this.tours.length === 0) {
+      this.displayedTours = [];
+      return;
+    }
+    const endIndex = this.currentPage * this.toursPerPage;
+    this.displayedTours = this.tours.slice(0, endIndex);
+  }
+
+  showMore(): void {
+    this.currentPage++;
+    this.updateDisplayedTours();
+  }
+
+  hasMoreTours(): boolean {
+    return this.tours && this.displayedTours && this.displayedTours.length < this.tours.length;
+  }
+
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(TourFormComponent, {
+      width: '650px',
+      maxWidth: '90vw',
+      data: { mode: 'create' },
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadTours();
+      }
+    });
+  }
+
+  openEditDialog(tour: Tour): void {
+    const dialogRef = this.dialog.open(TourFormComponent, {
+      width: '650px',
+      maxWidth: '90vw',
+      data: { mode: 'edit', tour: tour },
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadTours();
+      }
+    });
+  }
+
+  deleteTour(tour: Tour): void {
+    if (tour.status !== TourStatus.Draft) {
+      this.showError('You can only delete tours in Draft status');
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete this tour?')) {
+      this.tourService.deleteTour(tour.id!).subscribe({
+        next: () => {
+          this.showSuccess('Tour successfully deleted');
+          this.loadTours();
+        },
+        error: (error) => {
+          console.error('Delete error:', error);
+          this.showError('Error deleting tour');
+        }
+      });
+    }
+  }
+
+  publishTour(tour: Tour): void {
+    if (tour.status !== TourStatus.Draft) {
+      this.showError('You can only publish tours in Draft status');
+      return;
+    }
+
+    this.tourService.publishTour(tour.id!).subscribe({
+      next: () => {
+        this.showSuccess('Tour successfully published');
+        this.loadTours();
+      },
+      error: (error) => {
+        console.error('Publish error:', error);
+        this.showError('Error publishing tour');
+      }
+    });
+  }
+
+  getDifficultyLabel(difficulty: TourDifficulty): string {
+    const labels = {
+      [TourDifficulty.Easy]: 'Easy',
+      [TourDifficulty.Medium]: 'Medium',
+      [TourDifficulty.Hard]: 'Hard'
+    };
+    return labels[difficulty] || 'Unknown';
+  }
+
+  getStatusLabel(status: TourStatus): string {
+    const labels = {
+      [TourStatus.Draft]: 'Draft',
+      [TourStatus.Published]: 'Published',
+    };
+    return labels[status] || 'Unknown';
+  }
+
+  getStatusClass(status: TourStatus): string {
+    const classes = {
+      [TourStatus.Draft]: 'status-draft',
+      [TourStatus.Published]: 'status-published',
+    };
+    return classes[status] || '';
+  }
+
+  canDelete(tour: Tour): boolean {
+    return tour?.status === TourStatus.Draft;
+  }
+
+  canPublish(tour: Tour): boolean {
+    return tour?.status === TourStatus.Draft;
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
+    });
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      panelClass: ['error-snackbar']
+    });
+  }
+}

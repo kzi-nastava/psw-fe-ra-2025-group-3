@@ -1,0 +1,210 @@
+/* ============================================================================
+   TOURIST PREFERENCES - Travel Vista Style
+   Profesionalan izgled sa Teal/Cyan temom
+   ============================================================================ */
+
+#preference {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-8) var(--spacing-4);
+}
+
+/* Naslov sekcije */
+#preference > p:first-of-type {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: var(--color-secondary-800);
+  margin-bottom: var(--spacing-4);
+}
+
+#preference hr {
+  border: none;
+  border-top: 3px solid var(--color-primary-500);
+  margin-bottom: var(--spacing-8);
+  border-radius: var(--border-radius-sm);
+}
+
+/* Loading state */
+#preference > div p {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-800);
+}
+
+/* Empty state */
+#preference > div:not(#preference-details) {
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-4);
+}
+
+#preference > div:not(#preference-details) p {
+  font-size: var(--font-size-xl);
+  color: var(--color-neutral-600);
+  margin-bottom: var(--spacing-6);
+}
+
+/* Preference Details Container */
+#preference-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  align-items: flex-start;
+}
+
+/* ============================================================================
+   TABLE STYLING - Travel Vista Theme
+   ============================================================================ */
+
+table {
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Table Header */
+thead tr {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-secondary-800));
+  color: var(--color-neutral-0);
+}
+
+thead th {
+  padding: var(--spacing-4) var(--spacing-6);
+  text-align: left;
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Table Body */
+tbody td {
+  padding: var(--spacing-4) var(--spacing-6);
+  color: var(--color-neutral-800);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+tbody td:first-child {
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+tbody tr:hover {
+  background-color: rgba(0, 188, 212, 0.05);
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: var(--color-neutral-50);
+}
+
+tbody tr:last-of-type {
+  border-bottom: 3px solid var(--color-primary-500);
+}
+
+/* Action Buttons Container */
+#preference-details > div {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-4);
+}
+
+/* Button Overrides */
+#preference-details button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-normal);
+}
+
+#preference-details button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Angular Material Primary Button Override - CYAN umesto ljubičaste */
+::ng-deep #preference-details button.mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--color-primary-500) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+}
+
+::ng-deep #preference-details button.mat-mdc-raised-button.mat-primary:hover {
+  --mdc-filled-button-container-color: var(--color-primary-600) !important;
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700)) !important;
+  filter: brightness(1.1);
+}
+
+/* Warn Button Override - Crvena ostaje */
+::ng-deep #preference-details button.mat-mdc-raised-button.mat-warn {
+  --mdc-filled-button-container-color: var(--color-error) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+}
+
+::ng-deep #preference-details button.mat-mdc-raised-button.mat-warn:hover {
+  --mdc-filled-button-container-color: #d32f2f !important;
+}
+
+/* Empty state button */
+#preference > div:not(#preference-details) button {
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--font-size-lg);
+  border-radius: var(--border-radius-xl);
+}
+
+/* Empty state button - CYAN override */
+::ng-deep #preference > div:not(#preference-details) button.mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--color-primary-500) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+}
+
+::ng-deep #preference > div:not(#preference-details) button.mat-mdc-raised-button.mat-primary:hover {
+  --mdc-filled-button-container-color: var(--color-primary-600) !important;
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700)) !important;
+  filter: brightness(1.1);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  #preference {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+  
+  #preference > p:first-of-type {
+    font-size: var(--font-size-3xl);
+  }
+  
+  table {
+    font-size: var(--font-size-sm);
+  }
+  
+  thead th,
+  tbody td {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  
+  #preference-details > div {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  #preference-details button {
+    width: 100%;
+    justify-content: center;
+  }
+}

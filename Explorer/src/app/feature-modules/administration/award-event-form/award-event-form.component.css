@@ -1,0 +1,73 @@
+.award-event-form-card {
+    padding: 20px;
+    background-color: var(--color-neutral-50);
+}
+
+.award-event-form-card mat-card-header {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-500));
+    color: var(--color-neutral-0);
+    padding: 16px;
+    margin: -20px -20px 20px -20px;
+}
+
+.award-event-form-card mat-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--font-family-display);
+}
+
+.award-event-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.date-time-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.date-field {
+    flex: 3;
+}
+
+.time-field {
+    flex: 1.5;
+}
+
+::ng-deep .mat-mdc-raised-button.mat-primary {
+    background-color: var(--color-primary-600) !important;
+    color: white !important;
+}
+
+mat-dialog-actions {
+    margin-top: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.error-container {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #e57373;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.error-container mat-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}

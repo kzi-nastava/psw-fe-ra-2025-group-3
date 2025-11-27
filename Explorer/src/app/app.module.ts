@@ -14,6 +14,8 @@ import { TourExecutionModule } from './feature-modules/tour-execution/tour-execu
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
+import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-module';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,7 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,   
     LayoutModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -31,7 +33,9 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
     TourAuthoringModule,
     TourExecutionModule,
     AuthModule,
-    HttpClientModule
+    HttpClientModule,
+    StakeholdersModule,
+    MarkdownModule.forRoot()
   ],
   providers: [
     {
@@ -42,4 +46,4 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

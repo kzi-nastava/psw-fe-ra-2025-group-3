@@ -1,0 +1,218 @@
+/* ============================================================================
+   PREFERENCE FORM - Travel Vista Style
+   Profesionalan izgled forme sa Teal/Cyan temom
+   ============================================================================ */
+
+.preference-form-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--spacing-8);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-xl);
+  border: 2px solid var(--color-primary-500);
+}
+
+/* Form Title */
+h3 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-secondary-800);
+  margin-bottom: var(--spacing-6);
+  text-align: center;
+  padding-bottom: var(--spacing-4);
+  border-bottom: 3px solid var(--color-primary-500);
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: var(--spacing-8);
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, rgba(224, 247, 250, 0.3), rgba(255, 255, 255, 0.5));
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  transition: all var(--transition-normal);
+}
+
+.form-group:hover {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.15);
+}
+
+/* Labels */
+label {
+  display: block;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-4);
+  letter-spacing: 0.3px;
+}
+
+/* Radio Group Styling */
+::ng-deep .form-group mat-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+::ng-deep .form-group mat-radio-button {
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-fast);
+}
+
+::ng-deep .form-group mat-radio-button:hover {
+  background-color: rgba(0, 188, 212, 0.08);
+}
+
+::ng-deep .form-group mat-radio-button .mdc-radio {
+  --mdc-radio-selected-icon-color: var(--color-primary-500);
+  --mdc-radio-selected-hover-icon-color: var(--color-primary-600);
+  --mdc-radio-unselected-icon-color: var(--color-neutral-600);
+}
+
+::ng-deep .form-group mat-radio-button .mdc-label {
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+::ng-deep .form-group mat-radio-button.mat-mdc-radio-checked {
+  background-color: rgba(0, 188, 212, 0.1);
+  font-weight: 600;
+}
+
+/* Tags Container */
+.tags-container {
+  margin-top: var(--spacing-4);
+}
+
+::ng-deep mat-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+}
+
+::ng-deep mat-chip-option {
+  cursor: pointer;
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-2) var(--spacing-4);
+  border: 2px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+::ng-deep mat-chip-option:hover {
+  background-color: rgba(0, 188, 212, 0.15);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+::ng-deep mat-chip-option.mat-mdc-chip-selected {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: var(--color-neutral-0);
+  border-color: var(--color-primary-700);
+  box-shadow: var(--shadow-md);
+}
+
+::ng-deep mat-chip-option.mat-mdc-chip-selected:hover {
+  background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-500));
+}
+
+/* Selected Tags Text */
+.selected-tags {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  background-color: rgba(0, 188, 212, 0.05);
+  border-left: 4px solid var(--color-primary-500);
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-6);
+  border-top: 2px solid var(--color-neutral-200);
+}
+
+.form-actions button {
+  flex: 1;
+  padding: var(--spacing-4) var(--spacing-6);
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.form-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.form-actions button[type="submit"] {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+}
+
+/* Angular Material override za submit button */
+::ng-deep .form-actions button[type="submit"].mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--color-primary-500) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+}
+
+::ng-deep .form-actions button[type="submit"].mat-mdc-raised-button.mat-primary:hover {
+  --mdc-filled-button-container-color: var(--color-primary-600) !important;
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700)) !important;
+  filter: brightness(1.1);
+}
+
+.form-actions button[type="button"] {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+}
+
+.form-actions button[type="button"]:hover {
+  background: var(--color-neutral-200);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .preference-form-container {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+  
+  h3 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .form-group {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  label {
+    font-size: var(--font-size-base);
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}

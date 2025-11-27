@@ -1,0 +1,58 @@
+<div class="profile-container">
+  <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+    
+    <div class="profile-header">
+      <div class="image-container">
+        <img [src]="profileForm.value.profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
+             alt="Profile Picture" 
+             class="profile-image">
+      </div>
+    </div>
+
+    <div class="edit-toggle">
+      <button *ngIf="!isEditing" type="button" mat-raised-button color="primary" (click)="toggleEdit()">
+        Edit Profile
+      </button>
+      <button *ngIf="isEditing" type="button" mat-raised-button (click)="toggleEdit()">
+        Cancel
+      </button>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surname">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Profile Picture URL (paste link here)</mat-label>
+      <input matInput formControlName="profilePictureUrl" placeholder="https://example.com/my-photo.jpg">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Biography (optional)</mat-label>
+      <textarea matInput formControlName="biography" rows="4"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Quote (optional)</mat-label>
+      <input matInput formControlName="quote">
+    </mat-form-field>
+
+    <div *ngIf="isEditing" class="save-button">
+      <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">
+        Save Changes
+      </button>
+    </div>
+
+  </form>
+</div>

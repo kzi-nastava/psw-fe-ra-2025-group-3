@@ -1,0 +1,56 @@
+<h1 mat-dialog-title>{{ isEditMode ? 'Edit Club' : 'Create Club' }}</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="form" class="club-form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="name?.hasError('required')">Name is required</mat-error>
+      <mat-error *ngIf="name?.hasError('maxlength')">Name is too long</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput rows="4" formControlName="description"></textarea>
+      <mat-error *ngIf="description?.hasError('required')">Description is required</mat-error>
+      <mat-error *ngIf="description?.hasError('maxlength')">Description is too long</mat-error>
+    </mat-form-field>
+
+    <div class="image-section">
+      <h3>Featured image *</h3>
+      <div class="image-upload">
+        <input type="file" accept="image/*" (change)="onFeaturedImageSelected($event)" />
+      </div>
+      <div class="preview" *ngIf="featuredImageUrl">
+        <img [src]="clubService.buildImageUrl(featuredImageUrl)" alt="Featured preview" />
+      </div>
+    </div>
+
+    <div class="image-section">
+      <h3>Gallery images</h3>
+
+      <div class="existing-gallery" *ngIf="existingGallery.length > 0">
+        <div class="gallery-item" *ngFor="let img of existingGallery">
+          <img [src]="clubService.buildImageUrl(img.imageUrl)" alt="Gallery image" />
+          <button mat-icon-button color="primary" type="button" (click)="promoteToFeatured(img)" matTooltip="Set as featured">
+            <mat-icon>star</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" type="button" (click)="removeExistingGalleryImage(img)" matTooltip="Remove from gallery">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="image-upload">
+        <input type="file" accept="image/*" multiple (change)="onGalleryImagesSelected($event)" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="isSubmitting">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="isSubmitting">
+    {{ isEditMode ? 'Save changes' : 'Create club' }}
+  </button>
+</div>

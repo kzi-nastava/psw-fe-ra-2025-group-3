@@ -1,0 +1,37 @@
+<div class="meetup-details-container">
+  <button mat-button color="primary" class="back-button" (click)="goBack()">
+    ← Back to Meetups
+  </button>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Loading meetup details...</p>
+  </div>
+
+  <div *ngIf="!isLoading && meetup" class="meetup-details">
+    <h1>{{ meetup.title }}</h1>
+    
+    <div class="meetup-info">
+      <div class="info-item">
+        <strong>Date & Time:</strong>
+        <p>{{ meetup.dateTime | date:'full' }}</p>
+      </div>
+
+      <div class="info-item">
+        <strong>Location:</strong>
+        <p>Latitude: {{ meetup.latitude }}, Longitude: {{ meetup.longitude }}</p>
+      </div>
+    </div>
+
+    <div class="description-section">
+      <h2>Description</h2>
+      <div class="description-content">
+        <markdown [data]="meetup.description"></markdown>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !meetup" class="error-state">
+    <h2>Meetup not found</h2>
+    <p>The meetup you're looking for doesn't exist.</p>
+  </div>
+</div>
