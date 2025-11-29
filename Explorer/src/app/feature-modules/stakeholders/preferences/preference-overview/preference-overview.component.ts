@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PreferenceService } from '../preference.service';
-import { Preference, TourDifficulty } from '../model/preference.model';
+import { PreferenceService } from '../../preference.service';
+import { Preference, TourDifficulty } from '../../model/preference.model';
 
 @Component({
   selector: 'xp-preference-overview',
@@ -28,7 +28,7 @@ export class PreferenceOverviewComponent implements OnInit {
         this.hasPreference = true;
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.log('No preferences found');
         this.hasPreference = false;
         this.isLoading = false;
@@ -42,6 +42,15 @@ export class PreferenceOverviewComponent implements OnInit {
       case TourDifficulty.Medium: return 'Srednje';
       case TourDifficulty.Hard: return 'Teško';
       default: return 'N/A';
+    }
+  }
+
+  getDifficultyBadgeClass(difficulty: TourDifficulty): string {
+    switch(difficulty) {
+      case TourDifficulty.Easy: return 'badge-success';
+      case TourDifficulty.Medium: return 'badge-warning';
+      case TourDifficulty.Hard: return 'badge-error';
+      default: return 'badge-primary';
     }
   }
 
@@ -67,7 +76,7 @@ export class PreferenceOverviewComponent implements OnInit {
           this.hasPreference = false;
           this.shouldRenderPreferenceForm = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           alert('Greška pri brisanju preferenci');
         }
       });

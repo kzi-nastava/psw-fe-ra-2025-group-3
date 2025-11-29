@@ -22,6 +22,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatChipsModule } from '@angular/material/chips';
+import { PreferenceOverviewComponent } from './preferences/preference-overview/preference-overview.component';
+import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
 
 
 @NgModule({
@@ -33,7 +37,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MeetupFormComponent,
     MeetupDetailsComponent,
     ProfileFormComponent,
-    ProfileListComponent
+    ProfileListComponent,
+    PreferenceOverviewComponent,
+    PreferenceFormComponent
     
   ],
   imports: [
