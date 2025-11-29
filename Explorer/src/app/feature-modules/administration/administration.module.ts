@@ -6,6 +6,11 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccountListComponent } from './account-list/account-list.component';
 import { AccountFormComponent } from './account-form/account-form.component';
+
+import { MonumentListComponent } from './monuments/monument-list/monument-list.component';
+import { MonumentFormComponent } from './monument-form/monument-form.component';
+
+
 import { AwardEventsComponent } from './award-events/award-events.component';
 import { AwardEventFormComponent } from './award-event-form/award-event-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -18,14 +23,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatChipsModule } from '@angular/material/chips'; 
 
+import { SharedModule } from 'src/app/shared/shared.module';
+
+
 @NgModule({
   declarations: [
     EquipmentFormComponent,
     EquipmentComponent,
     AccountListComponent,
     AccountFormComponent,
+    MonumentListComponent,
+    MonumentFormComponent,
     AwardEventsComponent,
     AwardEventFormComponent
+
   ],
   imports: [
     CommonModule,
@@ -39,7 +50,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatChipsModule
+    MatChipsModule,
+    SharedModule
   ],
   exports: [
     EquipmentComponent,

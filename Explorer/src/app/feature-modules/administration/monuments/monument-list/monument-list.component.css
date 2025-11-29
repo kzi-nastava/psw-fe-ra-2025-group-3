@@ -1,0 +1,170 @@
+/* Glavni kontejner stranice */
+.monument-list-container {
+  padding: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* Header sa naslovom i dugmadima (npr. Add monument) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/* Loading spinner centriran */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* Empty state kad nema spomenika */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state mat-icon {
+  font-size: 96px;
+  width: 96px;
+  height: 96px;
+  color: #bdc3c7;
+  margin-bottom: 24px;
+}
+
+/* Grid layout za kartice spomenika */
+.monuments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+/* Pojedinačna kartica spomenika */
+.monument-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.monument-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Header kartice (naziv spomenika, godina…) */
+.monument-card mat-card-header {
+  padding: 24px 24px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+/* Badge za status */
+.status-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Active / Inactive varijante */
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #28a745;
+}
+
+.status-inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #dc3545;
+}
+
+/* Detalji spomenika unutar kartice */
+.monument-details {
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #495057;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Donji deo kartice sa akcijama (Edit, Delete…) */
+mat-card-actions {
+  padding: 16px 24px;
+  border-top: 2px solid #f1f3f5;
+  background: #fafbfc;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.add-monument-button {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  /* blagi „glow“ oko dugmeta */
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.add-monument-button mat-icon {
+  margin-right: 4px;
+}
+
+.add-monument-button:hover {
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  transform: translateY(-2px);
+}

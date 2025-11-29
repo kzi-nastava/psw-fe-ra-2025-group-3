@@ -1,10 +1,9 @@
-.profile-form {
+.monument-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 8px 0;
-  width: 100%;       /* ✔ uklanja X-scroll */
-  min-width: 0;      /* ✔ uklanja X-scroll */
+  min-width: 450px;
 }
 
 .full-width {
@@ -25,17 +24,13 @@ mat-label {
   font-size: 15px;
 }
 
-/* Dialog container i surface */
+/* Dialog stil - isto kao kod naloga */
 ::ng-deep .mat-mdc-dialog-container,
 ::ng-deep .mat-mdc-dialog-surface {
   border-radius: 16px !important;
   overflow: hidden !important;
-  width: 100% !important;          /* ✔ više nije fiksno 400px */
-  max-width: 550px !important;     /* ✔ dialog se lepo širi bez X-scroll */
-  max-width: 90vw !important;      /* za mobilne uređaje ostavljeno */
 }
 
-/* Dialog title */
 ::ng-deep .mat-mdc-dialog-title {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white !important;
@@ -45,31 +40,24 @@ mat-label {
   font-weight: 600 !important;
 }
 
-/* Dialog content sa scroll-om */
 ::ng-deep .mat-mdc-dialog-content {
   padding: 24px 32px !important;
   margin: 0 !important;
-  max-height: 60vh !important;
+
+
+  max-height: 70vh !important; 
   overflow-y: auto !important;
-  overflow-x: hidden !important;    /* ✔ uklanja horizontalni scroll */
   box-sizing: border-box;
 }
 
-/* Dialog actions (sticky dugme) */
 ::ng-deep .mat-mdc-dialog-actions {
   padding: 20px 32px !important;
   margin: 0 !important;
   border-top: 2px solid #f1f3f5;
   background: #fafbfc;
-  display: flex;
-  justify-content: flex-end;
   gap: 12px;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
 }
 
-/* Dugmad u actions */
 ::ng-deep .mat-mdc-dialog-actions button {
   border-radius: 8px;
   padding: 12px 28px;
@@ -86,9 +74,8 @@ mat-label {
   transform: translateY(-2px);
 }
 
-/* Responsivni stilovi za mobilne uređaje */
 @media (max-width: 600px) {
-  .account-form {
+  .monument-form {
     min-width: auto;
   }
 

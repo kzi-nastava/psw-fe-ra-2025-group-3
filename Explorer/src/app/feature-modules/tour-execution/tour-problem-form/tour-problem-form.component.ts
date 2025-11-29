@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TourProblem, ProblemCategory, ProblemPriority, TourProblemCreateDto, TourProblemUpdateDto } from '../model/tour-problem.model';
+import { TourProblemService } from '../tour-problem.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tour-problem-form',
@@ -16,6 +18,9 @@ export class TourProblemFormComponent implements OnInit {
 
   problemForm!: FormGroup;
   futureTimeError: boolean = false;
+  tourNotFoundError: boolean = false;
+  checkingTour: boolean = false;
+  tourExists: boolean = false;
   
   // Date picker arrays
   days: number[] = Array.from({length: 31}, (_, i) => i + 1);
@@ -53,12 +58,29 @@ export class TourProblemFormComponent implements OnInit {
     { value: ProblemPriority.Critical, label: 'Critical' }
   ];
 
+  constructor(private tourProblemService: TourProblemService) { }
+
   ngOnInit(): void {
     this.generateYears();
     this.initializeForm();
     
     if (this.problem && this.isEditMode) {
       this.populateForm();
+    }
+
+    // Sluša promene na tourId polju sa debounce (čeka 500ms posle unosa)
+    if (!this.isEditMode) {
+      this.problemForm.get('tourId')?.valueChanges.pipe(
+        debounceTime(500), // Čeka 500ms da korisnik završi kucanje
+        distinctUntilChanged() // Poziva samo ako se vrednost promenila
+      ).subscribe(tourId => {
+        if (tourId && tourId > 0) {
+          this.validateTourExists(tourId);
+        } else {
+          this.tourNotFoundError = false;
+          this.tourExists = false;
+        }
+      });
     }
   }
 
@@ -107,6 +129,38 @@ export class TourProblemFormComponent implements OnInit {
     }
   }
 
+ validateTourExists(tourId: number): void {
+  console.log('=== VALIDATE TOUR EXISTS START ===');
+  console.log('Tour ID to validate:', tourId);
+  
+  this.tourNotFoundError = false;
+  this.tourExists = false;
+  this.checkingTour = true;
+
+  this.tourProblemService.checkTourExists(tourId).subscribe({
+    next: (exists) => {
+      console.log('=== VALIDATION RESULT ===');
+      console.log('Exists:', exists);
+      
+      this.checkingTour = false;
+      this.tourExists = exists;
+      if (!exists) {
+        this.tourNotFoundError = true;
+        console.log('Setting tourNotFoundError to TRUE');
+      } else {
+        console.log('Tour is valid!');
+      }
+    },
+    error: (err) => {
+      console.error('=== VALIDATION ERROR ===');
+      console.error('Error checking tour:', err);
+      this.checkingTour = false;
+      this.tourNotFoundError = true;
+      this.tourExists = false;
+    }
+  });
+}
+
   isDateTimeInvalid(): boolean {
     const day = this.problemForm.get('day');
     const month = this.problemForm.get('month');
@@ -130,6 +184,17 @@ export class TourProblemFormComponent implements OnInit {
     console.log('Is edit mode:', this.isEditMode);
     
     this.futureTimeError = false;
+
+    // PROVERI DA LI TURA POSTOJI PRE SLANJA
+    if (!this.isEditMode && this.tourNotFoundError) {
+      alert('Tour with this ID does not exist. Please enter a valid tour ID.');
+      return;
+    }
+
+    if (!this.isEditMode && !this.tourExists) {
+      alert('Please wait for tour validation to complete.');
+      return;
+    }
 
     if (this.problemForm.valid) {
       const formValue = this.problemForm.getRawValue();
@@ -185,6 +250,8 @@ export class TourProblemFormComponent implements OnInit {
   onCancel(): void {
     this.problemForm.reset();
     this.futureTimeError = false;
+    this.tourNotFoundError = false;
+    this.tourExists = false;
     this.formCanceled.emit();
   }
 
