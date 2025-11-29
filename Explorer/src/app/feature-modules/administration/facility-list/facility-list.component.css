@@ -1,0 +1,42 @@
+.list-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table thead tr {
+  background-color: var(--color-primary-700);
+  color: var(--color-neutral-0);
+}
+
+.styled-table th,
+.styled-table td {
+  padding: var(--spacing-4);
+  text-align: left;
+  font-size: var(--font-size-sm);
+}
+
+.styled-table tbody tr {
+  transition: var(--transition-fast);
+}
+
+.styled-table tbody tr:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.delete-btn {
+  border: 2px solid var(--color-error) !important;
+  color: var(--color-error) !important;
+}
+
+.empty-box {
+  padding: var(--spacing-8);
+}

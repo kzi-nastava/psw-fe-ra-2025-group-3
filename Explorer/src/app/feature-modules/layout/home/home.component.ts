@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +20,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   // Interval reference
   private backgroundInterval: any;
+  
+  // Subscription
+  private userSubscription?: Subscription;
+
+  // Check if user is logged in
+  isLoggedIn: boolean = false;
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Start background rotation every 10 seconds
+    // Check authentication status
+    this.checkAuthStatus();
+    
+    // Start background rotation
     this.startBackgroundRotation();
   }
 
@@ -29,12 +42,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.backgroundInterval) {
       clearInterval(this.backgroundInterval);
     }
+    
+    // Unsubscribe
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  checkAuthStatus(): void {
+    // Proveri da li je korisnik ulogovan
+    this.userSubscription = this.authService.user$.subscribe(user => {
+      this.isLoggedIn = !!(user && user.id !== 0 && user.username !== "");
+    });
   }
 
   startBackgroundRotation(): void {
     this.backgroundInterval = setInterval(() => {
       this.currentBackgroundIndex = (this.currentBackgroundIndex + 1) % this.backgroundImages.length;
-    }, 7000); // 7 seconds
+    }, 7000);
   }
 
   getCurrentBackground(): string {

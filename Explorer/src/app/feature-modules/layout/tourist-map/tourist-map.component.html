@@ -13,8 +13,12 @@
     <xp-map
       [mode]="'object-view'"
       [points]="points"
+      [initialPoint]="initialPoint"
       (pointSelected)="onPointSelected($event)">
     </xp-map>
+    <button (click)="saveChanges()" [disabled]="!selectedPoint">
+  Sačuvaj moju poziciju
+</button>
   </div>
 
 </div>

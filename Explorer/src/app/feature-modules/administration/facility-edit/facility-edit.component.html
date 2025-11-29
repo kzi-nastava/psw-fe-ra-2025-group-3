@@ -1,0 +1,59 @@
+<div class="container animate-fade-in-up">
+
+  <div class="card form-card">
+
+    <h2 class="mb-6">
+      {{ isEditMode ? 'Izmeni objekat' : 'Dodaj novi objekat' }}
+    </h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <!-- Naziv -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Naziv objekta</mat-label>
+        <input matInput formControlName="name">
+        <mat-icon matPrefix>location_on</mat-icon>
+      </mat-form-field>
+
+      <!-- LOKACIJA PREKO MAPE -->
+      <div class="full-width" *ngIf="dataLoaded">
+        <mat-label>Lokacija</mat-label>
+
+        <xp-map
+          [mode]="'edit-object'"
+          [points]="mapPoints"
+          (pointSelected)="onPointSelected($event)">
+        </xp-map>
+
+        <div class="coords-preview">
+          Izabrano:
+          {{ form.value.latitude }},
+          {{ form.value.longitude }}
+        </div>
+      </div>
+
+      <!-- Kategorija -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Kategorija</mat-label>
+        <mat-select formControlName="category">
+          <mat-option [value]="0">WC</mat-option>
+          <mat-option [value]="1">Restoran</mat-option>
+          <mat-option [value]="2">Parking</mat-option>
+          <mat-option [value]="3">Ostalo</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>category</mat-icon>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="submit-btn"
+        type="submit">
+        {{ isEditMode ? 'Sačuvaj izmene' : 'Dodaj objekat' }}
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
