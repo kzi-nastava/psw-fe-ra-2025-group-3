@@ -1,11 +1,12 @@
 .blog-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 8px 0;
+  gap: var(--spacing-6);
+  padding: var(--spacing-2) 0;
   min-width: 650px;
   max-height: 70vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .full-width {
@@ -17,8 +18,8 @@ mat-form-field {
 }
 
 mat-form-field mat-icon[matPrefix] {
-  margin-right: 12px;
-  color: #667eea;
+  margin-right: var(--spacing-3);
+  color: var(--color-primary-500) !important;
 }
 
 mat-label {
@@ -28,59 +29,64 @@ mat-label {
 
 /* Images Section */
 .images-section {
-  margin-top: 12px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  border: 2px solid #e9ecef;
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-5);
+  background: #E0F7FA;
+  border-radius: var(--border-radius-lg);
+  border: 2px solid #B2EBF2;
 }
 
 .images-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-5);
 }
 
 .images-label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-2);
   font-size: 16px;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--color-secondary-800);
 }
 
 .images-label mat-icon {
-  color: #667eea;
+  color: var(--color-primary-500) !important;
   font-size: 24px;
   width: 24px;
   height: 24px;
 }
 
+/* Buttons styling - Angular Material override */
+.images-header button[mat-mini-fab] {
+  background-color: var(--color-primary-500) !important;
+}
+
 .images-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-4);
 }
 
 .image-item {
-  background: white;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  background: var(--color-neutral-0);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-neutral-200);
   transition: all 0.2s ease;
 }
 
 .image-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-primary-500);
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.1);
 }
 
 .image-form-group {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--spacing-3);
 }
 
 .image-url-field {
@@ -89,16 +95,78 @@ mat-label {
 }
 
 .image-form-group button {
-  margin-top: 8px;
+  margin-top: var(--spacing-2);
+}
+
+/* Drag & Drop Zone */
+.drop-zone {
+  border: 2px dashed var(--color-neutral-300);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-10);
+  text-align: center;
+  background-color: var(--color-neutral-50);
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-5);
+}
+
+.drop-zone.dragging {
+  border-color: var(--color-primary-500);
+  background-color: #E0F7FA;
+}
+
+.upload-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--color-neutral-500);
+  margin-bottom: var(--spacing-2);
+}
+
+.drop-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  margin: var(--spacing-2) 0 var(--spacing-1) 0;
+}
+
+.drop-subtext {
+  font-size: 14px;
+  color: var(--color-neutral-600);
+  margin: var(--spacing-2) 0;
+}
+
+.drop-hint {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  margin-top: var(--spacing-4);
+}
+
+.file-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2);
+  background-color: var(--color-neutral-100);
+  border-radius: var(--border-radius-sm);
+}
+
+.file-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-neutral-800);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Image Preview */
 .image-preview {
-  margin-top: 12px;
-  border-radius: 8px;
+  margin-top: var(--spacing-3);
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
   max-width: 100%;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--color-neutral-200);
 }
 
 .image-preview img {
@@ -111,10 +179,10 @@ mat-label {
 .images-hint {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
   font-size: 13px;
-  color: #718096;
+  color: var(--color-neutral-600);
   font-style: italic;
 }
 
@@ -122,60 +190,74 @@ mat-label {
   font-size: 18px;
   width: 18px;
   height: 18px;
-  color: #667eea;
+  color: var(--color-primary-500) !important;
 }
 
 /* Dialog Styling */
 ::ng-deep .mat-mdc-dialog-container {
-  border-radius: 16px !important;
+  border-radius: var(--border-radius-xl) !important;
   padding: 0 !important;
   overflow: hidden !important;
 }
 
 ::ng-deep .mat-mdc-dialog-surface {
-  border-radius: 16px !important;
+  border-radius: var(--border-radius-xl) !important;
   overflow: hidden !important;
 }
 
 ::ng-deep .mat-mdc-dialog-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white !important;
-  padding: 24px 32px !important;
+  background: var(--color-primary-700) !important;
+  color: var(--color-neutral-0) !important;
+  padding: var(--spacing-6) var(--spacing-8) !important;
   margin: 0 !important;
   font-size: 24px !important;
   font-weight: 600 !important;
+  font-family: var(--font-family-display) !important;
   border-radius: 0 !important;
 }
 
 ::ng-deep .mat-mdc-dialog-content {
-  padding: 24px 32px !important;
+  padding: var(--spacing-6) var(--spacing-8) !important;
   margin: 0 !important;
   max-height: none !important;
+  overflow-x: hidden !important;
 }
 
 ::ng-deep .mat-mdc-dialog-actions {
-  padding: 20px 32px !important;
+  padding: var(--spacing-6) var(--spacing-8) !important;
   margin: 0 !important;
-  border-top: 2px solid #f1f3f5;
-  background: #fafbfc;
+  border-top: 2px solid var(--color-neutral-100);
+  background: var(--color-neutral-50);
   border-radius: 0 !important;
-  gap: 12px;
+  gap: var(--spacing-4);
+  justify-content: flex-end !important;
 }
 
-::ng-deep .mat-mdc-dialog-actions button {
-  border-radius: 8px;
-  padding: 12px 28px;
-  font-weight: 500;
-  font-size: 15px;
-}
-
+/* Dialog Action Buttons - mat-raised-button (Submit) */
 ::ng-deep .mat-mdc-dialog-actions button[mat-raised-button] {
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background-color: var(--color-primary-500) !important;
+  color: var(--color-neutral-0) !important;
+  border-radius: var(--border-radius-lg) !important;
+  padding: var(--spacing-3) var(--spacing-7) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
+  margin: 0 !important;
 }
 
 ::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover {
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4) !important;
   transform: translateY(-2px);
+}
+
+/* Dialog Action Buttons - mat-button (Cancel) */
+::ng-deep .mat-mdc-dialog-actions button[mat-button] {
+  color: var(--color-neutral-700) !important;
+  border-radius: var(--border-radius-lg) !important;
+  padding: var(--spacing-3) var(--spacing-7) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  margin: 0 !important;
 }
 
 /* Scrollbar Styling */
@@ -184,17 +266,17 @@ mat-label {
 }
 
 .blog-form::-webkit-scrollbar-track {
-  background: #f1f3f5;
-  border-radius: 4px;
+  background: var(--color-neutral-100);
+  border-radius: var(--border-radius-sm);
 }
 
 .blog-form::-webkit-scrollbar-thumb {
-  background: #cbd5e0;
-  border-radius: 4px;
+  background: var(--color-neutral-400);
+  border-radius: var(--border-radius-sm);
 }
 
 .blog-form::-webkit-scrollbar-thumb:hover {
-  background: #a0aec0;
+  background: var(--color-neutral-500);
 }
 
 /* Responsive */
@@ -204,7 +286,7 @@ mat-label {
   }
 
   .images-section {
-    padding: 16px;
+    padding: var(--spacing-4);
   }
 
   .image-form-group {
@@ -214,20 +296,20 @@ mat-label {
 
   .image-form-group button {
     align-self: flex-end;
-    margin-top: 8px;
+    margin-top: var(--spacing-2);
   }
 
   ::ng-deep .mat-mdc-dialog-title {
     font-size: 20px !important;
-    padding: 20px 24px !important;
+    padding: var(--spacing-5) var(--spacing-6) !important;
   }
 
   ::ng-deep .mat-mdc-dialog-content {
-    padding: 20px 24px !important;
+    padding: var(--spacing-5) var(--spacing-6) !important;
   }
 
   ::ng-deep .mat-mdc-dialog-actions {
-    padding: 16px 24px !important;
+    padding: var(--spacing-4) var(--spacing-6) !important;
     flex-direction: column;
   }
 
