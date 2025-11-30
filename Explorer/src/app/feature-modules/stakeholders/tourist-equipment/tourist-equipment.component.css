@@ -1,0 +1,145 @@
+/* ============================================================================
+   TOURIST EQUIPMENT KOMPONENTA
+   Koristi globalne CSS promenljive iz styles.css
+   ============================================================================ */
+
+/* Notifikacije */
+.notification {
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  font-weight: 500;
+  animation: fadeInUp 0.5s ease;
+}
+
+.notification.success {
+  background-color: #C8E6C9;
+  color: #2E7D32;
+  border: 2px solid var(--color-success);
+}
+
+.notification.error {
+  background-color: #FFCDD2;
+  color: #C62828;
+  border: 2px solid var(--color-error);
+}
+
+/* Equipment Lista */
+.equipment-list {
+  margin-top: var(--spacing-6);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-16);
+}
+
+.empty-state p {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-800);
+}
+
+/* Tabela */
+.equipment-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.equipment-table thead tr {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-secondary-800));
+  color: var(--color-neutral-0);
+  text-align: left;
+}
+
+.equipment-table th,
+.equipment-table td {
+  padding: var(--spacing-4);
+}
+
+.equipment-table tbody tr {
+  border-bottom: 1px solid var(--color-neutral-100);
+  transition: all var(--transition-fast);
+}
+
+.equipment-table tbody tr:hover {
+  background-color: #E0F7FA;
+  transform: translateX(4px);
+}
+
+.equipment-table tbody tr:nth-of-type(even) {
+  background-color: var(--color-neutral-50);
+}
+
+.equipment-table tbody tr.owned-row {
+  background-color: #E8F5E9 !important;
+  font-weight: 600;
+}
+
+.equipment-table tbody tr.owned-row:hover {
+  background-color: #C8E6C9 !important;
+}
+
+/* Font utilities */
+.font-medium {
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+/* Delete Button */
+.btn-delete {
+  background: linear-gradient(135deg, #EF5350, #E53935) !important;
+  color: var(--color-neutral-0) !important;
+  border-radius: var(--border-radius-lg) !important;
+  padding: var(--spacing-2) var(--spacing-4) !important;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+}
+
+.btn-delete:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Material Tab Overrides */
+::ng-deep .mat-mdc-tab-labels {
+  border-bottom: 2px solid var(--color-primary-500);
+}
+
+::ng-deep .mat-mdc-tab.mat-mdc-tab-active .mdc-tab__text-label {
+  color: var(--color-primary-700);
+  font-weight: 700;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  padding-top: var(--spacing-4);
+}
+
+/* Checkbox Overrides */
+::ng-deep .mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-checkmark-color: var(--color-neutral-0);
+  --mdc-checkbox-selected-focus-icon-color: var(--color-primary-500);
+  --mdc-checkbox-selected-hover-icon-color: var(--color-primary-600);
+  --mdc-checkbox-selected-icon-color: var(--color-primary-500);
+  --mdc-checkbox-selected-pressed-icon-color: var(--color-primary-700);
+}
+
+/* Responzivnost */
+@media (max-width: 768px) {
+  .equipment-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: var(--spacing-2);
+  }
+
+  .btn-delete {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2) !important;
+  }
+}
