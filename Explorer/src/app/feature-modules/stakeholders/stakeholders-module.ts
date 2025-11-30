@@ -26,6 +26,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { PreferenceOverviewComponent } from './preferences/preference-overview/preference-overview.component';
 import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
+import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
+import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+
 
 
 @NgModule({
@@ -39,7 +42,8 @@ import { PreferenceFormComponent } from './preferences/preference-form/preferenc
     ProfileFormComponent,
     ProfileListComponent,
     PreferenceOverviewComponent,
-    PreferenceFormComponent
+    PreferenceFormComponent,
+    TouristEquipmentComponent
     
   ],
   imports: [
@@ -58,12 +62,14 @@ import { PreferenceFormComponent } from './preferences/preference-form/preferenc
     MatCardModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MaterialModule
   ],
   exports: [
     ProfileComponent,
     ProfileFormComponent,
-    ProfileListComponent
+    ProfileListComponent,
+    TouristEquipmentComponent
   ]
 })
 export class StakeholdersModule { }

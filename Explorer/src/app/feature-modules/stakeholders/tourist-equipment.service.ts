@@ -8,7 +8,7 @@ import { EquipmentWithOwnership } from './model/equipment-with-ownership.model';
   providedIn: 'root'
 })
 export class TouristEquipmentService {
-
+  
   constructor(private http: HttpClient) { }
 
   getAllEquipmentWithOwnership(): Observable<EquipmentWithOwnership[]> {
