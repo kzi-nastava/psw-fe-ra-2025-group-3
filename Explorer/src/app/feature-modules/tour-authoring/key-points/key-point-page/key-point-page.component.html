@@ -1,1 +1,37 @@
-<p>key-point-page works!</p>
+<div class="kp-container">
+  <div class="kp-main">
+    <div class="kp-map">
+      <xp-map
+        [mode]="'route-view'"
+        [waypoints]="testPoints"
+        (pointSelected)="onPointSelected($event)">
+      </xp-map>
+
+      <p *ngIf="selectedPoint" class="kp-selected">
+        Izabrana tačka:
+        {{ selectedPoint.lat }}, {{ selectedPoint.lng }}
+      </p>
+    </div>
+
+    <div class="kp-side">
+      <button mat-raised-button color="primary">
+        Dodaj ključnu tačku
+      </button>
+
+      <div class="kp-list">
+        <!-- Kasnije *ngFor preko key pointova -->
+        <p *ngIf="testPoints.length === 0">Nema ključnih tačaka još uvek.</p>
+        <ul *ngIf="testPoints.length > 0">
+          <li *ngFor="let p of testPoints">
+            {{ p.lat }}, {{ p.lng }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="kp-form">
+    <!-- Ovde će kasnije biti forma za key point -->
+    Forma za ključnu tačku (placeholder)
+  </div>
+</div>
