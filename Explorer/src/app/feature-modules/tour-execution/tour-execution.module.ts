@@ -7,8 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
+import { TourProblemDetailsComponent } from './tour-problem-details/tour-problem-details.component';
 import { PreferenceOverviewComponent } from './preference-overview/preference-overview.component';
 import { PreferenceFormComponent } from './preference-form/preference-form.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -23,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   declarations: [
     TourProblemListComponent,
     TourProblemFormComponent,
+    TourProblemDetailsComponent,
     PreferenceOverviewComponent,
     PreferenceFormComponent,
     TouristEquipmentComponent
@@ -39,7 +42,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatRadioModule,
     MatChipsModule,
     MatTabsModule,     
-    MatCheckboxModule      
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     TourProblemListComponent,

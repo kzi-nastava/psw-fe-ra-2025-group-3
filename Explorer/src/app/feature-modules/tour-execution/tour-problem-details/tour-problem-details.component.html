@@ -1,0 +1,155 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Problem Details</h1>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && problem" class="content-wrapper">
+
+  <!-- Problem Info Card -->
+  <mat-card class="problem-info-card">
+    <mat-card-header>
+      <mat-card-title>
+        Tour #{{problem.tourId}}
+        <div class="badges">
+          <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+            {{getPriorityName(problem.priority)}}
+          </span>
+          <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
+            {{getStatusName(problem.status)}}
+          </span>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{getCategoryName(problem.category)}} | {{problem.time | date: 'dd/MM/yyyy HH:mm'}}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+      <mat-card-content>
+        <div class="problem-description">
+          <h3><mat-icon>description</mat-icon>Description</h3>
+          <p>{{problem.description}}</p>
+        </div>
+
+        <div class="resolution-comment" *ngIf="problem.resolvedByTouristComment">
+          <h3>
+            <mat-icon [fontIcon]="problem.status === ProblemStatus.Resolved ? 'check_circle' : 'cancel'"></mat-icon>
+            {{problem.status === ProblemStatus.Resolved ? 'Resolution' : 'Unresolved'}} Comment
+          </h3>
+          <p>{{problem.resolvedByTouristComment}}</p>
+        </div>
+      </mat-card-content>    <mat-card-actions *ngIf="problem.status === ProblemStatus.Open">
+      <button mat-raised-button color="primary" (click)="openResolveDialog()">
+        <mat-icon>check_circle</mat-icon> Mark as Resolved
+      </button>
+      <button mat-raised-button color="warn" (click)="openUnresolveDialog()">
+        <mat-icon>cancel</mat-icon> Mark as Unresolved
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Messages Section -->
+    <mat-card class="messages-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>chat</mat-icon>
+          Conversation
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+    
+    <div class="messages-container">
+      <div *ngFor="let message of problem.messages" 
+           class="message" 
+           [ngClass]="{'message-tourist': message.authorType === AuthorType.Tourist, 'message-author': message.authorType === AuthorType.Author}">
+        <div class="message-header">
+          <span class="message-author-label">{{getAuthorTypeName(message.authorType)}}</span>
+          <span class="message-time">{{message.timestamp | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+        <div class="message-content">
+          {{message.content}}
+        </div>
+      </div>
+
+      <div *ngIf="problem.messages.length === 0" class="no-messages">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>No messages yet. Start the conversation!</p>
+      </div>
+    </div>
+
+    <!-- Message Input -->
+        <div class="message-input">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Your message</mat-label>
+            <textarea matInput 
+                      [formControl]="messageControl" 
+                      rows="3" 
+                      placeholder="Type your message here..."></textarea>
+            <mat-icon matPrefix>edit</mat-icon>
+            <mat-error *ngIf="messageControl.hasError('required')">Message is required</mat-error>
+          </mat-form-field>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="sendMessage()" 
+                  [disabled]="messageControl.invalid || sendingMessage">
+            <mat-icon>send</mat-icon> Send Message
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Resolve Dialog -->
+<div class="dialog-overlay" *ngIf="showResolveDialog" (click)="closeDialogs()">
+  <div class="dialog-box" (click)="$event.stopPropagation()">
+    <h2>Mark Problem as Resolved</h2>
+    <p>Please provide a comment explaining the resolution:</p>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Resolution Comment</mat-label>
+      <textarea matInput 
+                [formControl]="resolveCommentControl" 
+                rows="4" 
+                placeholder="Explain how the problem was resolved..."></textarea>
+      <mat-error *ngIf="resolveCommentControl.hasError('required')">Comment is required</mat-error>
+      <mat-error *ngIf="resolveCommentControl.hasError('minlength')">Comment must be at least 3 characters</mat-error>
+    </mat-form-field>
+    <div class="dialog-actions">
+      <button mat-button (click)="closeDialogs()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="confirmResolve()" [disabled]="resolveCommentControl.invalid">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Unresolved Dialog -->
+<div class="dialog-overlay" *ngIf="showUnresolveDialog" (click)="closeDialogs()">
+  <div class="dialog-box" (click)="$event.stopPropagation()">
+    <h2>Mark Problem as Unresolved</h2>
+    <p>Please provide a comment explaining why it's not resolved:</p>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Comment</mat-label>
+      <textarea matInput 
+                [formControl]="resolveCommentControl" 
+                rows="4" 
+                placeholder="Explain why the problem is not resolved..."></textarea>
+      <mat-error *ngIf="resolveCommentControl.hasError('required')">Comment is required</mat-error>
+      <mat-error *ngIf="resolveCommentControl.hasError('minlength')">Comment must be at least 3 characters</mat-error>
+    </mat-form-field>
+    <div class="dialog-actions">
+      <button mat-button (click)="closeDialogs()">Cancel</button>
+      <button mat-raised-button color="warn" (click)="confirmUnresolve()" [disabled]="resolveCommentControl.invalid">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
