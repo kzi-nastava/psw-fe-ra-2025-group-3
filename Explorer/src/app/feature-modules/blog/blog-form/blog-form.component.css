@@ -17,6 +17,46 @@ mat-form-field {
   font-size: 15px;
 }
 
+/* Border radius for input fields */
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field {
+  border-radius: var(--border-radius-lg) !important;
+}
+
+::ng-deep .mdc-notched-outline .mdc-notched-outline__leading {
+  border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg) !important;
+}
+
+::ng-deep .mdc-notched-outline .mdc-notched-outline__trailing {
+  border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0 !important;
+}
+
+/* Angular Material form field focus color override */
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--color-primary-500) !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: var(--color-primary-500) !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field {
+  background-color: #E0F7FA !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper.mdc-text-field {
+  background-color: #E0F7FA !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #E0F7FA !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #E0F7FA !important;
+}
+
 mat-form-field mat-icon[matPrefix] {
   margin-right: var(--spacing-3);
   color: var(--color-primary-500) !important;
@@ -234,49 +274,54 @@ mat-label {
 }
 
 /* Dialog Action Buttons - mat-raised-button (Submit) */
-::ng-deep .mat-mdc-dialog-actions button[mat-raised-button] {
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button],
+::ng-deep .mat-mdc-dialog-actions .mat-mdc-raised-button {
   background-color: var(--color-primary-500) !important;
   color: var(--color-neutral-0) !important;
   border-radius: var(--border-radius-lg) !important;
-  padding: var(--spacing-3) var(--spacing-7) !important;
+  padding: 16px 32px !important;
+  min-width: 140px !important;
   font-weight: 500 !important;
   font-size: 14px !important;
   box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
   margin: 0 !important;
+  transition: all 0.3s ease !important;
 }
 
-::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover {
+::ng-deep .mat-mdc-dialog-actions button[mat-raised-button]:hover,
+::ng-deep .mat-mdc-dialog-actions .mat-mdc-raised-button:hover {
   box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4) !important;
-  transform: translateY(-2px);
+  transform: translateY(-2px) !important;
 }
 
 /* Dialog Action Buttons - mat-button (Cancel) */
-::ng-deep .mat-mdc-dialog-actions button[mat-button] {
+::ng-deep .mat-mdc-dialog-actions button[mat-button]:not([mat-raised-button]),
+::ng-deep .mat-mdc-dialog-actions .mat-mdc-button:not(.mat-mdc-raised-button) {
   color: var(--color-neutral-700) !important;
   border-radius: var(--border-radius-lg) !important;
-  padding: var(--spacing-3) var(--spacing-7) !important;
+  padding: 16px 32px !important;
+  min-width: 100px !important;
   font-weight: 500 !important;
   font-size: 14px !important;
   margin: 0 !important;
+  transition: all 0.3s ease !important;
 }
 
-/* Scrollbar Styling */
+::ng-deep .mat-mdc-dialog-actions button[mat-button]:not([mat-raised-button]):hover,
+::ng-deep .mat-mdc-dialog-actions .mat-mdc-button:not(.mat-mdc-raised-button):hover {
+  transform: translateY(-2px) !important;
+  background-color: rgba(0, 188, 212, 0.05) !important;
+}
+
+/* Scrollbar Styling - Hide scrollbar */
 .blog-form::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
+  display: none;
 }
 
-.blog-form::-webkit-scrollbar-track {
-  background: var(--color-neutral-100);
-  border-radius: var(--border-radius-sm);
-}
-
-.blog-form::-webkit-scrollbar-thumb {
-  background: var(--color-neutral-400);
-  border-radius: var(--border-radius-sm);
-}
-
-.blog-form::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neutral-500);
+.blog-form {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Responsive */

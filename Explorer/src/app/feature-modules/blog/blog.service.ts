@@ -22,6 +22,10 @@ export class BlogService {
     return this.http.get<Blog[]>(`${this.baseUrl}/my-blogs`);
   }
 
+  getBlogById(id: number): Observable<Blog> {
+    return this.http.get<Blog>(`${this.baseUrl}/${id}`);
+  }
+
   createBlog(blog: BlogCreateDto): Observable<Blog> {
     return this.http.post<Blog>(this.baseUrl, blog);
   }
@@ -34,14 +38,12 @@ export class BlogService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  // Nova metoda za upload slika
   uploadImage(file: File): Observable<ImageUploadResponse> {
     const formData = new FormData();
     formData.append('file', file, file.name);
     return this.http.post<ImageUploadResponse>(`${this.imageUploadUrl}/upload`, formData);
   }
 
-  // Nova metoda za brisanje uploadovanih slika
   deleteUploadedImage(fileName: string): Observable<void> {
     return this.http.delete<void>(`${this.imageUploadUrl}/${fileName}`);
   }

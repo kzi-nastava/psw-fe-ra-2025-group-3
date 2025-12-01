@@ -33,15 +33,26 @@
 }
 
 /* Header Button - mat-raised-button */
-.header button[mat-raised-button] {
+.header button[mat-raised-button],
+.header .mat-mdc-raised-button {
   background-color: var(--color-primary-500) !important;
   color: var(--color-neutral-0) !important;
   border-radius: var(--border-radius-lg) !important;
-  padding: var(--spacing-3) var(--spacing-6) !important;
+  padding-top: 17px !important;
+  padding-bottom: 17px !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
   font-weight: 600 !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
   transition: all 0.3s ease !important;
+  height: auto !important;
+  min-height: auto !important;
+}
+
+.header button[mat-raised-button] .mat-mdc-button-touch-target,
+.header .mat-mdc-raised-button .mat-mdc-button-touch-target {
+  height: 100% !important;
 }
 
 .header button[mat-raised-button]:hover {

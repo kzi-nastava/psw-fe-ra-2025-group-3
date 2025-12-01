@@ -17,11 +17,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // Components
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 
 @NgModule({
   declarations: [
     BlogListComponent,
-    BlogFormComponent
+    BlogFormComponent,
+    BlogDetailComponent
   ],
   imports: [
     CommonModule,

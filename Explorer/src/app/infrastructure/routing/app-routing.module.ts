@@ -35,6 +35,7 @@ import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetup
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
 
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
+import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
 
 const routes: Routes = [
 
@@ -84,7 +85,9 @@ const routes: Routes = [
 
   // Blogs (Author & Tourist)
   { path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'author' } },
+  { path: 'author/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
 ];
 
