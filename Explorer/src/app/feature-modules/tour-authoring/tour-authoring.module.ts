@@ -4,12 +4,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { TourListComponent } from './tour-list/tour-list.component';
 import { TourFormComponent } from './tour-form/tour-form.component';
+import { AuthorProblemListComponent } from './author-problem-list/author-problem-list.component';
+import { AuthorProblemDetailsComponent } from './author-problem-details/author-problem-details.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
     TourListComponent,
-    TourFormComponent
+    TourFormComponent,
+    AuthorProblemListComponent,
+    AuthorProblemDetailsComponent
   ],
   imports: [
     CommonModule,

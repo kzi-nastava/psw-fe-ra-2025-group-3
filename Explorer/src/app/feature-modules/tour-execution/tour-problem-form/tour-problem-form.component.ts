@@ -43,12 +43,11 @@ export class TourProblemFormComponent implements OnInit {
   minutes: number[] = Array.from({length: 60}, (_, i) => i);
   
   categories = [
-    { value: ProblemCategory.Transportation, label: 'Transportation' },
     { value: ProblemCategory.Accommodation, label: 'Accommodation' },
-    { value: ProblemCategory.Guide, label: 'Guide' },
     { value: ProblemCategory.Location, label: 'Location' },
-    { value: ProblemCategory.Food, label: 'Food' },
-    { value: ProblemCategory.Other, label: 'Other' }
+    { value: ProblemCategory.Transportation, label: 'Transportation' },
+    { value: ProblemCategory.Other, label: 'Other' },
+    { value: ProblemCategory.Food, label: 'Food' }
   ];
 
   priorities = [
@@ -213,12 +212,15 @@ export class TourProblemFormComponent implements OnInit {
         return;
       }
       
+      // Convert to ISO string for backend
+      const timeString = combinedDateTime.toISOString();
+      
       if (this.isEditMode && this.problem) {
         const updateDto: TourProblemUpdateDto = {
           category: formValue.category,
           priority: formValue.priority,
           description: formValue.description,
-          time: combinedDateTime
+          time: timeString
         };
         console.log('Emitting UPDATE:', updateDto);
         this.problemUpdated.emit(updateDto);
@@ -228,7 +230,7 @@ export class TourProblemFormComponent implements OnInit {
           category: formValue.category,
           priority: formValue.priority,
           description: formValue.description,
-          time: combinedDateTime
+          time: timeString
         };
         console.log('Emitting CREATE:', createDto);
         this.problemCreated.emit(createDto);

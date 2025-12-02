@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TourProblemService } from '../tour-problem.service';
-import { TourProblem, ProblemCategory, ProblemPriority, TourProblemCreateDto, TourProblemUpdateDto } from '../model/tour-problem.model';
+import { TourProblem, ProblemCategory, ProblemPriority, ProblemStatus, TourProblemCreateDto, TourProblemUpdateDto } from '../model/tour-problem.model';
 
 @Component({
   selector: 'app-tour-problem-list',
@@ -13,7 +14,10 @@ export class TourProblemListComponent implements OnInit {
   selectedProblem: TourProblem | null = null;
   isEditMode: boolean = false;
 
-  constructor(private tourProblemService: TourProblemService) { }
+  constructor(
+    private tourProblemService: TourProblemService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loadProblems();
@@ -39,14 +43,31 @@ export class TourProblemListComponent implements OnInit {
     return ProblemPriority[priority];
   }
 
+  getStatusName(status: ProblemStatus): string {
+    return ProblemStatus[status];
+  }
+
   getPriorityColor(priority: ProblemPriority): string {
     switch (priority) {
       case ProblemPriority.Low: return '#4caf50';
       case ProblemPriority.Medium: return '#ff9800';
       case ProblemPriority.High: return '#f44336';
-      case ProblemPriority.Critical: return '#b71c1c';
+      case ProblemPriority.Critical: return '#d32f2f';
       default: return '#9e9e9e';
     }
+  }
+
+  getStatusColor(status: ProblemStatus): string {
+    switch (status) {
+      case ProblemStatus.Open: return '#2196f3';
+      case ProblemStatus.Resolved: return '#4caf50';
+      case ProblemStatus.Unresolved: return '#f44336';
+      default: return '#9e9e9e';
+    }
+  }
+
+  onViewDetails(problemId: number): void {
+    this.router.navigate(['/tour-execution/tour-problems', problemId]);
   }
 
   onAddNew(): void {
