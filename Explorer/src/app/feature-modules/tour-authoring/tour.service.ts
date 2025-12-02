@@ -9,6 +9,7 @@ import { Tour, TourCreateDto, TourUpdateDto } from './model/tour.model';
 })
 export class TourService {
   private baseUrl = environment.apiHost + 'tours';
+  private readonly touristBaseUrl = environment.apiHost + 'tourist/tours';
 
   constructor(private http: HttpClient) { }
 
@@ -34,5 +35,9 @@ export class TourService {
 
   publishTour(id: number): Observable<Tour> {
     return this.http.patch<Tour>(`${this.baseUrl}/${id}/publish`, {});
+  }
+
+  getPublishedToursForTourist(): Observable<Tour[]> {
+    return this.http.get<Tour[]>(this.touristBaseUrl);
   }
 }

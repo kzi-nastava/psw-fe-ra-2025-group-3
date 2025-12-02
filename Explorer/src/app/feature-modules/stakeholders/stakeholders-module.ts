@@ -17,6 +17,8 @@ import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.
 import { MarkdownModule } from 'ngx-markdown';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ProfileListComponent } from './profile-list/profile-list.component';
+import { TouristToursComponent } from './tourist-tours/tourist-tours.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -43,6 +45,8 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     ProfileListComponent,
     PreferenceOverviewComponent,
     PreferenceFormComponent,
+    ShoppingCartComponent,
+    TouristToursComponent,
     TouristEquipmentComponent
     
   ],
