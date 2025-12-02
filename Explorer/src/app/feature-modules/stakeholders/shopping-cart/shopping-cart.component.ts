@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ShoppingCart } from '../model/shopping-cart.model';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { Router } from '@angular/router';
+import { TourPurchaseService } from '../tour-purchase.service';
+
 
 @Component({
   selector: 'xp-shopping-cart',
@@ -13,7 +15,7 @@ export class ShoppingCartComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private shoppingCartService: ShoppingCartService, private router: Router) {}
+  constructor(private shoppingCartService: ShoppingCartService,private purchaseService: TourPurchaseService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCart();
@@ -58,4 +60,36 @@ export class ShoppingCartComponent implements OnInit {
   goToTours(): void {
     this.router.navigate(['/tourist/tours']);
   }
+
+ onCheckout(): void {
+  if (!this.cart || this.cart.items.length === 0) {
+    return;
+  }
+
+  this.loading = true;
+
+  this.purchaseService.checkout().subscribe({
+    next: tokens => {
+      this.loading = false;
+
+      this.cart = {
+        touristId: this.cart!.touristId,
+        items: [],
+        totalPrice: 0
+      };
+
+      alert(`Purchase successful! You received ${tokens.length} tokens.`);
+
+      this.router.navigate(['/tourist/purchase-success'], {
+        state: { tokens }
+      });
+    },
+    error: () => {
+      this.loading = false;
+      alert('Checkout failed. Please try again later.');
+    }
+  });
+}
+
+  
 }

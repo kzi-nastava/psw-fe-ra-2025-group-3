@@ -28,6 +28,9 @@ import { ProfileListComponent } from 'src/app/feature-modules/stakeholders/profi
 import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profile-form/profile-form.component';
 
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component';
+import { TourProblemDetailsComponent } from 'src/app/feature-modules/tour-execution/tour-problem-details/tour-problem-details.component';
+import { AuthorProblemListComponent } from 'src/app/feature-modules/tour-authoring/author-problem-list/author-problem-list.component';
+import { AuthorProblemDetailsComponent } from 'src/app/feature-modules/tour-authoring/author-problem-details/author-problem-details.component';
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/stakeholders/preferences/preference-overview/preference-overview.component';
 import { TouristEquipmentComponent } from 'src/app/feature-modules/stakeholders/tourist-equipment/tourist-equipment.component';
 import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tourist-tours/tourist-tours.component';
@@ -38,7 +41,7 @@ import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/mee
 
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
-
+import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 const routes: Routes = [
 
   // Public
@@ -62,6 +65,8 @@ const routes: Routes = [
 
   // Tours
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] },
+  { path: 'author/tour-problems', component: AuthorProblemListComponent, canActivate: [AuthGuard] },
+  { path: 'author/tour-problems/:id', component: AuthorProblemDetailsComponent, canActivate: [AuthGuard] },
 
   // Ratings
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
@@ -79,9 +84,10 @@ const routes: Routes = [
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
-
+  { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
+  { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
 
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },

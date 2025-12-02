@@ -72,12 +72,13 @@
       </div>
 
       <button
-        mat-raised-button
-        color="primary"
-        class="checkout-button">
-        <mat-icon>shopping_bag</mat-icon>
-        Proceed to checkout
-      </button>
+  mat-raised-button
+  color="primary"
+  class="checkout-button"
+  (click)="onCheckout()">
+  <mat-icon>shopping_bag</mat-icon>
+  Proceed to checkout
+</button>
 
       <p class="summary-note">
         You will be able to review details of each tour before final confirmation.

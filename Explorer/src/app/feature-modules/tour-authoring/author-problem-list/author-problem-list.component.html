@@ -1,0 +1,67 @@
+<div class="tour-list-container">
+  <div class="header">
+    <h2>
+      Tour Problems
+      <p class="subtitle">Problems reported by tourists on your tours</p>
+    </h2>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && problems.length === 0" class="empty-state">
+    <mat-icon>check_circle</mat-icon>
+    <h2>No Problems Reported</h2>
+    <p>No problems have been reported on your tours yet.</p>
+  </div>
+
+  <div *ngIf="!loading && problems.length > 0" class="tours-grid">
+    <mat-card *ngFor="let problem of problems" class="tour-card">
+      <mat-card-header>
+        <mat-card-title>
+          Tour #{{problem.tourId}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          <div class="status-badges">
+            <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+              {{getPriorityName(problem.priority)}}
+            </span>
+            <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
+              {{getStatusName(problem.status)}}
+            </span>
+          </div>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="description">{{problem.description}}</p>
+        
+        <div class="tour-details">
+          <div class="detail-item">
+            <mat-icon>category</mat-icon>
+            <span>{{getCategoryName(problem.category)}}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{problem.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>person</mat-icon>
+            <span>Tourist #{{problem.touristId}}</span>
+          </div>
+          <div class="detail-item" *ngIf="problem.messages && problem.messages.length > 0">
+            <mat-icon>chat</mat-icon>
+            <span>{{problem.messages.length}} messages</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onViewDetails(problem.id)">
+          <mat-icon>visibility</mat-icon> View & Respond
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
