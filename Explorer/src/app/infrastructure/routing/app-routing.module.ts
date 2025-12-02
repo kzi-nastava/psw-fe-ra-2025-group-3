@@ -37,7 +37,7 @@ import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetup
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
 
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
-
+import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 const routes: Routes = [
 
   // Public
@@ -78,7 +78,7 @@ const routes: Routes = [
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
-
+  { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
 
