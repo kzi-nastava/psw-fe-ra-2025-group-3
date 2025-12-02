@@ -1,1 +1,11 @@
-<p>key-point-list works!</p>
+<div class="kp-list">
+  <p *ngIf="!keyPoints || keyPoints.length === 0">
+    Nema ključnih tačaka još uvek.
+  </p>
+
+  <ul *ngIf="keyPoints && keyPoints.length > 0">
+    <li *ngFor="let kp of keyPoints">
+      {{ kp.name }}
+    </li>
+  </ul>
+</div>

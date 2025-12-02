@@ -1,1 +1,80 @@
-<p>key-point-form works!</p>
+<form class="key-point-form" [formGroup]="keyPointForm" (ngSubmit)="onSubmit()">
+
+  <mat-card>
+    <mat-card-title>
+      {{ isEditMode ? 'Izmena key point-a' : 'Novi key point' }}
+    </mat-card-title>
+
+    <mat-card-content>
+
+      <!-- Naziv -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Naziv</mat-label>
+        <input matInput formControlName="name" placeholder="Unesi naziv key point-a" />
+
+        <mat-error *ngIf="name?.hasError('required') && name?.touched">
+          Naziv je obavezan.
+        </mat-error>
+        <mat-error *ngIf="name?.hasError('minlength') && name?.touched">
+          Naziv mora imati bar 3 karaktera.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Opis -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Opis</mat-label>
+        <textarea
+          matInput
+          rows="3"
+          formControlName="description"
+          placeholder="Unesi opis key point-a">
+        </textarea>
+
+        <mat-error *ngIf="description?.hasError('required') && description?.touched">
+          Opis je obavezan.
+        </mat-error>
+        <mat-error *ngIf="description?.hasError('minlength') && description?.touched">
+          Opis mora imati bar 5 karaktera.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Image URL -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Image URL</mat-label>
+        <input
+          matInput
+          formControlName="imageUrl"
+          placeholder="https://example.com/slika.jpg" />
+
+        <mat-error *ngIf="imageUrl?.hasError('required') && imageUrl?.touched">
+          URL slike je obavezan.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Secret -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Secret</mat-label>
+        <input
+          matInput
+          formControlName="secret"
+          placeholder="Tajni kod / ključ" />
+
+        <mat-error *ngIf="secret?.hasError('required') && secret?.touched">
+          Secret je obavezan.
+        </mat-error>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-stroked-button type="button" (click)="onCancel()">
+        Otkaži
+      </button>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="keyPointForm.invalid">
+        Sačuvaj
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+</form>

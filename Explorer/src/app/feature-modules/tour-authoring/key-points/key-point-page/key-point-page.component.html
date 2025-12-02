@@ -1,4 +1,5 @@
 <div class="kp-container">
+
   <div class="kp-main">
     <div class="kp-map">
       <xp-map
@@ -18,20 +19,17 @@
         Dodaj ključnu tačku
       </button>
 
-      <div class="kp-list">
-        <!-- Kasnije *ngFor preko key pointova -->
-        <p *ngIf="testPoints.length === 0">Nema ključnih tačaka još uvek.</p>
-        <ul *ngIf="testPoints.length > 0">
-          <li *ngFor="let p of testPoints">
-            {{ p.lat }}, {{ p.lng }}
-          </li>
-        </ul>
-      </div>
+      <!-- OVDE sada koristimo list komponentu -->
+      <xp-key-point-list [keyPoints]="keyPoints"></xp-key-point-list>
     </div>
   </div>
 
   <div class="kp-form">
-    <!-- Ovde će kasnije biti forma za key point -->
-    Forma za ključnu tačku (placeholder)
+    <xp-key-point-form
+      [isEditMode]="false"
+      (save)="onKeyPointSave($event)"
+      (cancel)="onKeyPointCancel()">
+    </xp-key-point-form>
   </div>
+
 </div>
