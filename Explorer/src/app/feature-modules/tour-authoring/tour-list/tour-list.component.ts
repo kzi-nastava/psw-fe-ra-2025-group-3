@@ -143,10 +143,12 @@ export class TourListComponent implements OnInit {
     return labels[difficulty] || 'Unknown';
   }
 
+  // === POPRAVLJENO: Dodat 'Archived' status ===
   getStatusLabel(status: TourStatus): string {
     const labels = {
       [TourStatus.Draft]: 'Draft',
       [TourStatus.Published]: 'Published',
+      [TourStatus.Archived]: 'Archived' 
     };
     return labels[status] || 'Unknown';
   }
@@ -155,6 +157,7 @@ export class TourListComponent implements OnInit {
     const classes = {
       [TourStatus.Draft]: 'status-draft',
       [TourStatus.Published]: 'status-published',
+      [TourStatus.Archived]: 'status-archived' 
     };
     return classes[status] || '';
   }
