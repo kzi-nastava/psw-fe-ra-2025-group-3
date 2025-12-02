@@ -31,8 +31,6 @@ import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution
 import { TourProblemDetailsComponent } from 'src/app/feature-modules/tour-execution/tour-problem-details/tour-problem-details.component';
 import { AuthorProblemListComponent } from 'src/app/feature-modules/tour-authoring/author-problem-list/author-problem-list.component';
 import { AuthorProblemDetailsComponent } from 'src/app/feature-modules/tour-authoring/author-problem-details/author-problem-details.component';
-import { PreferenceOverviewComponent } from 'src/app/feature-modules/tour-execution/preference-overview/preference-overview.component';
-import { TouristEquipmentComponent } from 'src/app/feature-modules/tour-execution/tourist-equipment/tourist-equipment.component';
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/stakeholders/preferences/preference-overview/preference-overview.component';
 import { TouristEquipmentComponent } from 'src/app/feature-modules/stakeholders/tourist-equipment/tourist-equipment.component';
 import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tourist-tours/tourist-tours.component';
