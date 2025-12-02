@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 
 // Angular Material
@@ -17,14 +17,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // Components
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 
 @NgModule({
   declarations: [
     BlogListComponent,
-    BlogFormComponent
+    BlogFormComponent,
+    BlogDetailComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MarkdownModule.forChild(),
     // Material modules

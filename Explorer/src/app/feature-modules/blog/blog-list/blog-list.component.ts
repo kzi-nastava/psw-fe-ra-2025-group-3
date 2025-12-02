@@ -3,6 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { BlogService } from '../blog.service';
 import { Blog } from '../model/blog.model';
 import { BlogFormComponent } from '../blog-form/blog-form.component';
@@ -19,7 +20,8 @@ export class BlogListComponent implements OnInit {
   constructor(
     private blogService: BlogService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,10 @@ export class BlogListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  viewBlog(blogId: number): void {
+    this.router.navigate(['/author/blogs', blogId]);
   }
 
   openCreateDialog(): void {
@@ -74,37 +80,32 @@ export class BlogListComponent implements OnInit {
       year: 'numeric'
     });
   }
+
   truncateMarkdown(text: string, maxLength: number = 120): string {
-  if (!text) return '';
-  
-  // Ukloni Markdown sintaksu PRE truncate-a da bi dobio tačnu dužinu
-  const plainText = text
-    .replace(/#+\s/g, '')           // Ukloni # za headinge
-    .replace(/\*\*/g, '')            // Ukloni ** za bold
-    .replace(/\*/g, '')              // Ukloni * za italic
-    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Ukloni linkove
-  
-  if (plainText.length <= maxLength) {
-    return text; // Vrati original Markdown
+    if (!text) return '';
+    
+    const plainText = text
+      .replace(/#+\s/g, '')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+    
+    if (plainText.length <= maxLength) {
+      return text;
+    }
+    
+    const truncated = plainText.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    const finalText = lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
+    
+    return finalText + '...';
   }
-  
-  // Truncate na reči
-  const truncated = plainText.substring(0, maxLength);
-  const lastSpace = truncated.lastIndexOf(' ');
-  const finalText = lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated;
-  
-  return finalText + '...';
-  }
+
   getImageUrl(blog: Blog): string {
     if (blog.images && blog.images.length > 0) {
       return blog.images[0].imageUrl;
     }
     return 'https://via.placeholder.com/400x200?text=No+Image';
-  }
-
-  truncateText(text: string, maxLength: number = 150): string {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
   }
 
   private showError(message: string): void {
