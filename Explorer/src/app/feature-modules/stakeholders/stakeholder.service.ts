@@ -27,7 +27,10 @@ export class StakeholderService {
     return this.http.put<Person>(this.profileUrl, profile);
   }
 
+
+
   // GET ALL
+
   getAllPersons(): Observable<Person[]> {
     return this.http.get<Person[]>(`${this.baseUrl}/all`);
   }

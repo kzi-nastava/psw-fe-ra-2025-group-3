@@ -34,7 +34,6 @@ export enum TourDifficulty {
   Hard = 2
 }
 
-
 export const AVAILABLE_TAGS = [
   'Nature',
   'Culture',

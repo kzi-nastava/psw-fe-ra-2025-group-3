@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PreferenceService } from '../preference.service';
-import { Preference, PreferenceCreateDto, PreferenceUpdateDto, TourDifficulty, AVAILABLE_TAGS } from '../model/preference.model';
+import { PreferenceService } from '../../preference.service'; // Ispravi path
+import { Preference, PreferenceCreateDto, PreferenceUpdateDto, TourDifficulty, AVAILABLE_TAGS } from '../../model/preference.model';
 
 @Component({
   selector: 'xp-preference-form',
@@ -18,9 +18,9 @@ export class PreferenceFormComponent implements OnInit {
   selectedTags: string[] = [];
   
   difficulties = [
-    { value: TourDifficulty.Easy, label: 'Lako' },
-    { value: TourDifficulty.Medium, label: 'Srednje' },
-    { value: TourDifficulty.Hard, label: 'Teško' }
+    { value: TourDifficulty.Easy, label: 'Lako', icon: 'sentiment_satisfied' },
+    { value: TourDifficulty.Medium, label: 'Srednje', icon: 'sentiment_neutral' },
+    { value: TourDifficulty.Hard, label: 'Teško', icon: 'fitness_center' }
   ];
 
   constructor(private service: PreferenceService) {
@@ -72,7 +72,6 @@ export class PreferenceFormComponent implements OnInit {
     const formValue = this.preferenceForm.value;
 
     if (this.shouldEdit && this.preference) {
-      // IZMENA
       const updateDto: PreferenceUpdateDto = {
         id: this.preference.id,
         difficulty: formValue.difficulty,
@@ -87,12 +86,11 @@ export class PreferenceFormComponent implements OnInit {
         next: () => {
           this.preferenceUpdated.emit();
         },
-        error: (err) => {
+        error: (err: any) => {
           alert('Greška pri izmeni preferenci: ' + err.message);
         }
       });
     } else {
-      // KREIRANJE
       const createDto: PreferenceCreateDto = {
         difficulty: formValue.difficulty,
         walkingRating: formValue.walkingRating,
@@ -106,7 +104,7 @@ export class PreferenceFormComponent implements OnInit {
         next: () => {
           this.preferenceUpdated.emit();
         },
-        error: (err) => {
+        error: (err: any) => {
           alert('Greška pri kreiranju preferenci: ' + err.message);
         }
       });
