@@ -91,6 +91,10 @@
         <mat-icon>explore</mat-icon>
       </button>
       <mat-menu #touristMenu="matMenu" class="custom-menu">
+        <button mat-menu-item routerLink="/tourist/tours">
+          <mat-icon>map</mat-icon>
+          <span>Tours</span>
+        </button>
         <button mat-menu-item routerLink="/tourist/equipment">
           <mat-icon>backpack</mat-icon>
           <span>My Equipment</span>
@@ -115,6 +119,10 @@
         <button mat-menu-item routerLink="/meetups">
           <mat-icon>event</mat-icon>
           <span>Meetups</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/cart">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>My Cart</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item routerLink="/tour-execution/tour-problems">

@@ -30,6 +30,8 @@ import { ProfileFormComponent } from 'src/app/feature-modules/stakeholders/profi
 import { TourProblemListComponent } from 'src/app/feature-modules/tour-execution/tour-problem-list/tour-problem-list.component';
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/stakeholders/preferences/preference-overview/preference-overview.component';
 import { TouristEquipmentComponent } from 'src/app/feature-modules/stakeholders/tourist-equipment/tourist-equipment.component';
+import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tourist-tours/tourist-tours.component';
+import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -74,6 +76,8 @@ const routes: Routes = [
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
+  { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },

@@ -1,0 +1,132 @@
+.cart-page {
+  margin-top: var(--spacing-8);
+  margin-bottom: var(--spacing-12);
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-8);
+}
+
+.cart-subtitle {
+  color: var(--color-neutral-800);
+  margin-top: var(--spacing-2);
+}
+
+.cart-total-pill {
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: 999px;
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.cart-total-pill span {
+  margin-left: var(--spacing-2);
+}
+
+.cart-empty {
+  text-align: center;
+  padding: var(--spacing-12);
+}
+
+.cart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr;
+  gap: var(--spacing-6);
+}
+
+.cart-items h2,
+.cart-summary h2 {
+  margin-bottom: var(--spacing-4);
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-neutral-100);
+  margin-bottom: var(--spacing-3);
+}
+
+.cart-item-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.tour-pill {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 999px;
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.cart-item-title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-1);
+}
+
+.cart-item-id {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-800);
+}
+
+.cart-item-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.cart-item-price {
+  font-weight: 700;
+  color: var(--color-secondary-800);
+}
+
+.cart-summary .summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-3);
+}
+
+.cart-summary .total-row {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-secondary-800);
+  margin-top: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+.checkout-button {
+  width: 100%;
+  margin-top: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+}
+
+.summary-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+}
+
+@media (max-width: 1024px) {
+  .cart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cart-total-pill {
+    align-self: flex-start;
+  }
+}
