@@ -8,9 +8,11 @@ import { EquipmentWithOwnership } from '../model/equipment-with-ownership.model'
   styleUrls: ['./tourist-equipment.component.css']
 })
 export class TouristEquipmentComponent implements OnInit {
+
   allEquipment: EquipmentWithOwnership[] = [];
   myEquipment: EquipmentWithOwnership[] = [];
   selectedTabIndex: number = 0;
+  
   errorMessage: string = '';
   successMessage: string = '';
 
@@ -46,7 +48,13 @@ export class TouristEquipmentComponent implements OnInit {
     if (event.checked) {
       this.addEquipment(equipment.id);
     } else {
-      this.removeEquipment(equipment.id);
+      // Confirmation pre brisanja
+      if (confirm(`Da li ste sigurni da želite da uklonite "${equipment.name}" iz vašeg spiska?`)) {
+        this.removeEquipment(equipment.id);
+      } else {
+        // Vrati checkbox na prethodno stanje
+        event.source.checked = true;
+      }
     }
   }
 
@@ -58,7 +66,7 @@ export class TouristEquipmentComponent implements OnInit {
           equipment.isOwnedByTourist = true;
         }
         this.updateMyEquipment();
-        this.showSuccess('Oprema je dodata u vaš spisak');
+        this.showSuccess('Oprema je uspešno dodata u vaš spisak');
       },
       error: () => {
         this.showError('Došlo je do greške. Molimo pokušajte ponovo.');
@@ -75,7 +83,7 @@ export class TouristEquipmentComponent implements OnInit {
           equipment.isOwnedByTourist = false;
         }
         this.updateMyEquipment();
-        this.showSuccess('Oprema je uklonjena iz vašeg spiska');
+        this.showSuccess('Oprema je uspešno uklonjena iz vašeg spiska');
       },
       error: () => {
         this.showError('Došlo je do greške. Molimo pokušajte ponovo.');
@@ -85,7 +93,12 @@ export class TouristEquipmentComponent implements OnInit {
   }
 
   onRemoveFromMyEquipment(equipmentId: number): void {
-    this.removeEquipment(equipmentId);
+    const equipment = this.myEquipment.find(eq => eq.id === equipmentId);
+    
+    // Confirmation dialog
+    if (confirm(`Da li ste sigurni da želite da uklonite "${equipment?.name}" iz vašeg spiska?`)) {
+      this.removeEquipment(equipmentId);
+    }
   }
 
   showSuccess(message: string): void {
@@ -97,6 +110,6 @@ export class TouristEquipmentComponent implements OnInit {
   showError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';
-    setTimeout(() => this.errorMessage = '', 3000);
+    setTimeout(() => this.errorMessage = '', 5000);
   }
 }

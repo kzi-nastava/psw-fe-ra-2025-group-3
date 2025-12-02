@@ -67,7 +67,7 @@ export class ProfileListComponent implements OnInit {
     },
     error: (err) => {
       console.error(err);
-      this.showError('Error blocking this person: ' + (err.error?.message || err.statusText));
+      this.showError('Cannot block administrator accounts: ' + (err.error?.message || err.statusText));
     }
   });
 }

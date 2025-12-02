@@ -1,0 +1,86 @@
+<div class="container py-8">
+  <div class="card">
+    <!-- Header -->
+    <div class="flex-between mb-6">
+      <h2>Moja Oprema</h2>
+      <div class="badge badge-primary">
+        {{ ownedEquipmentCount }} {{ ownedEquipmentCount === 1 ? 'stavka' : 'stavki' }}
+      </div>
+    </div>
+
+    <!-- Notifikacije -->
+    <div *ngIf="successMessage" class="notification success mb-4">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="notification error mb-4">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Tabovi -->
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="mt-4">
+      
+      <!-- Tab: Sva oprema -->
+      <mat-tab label="Sva oprema">
+        <div class="equipment-list mt-6">
+          <table class="equipment-table">
+            <thead>
+              <tr>
+                <th style="width: 50px;"></th>
+                <th>Naziv</th>
+                <th>Opis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let eq of allEquipment" 
+                  [class.owned-row]="eq.isOwnedByTourist">
+                <td>
+                  <mat-checkbox 
+                    [checked]="eq.isOwnedByTourist"
+                    (change)="onCheckboxChange(eq, $event)">
+                  </mat-checkbox>
+                </td>
+                <td class="font-medium">{{ eq.name }}</td>
+                <td class="text-muted">{{ eq.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Moja oprema -->
+      <mat-tab label="Moja oprema">
+        <div class="equipment-list mt-6">
+          <div *ngIf="myEquipment.length === 0" class="empty-state">
+            <p class="text-muted">Nemate evidentirane opreme</p>
+          </div>
+
+          <table *ngIf="myEquipment.length > 0" class="equipment-table">
+            <thead>
+              <tr>
+                <th>Naziv</th>
+                <th>Opis</th>
+                <th style="width: 150px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let eq of myEquipment">
+                <td class="font-medium">{{ eq.name }}</td>
+                <td class="text-muted">{{ eq.description }}</td>
+                <td>
+                  <button 
+                    class="btn-delete"
+                    (click)="onRemoveFromMyEquipment(eq.id)" 
+                    mat-raised-button
+                    color="warn">
+                    Ukloni
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

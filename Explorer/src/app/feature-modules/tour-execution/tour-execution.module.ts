@@ -9,11 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
-import { PreferenceOverviewComponent } from './preference-overview/preference-overview.component';
-import { PreferenceFormComponent } from './preference-form/preference-form.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
-import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
 import { MatTabsModule } from '@angular/material/tabs';      
 import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
@@ -22,10 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     TourProblemListComponent,
-    TourProblemFormComponent,
-    PreferenceOverviewComponent,
-    PreferenceFormComponent,
-    TouristEquipmentComponent
+    TourProblemFormComponent
   ],
   imports: [
     CommonModule,
@@ -42,8 +36,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatCheckboxModule      
   ],
   exports: [
-    TourProblemListComponent,
-    TouristEquipmentComponent 
+    TourProblemListComponent
   ]
 })
 export class TourExecutionModule { }

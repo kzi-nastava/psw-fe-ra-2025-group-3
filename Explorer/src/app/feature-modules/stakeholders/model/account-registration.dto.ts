@@ -7,7 +7,7 @@ export interface AccountRegistrationDto {
   surname: string;
   email: string;
 
-  phoneNumber?: string;
-  biography?: string;
-  quote?: string;
+  
+  biography: string;
+  quote: string;
 }

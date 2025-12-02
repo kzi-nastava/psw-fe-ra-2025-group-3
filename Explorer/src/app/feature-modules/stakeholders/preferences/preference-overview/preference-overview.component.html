@@ -1,0 +1,132 @@
+<div class="container py-8">
+  
+  <!-- Header Section -->
+  <div class="flex-between mb-8">
+    <div>
+      <h1 class="mb-4">Moje Preference</h1>
+      <p class="text-muted">Prilagodite svoje putovanje prema svojim željama</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="card text-center animate-fade-in-up">
+    <mat-icon class="text-primary" style="font-size: 48px; width: 48px; height: 48px;">hourglass_empty</mat-icon>
+    <p class="mt-4">Učitavanje...</p>
+  </div>
+
+  <!-- Empty State - Nema preferenci -->
+  <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm" class="card text-center animate-fade-in-up">
+    <mat-icon class="text-primary" style="font-size: 64px; width: 64px; height: 64px;">tune</mat-icon>
+    <h3 class="mt-4 mb-4">Još nemate postavljene preference</h3>
+    <p class="text-muted mb-6">Kreirajte svoje preference kako bismo vam preporučili savršenu turu!</p>
+    <button class="btn btn-primary btn-lg mx-auto" (click)="onAddClicked()">
+      <mat-icon>add</mat-icon>
+      Kreiraj Preference
+    </button>
+  </div>
+
+  <!-- Preference Details - Kada postoje -->
+  <div *ngIf="!isLoading && hasPreference && !shouldRenderPreferenceForm" class="animate-fade-in-up">
+    
+    <!-- Info Card -->
+    <div class="card mb-6">
+      
+      <!-- Težina ture -->
+      <div class="flex-between mb-6">
+        <div>
+          <h3 class="m-0">Težina Ture</h3>
+          <p class="text-muted m-0">Preferirana težina vaših avantura</p>
+        </div>
+        <span class="badge" [ngClass]="getDifficultyBadgeClass(preference!.difficulty)">
+          {{ getDifficultyText(preference!.difficulty) }}
+        </span>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--color-neutral-100); margin: var(--spacing-6) 0;">
+
+      <!-- Prevozna Sredstva Grid -->
+      <h3 class="mb-4">Prevozna Sredstva</h3>
+      <div class="grid-2 mb-6">
+        
+        <!-- Šetnja -->
+        <div class="transport-item">
+          <div class="flex-row items-center gap-4">
+            <mat-icon class="text-primary">directions_walk</mat-icon>
+            <div>
+              <strong>Šetnja</strong>
+              <p class="m-0">{{ getRatingStars(preference!.walkingRating) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bicikl -->
+        <div class="transport-item">
+          <div class="flex-row items-center gap-4">
+            <mat-icon class="text-primary">directions_bike</mat-icon>
+            <div>
+              <strong>Bicikl</strong>
+              <p class="m-0">{{ getRatingStars(preference!.bicycleRating) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto -->
+        <div class="transport-item">
+          <div class="flex-row items-center gap-4">
+            <mat-icon class="text-primary">directions_car</mat-icon>
+            <div>
+              <strong>Auto</strong>
+              <p class="m-0">{{ getRatingStars(preference!.carRating) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Čamac -->
+        <div class="transport-item">
+          <div class="flex-row items-center gap-4">
+            <mat-icon class="text-primary">directions_boat</mat-icon>
+            <div>
+              <strong>Čamac</strong>
+              <p class="m-0">{{ getRatingStars(preference!.boatRating) }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--color-neutral-100); margin: var(--spacing-6) 0;">
+
+      <!-- Tagovi -->
+      <h3 class="mb-4">Interesovanja</h3>
+      <div class="flex-row gap-2" style="flex-wrap: wrap;">
+        <span *ngFor="let tag of preference!.tags" class="badge badge-primary">
+          {{ tag }}
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex-row gap-4">
+      <button class="btn btn-primary" (click)="onEditClicked()">
+        <mat-icon>edit</mat-icon>
+        Izmeni
+      </button>
+      <button class="btn btn-secondary" (click)="deletePreference()">
+        <mat-icon>delete</mat-icon>
+        Obriši
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Forma za kreiranje/izmenu -->
+  <div *ngIf="shouldRenderPreferenceForm" class="animate-fade-in-up">
+    <xp-preference-form 
+      [shouldEdit]="shouldEdit" 
+      [preference]="preference"
+      (preferenceUpdated)="getPreference(); shouldRenderPreferenceForm = false;">
+    </xp-preference-form>
+  </div>
+
+</div>

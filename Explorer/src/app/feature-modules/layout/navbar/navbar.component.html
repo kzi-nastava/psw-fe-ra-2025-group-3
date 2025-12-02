@@ -10,91 +10,154 @@
     </a>
     
     <!-- Navigation Buttons -->
-<div class="navbar-buttons">
-      <!-- Role-specific buttons -->
+    <div class="navbar-buttons">
       
-      <!-- Administrator buttons -->
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/profiles">
-        My Profiles
+      <!-- Administrator Menu -->
+      <button *ngIf="user && user.role === 'administrator'" 
+              mat-button 
+              [matMenuTriggerFor]="adminMenu"
+              class="nav-menu-button">
+        <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+        <span>Admin</span>
+        <mat-icon>admin_panel_settings</mat-icon>
       </button>
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/equipment">
-        Manage Equipment
-      </button>
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/award-events">
-        Manage Awards
-      </button>
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/facilities">
-        Manage Facilities
-      </button>
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/administration/monuments">
-        Manage Monuments
-      </button>
-      <button *ngIf="user && user.role === 'administrator'" mat-button routerLink="/app-ratings">
-        App Ratings
-      </button>
+      <mat-menu #adminMenu="matMenu" class="custom-menu">
+        <button mat-menu-item routerLink="/administration/profiles">
+          <mat-icon>person</mat-icon>
+          <span>My Profiles</span>
+        </button>
+        <button mat-menu-item routerLink="/equipment">
+          <mat-icon>backpack</mat-icon>
+          <span>Equipment</span>
+        </button>
+        <button mat-menu-item routerLink="/administration/award-events">
+          <mat-icon>emoji_events</mat-icon>
+          <span>Awards</span>
+        </button>
+        <button mat-menu-item routerLink="/administration/facilities">
+          <mat-icon>business</mat-icon>
+          <span>Facilities</span>
+        </button>
+        <button mat-menu-item routerLink="/administration/monuments">
+          <mat-icon>castle</mat-icon>
+          <span>Monuments</span>
+        </button>
+        <button mat-menu-item routerLink="/app-ratings">
+          <mat-icon>star_rate</mat-icon>
+          <span>App Ratings</span>
+        </button>
+      </mat-menu>
       
-      <!-- Author buttons -->
-      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/tours">
-        My Tours
+      <!-- Author Menu -->
+      <button *ngIf="user && user.role === 'author'" 
+              mat-button 
+              [matMenuTriggerFor]="authorMenu"
+              class="nav-menu-button">
+        <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+        <span>Create</span>
+        <mat-icon>edit_note</mat-icon>
       </button>
-      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/app-rating">
-        My App Rating
-      </button>
-      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/author/blogs">
-        My Blogs
-      </button>
-
-
-      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/profile">
-        My Profile
-      </button>
-
-      <button *ngIf="user && user.role === 'author'" mat-button routerLink="/meetups">
-        Meetups
-
-      </button>
+      <mat-menu #authorMenu="matMenu" class="custom-menu">
+        <button mat-menu-item routerLink="/author/tours">
+          <mat-icon>map</mat-icon>
+          <span>My Tours</span>
+        </button>
+        <button mat-menu-item routerLink="/author/blogs">
+          <mat-icon>article</mat-icon>
+          <span>My Blogs</span>
+        </button>
+        <button mat-menu-item routerLink="/meetups">
+          <mat-icon>group</mat-icon>
+          <span>Meetups</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>account_circle</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item routerLink="/author/app-rating">
+          <mat-icon>star</mat-icon>
+          <span>Rate App</span>
+        </button>
+      </mat-menu>
       
-      <!-- Tourist buttons -->
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/equipment">
-        My Equipment
+      <!-- Tourist Menu -->
+      <button *ngIf="user && user.role === 'tourist'" 
+              mat-button 
+              [matMenuTriggerFor]="touristMenu"
+              class="nav-menu-button">
+        <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+        <span>Explore</span>
+        <mat-icon>explore</mat-icon>
       </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/preferences">
-        My Preferences
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tour-execution/tour-problems">
-        My Problems
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs">
-        Clubs
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/clubs/my">
-        Your Clubs
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/meetups">
-        Meetups
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/app-rating">
-        My App Rating
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/profile">
-        My Profile
-      </button>
-      <button *ngIf="user && user.role === 'tourist'" mat-button routerLink="/tourist/blogs">
-        My Blogs
-      </button>
+      <mat-menu #touristMenu="matMenu" class="custom-menu">
+        <button mat-menu-item routerLink="/tourist/tours">
+          <mat-icon>map</mat-icon>
+          <span>Tours</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/equipment">
+          <mat-icon>backpack</mat-icon>
+          <span>My Equipment</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/preferences">
+          <mat-icon>tune</mat-icon>
+          <span>Preferences</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/blogs">
+          <mat-icon>article</mat-icon>
+          <span>My Blogs</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/clubs">
+          <mat-icon>groups</mat-icon>
+          <span>Clubs</span>
+        </button>
+        <button mat-menu-item routerLink="/clubs/my">
+          <mat-icon>badge</mat-icon>
+          <span>Your Clubs</span>
+        </button>
+        <button mat-menu-item routerLink="/meetups">
+          <mat-icon>event</mat-icon>
+          <span>Meetups</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/cart">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>My Cart</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/tour-execution/tour-problems">
+          <mat-icon>report_problem</mat-icon>
+          <span>My Problems</span>
+        </button>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>account_circle</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/app-rating">
+          <mat-icon>star</mat-icon>
+          <span>Rate App</span>
+        </button>
+      </mat-menu>
       
-      <!-- Auth & Home buttons with icons -->
-      <button mat-flat-button class="btn-home" routerLink="/home">
-        <img src="assets/icons/home.png" alt="Home" class="btn-icon-img">
+      <!-- Home Button -->
+      <button mat-button class="nav-menu-button" routerLink="/home">
+        <mat-icon>home</mat-icon>
         <span>Home</span>
       </button>
       
-      <button *ngIf="!user || user.username === ''" mat-flat-button class="btn-login" routerLink="/login">
+      <!-- Login/Logout -->
+      <button *ngIf="!user || user.username === ''" 
+              mat-flat-button 
+              class="btn-login" 
+              routerLink="/login">
         <img src="assets/icons/user.png" alt="Login" class="btn-icon-img">
         <span>Login</span>
       </button>
       
-      <button *ngIf="user && user.username !== ''" mat-flat-button class="btn-logout" (click)="onLogout()">
+      <button *ngIf="user && user.username !== ''" 
+              mat-flat-button 
+              class="btn-logout" 
+              (click)="onLogout()">
         <img src="assets/icons/user.png" alt="Logout" class="btn-icon-img">
         <span>Logout</span>
       </button>
