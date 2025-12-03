@@ -31,7 +31,7 @@ import { PreferenceFormComponent } from './preferences/preference-form/preferenc
 import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { PurchaseSuccessComponent } from './purchase/purchase-success.component'; 
-
+import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 
 
 @NgModule({
@@ -69,7 +69,8 @@ import { PurchaseSuccessComponent } from './purchase/purchase-success.component'
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MaterialModule
+    MaterialModule,
+    TourExecutionModule
   ],
   exports: [
     ProfileComponent,
