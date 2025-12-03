@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { TourExecution, TourExecutionCreateDto } from './model/tour-execution.model';
+import { TourExecution, TourExecutionCreateDto, LocationCheckDto, LocationCheckResultDto } from './model/tour-execution.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,4 +20,9 @@ export class TourExecutionService {
   getActiveTourExecution(): Observable<TourExecution | null> {
     return this.http.get<TourExecution | null>(`${this.baseUrl}/active`);
   }
+
+  checkLocation(dto: LocationCheckDto): Observable<LocationCheckResultDto> {
+  console.log('[TourExecutionService] Checking location:', dto);
+  return this.http.post<LocationCheckResultDto>(`${this.baseUrl}/check-location`, dto);
+}
 }

@@ -23,3 +23,16 @@ export interface TourExecutionCreateDto {
   startLatitude: number;
   startLongitude: number;
 }
+
+export interface LocationCheckDto {
+  tourId: number;
+  currentLatitude: number;
+  currentLongitude: number;
+}
+
+export interface LocationCheckResultDto {
+  keyPointCompleted: boolean;
+  completedKeyPointId: number | null;
+  lastActivity: Date;
+  totalCompletedKeyPoints: number;
+}
