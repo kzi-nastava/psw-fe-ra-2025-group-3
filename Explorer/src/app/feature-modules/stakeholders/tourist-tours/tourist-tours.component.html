@@ -52,9 +52,22 @@
               <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
             </mat-chip-set>
           </div>
+
+           <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+            <xp-tour-reviews 
+              [tourId]="tour.id!"
+              [currentUserId]="currentUserId">
+            </xp-tour-reviews>
+          </div>
         </mat-card-content>
 
         <mat-card-actions>
+          <button
+            mat-button
+            (click)="expandReviews(tour)">
+            <mat-icon>rate_review</mat-icon>
+            {{ expandedTourId === tour.id ? 'Hide' : 'Reviews' }}
+          </button>
           <button
             mat-stroked-button
             color="primary"

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { TourExecutionService } from '../../tour-execution/tour-execution.service';
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 
 @Component({
@@ -22,18 +23,26 @@ export class TouristToursComponent implements OnInit {
   hasActiveTour = false;
   TourStatus = TourStatus;
 
+  expandedTourId: number | null = null;
+  currentUserId?: number;
+
   constructor(
     private tourService: TourService,
     private shoppingCartService: ShoppingCartService,
     private snackBar: MatSnackBar,
     private positionSimulator: PositionSimulatorService,
     private tourExecutionService: TourExecutionService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService 
   ) {}
 
   ngOnInit(): void {
     this.checkActiveTour();
     this.loadTours();
+    const user = this.authService.user$.value;
+    if (user) {
+      this.currentUserId = user.id;
+    }
   }
 
   checkActiveTour(): void {
@@ -179,5 +188,12 @@ export class TouristToursComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+  expandReviews(tour: Tour): void {
+    if (this.expandedTourId === tour.id) {
+      this.expandedTourId = null;  // Collapse
+    } else {
+      this.expandedTourId = tour.id;  // Expand
+    }
   }
 }

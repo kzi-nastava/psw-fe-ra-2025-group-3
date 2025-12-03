@@ -7,6 +7,7 @@ import { TourFormComponent } from './tour-form/tour-form.component';
 import { AuthorProblemListComponent } from './author-problem-list/author-problem-list.component';
 import { AuthorProblemDetailsComponent } from './author-problem-details/author-problem-details.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    SharedModule
+    SharedModule,
+    TourExecutionModule
   ],
   exports: [
     TourListComponent,
