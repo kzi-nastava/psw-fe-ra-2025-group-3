@@ -31,6 +31,14 @@
               <mat-icon>location_on</mat-icon>
               <span>Start: {{ execution.startLatitude | number:'1.4-4' }}, {{ execution.startLongitude | number:'1.4-4' }}</span>
             </div>
+            <div class="stat-item">
+              <mat-icon>schedule</mat-icon>
+              <span>Last Check: {{ getFormattedLastActivity() }}</span>
+            </div>
+            <div class="stat-item" [class.checking]="isCheckingLocation">
+              <mat-icon>sync</mat-icon>
+              <span>{{ isCheckingLocation ? 'Checking location...' : 'Monitoring active' }}</span>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>

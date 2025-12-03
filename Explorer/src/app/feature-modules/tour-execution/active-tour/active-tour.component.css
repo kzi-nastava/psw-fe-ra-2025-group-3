@@ -347,3 +347,32 @@
     transform: translateY(0);
   }
 }
+
+/* Location check status indicator */
+.stat-item.checking {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid var(--color-primary-500);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    background: rgba(76, 175, 80, 0.1);
+  }
+  50% {
+    background: rgba(76, 175, 80, 0.2);
+  }
+}
+
+.stat-item.checking mat-icon {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
