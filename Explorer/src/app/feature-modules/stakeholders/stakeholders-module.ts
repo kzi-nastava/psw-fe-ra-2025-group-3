@@ -30,6 +30,7 @@ import { PreferenceOverviewComponent } from './preferences/preference-overview/p
 import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
 import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+import { PurchaseSuccessComponent } from './purchase/purchase-success.component'; 
 
 
 
@@ -47,7 +48,8 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     PreferenceFormComponent,
     ShoppingCartComponent,
     TouristToursComponent,
-    TouristEquipmentComponent
+    TouristEquipmentComponent,
+    PurchaseSuccessComponent
     
   ],
   imports: [
@@ -73,7 +75,8 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     ProfileComponent,
     ProfileFormComponent,
     ProfileListComponent,
-    TouristEquipmentComponent
+    TouristEquipmentComponent,
+    PurchaseSuccessComponent
   ]
 })
 export class StakeholdersModule { }

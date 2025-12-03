@@ -1,0 +1,22 @@
+<div class="success-container card animate-fade-in-up">
+  <h1>Purchase Successful!</h1>
+  <p>Your tours are now unlocked. Keep your tokens safe.</p>
+
+  <div class="token-list">
+    <div class="token-item" *ngFor="let t of tokens">
+      <div>
+        <strong>Tour ID:</strong> {{ t.tourId }}<br />
+        <strong>Token:</strong> {{ t.token }}
+      </div>
+
+      <div class="date">
+        {{ t.createdAt | date:'medium' }}
+      </div>
+    </div>
+  </div>
+
+  <button mat-raised-button color="primary" class="explore-btn" (click)="goExplore()">
+  Continue exploring
+</button>
+
+</div>
