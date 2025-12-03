@@ -14,7 +14,9 @@ import { TourProblemDetailsComponent } from './tour-problem-details/tour-problem
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';      
-import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ActiveTourComponent } from './active-tour/active-tour.component'; 
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -22,7 +24,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   declarations: [
     TourProblemListComponent,
     TourProblemFormComponent,
-    TourProblemDetailsComponent
+    TourProblemDetailsComponent,
+    ActiveTourComponent
     
   ],
   imports: [
@@ -38,10 +41,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatChipsModule,
     MatTabsModule,     
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    SharedModule
   ],
   exports: [
-    TourProblemListComponent
+    TourProblemListComponent,
+    ActiveTourComponent 
   ]
 })
 export class TourExecutionModule { }

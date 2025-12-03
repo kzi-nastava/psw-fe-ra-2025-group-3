@@ -1,0 +1,349 @@
+
+.active-tour-container {
+  padding: var(--spacing-8);
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================================================
+   SUCCESS BANNER - Gradijent hero sekcija
+   ============================================================================ */
+
+.success-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  padding: var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+  
+
+  background: linear-gradient(135deg, 
+    #00C853 0%,      
+    #00897B 50%,    
+    #00ACC1 100%     
+  );
+  
+  color: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-xl);
+  
+  position: relative;
+  overflow: hidden;
+}
+
+
+.success-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.success-banner mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.success-banner div {
+  position: relative;
+  z-index: 1;
+}
+
+.success-banner h2 {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-neutral-0);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.5px;
+}
+
+.success-banner p {
+  margin: var(--spacing-2) 0 0;
+  opacity: 0.95;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+}
+
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+
+
+.tour-info-card {
+  margin-bottom: var(--spacing-8);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  
+ 
+  border-top: 5px solid var(--color-primary-500);
+  
+  transition: all var(--transition-normal);
+  background: var(--color-neutral-0);
+}
+
+.tour-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.tour-info-card mat-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.05) 0%,
+    rgba(0, 150, 136, 0.05) 100%
+  );
+  padding: var(--spacing-6);
+  border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+}
+
+.tour-info-card mat-card-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-2);
+}
+
+.tour-info-card mat-card-subtitle {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-secondary-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tour-info-card mat-card-content {
+  padding: var(--spacing-6);
+}
+
+.tour-description {
+  margin-bottom: var(--spacing-6);
+  line-height: 1.8;
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+}
+
+
+
+.tour-stats {
+  display: flex;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  
+  /* Travel Vista light gradient */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.08) 0%,
+    rgba(0, 150, 136, 0.08) 100%
+  );
+  
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(0, 188, 212, 0.15);
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-800);
+  
+  transition: all var(--transition-fast);
+  flex: 1;
+  min-width: 200px;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-item mat-icon {
+  color: var(--color-primary-500);
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+
+
+.map-card {
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+
+  border-top: 5px solid var(--color-primary-600);
+  
+  background: var(--color-neutral-0);
+}
+
+.map-card mat-card-header {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-700) 0%,
+    var(--color-secondary-800) 100%
+  );
+  padding: var(--spacing-6);
+}
+
+.map-card mat-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-neutral-0);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.map-card mat-card-title::before {
+  content: '📍';
+  font-size: var(--font-size-2xl);
+}
+
+.map-card mat-card-content {
+  padding: 0;
+}
+
+.map-wrapper {
+  height: 500px;
+  width: 100%;
+  position: relative;
+  
+
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+
+.map-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 3px solid rgba(0, 188, 212, 0.1);
+  border-radius: 0;
+}
+
+
+@media (max-width: 768px) {
+  .active-tour-container {
+    padding: var(--spacing-4);
+  }
+
+  .success-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-6);
+    gap: var(--spacing-4);
+  }
+
+  .success-banner mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .success-banner h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .success-banner p {
+    font-size: var(--font-size-base);
+  }
+
+  .tour-info-card mat-card-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .tour-stats {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+  }
+
+  .stat-item {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .map-wrapper {
+    height: 350px;
+  }
+
+  .map-card mat-card-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .active-tour-container {
+    padding: var(--spacing-3);
+  }
+
+  .success-banner {
+    padding: var(--spacing-4);
+  }
+
+  .map-wrapper {
+    height: 280px;
+  }
+}
+
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

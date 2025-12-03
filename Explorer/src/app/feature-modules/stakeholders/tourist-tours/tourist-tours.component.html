@@ -22,8 +22,13 @@
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
           <mat-card-subtitle>
-            <span class="status-badge status-published">
-              Published
+            <span 
+              class="status-badge" 
+              [ngClass]="{
+                'status-published': tour.status === TourStatus.Published,
+                'status-archived': tour.status === TourStatus.Archived
+              }">
+              {{ getStatusLabel(tour.status) }}
             </span>
           </mat-card-subtitle>
         </mat-card-header>
@@ -56,6 +61,22 @@
             (click)="addToCart(tour)">
             <mat-icon>add_shopping_cart</mat-icon>
             Add to cart
+          </button>
+
+          <button    
+            mat-raised-button
+            color="accent"
+            (click)="startTour(tour)"
+            [disabled]="isStartingTour(tour.id!) || hasActiveTour">
+            
+            <mat-spinner *ngIf="isStartingTour(tour.id!)" diameter="20"></mat-spinner>
+            
+            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">play_arrow</mat-icon>
+            <mat-icon *ngIf="hasActiveTour && !isStartingTour(tour.id!)">block</mat-icon>
+            
+            <span *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
+            <span *ngIf="isStartingTour(tour.id!)">Starting...</span>
+            <span *ngIf="hasActiveTour && !isStartingTour(tour.id!)">Active Tour Running</span>
           </button>
         </mat-card-actions>
       </mat-card>

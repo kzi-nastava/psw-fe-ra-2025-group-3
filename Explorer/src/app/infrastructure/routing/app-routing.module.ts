@@ -42,6 +42,7 @@ import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/mee
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
+import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 const routes: Routes = [
 
   // Public
@@ -88,6 +89,7 @@ const routes: Routes = [
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
