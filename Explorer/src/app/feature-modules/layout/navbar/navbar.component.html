@@ -12,6 +12,11 @@
     <!-- Navigation Buttons -->
     <div class="navbar-buttons">
       
+      <button mat-button class="nav-menu-button" routerLink="/blogs">
+        <mat-icon>article</mat-icon>
+        <span>Blogs</span>
+      </button>
+
       <!-- Administrator Menu -->
       <button *ngIf="user && user.role === 'administrator'" 
               mat-button 
