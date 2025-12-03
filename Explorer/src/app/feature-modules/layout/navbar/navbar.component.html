@@ -95,9 +95,18 @@
         <mat-icon>explore</mat-icon>
       </button>
       <mat-menu #touristMenu="matMenu" class="custom-menu">
+        <button mat-menu-item routerLink="/tour-execution/active">
+          <mat-icon>play_circle</mat-icon>
+          <span>Active Tour</span>
+        </button>
+      <mat-divider></mat-divider>
         <button mat-menu-item routerLink="/tourist/tours">
           <mat-icon>map</mat-icon>
           <span>Tours</span>
+        </button>
+        <button mat-menu-item routerLink="/tourist/map">
+          <mat-icon>place</mat-icon>
+          <span>Explore Map</span>       
         </button>
         <button mat-menu-item routerLink="/tourist/equipment">
           <mat-icon>backpack</mat-icon>

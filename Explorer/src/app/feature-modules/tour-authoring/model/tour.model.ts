@@ -20,6 +20,7 @@ export enum TourDifficulty {
 export enum TourStatus {
   Draft = 0,
   Published = 1,
+  Archived = 2 // dodato za tour-execution
 }
 
 export interface TourCreateDto {

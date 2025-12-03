@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="active-tour-container">
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    
+    <div *ngIf="!isLoading && execution && tour">
+      
+      <div class="success-banner">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <h2>Tour in progress</h2>
+          <p>Started at {{ getFormattedStartTime() }}</p>
+        </div>
+      </div>
+
+      <mat-card class="tour-info-card">
+        <mat-card-header>
+          <mat-card-title>{{ tour.name }}</mat-card-title>
+          <mat-card-subtitle>Active Tour</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="tour-description">{{ tour.description }}</p>
+          <div class="tour-stats">
+            <div class="stat-item">
+              <mat-icon>explore</mat-icon>
+              <span>Progress: {{ execution.progressPercentage }}%</span>
+            </div>
+            <div class="stat-item">
+              <mat-icon>location_on</mat-icon>
+              <span>Start: {{ execution.startLatitude | number:'1.4-4' }}, {{ execution.startLongitude | number:'1.4-4' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="map-card">
+        <mat-card-header>
+          <mat-card-title>Your Starting Location</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="map-wrapper">
+            <xp-map
+              [mode]="'object-view'"
+              [center]="[execution.startLatitude, execution.startLongitude]"
+              [zoom]="15"
+              [initialPoint]="{lat: execution.startLatitude, lng: execution.startLongitude}">
+            </xp-map>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+    </div>
+  </div>
+</div>
