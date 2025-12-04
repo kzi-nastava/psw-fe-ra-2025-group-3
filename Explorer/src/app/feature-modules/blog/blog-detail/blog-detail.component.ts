@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlogService } from '../blog.service';
 import { Blog } from '../model/blog.model';
+import { BlogVoteStateDto } from '../model/blog.model';
 
 @Component({
   selector: 'app-blog-detail',
@@ -15,6 +16,10 @@ export class BlogDetailComponent implements OnInit {
   blog: Blog | null = null;
   isLoading: boolean = true;
   currentImageIndex: number = 0;
+  voteState: BlogVoteStateDto | null = null;
+
+  // TODO: zameniti pravom autentikacijom
+  isAuthenticated = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +31,9 @@ export class BlogDetailComponent implements OnInit {
   ngOnInit(): void {
     const blogId = this.route.snapshot.paramMap.get('id');
     if (blogId) {
-      this.loadBlog(Number(blogId));
+      const id = Number(blogId);
+      this.loadBlog(id);
+      this.loadVoteState(id);
     } else {
       this.showError('Invalid blog ID');
       this.goBack();
@@ -46,6 +53,21 @@ export class BlogDetailComponent implements OnInit {
         this.isLoading = false;
         this.goBack();
       }
+    });
+  }
+
+  private loadVoteState(id: number): void {
+    if (!this.isAuthenticated) {
+      return;
+    }
+
+    this.blogService.getVoteState(id).subscribe({
+      next: (state) => {
+        this.voteState = state;
+      },
+      error: (err) => {
+        console.error('Error loading vote state:', err);
+      },
     });
   }
 
@@ -80,6 +102,56 @@ export class BlogDetailComponent implements OnInit {
       return this.blog.images[this.currentImageIndex].imageUrl;
     }
     return 'https://via.placeholder.com/1200x600?text=No+Image';
+  }
+
+  onUpvote(): void {
+    if (!this.blog || !this.isAuthenticated) {
+      this.showError('Morate biti prijavljeni da biste glasali.');
+      return;
+    }
+
+    this.blogService.vote(this.blog.id, true).subscribe({
+      next: (state) => {
+        this.voteState = state;
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.showError('Morate biti prijavljeni da biste glasali.');
+        } else {
+          console.error('Failed to upvote', err);
+          this.showError('Greška pri glasanju.');
+        }
+      },
+    });
+  }
+
+  onDownvote(): void {
+    if (!this.blog || !this.isAuthenticated) {
+      this.showError('Morate biti prijavljeni da biste glasali.');
+      return;
+    }
+
+    this.blogService.vote(this.blog.id, false).subscribe({
+      next: (state) => {
+        this.voteState = state;
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.showError('Morate biti prijavljeni da biste glasali.');
+        } else {
+          console.error('Failed to downvote', err);
+          this.showError('Greška pri glasanju.');
+        }
+      },
+    });
+  }
+
+  isUpvoteActive(): boolean {
+    return this.voteState?.isUpvote === true;
+  }
+
+  isDownvoteActive(): boolean {
+    return this.voteState?.isUpvote === false;
   }
 
   private showError(message: string): void {
