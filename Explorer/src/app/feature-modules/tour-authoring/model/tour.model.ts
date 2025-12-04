@@ -6,10 +6,19 @@ export interface Tour {
   status: TourStatus;
   price: number;
   tags: string[];
+  equipment: Equipment[];
   authorId: number;
   createdAt: Date;
   updatedAt?: Date;
 }
+
+
+export interface Equipment {
+  id: number;
+  name: string;
+  description: string;
+}
+
 
 export enum TourDifficulty {
   Easy = 0,

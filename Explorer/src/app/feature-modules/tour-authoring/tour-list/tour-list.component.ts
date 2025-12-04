@@ -144,6 +144,7 @@ export class TourListComponent implements OnInit {
     return labels[difficulty] || 'Unknown';
   }
 
+  // === POPRAVLJENO: Dodat 'Archived' status ===
   getStatusLabel(status: TourStatus): string {
     const labels = {
       [TourStatus.Draft]: 'Draft',
