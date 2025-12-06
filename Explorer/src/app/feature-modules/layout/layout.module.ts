@@ -7,13 +7,19 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TouristMapComponent } from './tourist-map/tourist-map.component';
+import { NotificationBadgeComponent } from './notification-badge/notification-badge.component';
+import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
+import { NotificationItemComponent } from './notification-item/notification-item.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     NavbarComponent,
     MapTestComponent,
-    TouristMapComponent
+    TouristMapComponent,
+    NotificationBadgeComponent,
+    NotificationDropdownComponent,
+    NotificationItemComponent
   ],
   imports: [
     CommonModule,
