@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { KeyPoint } from '../model/key-point.model';
 
 @Component({
@@ -8,4 +8,16 @@ import { KeyPoint } from '../model/key-point.model';
 })
 export class KeyPointListComponent {
   @Input() keyPoints: KeyPoint[] = [];
+
+  @Output() keyPointSelected = new EventEmitter<KeyPoint>();
+  @Output() keyPointDelete = new EventEmitter<KeyPoint>();
+
+  onItemClick(kp: KeyPoint) {
+    this.keyPointSelected.emit(kp);
+  }
+
+  onDeleteClick(kp: KeyPoint, event: MouseEvent) {
+    event.stopPropagation();           // da klik na kanticu ne trigeruje selekciju
+    this.keyPointDelete.emit(kp);
+  }
 }

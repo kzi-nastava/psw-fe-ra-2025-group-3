@@ -19,12 +19,25 @@ export class KeyPointService {
   constructor(private http: HttpClient) { }
 
   // POST - kreiranje key point-a
-  create(keyPoint: KeyPoint): Observable<KeyPoint> {
-    return this.http.post<KeyPoint>(this.baseUrl, keyPoint);
-  }
+  create(keyPoint: Omit<KeyPoint, 'id'>): Observable<KeyPoint> {
+  return this.http.post<KeyPoint>(this.baseUrl, keyPoint);
+}
 
   // GET - SVI key point-ovi (paged rezultat)
   getAll(): Observable<PagedResult<KeyPoint>> {
     return this.http.get<PagedResult<KeyPoint>>(this.baseUrl);
   }
+
+  // PUT na npr: https://localhost:44333/keypoints/5
+  update(keyPoint: KeyPoint): Observable<KeyPoint> {  
+    return this.http.put<KeyPoint>(
+      `${this.baseUrl}${keyPoint.id}`,
+      keyPoint
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(`${this.baseUrl}${id}`);
+  } 
+  
 }

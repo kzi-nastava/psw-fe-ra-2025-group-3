@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { KeyPoint } from '../model/key-point.model';
 
 @Component({
   selector: 'xp-key-point-form',
@@ -9,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class KeyPointFormComponent implements OnInit {
 
   @Input() isEditMode: boolean = false;
+  @Input() keyPoint: KeyPoint | null = null;
   @Output() save = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -45,6 +47,24 @@ export class KeyPointFormComponent implements OnInit {
 
   resetForm() {
     this.keyPointForm.reset();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['keyPoint']) {
+      if (this.keyPoint) {
+        // EDIT mod – popuni formu
+        this.keyPointForm.patchValue({
+          name: this.keyPoint.name,
+          description: this.keyPoint.description,
+          imageUrl: this.keyPoint.imageUrl,
+          secret: this.keyPoint.secret
+          // koordinate NE diramo ovde – njih rešava mapa
+        });
+      } else {
+        // Izašli smo iz edit moda – reset
+        this.keyPointForm.reset();
+      }
+    }
   }
 
 }

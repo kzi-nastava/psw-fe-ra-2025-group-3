@@ -1,28 +1,149 @@
+/* Outer page wrapper – centriran sadržaj i margina od ivica ekrana */
+.kp-page {
+  max-width: 1360px;          /* ili 1200/1400 po želji */
+  margin: 0 auto;             /* centriranje */
+  padding: 24px 32px;         /* okvir od ivica ekrana */
+  box-sizing: border-box;
+}
+
+/* Glavni kontejner za ceo ekran */
 .kp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                 /* Razmak između gornjeg dela i forme */
+  /* padding: 24px 32px;  <- OVO OBRIŠI, sada padding radi .kp-page */
+  box-sizing: border-box;
+}
+
+/* Gornji deo: mapa + sidebar */
+.kp-main {
+  display: flex;
+  gap: 24px;                 /* Razmak između mape i sidebar-a */
+  align-items: stretch;
+}
+
+/* Osnovni stil za "kartice" na stranici */
+.kp-card {
+  background: #ffffff;
+  border-radius: 24px;       /* Preporučeno za kartice */
+  padding: 24px 28px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+/* Mapa - glavni sadržaj, zauzima više prostora */
+.kp-map {
+  flex: 2;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.kp-main {
-  display: flex;
-  gap: 16px;
+/* Wrapper da xp-map fino ispuni visinu */
+.kp-map-wrapper {
+  flex: 1;
+  min-height: 360px;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.kp-map {
-  flex: 2;
-  min-height: 300px;
-  border: 1px solid #ddd;
-}
-
+/* Sidebar - lista ključnih tačaka */
 .kp-side {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
+/* Forma - donja kartica */
 .kp-form {
-  border-top: 1px solid #ddd;
-  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header svakog bloka (naslov + opis + eventualno dugme) */
+.kp-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+/* Header za sidebar: naslov + dugme u jednom redu */
+.kp-side-header {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Naslovi i podnaslovi */
+.kp-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.kp-side-title,
+.kp-form-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.kp-subtitle {
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+}
+
+/* Tekst ispod mape sa koordinatama */
+.kp-selected {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #444444;
+}
+
+.kp-selected span {
+  font-weight: 500;
+}
+
+/* Responsivnost */
+
+/* Tablet: mapa i sidebar idu jedan ispod drugog */
+@media (max-width: 1024px) {
+  .kp-main {
+    flex-direction: column;
+  }
+
+  .kp-map,
+  .kp-side {
+    width: 100%;
+  }
+}
+
+/* Telefon: malo smanjiti padding kartica i layouta */
+@media (max-width: 768px) {
+  .kp-container {
+    padding: 16px;
+    gap: 24px;
+  }
+
+  .kp-card {
+    padding: 16px 18px;
+    border-radius: 20px;
+  }
+
+  .kp-map-wrapper {
+    min-height: 280px;
+  }
+
+  .kp-title {
+    font-size: 20px;
+  }
+
+  .kp-side-title,
+  .kp-form-title {
+    font-size: 18px;
+  }
 }

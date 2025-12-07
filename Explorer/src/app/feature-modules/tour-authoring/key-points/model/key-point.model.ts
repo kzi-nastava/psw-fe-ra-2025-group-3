@@ -1,5 +1,5 @@
 export class KeyPoint {
-  id?: number;
+  id!: number;
   tourId!: number;
   name!: string;
   description!: string;
