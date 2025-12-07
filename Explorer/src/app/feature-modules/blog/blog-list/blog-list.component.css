@@ -1,5 +1,5 @@
 .blog-container {
-  padding: 32px;
+  padding: var(--spacing-8);
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -9,18 +9,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  padding-bottom: 20px;
-  border-bottom: 3px solid #f1f3f5;
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-5);
+  border-bottom: 3px solid var(--color-neutral-100);
 }
 
 .header h1 {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 32px;
+  gap: var(--spacing-3);
+  font-size: 36px;
   font-weight: 700;
-  color: #2d3748;
+  font-family: var(--font-family-display);
+  color: var(--color-secondary-800);
   margin: 0;
 }
 
@@ -28,24 +29,39 @@
   font-size: 36px;
   width: 36px;
   height: 36px;
-  color: #667eea;
+  color: var(--color-primary-500) !important;
 }
 
-.header button {
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  transition: all 0.3s ease;
+/* Header Button - mat-raised-button */
+.header button[mat-raised-button],
+.header .mat-mdc-raised-button {
+  background-color: var(--color-primary-500) !important;
+  color: var(--color-neutral-0) !important;
+  border-radius: var(--border-radius-lg) !important;
+  padding-top: 17px !important;
+  padding-bottom: 17px !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
+  transition: all 0.3s ease !important;
+  height: auto !important;
+  min-height: auto !important;
 }
 
-.header button:hover {
+.header button[mat-raised-button] .mat-mdc-button-touch-target,
+.header .mat-mdc-raised-button .mat-mdc-button-touch-target {
+  height: 100% !important;
+}
+
+.header button[mat-raised-button]:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4) !important;
 }
 
 .header button mat-icon {
-  margin-right: 8px;
+  margin-right: var(--spacing-2);
 }
 
 /* Loading */
@@ -64,45 +80,50 @@
   justify-content: center;
   min-height: 400px;
   text-align: center;
-  padding: 40px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 16px;
-  border: 2px dashed #cbd5e0;
+  padding: var(--spacing-10);
+  background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-neutral-100) 100%);
+  border-radius: var(--border-radius-xl);
+  border: 2px dashed var(--color-neutral-300);
 }
 
 .empty-icon {
   font-size: 80px;
   width: 80px;
   height: 80px;
-  color: #a0aec0;
-  margin-bottom: 20px;
+  color: var(--color-neutral-500);
+  margin-bottom: var(--spacing-5);
 }
 
 .empty-state h2 {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 12px;
+  font-family: var(--font-family-display);
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-3);
 }
 
 .empty-state p {
   font-size: 16px;
-  color: #718096;
-  margin-bottom: 24px;
+  color: var(--color-neutral-600);
+  margin-bottom: var(--spacing-6);
 }
 
-.empty-state button {
-  border-radius: 8px;
-  padding: 14px 28px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+/* Empty State Button */
+.empty-state button[mat-raised-button] {
+  background-color: var(--color-primary-500) !important;
+  color: var(--color-neutral-0) !important;
+  border-radius: var(--border-radius-lg) !important;
+  padding: var(--spacing-4) var(--spacing-7) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
 }
 
 /* Blog Grid */
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-6);
   animation: fadeIn 0.5s ease-in;
 }
 
@@ -119,17 +140,18 @@
 
 /* Blog Card */
 .blog-card {
-  border-radius: 16px;
+  border-radius: var(--border-radius-2xl);
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  background: var(--color-neutral-0);
 }
 
 .blog-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -139,7 +161,7 @@
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: #e9ecef;
+  background: var(--color-neutral-100);
 }
 
 .blog-image {
@@ -163,16 +185,16 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  padding: 16px;
+  padding: var(--spacing-4);
 }
 
 .blog-date {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #2d3748;
-  padding: 8px 14px;
+  gap: var(--spacing-1);
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-800);
+  padding: var(--spacing-2) var(--spacing-4);
   border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
@@ -186,16 +208,17 @@
 }
 
 /* Blog Content */
-mat-card-content {
-  padding: 20px !important;
+.blog-card mat-card-content {
+  padding: var(--spacing-6) !important;
   flex-grow: 1;
 }
 
 .blog-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 12px 0;
+  font-family: var(--font-family-display);
+  color: var(--color-primary-800);
+  margin: 0 0 var(--spacing-3) 0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -204,10 +227,11 @@ mat-card-content {
 }
 
 .blog-description {
-  font-size: 14px;
-  color: #718096;
+  font-size: 16px;
+  font-family: var(--font-family-primary);
+  color: var(--color-neutral-800);
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-4);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -217,16 +241,16 @@ mat-card-content {
 .blog-meta {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 12px;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-3);
 }
 
 .image-count {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-1);
   font-size: 13px;
-  color: #667eea;
+  color: var(--color-primary-500);
   font-weight: 600;
 }
 
@@ -234,28 +258,33 @@ mat-card-content {
   font-size: 18px;
   width: 18px;
   height: 18px;
+  color: var(--color-primary-500) !important;
 }
 
 /* Actions */
-mat-card-actions {
-  padding: 16px 20px !important;
-  border-top: 2px solid #f1f3f5;
+.blog-card mat-card-actions {
+  padding: var(--spacing-3) var(--spacing-6) !important;
+  border-top: 2px solid var(--color-neutral-100);
   display: flex;
   justify-content: flex-end;
 }
 
-mat-card-actions button {
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.2s ease;
+/* Card Action Button - mat-button */
+.blog-card mat-card-actions button[mat-button] {
+  color: var(--color-primary-500) !important;
+  border-radius: var(--border-radius-lg) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
+  padding: var(--spacing-2) var(--spacing-4) !important;
 }
 
-mat-card-actions button:hover {
-  background-color: rgba(102, 126, 234, 0.1);
+.blog-card mat-card-actions button[mat-button]:hover {
+  background-color: rgba(0, 188, 212, 0.1) !important;
 }
 
-mat-card-actions button mat-icon {
-  margin-right: 6px;
+.blog-card mat-card-actions button mat-icon {
+  margin-right: var(--spacing-2);
   font-size: 18px;
   width: 18px;
   height: 18px;
@@ -264,13 +293,13 @@ mat-card-actions button mat-icon {
 /* Responsive */
 @media (max-width: 768px) {
   .blog-container {
-    padding: 20px;
+    padding: var(--spacing-5);
   }
 
   .header {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: var(--spacing-4);
   }
 
   .header h1 {
@@ -283,11 +312,11 @@ mat-card-actions button mat-icon {
 
   .blog-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: var(--spacing-5);
   }
 
   .empty-state {
-    padding: 30px 20px;
+    padding: var(--spacing-8) var(--spacing-5);
   }
 
   .empty-icon {
@@ -298,5 +327,13 @@ mat-card-actions button mat-icon {
 
   .empty-state h2 {
     font-size: 22px;
+  }
+
+  .blog-card mat-card-content {
+    padding: var(--spacing-5) !important;
+  }
+
+  .blog-card mat-card-actions {
+    padding: var(--spacing-3) var(--spacing-5) !important;
   }
 }

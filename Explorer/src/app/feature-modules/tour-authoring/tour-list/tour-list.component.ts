@@ -16,6 +16,7 @@ export class TourListComponent implements OnInit {
   toursPerPage: number = 6;
   currentPage: number = 1;
   isLoading: boolean = false;
+  expandedTourId: number | null = null;
 
   constructor(
     private tourService: TourService,
@@ -143,10 +144,12 @@ export class TourListComponent implements OnInit {
     return labels[difficulty] || 'Unknown';
   }
 
+  // === POPRAVLJENO: Dodat 'Archived' status ===
   getStatusLabel(status: TourStatus): string {
     const labels = {
       [TourStatus.Draft]: 'Draft',
       [TourStatus.Published]: 'Published',
+      [TourStatus.Archived]: 'Archived' 
     };
     return labels[status] || 'Unknown';
   }
@@ -155,6 +158,7 @@ export class TourListComponent implements OnInit {
     const classes = {
       [TourStatus.Draft]: 'status-draft',
       [TourStatus.Published]: 'status-published',
+      [TourStatus.Archived]: 'status-archived'
     };
     return classes[status] || '';
   }
@@ -179,5 +183,13 @@ export class TourListComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  expandReviews(tour: Tour): void {
+    if (this.expandedTourId === tour.id) {
+      this.expandedTourId = null;  // Collapse
+    } else {
+      this.expandedTourId = tour.id;  // Expand
+    }
   }
 }

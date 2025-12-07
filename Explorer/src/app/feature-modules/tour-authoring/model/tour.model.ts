@@ -6,10 +6,19 @@ export interface Tour {
   status: TourStatus;
   price: number;
   tags: string[];
+  equipment: Equipment[];
   authorId: number;
   createdAt: Date;
   updatedAt?: Date;
 }
+
+
+export interface Equipment {
+  id: number;
+  name: string;
+  description: string;
+}
+
 
 export enum TourDifficulty {
   Easy = 0,
@@ -20,6 +29,7 @@ export enum TourDifficulty {
 export enum TourStatus {
   Draft = 0,
   Published = 1,
+  Archived = 2 // dodato za tour-execution
 }
 
 export interface TourCreateDto {

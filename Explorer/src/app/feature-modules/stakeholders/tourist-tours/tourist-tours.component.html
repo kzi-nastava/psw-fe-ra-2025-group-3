@@ -1,0 +1,98 @@
+<div class="container">
+  <div class="tour-list-container">
+    <div class="header">
+      <h1>Available Tours</h1>
+      <p class="cart-subtitle">
+        Browse published tours and add your favorites to the cart.
+      </p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length === 0" class="empty-state">
+      <mat-icon>explore_off</mat-icon>
+      <h2>No tours available</h2>
+      <p>There are currently no published tours. Please check back later.</p>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
+      <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
+        <mat-card-header>
+          <mat-card-title>{{ tour.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <span 
+              class="status-badge" 
+              [ngClass]="{
+                'status-published': tour.status === TourStatus.Published,
+                'status-archived': tour.status === TourStatus.Archived
+              }">
+              {{ getStatusLabel(tour.status) }}
+            </span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="description">{{ tour.description }}</p>
+
+          <div class="tour-details">
+            <div class="detail-item">
+              <mat-icon>terrain</mat-icon>
+              <span>{{ tour.difficulty }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+            </div>
+          </div>
+
+          <div class="tags" *ngIf="tour.tags && tour.tags.length > 0">
+            <mat-chip-set>
+              <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
+            </mat-chip-set>
+          </div>
+
+           <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+            <xp-tour-reviews 
+              [tourId]="tour.id!"
+              [currentUserId]="currentUserId">
+            </xp-tour-reviews>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button
+            mat-button
+            (click)="expandReviews(tour)">
+            <mat-icon>rate_review</mat-icon>
+            {{ expandedTourId === tour.id ? 'Hide' : 'Reviews' }}
+          </button>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="addToCart(tour)">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add to cart
+          </button>
+
+          <button    
+            mat-raised-button
+            color="accent"
+            (click)="startTour(tour)"
+            [disabled]="isStartingTour(tour.id!) || hasActiveTour">
+            
+            <mat-spinner *ngIf="isStartingTour(tour.id!)" diameter="20"></mat-spinner>
+            
+            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">play_arrow</mat-icon>
+            <mat-icon *ngIf="hasActiveTour && !isStartingTour(tour.id!)">block</mat-icon>
+            
+            <span *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
+            <span *ngIf="isStartingTour(tour.id!)">Starting...</span>
+            <span *ngIf="hasActiveTour && !isStartingTour(tour.id!)">Active Tour Running</span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -17,6 +17,8 @@ import { MeetupDetailsComponent } from './meetups/meetup-details/meetup-details.
 import { MarkdownModule } from 'ngx-markdown';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { ProfileListComponent } from './profile-list/profile-list.component';
+import { TouristToursComponent } from './tourist-tours/tourist-tours.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -28,7 +30,8 @@ import { PreferenceOverviewComponent } from './preferences/preference-overview/p
 import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
 import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
-
+import { PurchaseSuccessComponent } from './purchase/purchase-success.component'; 
+import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 
 
 @NgModule({
@@ -43,7 +46,10 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     ProfileListComponent,
     PreferenceOverviewComponent,
     PreferenceFormComponent,
-    TouristEquipmentComponent
+    ShoppingCartComponent,
+    TouristToursComponent,
+    TouristEquipmentComponent,
+    PurchaseSuccessComponent
     
   ],
   imports: [
@@ -63,13 +69,15 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MaterialModule
+    MaterialModule,
+    TourExecutionModule
   ],
   exports: [
     ProfileComponent,
     ProfileFormComponent,
     ProfileListComponent,
-    TouristEquipmentComponent
+    TouristEquipmentComponent,
+    PurchaseSuccessComponent
   ]
 })
 export class StakeholdersModule { }

@@ -1,6 +1,6 @@
-<div class="container">
+<div class="tour-list-container">
   <div class="header">
-    <h2>My Reported Problems</h2>
+    <h1>My Reported Problems</h1>
     <button mat-raised-button color="primary" (click)="onAddNew()" *ngIf="!showForm">
       <mat-icon>add</mat-icon>
       Report New Problem
@@ -16,42 +16,65 @@
     (formCanceled)="onFormCanceled()">
   </app-tour-problem-form>
 
-  <div *ngIf="problems.length === 0 && !showForm" class="no-problems">
-    <mat-icon class="empty-icon">report_problem</mat-icon>
-    <p>You have no reported problems.</p>
+  <div *ngIf="problems.length === 0 && !showForm" class="empty-state">
+    <mat-icon>report_off</mat-icon>
+    <h2>No problems reported yet</h2>
+    <p>Click the "Report New Problem" button to report your first issue.</p>
     <button mat-raised-button color="primary" (click)="onAddNew()">
       Report First Problem
     </button>
   </div>
 
-  <div *ngIf="problems.length > 0 && !showForm" class="problems-grid">
-    <mat-card *ngFor="let problem of problems" class="problem-card">
+  <div *ngIf="problems.length > 0 && !showForm" class="tours-grid">
+    <mat-card *ngFor="let problem of problems" class="tour-card">
       <mat-card-header>
-        <mat-card-title>
-          Tour #{{problem.tourId}}
-          <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
-            {{getPriorityName(problem.priority)}}
-          </span>
-        </mat-card-title>
+        <mat-card-title>Tour #{{problem.tourId}}</mat-card-title>
         <mat-card-subtitle>
-          {{getCategoryName(problem.category)}} | {{problem.time | date: 'dd/MM/yyyy HH:mm'}}
+          <div class="status-badges">
+            <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+              {{getPriorityName(problem.priority)}}
+            </span>
+            <span class="status-badge" [ngClass]="'status-' + getStatusName(problem.status).toLowerCase()">
+              {{getStatusName(problem.status)}}
+            </span>
+          </div>
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <p class="description">{{problem.description}}</p>
-        <div class="metadata">
-          <small>Reported: {{problem.createdAt | date: 'short'}}</small>
-          <small *ngIf="problem.updatedAt">Modified: {{problem.updatedAt | date: 'short'}}</small>
+        
+        <div class="tour-details">
+          <div class="detail-item">
+            <mat-icon>category</mat-icon>
+            <span>{{getCategoryName(problem.category)}}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{problem.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+          </div>
+        </div>
+
+        <div class="tour-details" *ngIf="problem.messages && problem.messages.length > 0">
+          <div class="detail-item">
+            <mat-icon>chat</mat-icon>
+            <span>{{problem.messages.length}} message{{problem.messages.length !== 1 ? 's' : ''}}</span>
+          </div>
         </div>
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="onEdit(problem)">
-          <mat-icon>edit</mat-icon> Edit
+        <button mat-button color="primary" (click)="onViewDetails(problem.id)">
+          <mat-icon>visibility</mat-icon>
+          View
+        </button>
+        <button mat-button color="accent" (click)="onEdit(problem)" *ngIf="problem.status === 0">
+          <mat-icon>edit</mat-icon>
+          Edit
         </button>
         <button mat-button color="warn" (click)="onDelete(problem.id)">
-          <mat-icon>delete</mat-icon> Delete
+          <mat-icon>delete</mat-icon>
+          Delete
         </button>
       </mat-card-actions>
     </mat-card>

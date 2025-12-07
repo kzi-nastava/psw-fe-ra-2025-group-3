@@ -2,13 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { Tour, TourCreateDto, TourUpdateDto } from './model/tour.model';
+import { Tour, TourCreateDto, TourUpdateDto, Equipment } from './model/tour.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TourService {
   private baseUrl = environment.apiHost + 'tours';
+
+  private equipmentUrl = environment.apiHost + 'administration/equipment'; 
+
+  private readonly touristBaseUrl = environment.apiHost + 'tourist/tours';
+
 
   constructor(private http: HttpClient) { }
 
@@ -34,5 +39,22 @@ export class TourService {
 
   publishTour(id: number): Observable<Tour> {
     return this.http.patch<Tour>(`${this.baseUrl}/${id}/publish`, {});
+  }
+
+
+  getEquipment(): Observable<Equipment[]> {
+    return this.http.get<Equipment[]>(`${this.equipmentUrl}/all`);
+  }
+
+  addEquipmentToTour(tourId: number, equipmentId: number): Observable<Tour> {
+    return this.http.put<Tour>(`${this.baseUrl}/${tourId}/equipment/${equipmentId}`, {});
+  }
+
+  removeEquipmentFromTour(tourId: number, equipmentId: number): Observable<Tour> {
+    return this.http.delete<Tour>(`${this.baseUrl}/${tourId}/equipment/${equipmentId}`);
+  }
+
+  getPublishedToursForTourist(): Observable<Tour[]> {
+    return this.http.get<Tour[]>(this.touristBaseUrl);
   }
 }

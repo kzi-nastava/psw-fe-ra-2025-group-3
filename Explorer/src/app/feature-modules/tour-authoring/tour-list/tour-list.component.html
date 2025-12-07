@@ -50,6 +50,21 @@
             <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
           </mat-chip-set>
         </div>
+         <div class="reviews-preview" *ngIf="tour.status === 1">
+          <button 
+            mat-stroked-button 
+            color="primary" 
+            (click)="expandReviews(tour)"
+            class="view-reviews-btn">
+            <mat-icon>{{ expandedTourId === tour.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+            {{ expandedTourId === tour.id ? 'Hide' : 'View' }} Reviews
+          </button>
+          
+          <!-- Reviews se prikazuju kada je expanded -->
+          <div *ngIf="expandedTourId === tour.id" class="reviews-content">
+            <xp-tour-reviews [tourId]="tour.id"></xp-tour-reviews>
+          </div>
+        </div>
       </mat-card-content>
 
       <mat-card-actions>
