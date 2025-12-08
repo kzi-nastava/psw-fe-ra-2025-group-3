@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TourService } from '../tour.service';
-import { Tour, TourDifficulty, TourCreateDto, TourUpdateDto, Equipment, TourStatus } from '../model/tour.model';
+import { Tour, TourDifficulty, TourCreateDto, TourUpdateDto, Equipment, TourStatus, TourDuration, TransportType} from '../model/tour.model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
@@ -21,6 +21,13 @@ export class TourFormComponent implements OnInit {
   availableEquipment: Equipment[] = [];
   selectedEquipmentIds: number[] = [];
   isArchived: boolean = false; 
+
+  tourDurations: TourDuration[] = [];
+  transportTypes = [
+    { value: TransportType.Walking, label: 'Walking' },
+    { value: TransportType.Bicycle, label: 'Bicycle' },
+    { value: TransportType.Car, label: 'Car' }
+  ];
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -63,6 +70,7 @@ export class TourFormComponent implements OnInit {
 
     this.tourId = this.data.tour.id;
     this.tags = [...(this.data.tour.tags || [])];
+    this.tourDurations = [...(this.data.tour.tourDurations || [])];
     
     this.isArchived = this.data.tour.status === TourStatus.Archived;
 
@@ -83,8 +91,40 @@ export class TourFormComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       difficulty: [TourDifficulty.Easy, Validators.required],
-      price: [{ value: 0, disabled: !this.isEditMode }, [Validators.min(0)]]
+      price: [{ value: 0, disabled: !this.isEditMode }, [Validators.min(0)]],
+      durationTime: [''], 
+      transportType: [TransportType.Walking]
     });
+  }
+
+  addDuration(): void {
+    const duration = this.tourForm.get('durationTime')?.value;
+    const type = this.tourForm.get('transportType')?.value;
+
+    if (duration && duration > 0 && type !== null) {
+      // Provera da li taj tip prevoza vec postoji
+      const existing = this.tourDurations.find(d => d.transportType === type);
+      if (existing) {
+        this.showError('Duration for this transport type already exists.');
+        return;
+      }
+
+      this.tourDurations.push({
+        timeInMinutes: duration,
+        transportType: type
+      });
+
+      // Reset polja
+      this.tourForm.patchValue({ durationTime: '', transportType: TransportType.Walking });
+    }
+  }
+
+  removeDuration(index: number): void {
+    this.tourDurations.splice(index, 1);
+  }
+
+  getTransportLabel(type: TransportType): string {
+    return this.transportTypes.find(t => t.value === type)?.label || 'Unknown';
   }
 
   onEquipmentChange(equipmentId: number, event: any): void {
@@ -136,7 +176,8 @@ export class TourFormComponent implements OnInit {
         description: formValue.description,
         difficulty: formValue.difficulty,
         tags: this.tags,
-        price: formValue.price
+        price: formValue.price,
+        tourDurations: this.tourDurations
       };
 
       this.tourService.updateTour(this.tourId, updateDto).subscribe({
@@ -152,7 +193,8 @@ export class TourFormComponent implements OnInit {
         name: formValue.name,
         description: formValue.description,
         difficulty: formValue.difficulty,
-        tags: this.tags
+        tags: this.tags,
+        tourDurations: this.tourDurations
       };
 
       this.tourService.createTour(createDto).subscribe({
