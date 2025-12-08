@@ -41,7 +41,14 @@ export class TourService {
     return this.http.patch<Tour>(`${this.baseUrl}/${id}/publish`, {});
   }
 
+  archiveTour(id: number): Observable<Tour> {
+    return this.http.patch<Tour>(`${this.baseUrl}/${id}/archive`, {});
+  }
 
+  reactivateTour(id: number): Observable<Tour> {
+    return this.http.patch<Tour>(`${this.baseUrl}/${id}/reactivate`, {});
+  }
+  
   getEquipment(): Observable<Equipment[]> {
     return this.http.get<Equipment[]>(`${this.equipmentUrl}/all`);
   }

@@ -158,7 +158,8 @@
         <span>Home</span>
       </button>
       
-      <!-- Login/Logout -->
+      <xp-notification-badge *ngIf="user && user.username !== ''"></xp-notification-badge>
+      
       <button *ngIf="!user || user.username === ''" 
               mat-flat-button 
               class="btn-login" 
