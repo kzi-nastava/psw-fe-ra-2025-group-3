@@ -40,9 +40,12 @@ import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetup
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
 
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
+import { KeyPointPageComponent } from 'src/app/feature-modules/tour-authoring/key-points/key-point-page/key-point-page.component';
+
 import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
+
 const routes: Routes = [
 
   // Public
@@ -100,6 +103,9 @@ const routes: Routes = [
   { path: 'author/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+
+  // Authoring
+  { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } }
 
 ];
 

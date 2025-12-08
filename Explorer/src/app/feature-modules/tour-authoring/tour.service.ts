@@ -64,4 +64,10 @@ export class TourService {
   getPublishedToursForTourist(): Observable<Tour[]> {
     return this.http.get<Tour[]>(this.touristBaseUrl);
   }
+
+  updateDistance(tourId: number, distanceInKm: number): Observable<Tour> {
+    return this.http.put<Tour>(`${this.baseUrl}/${tourId}/distance`, {
+      distanceInKm: distanceInKm
+    });
+  }
 }

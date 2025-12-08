@@ -1,0 +1,74 @@
+/* Glavni kontejner liste */
+.kp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tekst kad nema tačaka */
+.kp-empty {
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+}
+
+/* Lista bez default bullet-a */
+.kp-list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Svaka stavka kao mala kartica */
+.kp-item {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 14px 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  cursor: default;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+/* Sadržaj unutar stavke */
+.kp-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Naslov ključne tačke */
+.kp-item-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333333;
+}
+
+/* Hover efekat – malo „diže” karticu */
+.kp-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  background: #f9fdfd;
+}
+
+/* Mobilni prikaz – malo kompaktnije */
+@media (max-width: 768px) {
+  .kp-item {
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  .kp-item-title {
+    font-size: 14px;
+  }
+}
+.kp-actions {
+  display: flex;
+  gap: 4px;
+}
