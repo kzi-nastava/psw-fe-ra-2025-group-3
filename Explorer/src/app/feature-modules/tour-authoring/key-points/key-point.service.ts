@@ -14,30 +14,32 @@ interface PagedResult<T> {
 })
 export class KeyPointService {
 
-  private readonly baseUrl = environment.apiHost + 'keypoints/';
+  // bez završne kose crte, kao kod ostalih servisa (tours, monuments...)
+  private readonly baseUrl = environment.apiHost + 'keypoints';
 
   constructor(private http: HttpClient) { }
 
   // POST - kreiranje key point-a
   create(keyPoint: Omit<KeyPoint, 'id'>): Observable<KeyPoint> {
-  return this.http.post<KeyPoint>(this.baseUrl, keyPoint);
-}
-
-  // GET - SVI key point-ovi (paged rezultat)
-  getAll(): Observable<PagedResult<KeyPoint>> {
-    return this.http.get<PagedResult<KeyPoint>>(this.baseUrl);
+    return this.http.post<KeyPoint>(this.baseUrl, keyPoint);
   }
 
-  // PUT na npr: https://localhost:44333/keypoints/5
-  update(keyPoint: KeyPoint): Observable<KeyPoint> {  
+  // GET - key point-ovi za JEDNU turu (paged)
+  getAll(tourId: number, page: number = 0, pageSize: number = 10): Observable<PagedResult<KeyPoint>> {
+    const url = `${this.baseUrl}?tourId=${tourId}&page=${page}&pageSize=${pageSize}`;
+    return this.http.get<PagedResult<KeyPoint>>(url);
+  }
+
+  // PUT: /api/keypoints/{id}
+  update(keyPoint: KeyPoint): Observable<KeyPoint> {
     return this.http.put<KeyPoint>(
-      `${this.baseUrl}${keyPoint.id}`,
+      `${this.baseUrl}/${keyPoint.id}`,
       keyPoint
     );
   }
 
+  // DELETE: /api/keypoints/{id}
   delete(id: number) {
-    return this.http.delete<void>(`${this.baseUrl}${id}`);
-  } 
-  
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }

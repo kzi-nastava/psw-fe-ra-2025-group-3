@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { KeyPointService } from '../key-point.service';
 import { KeyPoint } from '../model/key-point.model';
 import { KeyPointFormComponent } from '../key-point-form/key-point-form.component';
-import { ActivatedRoute } from '@angular/router';
-import { TourAuthoringService } from '../../tour-authoring.service';
-
+import { TourService } from '../../tour.service';
 
 @Component({
   selector: 'xp-key-point-page',
@@ -31,16 +29,20 @@ export class KeyPointPageComponent implements OnInit {
   // For list – full key point objects
   keyPoints: KeyPoint[] = [];
 
-  currentTourId: number = 1;  // for later use
+  // TODO: kasnije ovo veži za pravu turu (iz rute ili slično)
+  currentTourId: number = 1;
 
-  constructor(private keyPointService: KeyPointService) { }
+  constructor(
+    private keyPointService: KeyPointService,
+    private tourService: TourService
+  ) { }
 
   ngOnInit(): void {
     this.loadKeyPoints();
   }
 
   private loadKeyPoints(): void {
-    this.keyPointService.getAll().subscribe({
+    this.keyPointService.getAll(this.currentTourId).subscribe({
       next: (response) => {
         console.log('Key points response:', response);
         this.keyPoints = response.results.sort((a, b) => a.id - b.id);
@@ -201,7 +203,8 @@ export class KeyPointPageComponent implements OnInit {
     this.selectedPoint = null;
     this.keyPointFormComponent.resetForm();
   }
+
   onRouteDistanceChanged(distanceKm: number) {
-    this.tourAuthoringService.updateDistance(this.tourId, distanceKm).subscribe();
+    this.tourService.updateDistance(this.currentTourId, distanceKm).subscribe();
   }
 }
