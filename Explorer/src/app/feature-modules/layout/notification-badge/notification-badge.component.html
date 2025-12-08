@@ -1,0 +1,12 @@
+<div class="notification-badge-container">
+  <button mat-icon-button class="notification-button" (click)="toggleDropdown()">
+    <mat-icon class="bell-icon">notifications</mat-icon>
+    <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+  </button>
+
+  <div *ngIf="isDropdownOpen" class="notification-dropdown-overlay" (click)="closeDropdown()"></div>
+  <xp-notification-dropdown 
+    *ngIf="isDropdownOpen"
+    (closeDropdown)="closeDropdown()">
+  </xp-notification-dropdown>
+</div>
