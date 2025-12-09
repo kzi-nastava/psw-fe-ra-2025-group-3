@@ -16,6 +16,8 @@ export interface TourProblem {
   touristName?: string;     // For admin view - tourist name
   isOverdue?: boolean;      // For admin view - problem older than 5 days
   daysOpen?: number;        // For admin view - number of days problem is open
+  adminDeadline?: string;       // Rok koji je admin postavio
+  isDeadlineExpired?: boolean;
 }
 
 export interface Message {
@@ -74,4 +76,8 @@ export interface AddMessageDto {
 
 export interface MarkProblemResolvedDto {
   touristComment: string;
+}
+
+export interface AdminDeadlineDto {
+  deadline: string;   
 }

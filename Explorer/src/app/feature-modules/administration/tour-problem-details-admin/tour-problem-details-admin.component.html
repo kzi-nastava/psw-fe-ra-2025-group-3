@@ -4,7 +4,7 @@
     <button mat-icon-button (click)="goBack()" class="back-button">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1>Problem Details - Admin View (Read-Only)</h1>
+    <h1>Problem Details</h1>
   </div>
 
   <div *ngIf="loading" class="loading-container">
@@ -12,6 +12,17 @@
   </div>
 
   <div *ngIf="!loading && problem" class="content-wrapper">
+
+  <!-- Success / error messages -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    <mat-icon>check_circle</mat-icon>
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </div>
 
   <!-- Problem Info Card -->
   <mat-card class="problem-info-card" 
@@ -56,10 +67,67 @@
 
         <div class="admin-notice" *ngIf="problem.status === 0">
           <mat-icon>info</mat-icon>
-          <span>As an administrator, you can view this problem but cannot change its status. Only the tourist can mark it as resolved or unresolved.</span>
+          <span>As an administrator, you can set a deadline for the author, monitor its expiration,
+                close the problem or penalize the author if the issue is not resolved.</span>
+        </div>
+        <!-- Admin actions – vidljive samo ako je problem još uvek OPEN -->
+        <div *ngIf="problem.status === ProblemStatus.Open" class="admin-actions">
+          <h3><mat-icon>admin_panel_settings</mat-icon> Admin actions</h3>
+
+          <!-- Rok -->
+          <div class="deadline-row">
+            <label class="deadline-label">
+              Set a deadline by which the author must resolve this problem:
+            </label>
+
+            <input
+              type="datetime-local"
+              [(ngModel)]="deadlineInput"
+              [disabled]="savingDeadline"
+            />
+
+            <button mat-raised-button color="primary"
+                    (click)="onSetDeadline()"
+                    [disabled]="savingDeadline || !deadlineInput">
+              <mat-icon>event</mat-icon>
+              {{ problem.adminDeadline ? 'Update deadline' : 'Set deadline' }}
+            </button>
+            </div>
+            <div class="deadline-info" *ngIf="problem.adminDeadline">
+            <mat-icon>info</mat-icon>
+            <span>
+              Current deadline:
+              {{ problem.adminDeadline | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+          </div>
+
+          <!-- ISTEKAO ADMIN ROK -->
+          <div class="deadline-expired" *ngIf="problem.isDeadlineExpired">
+            <mat-icon color="warn">warning</mat-icon>
+            <span>Admin deadline has expired. You can now close the problem or penalize the author.</span>
+          </div>
+
+          <!-- DUGMAD SAMO KAD JE ROK ISTEKAO -->
+          <div class="action-buttons" *ngIf="problem.isDeadlineExpired">
+
+          <button mat-stroked-button color="accent"
+                  (click)="onCloseProblem()"
+                  [disabled]="closing">
+            <mat-icon>check_circle</mat-icon>
+            Close problem
+          </button>
+
+          <button mat-stroked-button color="warn"
+                  (click)="onPenalizeAuthor()"
+                  [disabled]="penalizing">
+            <mat-icon>gavel</mat-icon>
+            Penalize author
+          </button>
+            
+          </div>
         </div>
       </mat-card-content>
-  </mat-card>
+    </mat-card>
 
   <!-- Messages Section -->
     <mat-card class="messages-card">
