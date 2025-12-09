@@ -12,6 +12,10 @@ export interface TourProblem {
   messages: Message[];
   createdAt?: Date;
   updatedAt?: Date;
+  tourName?: string;        // For admin view - tour name
+  touristName?: string;     // For admin view - tourist name
+  isOverdue?: boolean;      // For admin view - problem older than 5 days
+  daysOpen?: number;        // For admin view - number of days problem is open
 }
 
 export interface Message {

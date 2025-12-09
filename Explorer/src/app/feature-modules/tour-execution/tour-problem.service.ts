@@ -62,4 +62,17 @@ export class TourProblemService {
       })
     );
   }
+
+  // Admin methods
+  getAllProblems(): Observable<TourProblem[]> {
+    return this.http.get<TourProblem[]>(`${environment.apiHost}admin/tour-problems`);
+  }
+
+  getProblemByIdForAdmin(id: number): Observable<TourProblem> {
+    return this.http.get<TourProblem>(`${environment.apiHost}admin/tour-problems/${id}`);
+  }
+
+  getOverdueProblems(): Observable<TourProblem[]> {
+    return this.http.get<TourProblem[]>(`${environment.apiHost}admin/tour-problems/overdue`);
+  }
 }
