@@ -18,6 +18,8 @@ import { MonumentListComponent } from 'src/app/feature-modules/administration/mo
 
 import { FacilityListComponent } from 'src/app/feature-modules/administration/facility-list/facility-list.component';
 import { FacilityEditComponent } from 'src/app/feature-modules/administration/facility-edit/facility-edit.component';
+import { TourProblemListAdminComponent } from 'src/app/feature-modules/administration/tour-problem-list-admin/tour-problem-list-admin.component';
+import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/administration/tour-problem-details-admin/tour-problem-details-admin.component';
 
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
@@ -66,6 +68,10 @@ const routes: Routes = [
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
+
+  // Admin Tour Problems
+  { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
+  { path: 'administration/tour-problems/:id', component: TourProblemDetailsAdminComponent, canActivate: [AuthGuard] },
 
   // Tours
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] },

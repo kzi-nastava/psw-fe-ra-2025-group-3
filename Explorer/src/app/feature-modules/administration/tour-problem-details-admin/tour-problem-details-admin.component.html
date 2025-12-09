@@ -1,0 +1,104 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Problem Details - Admin View (Read-Only)</h1>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && problem" class="content-wrapper">
+
+  <!-- Problem Info Card -->
+  <mat-card class="problem-info-card" 
+            [class.overdue-card]="problem.isOverdue && problem.status === 0">
+    <mat-card-header>
+      <mat-card-title>
+        {{ problem.tourName || 'Tour #' + problem.tourId }}
+        <div class="badges">
+          <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+            {{getPriorityName(problem.priority)}}
+          </span>
+          <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
+            {{getStatusName(problem.status)}}
+          </span>
+          <span *ngIf="problem.isOverdue && problem.status === 0" class="overdue-badge">
+            ⚠️ OVERDUE ({{problem.daysOpen}} days)
+          </span>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div class="subtitle-row">
+          <span><mat-icon>person</mat-icon> {{ problem.touristName || 'Tourist #' + problem.touristId }}</span>
+          <span><mat-icon>category</mat-icon> {{getCategoryName(problem.category)}}</span>
+          <span><mat-icon>schedule</mat-icon> {{problem.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+      <mat-card-content>
+        <div class="problem-description">
+          <h3><mat-icon>description</mat-icon>Description</h3>
+          <p>{{problem.description}}</p>
+        </div>
+
+        <div class="resolution-comment" *ngIf="problem.resolvedByTouristComment">
+          <h3>
+            <mat-icon [fontIcon]="problem.status === ProblemStatus.Resolved ? 'check_circle' : 'cancel'"></mat-icon>
+            {{problem.status === ProblemStatus.Resolved ? 'Resolution' : 'Unresolved'}} Comment by Tourist
+          </h3>
+          <p>{{problem.resolvedByTouristComment}}</p>
+        </div>
+
+        <div class="admin-notice" *ngIf="problem.status === 0">
+          <mat-icon>info</mat-icon>
+          <span>As an administrator, you can view this problem but cannot change its status. Only the tourist can mark it as resolved or unresolved.</span>
+        </div>
+      </mat-card-content>
+  </mat-card>
+
+  <!-- Messages Section -->
+    <mat-card class="messages-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>chat</mat-icon>
+          Conversation (Read-Only)
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+    
+    <div class="messages-container">
+      <div *ngFor="let message of problem.messages" 
+           class="message" 
+           [ngClass]="{'message-tourist': message.authorType === AuthorType.Tourist, 
+                       'message-author': message.authorType === AuthorType.Author,
+                       'message-admin': message.authorType === AuthorType.Admin}">
+        <div class="message-header">
+          <span class="message-author-label">{{getAuthorTypeName(message.authorType)}}</span>
+          <span class="message-time">{{message.timestamp | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+        <div class="message-content">
+          {{message.content}}
+        </div>
+      </div>
+
+      <div *ngIf="problem.messages.length === 0" class="no-messages">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>No messages in this conversation yet.</p>
+      </div>
+    </div>
+
+    <div class="admin-notice-footer">
+      <mat-icon>visibility</mat-icon>
+      <span>Administrators can view messages but cannot participate in the conversation between tourist and author.</span>
+    </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

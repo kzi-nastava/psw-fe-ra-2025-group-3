@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Equipment
 import { EquipmentComponent } from './equipment/equipment.component';
@@ -33,6 +34,10 @@ import { AwardEventFormComponent } from './award-event-form/award-event-form.com
 import { FacilityListComponent } from './facility-list/facility-list.component';
 import { FacilityEditComponent } from './facility-edit/facility-edit.component';
 
+// Tour Problems Admin
+import { TourProblemListAdminComponent } from './tour-problem-list-admin/tour-problem-list-admin.component';
+import { TourProblemDetailsAdminComponent } from './tour-problem-details-admin/tour-problem-details-admin.component';
+
 @NgModule({
   declarations: [
     EquipmentComponent,
@@ -44,7 +49,9 @@ import { FacilityEditComponent } from './facility-edit/facility-edit.component';
     AwardEventsComponent,
     AwardEventFormComponent,
     FacilityListComponent,
-    FacilityEditComponent
+    FacilityEditComponent,
+    TourProblemListAdminComponent,
+    TourProblemDetailsAdminComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +63,8 @@ import { FacilityEditComponent } from './facility-edit/facility-edit.component';
     MatNativeDateModule,
     MatInputModule,
     MatFormFieldModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
   ],
   exports: [
     EquipmentComponent,
