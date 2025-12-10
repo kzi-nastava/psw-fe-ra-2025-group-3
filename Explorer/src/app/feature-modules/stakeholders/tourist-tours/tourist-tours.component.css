@@ -245,3 +245,33 @@ mat-card-actions button[mat-raised-button][disabled] {
 mat-card-actions button[mat-raised-button] mat-icon[class*="block"] {
   color: rgba(0, 0, 0, 0.4);
 }
+
+.tour-badge {
+  padding: 4px 10px;
+  display: inline-block;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.tour-badge.preview {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tour-badge.purchased {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.tour-badge.archived {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.locked-msg {
+  font-size: 12px;
+  color: #c62828;
+  margin-top: 4px;
+  display: block;
+}
