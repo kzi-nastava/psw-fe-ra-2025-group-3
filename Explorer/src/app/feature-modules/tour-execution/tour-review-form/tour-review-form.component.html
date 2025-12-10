@@ -85,6 +85,67 @@
             </mat-form-field>
           </div>
 
+          <!-- Images Section -->
+          <div class="form-section">
+            <label class="form-label">
+              Photos (Optional - Max 5)
+            </label>
+
+            <!-- Existing Images (Edit Mode) -->
+            <div *ngIf="existingImages.length > 0" class="images-grid">
+              <div *ngFor="let img of existingImages" class="image-preview existing">
+                <img [src]="getImageUrl(img.imageUrl)" alt="Review image">
+                <button 
+                  type="button"
+                  mat-icon-button
+                  class="delete-btn"
+                  (click)="deleteExistingImage(img.id)"
+                  [disabled]="!eligibility?.canReview">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- New Images Preview -->
+            <div *ngIf="selectedFiles.length > 0" class="images-grid">
+              <div *ngFor="let file of selectedFiles; let i = index" class="image-preview new">
+                <img [src]="file.preview" alt="Preview">
+                <button 
+                  type="button"
+                  mat-icon-button
+                  class="delete-btn"
+                  (click)="removeSelectedFile(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Button -->
+            <button
+              type="button"
+              mat-stroked-button
+              color="primary"
+              (click)="fileInput.click()"
+              [disabled]="!canAddMoreImages || !eligibility?.canReview"
+              class="upload-btn">
+              <mat-icon>add_photo_alternate</mat-icon>
+              {{ canAddMoreImages ? 'Add Photos (' + totalImagesCount + '/5)' : 'Maximum 5 photos' }}
+            </button>
+
+            <!-- Hidden File Input -->
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              multiple
+              hidden>
+
+            <mat-hint class="image-hint">
+              Supported formats: JPG, PNG, WEBP. Max size: 5MB per image.
+            </mat-hint>
+          </div>
+
           <!-- Progress Info -->
           <div *ngIf="eligibility" class="progress-info">
             <mat-icon>info</mat-icon>
