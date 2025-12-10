@@ -20,5 +20,6 @@ export interface MarkAllReadResultDto {
 export enum NotificationType {
   NewMessage = 0,
   ProblemResolved = 1,
-  ProblemUnresolved = 2
+  ProblemUnresolved = 2,
+  DeadlineSet = 3
 }
