@@ -11,11 +11,6 @@
     
     <!-- Navigation Buttons -->
     <div class="navbar-buttons">
-      
-      <button mat-button class="nav-menu-button" routerLink="/blogs">
-        <mat-icon>article</mat-icon>
-        <span>Blogs</span>
-      </button>
 
       <!-- Administrator Menu -->
       <button *ngIf="user && user.role === 'administrator'" 
@@ -80,6 +75,10 @@
           <span>Meetups</span>
         </button>
         <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/blogs">
+        <mat-icon>article</mat-icon>
+        <span>Blogs</span>
+        </button>
         <button mat-menu-item routerLink="/author/tour-problems">
           <mat-icon>report_problem</mat-icon>
           <span>Tour Problems</span>
@@ -112,6 +111,10 @@
         <button mat-menu-item routerLink="/tourist/tours">
           <mat-icon>map</mat-icon>
           <span>Tours</span>
+        </button>
+        <button mat-menu-item routerLink="/blogs">
+        <mat-icon>article</mat-icon>
+        <span>Blogs</span>
         </button>
         <button mat-menu-item routerLink="/tourist/map">
           <mat-icon>place</mat-icon>
