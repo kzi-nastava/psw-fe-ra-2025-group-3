@@ -32,6 +32,10 @@ import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { PurchaseSuccessComponent } from './purchase/purchase-success.component'; 
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
+import { TourDetails } from './model/tour-details.model';
+import { TourDetailsComponent } from './tour-details/tour-details.component';
+import { RouterModule } from '@angular/router';
+
 
 
 @NgModule({
@@ -49,7 +53,8 @@ import { TourExecutionModule } from '../tour-execution/tour-execution.module';
     ShoppingCartComponent,
     TouristToursComponent,
     TouristEquipmentComponent,
-    PurchaseSuccessComponent
+    PurchaseSuccessComponent,
+    TourDetailsComponent
     
   ],
   imports: [
@@ -70,14 +75,16 @@ import { TourExecutionModule } from '../tour-execution/tour-execution.module';
     MatCheckboxModule,
     MatSnackBarModule,
     MaterialModule,
-    TourExecutionModule
+    TourExecutionModule,
+    RouterModule
   ],
   exports: [
     ProfileComponent,
     ProfileFormComponent,
     ProfileListComponent,
     TouristEquipmentComponent,
-    PurchaseSuccessComponent
+    PurchaseSuccessComponent,
+    TourDetailsComponent
   ]
 })
 export class StakeholdersModule { }

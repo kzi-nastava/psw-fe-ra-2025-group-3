@@ -48,6 +48,7 @@ import { KeyPointPageComponent } from 'src/app/feature-modules/tour-authoring/ke
 import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
+import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
 
 const routes: Routes = [
 
@@ -119,7 +120,9 @@ const routes: Routes = [
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
   // Authoring
-  { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } }
+  { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
+  { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
+},
 
 ];
 

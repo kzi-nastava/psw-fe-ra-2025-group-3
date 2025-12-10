@@ -8,7 +8,9 @@ import { TourExecutionService } from '../../tour-execution/tour-execution.servic
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
-
+interface TouristTourView extends Tour {
+  isPurchased?: boolean;
+}
 
 @Component({
   selector: 'xp-tourist-tours',
@@ -17,7 +19,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 })
 export class TouristToursComponent implements OnInit {
 
-  tours: Tour[] = [];
+  tours: TouristTourView[] = [];
   isLoading = false;
   startingTourId: number | null = null;
   hasActiveTour = false;
@@ -57,19 +59,30 @@ export class TouristToursComponent implements OnInit {
   }
 
   loadTours(): void {
-    this.isLoading = true;
-    this.tourService.getPublishedToursForTourist().subscribe({
-      next: (tours: Tour[]) => {
-        this.tours = tours || [];
-        this.isLoading = false;
-      },
-      error: (error: any) => {
-        console.error('Error loading tours for tourist:', error);
-        this.isLoading = false;
-        this.showError('Error loading tours');
-      }
-    });
-  }
+  this.isLoading = true;
+
+  this.tourService.getPublishedToursForTourist().subscribe({
+    next: (tours: Tour[]) => {
+      this.tours = tours as TouristTourView[];  // cast
+
+      // ✨ Provera za svaku turu: da li je kupljena
+      this.tours.forEach(tour => {
+        if (tour.id) {
+          this.tourService.getTourDetails(tour.id).subscribe(details => {
+            tour.isPurchased = !!details.keyPoints;
+          });
+        }
+      });
+
+      this.isLoading = false;
+    },
+    error: (error: any) => {
+      console.error('Error loading tours for tourist:', error);
+      this.isLoading = false;
+      this.showError('Error loading tours');
+    }
+  });
+}
 
   addToCart(tour: Tour): void {
     if (!tour.id) {

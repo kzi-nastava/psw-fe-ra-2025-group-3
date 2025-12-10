@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Tour, TourCreateDto, TourUpdateDto, Equipment } from './model/tour.model';
+import { TourDetails } from 'src/app/feature-modules/stakeholders/model/tour-details.model';
 
 @Injectable({
   providedIn: 'root'
@@ -70,4 +71,7 @@ export class TourService {
       distanceInKm: distanceInKm
     });
   }
+  getTourDetails(id: number) {
+  return this.http.get<TourDetails>(`${this.touristBaseUrl}/${id}/details`);
+}
 }
