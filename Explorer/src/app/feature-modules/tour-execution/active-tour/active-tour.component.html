@@ -1,20 +1,24 @@
 <div class="container">
   <div class="active-tour-container">
     
+    <!-- LOADING STATE -->
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner></mat-spinner>
     </div>
     
+    <!-- ACTIVE TOUR CONTENT -->
     <div *ngIf="!isLoading && execution && tour">
       
+      <!-- SUCCESS BANNER -->
       <div class="success-banner">
         <mat-icon>check_circle</mat-icon>
         <div>
-          <h2>Tour in progress</h2>
+          <h2>Tour in Progress</h2>
           <p>Started at {{ getFormattedStartTime() }}</p>
         </div>
       </div>
 
+      <!-- TOUR INFO CARD -->
       <mat-card class="tour-info-card">
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
@@ -22,38 +26,62 @@
         </mat-card-header>
         <mat-card-content>
           <p class="tour-description">{{ tour.description }}</p>
+          
+          <!-- STATISTICS -->
           <div class="tour-stats">
             <div class="stat-item">
               <mat-icon>explore</mat-icon>
-              <span>Progress: {{ execution.progressPercentage }}%</span>
+              <span>Progress: {{ execution.progressPercentage | number:'1.0-0' }}%</span>
             </div>
+            
+            <div class="stat-item">
+              <mat-icon>flag</mat-icon>
+              <span>Next: {{ getNextKeyPointName() }}</span>
+            </div>
+            
             <div class="stat-item">
               <mat-icon>location_on</mat-icon>
-              <span>Start: {{ execution.startLatitude | number:'1.4-4' }}, {{ execution.startLongitude | number:'1.4-4' }}</span>
+              <span>Key Points: {{ getTotalKeyPoints() }}</span>
             </div>
+            
             <div class="stat-item">
               <mat-icon>schedule</mat-icon>
               <span>Last Check: {{ getFormattedLastActivity() }}</span>
             </div>
+            
             <div class="stat-item" [class.checking]="isCheckingLocation">
               <mat-icon>sync</mat-icon>
               <span>{{ isCheckingLocation ? 'Checking location...' : 'Monitoring active' }}</span>
             </div>
           </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="completeTour()">
+              <mat-icon>check_circle</mat-icon>
+              Complete Tour
+            </button>
+            <button mat-stroked-button color="warn" (click)="abandonTour()">
+              <mat-icon>close</mat-icon>
+              Abandon Tour
+            </button>
+          </div>
         </mat-card-content>
       </mat-card>
 
+      <!-- MAP CARD -->
       <mat-card class="map-card">
         <mat-card-header>
-          <mat-card-title>Your Starting Location</mat-card-title>
+          <mat-card-title>Route to Next Key Point</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div class="map-wrapper">
             <xp-map
-              [mode]="'object-view'"
+              [mode]="'route-view'"
               [center]="[execution.startLatitude, execution.startLongitude]"
-              [zoom]="15"
-              [initialPoint]="{lat: execution.startLatitude, lng: execution.startLongitude}">
+              [zoom]="14"
+              [waypoints]="routeWaypoints"
+              [points]="routePoints">
             </xp-map>
           </div>
         </mat-card-content>
