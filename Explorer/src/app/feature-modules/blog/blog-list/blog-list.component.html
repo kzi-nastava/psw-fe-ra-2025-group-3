@@ -31,9 +31,18 @@
 
   <!-- Blog Grid -->
   <div *ngIf="!isLoading && blogs.length > 0" class="blog-grid">
-    <mat-card *ngFor="let blog of blogs" class="blog-card" (click)="viewBlog(blog.id)">
+    <mat-card *ngFor="let blog of blogs" class="blog-card">
+      
+      <!-- ✅ Status Badge -->
+      <div class="status-badge-container">
+        <span class="status-badge status-{{ blog.status }}">
+          <mat-icon>{{ getStatusIcon(blog.status) }}</mat-icon>
+          {{ getStatusLabel(blog.status) }}
+        </span>
+      </div>
+
       <!-- Blog Image -->
-      <div class="blog-image-container">
+      <div class="blog-image-container" (click)="viewBlog(blog.id)">
         <img 
           mat-card-image 
           [src]="getImageUrl(blog)" 
@@ -48,25 +57,53 @@
       </div>
 
       <!-- Blog Content -->
-      <mat-card-content>
+      <mat-card-content (click)="viewBlog(blog.id)">
         <h2 class="blog-title">{{ blog.title }}</h2>
         <div class="blog-description" markdown>{{ truncateMarkdown(blog.description, 120) }}</div>
         
-        <!-- Image Count Badge -->
+        <!-- Meta Info -->
         <div class="blog-meta">
           <span class="image-count">
             <mat-icon>photo_library</mat-icon>
             {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+          </span>
+          <span *ngIf="blog.lastModifiedDate" class="last-modified">
+            <mat-icon>update</mat-icon>
+            Updated {{ formatDate(blog.lastModifiedDate) }}
           </span>
         </div>
       </mat-card-content>
 
       <!-- Actions -->
       <mat-card-actions>
+        <!-- ✅ Status Dropdown -->
+        <mat-form-field appearance="outline" class="status-selector">
+          <mat-label>Status</mat-label>
+          <mat-select 
+            [value]="blog.status" 
+            (selectionChange)="changeStatus(blog, $event.value)"
+            [disabled]="isChangingStatus[blog.id]">
+            <mat-option [value]="0">
+              <mat-icon>edit_note</mat-icon>
+              Draft
+            </mat-option>
+            <mat-option [value]="1">
+              <mat-icon>publish</mat-icon>
+              Published
+            </mat-option>
+            <mat-option [value]="2">
+              <mat-icon>archive</mat-icon>
+              Archived
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Edit Button -->
         <button 
           mat-button 
           color="primary" 
-          (click)="openEditDialog(blog); $event.stopPropagation()">
+          (click)="openEditDialog(blog); $event.stopPropagation()"
+          [disabled]="blog.status === 2">
           <mat-icon>edit</mat-icon>
           Edit
         </button>
