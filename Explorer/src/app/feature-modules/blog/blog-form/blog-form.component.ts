@@ -1,9 +1,11 @@
+// src/app/feature-modules/blog/blog-form/blog-form.component.ts
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlogService } from '../blog.service';
-import { Blog, BlogCreateDto, BlogUpdateDto, BlogImageCreateDto } from '../model/blog.model';
+import { Blog, BlogCreateDto, BlogUpdateDto, BlogImageCreateDto, BlogStatus } from '../model/blog.model';
 
 interface ImageItem {
   type: 'url' | 'file';
@@ -25,8 +27,13 @@ export class BlogFormComponent implements OnInit {
   blogForm: FormGroup;
   isEditMode: boolean = false;
   blogId?: number;
+  blogStatus: BlogStatus = BlogStatus.Draft; //  Novo
   imageItems: ImageItem[] = [];
   isDragging = false;
+
+  // Novo - Provere permisija
+  canEditTitle: boolean = true;
+  canEditImages: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -42,10 +49,21 @@ export class BlogFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.isEditMode && this.data.blog) {
       this.blogId = this.data.blog.id;
+      this.blogStatus = this.data.blog.status; // Novo
+
+      // Proveri permisije
+      this.canEditTitle = this.blogService.canEditTitle(this.blogStatus);
+      this.canEditImages = this.blogService.canEditImages(this.blogStatus);
+
       this.blogForm.patchValue({
         title: this.data.blog.title,
         description: this.data.blog.description
       });
+
+      //  Disable polja ako ne mogu da se edituju
+      if (!this.canEditTitle) {
+        this.blogForm.get('title')?.disable();
+      }
 
       // Učitaj postojeće slike
       this.data.blog.images.forEach(img => {
@@ -57,7 +75,6 @@ export class BlogFormComponent implements OnInit {
         this.addImageToFormArray(img.imageUrl);
       });
     } else {
-      // Za novi blog, dodaj jedno prazno polje
       this.addEmptyImageField();
     }
   }
@@ -74,8 +91,13 @@ export class BlogFormComponent implements OnInit {
     return this.blogForm.get('images') as FormArray;
   }
 
-  // Drag & Drop event handlers
+  //  Helper za prikaz statusa
+  getStatusLabel(): string {
+    return this.blogService.getStatusLabel(this.blogStatus);
+  }
+
   onDragOver(event: DragEvent): void {
+    if (!this.canEditImages) return; //  Blokiraj ako nije dozvoljeno
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = true;
@@ -88,6 +110,7 @@ export class BlogFormComponent implements OnInit {
   }
 
   onDrop(event: DragEvent): void {
+    if (!this.canEditImages) return; // Blokiraj ako nije dozvoljeno
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
@@ -106,7 +129,6 @@ export class BlogFormComponent implements OnInit {
     item.loaded = true;
   }
 
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files) {
@@ -115,6 +137,11 @@ export class BlogFormComponent implements OnInit {
   }
 
   handleFiles(files: File[]): void {
+    if (!this.canEditImages) {
+      this.showError('Images cannot be changed for this blog status');
+      return;
+    }
+
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
     if (imageFiles.length === 0) {
@@ -128,13 +155,11 @@ export class BlogFormComponent implements OnInit {
     }
 
     imageFiles.forEach(file => {
-      // Provera veličine (5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.showError(`${file.name} is too large. Maximum size is 5MB`);
         return;
       }
 
-      // Kreiranje preview-a
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const imageItem: ImageItem = {
@@ -145,13 +170,17 @@ export class BlogFormComponent implements OnInit {
           uploading: false
         };
         this.imageItems.push(imageItem);
-        this.addImageToFormArray(''); // Dodaj prazno polje koje će se popuniti nakon upload-a
+        this.addImageToFormArray('');
       };
       reader.readAsDataURL(file);
     });
   }
 
   addUrlImage(): void {
+    if (!this.canEditImages) {
+      this.showError('Images cannot be changed for this blog status');
+      return;
+    }
     if (this.imageItems.length >= 10) {
       this.showError('Maximum 10 images allowed');
       return;
@@ -172,6 +201,10 @@ export class BlogFormComponent implements OnInit {
   }
 
   removeImage(index: number): void {
+    if (!this.canEditImages) {
+      this.showError('Images cannot be changed for this blog status');
+      return;
+    }
     if (this.imageItems.length === 1 && !this.isEditMode) {
       this.showError('At least one image field is required');
       return;
@@ -189,6 +222,13 @@ export class BlogFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    //  Validacija na osnovu statusa
+    if (this.isEditMode && !this.canEditTitle) {
+      // Ako ne može da edituje title, ukloni ga iz validacije
+      this.blogForm.get('title')?.clearValidators();
+      this.blogForm.get('title')?.updateValueAndValidity();
+    }
+
     if (this.blogForm.invalid) {
       this.markFormGroupTouched(this.blogForm);
       this.showError('Please fill in all required fields correctly');
@@ -196,31 +236,33 @@ export class BlogFormComponent implements OnInit {
     }
 
     try {
-      // Upload svih file-based slika
-      for (let i = 0; i < this.imageItems.length; i++) {
-        const item = this.imageItems[i];
-        if (item.type === 'file' && item.file && !item.uploadedUrl) {
-          item.uploading = true;
-          try {
-            const response = await this.blogService.uploadImage(item.file).toPromise();
-            item.uploadedUrl = response!.imageUrl;
-            item.fileName = response!.fileName;
-            this.updateUrlInFormArray(i, response!.imageUrl);
-          } catch (error) {
-            console.error('Error uploading image:', error);
-            this.showError(`Failed to upload ${item.fileName}`);
-            return;
-          } finally {
-            item.uploading = false;
+      // Upload slika (samo ako mogu da se menjaju)
+      if (this.canEditImages) {
+        for (let i = 0; i < this.imageItems.length; i++) {
+          const item = this.imageItems[i];
+          if (item.type === 'file' && item.file && !item.uploadedUrl) {
+            item.uploading = true;
+            try {
+              const response = await this.blogService.uploadImage(item.file).toPromise();
+              item.uploadedUrl = response!.imageUrl;
+              item.fileName = response!.fileName;
+              this.updateUrlInFormArray(i, response!.imageUrl);
+            } catch (error) {
+              console.error('Error uploading image:', error);
+              this.showError(`Failed to upload ${item.fileName}`);
+              return;
+            } finally {
+              item.uploading = false;
+            }
+          } else if (item.type === 'url' && item.url) {
+            this.updateUrlInFormArray(i, item.url);
           }
-        } else if (item.type === 'url' && item.url) {
-          this.updateUrlInFormArray(i, item.url);
         }
       }
 
       // Pripremi slike za slanje
       const imageUrls: BlogImageCreateDto[] = this.imageItems
-        .map((item, index) => {
+        .map((item) => {
           if (item.type === 'file' && item.uploadedUrl) {
             return { imageUrl: item.uploadedUrl };
           } else if (item.type === 'url' && item.url && item.url.trim() !== '') {
@@ -230,13 +272,13 @@ export class BlogFormComponent implements OnInit {
         })
         .filter(img => img !== null) as BlogImageCreateDto[];
 
-      const formValue = this.blogForm.value;
+      const formValue = this.blogForm.getRawValue(); // getRawValue da dobije i disabled polja
 
       if (this.isEditMode && this.blogId) {
         const updateDto: BlogUpdateDto = {
           title: formValue.title,
           description: formValue.description,
-          images: imageUrls
+          images: this.canEditImages ? imageUrls : this.data.blog!.images.map(img => ({ imageUrl: img.imageUrl }))
         };
 
         this.blogService.updateBlog(this.blogId, updateDto).subscribe({
@@ -246,7 +288,7 @@ export class BlogFormComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error updating blog:', error);
-            this.showError(error.error?.errors?.Description?.[0] || 'Error updating blog');
+            this.showError(error.error || 'Error updating blog');
           }
         });
       } else {
@@ -263,7 +305,7 @@ export class BlogFormComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating blog:', error);
-            this.showError(error.error?.errors?.Description?.[0] || 'Error creating blog');
+            this.showError(error.error || 'Error creating blog');
           }
         });
       }

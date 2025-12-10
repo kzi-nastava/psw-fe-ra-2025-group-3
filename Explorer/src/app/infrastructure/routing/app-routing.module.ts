@@ -41,6 +41,7 @@ import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shop
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
 
+import { AllBlogsComponent } from 'src/app/feature-modules/blog/all-blogs/all-blogs.component';
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
 import { KeyPointPageComponent } from 'src/app/feature-modules/tour-authoring/key-points/key-point-page/key-point-page.component';
 
@@ -105,8 +106,15 @@ const routes: Routes = [
   { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },
 
   // Blogs (Author & Tourist)
+  // Blogs – Public views
+  { path: 'blogs', component: AllBlogsComponent, canActivate: [AuthGuard] },
+  { path: 'blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard] },
+
+  // Author – My Blogs
   { path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'author/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'author' } },
+
+  // Tourist – My Blogs (ako koristiš istu komponentu)
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
