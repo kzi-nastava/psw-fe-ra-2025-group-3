@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { TourExecutionService } from '../tour-execution.service';
 import { TourService } from '../../tour-authoring/tour.service';
 import { KeyPointService } from '../../tour-authoring/key-points/key-point.service';
-import { KeyPoint } from '../../tour-authoring/key-points/model/key-point.model';
-import { TourExecution, LocationCheckDto } from '../model/tour-execution.model';
+import { TourExecution, LocationCheckDto, KeyPointWithStatus } from '../model/tour-execution.model';
 import { Tour } from '../../tour-authoring/model/tour.model';
+import { KeyPoint } from '../../tour-authoring/key-points/model/key-point.model';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
@@ -23,7 +23,10 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   keyPoints: KeyPoint[] = [];
   nextKeyPoint: KeyPoint | null = null;
 
-  // Map data - za route-view mode
+  // ✅ DODAJ OVO - KeyPoints sa statusom completion
+  keyPointsWithStatus: KeyPointWithStatus[] = [];
+
+  // Map data
   routeWaypoints: { lat: number; lng: number }[] = [];
   routePoints: { lat: number; lng: number; name?: string }[] = [];
 
@@ -90,154 +93,169 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadKeyPoints(tourId: number): void {
+ loadKeyPoints(tourId: number): void {
   console.log('[Active Tour] 🔄 Loading key points for tour:', tourId);
-  
+
   this.keyPointService.getAll(tourId, 0, 100).subscribe({
     next: (response) => {
-      console.log('[Active Tour] 📦 Raw response:', response);
-      
-      // Proveri da li response ima results
+      console.log('[Active Tour] 📦 Raw KeyPoints response:', response);
+
       if (!response || !response.results) {
-        console.error('[Active Tour] ❌ Invalid response structure:', response);
+        console.error('[Active Tour] ❌ Invalid response structure');
         this.keyPoints = [];
         this.isLoading = false;
         return;
       }
 
-      // Sortiraj KeyPoints po ID-u
       this.keyPoints = response.results.sort((a, b) => a.id - b.id);
       console.log('[Active Tour] ✅ Loaded key points:', this.keyPoints);
-      console.log('[Active Tour] 📊 Total key points:', this.keyPoints.length);
 
-      // Proveri da li ima KeyPoints
       if (this.keyPoints.length === 0) {
-        console.warn('[Active Tour] ⚠️ No key points found for this tour');
+        console.warn('[Active Tour] ⚠️ No key points found');
         this.isLoading = false;
         return;
       }
 
-      // Postavi prvu KeyPoint kao "next"
-      this.nextKeyPoint = this.keyPoints[0];
+      // ✅ DODAJ OVO - Pronađi sledeću nekompletiranu KeyPoint
+      this.nextKeyPoint = this.findNextKeyPoint();
       console.log('[Active Tour] 🎯 Next key point:', this.nextKeyPoint);
 
-      // Postavi rutu na mapi
-      this.setupMapRoute();
+      // ✅ Kreiraj KeyPoints sa statusom
+      this.updateKeyPointsWithStatus();
 
+      this.setupMapRoute();
       this.isLoading = false;
       this.startLocationCheck();
     },
     error: (err) => {
       console.error('[Active Tour] ❌ Error loading key points:', err);
-      console.error('[Active Tour] ❌ Error details:', {
-        status: err.status,
-        message: err.message,
-        error: err.error
-      });
       this.keyPoints = [];
       this.isLoading = false;
     }
   });
 }
+  // ✅ NOVA METODA - Pronađi sledeću nekompletiranu KeyPoint
+private findNextKeyPoint(): KeyPoint | null {
+  if (!this.execution || !this.keyPoints.length) return null;
+
+  // Pronađi prvu KeyPoint koja NIJE u CompletedKeyPoints
+  const completedIds = this.execution.completedKeyPoints?.map(c => c.keyPointId) || [];
+  
+  const next = this.keyPoints.find(kp => !completedIds.includes(kp.id));
+  
+  return next || null;
+}
+
+// ✅ AŽURIRAJ OVU METODU
+private updateKeyPointsWithStatus(): void {
+  if (!this.execution || !this.keyPoints.length) return;
+
+  const completedIds = this.execution.completedKeyPoints?.map(c => c.keyPointId) || [];
+  
+  console.log('[Active Tour] 🔍 Completed IDs from backend:', completedIds);
+
+  this.keyPointsWithStatus = this.keyPoints.map(kp => {
+    const completion = this.execution!.completedKeyPoints?.find(c => c.keyPointId === kp.id);
+    
+    return {
+      id: kp.id,
+      name: kp.name,
+      description: kp.description,
+      imageUrl: kp.imageUrl,
+      secret: kp.secret,
+      latitude: kp.latitude,
+      longitude: kp.longitude,
+      isCompleted: !!completion,
+      completedAt: completion?.completedAt
+    };
+  });
+
+  console.log('[Active Tour] 🔓 KeyPoints with status:', this.keyPointsWithStatus);
+}
 
   private setupMapRoute(): void {
-  if (!this.execution || !this.nextKeyPoint) {
-    console.error('[Active Tour] ❌ Cannot setup route - missing execution or nextKeyPoint');
-    return;
-  }
-
-  console.log('[Active Tour] 🗺️ Setting up map route...');
-  console.log('[Active Tour] 📍 Start position:', {
-    lat: this.execution.startLatitude,
-    lng: this.execution.startLongitude
-  });
-  console.log('[Active Tour] 🎯 Next key point:', {
-    lat: this.nextKeyPoint.latitude,
-    lng: this.nextKeyPoint.longitude,
-    name: this.nextKeyPoint.name
-  });
-
-  // RUTA: Pozicija turiste → Prva KeyPoint (za routing liniju)
-  this.routeWaypoints = [
-    { 
-      lat: this.execution.startLatitude, 
-      lng: this.execution.startLongitude 
-    },
-    { 
-      lat: this.nextKeyPoint.latitude, 
-      lng: this.nextKeyPoint.longitude 
+    if (!this.execution || !this.nextKeyPoint) {
+      console.error('[Active Tour] ❌ Cannot setup route - missing execution or nextKeyPoint');
+      return;
     }
-  ];
 
-  // MARKERI: Pozicija turiste + SVE KeyPoints (za prikaz na mapi)
-  this.routePoints = [
-    {
-      lat: this.execution.startLatitude,
-      lng: this.execution.startLongitude,
-      name: '📍 Your Start Position'
-    },
-    ...this.keyPoints.map(kp => ({
-      lat: kp.latitude,
-      lng: kp.longitude,
-      name: `🎯 ${kp.name}`
-    }))
-  ];
+    console.log('[Active Tour] 🗺️ Setting up map route...');
 
-  console.log('[Active Tour] 🗺️ Route waypoints:', this.routeWaypoints);
-  console.log('[Active Tour] 📍 Route points:', this.routePoints);
-  console.log('[Active Tour] ✅ Map route setup complete');
-}
-  private startLocationCheck(): void {
-    if (!this.execution) return;
+    this.routeWaypoints = [
+      { lat: this.execution.startLatitude, lng: this.execution.startLongitude },
+      { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
+    ];
 
-    console.log('[Active Tour] ✅ Starting location check every 10 seconds');
+    this.routePoints = [
+      {
+        lat: this.execution.startLatitude,
+        lng: this.execution.startLongitude,
+        name: '📍 Your Start Position'
+      },
+      ...this.keyPoints.map(kp => ({
+        lat: kp.latitude,
+        lng: kp.longitude,
+        name: `🎯 ${kp.name}`
+      }))
+    ];
 
-    this.locationCheckSubscription = interval(10000)
-      .pipe(
-        switchMap(() => {
-          this.isCheckingLocation = true;
-          this.lastCheckTime = new Date();
-          console.log('[Location Check] 🔄 Triggered at:', this.lastCheckTime.toLocaleTimeString());
-          return this.positionSimulator.getCurrentPosition();
-        }),
-        switchMap((position) => {
-          if (position.source === 'none' || position.latitude === 0 || position.longitude === 0) {
-            console.log('[Location Check] ❌ No position available');
-            this.isCheckingLocation = false;
-            throw new Error('No position available');
-          }
-
-          console.log('[Location Check] 📍 Current position:', position);
-
-          const dto: LocationCheckDto = {
-            tourId: this.execution!.tourId,
-            currentLatitude: position.latitude,
-            currentLongitude: position.longitude
-          };
-
-          return this.tourExecutionService.checkLocation(dto);
-        })
-      )
-      .subscribe({
-        next: (result) => {
-          this.isCheckingLocation = false;
-          console.log('[Location Check] ✅ Result:', result);
-
-          if (this.execution) {
-            this.execution.lastActivity = result.lastActivity;
-
-            if (result.keyPointCompleted && result.completedKeyPointId) {
-              this.showKeyPointCompleted(result.completedKeyPointId, result.totalCompletedKeyPoints);
-              this.refreshExecution();
-            }
-          }
-        },
-        error: (err) => {
-          this.isCheckingLocation = false;
-          console.error('[Location Check] ❌ Error:', err);
-        }
-      });
+    console.log('[Active Tour] ✅ Map route setup complete');
   }
+
+  private startLocationCheck(): void {
+  if (!this.execution) return;
+
+  console.log('[Active Tour] ✅ Starting location check every 10 seconds');
+
+  this.locationCheckSubscription = interval(10000)
+    .pipe(
+      switchMap(() => {
+        this.isCheckingLocation = true;
+        this.lastCheckTime = new Date();
+        console.log('[Location Check] 🔄 Triggered at:', this.lastCheckTime.toLocaleTimeString());
+        return this.positionSimulator.getCurrentPosition();
+      }),
+      switchMap((position) => {
+        if (position.source === 'none' || position.latitude === 0 || position.longitude === 0) {
+          console.log('[Location Check] ❌ No position available');
+          this.isCheckingLocation = false;
+          throw new Error('No position available');
+        }
+
+        console.log('[Location Check] 📍 Current position:', position);
+
+        const dto: LocationCheckDto = {
+          tourId: this.execution!.tourId,
+          currentLatitude: position.latitude,
+          currentLongitude: position.longitude
+        };
+
+        return this.tourExecutionService.checkLocation(dto);
+      })
+    )
+    .subscribe({
+      next: (result) => {
+        this.isCheckingLocation = false;
+        console.log('[Location Check] ✅ Result:', result);
+
+        if (this.execution) {
+          this.execution.lastActivity = result.lastActivity;
+
+          if (result.keyPointCompleted && result.completedKeyPointId) {
+            // ✅ PRIKAŽI NOTIFIKACIJU
+            this.showKeyPointUnlocked(result.completedKeyPointId, result.totalCompletedKeyPoints);
+
+            // ✅ REFRESH EXECUTION SA BACKEND-A (dobija ažurirane CompletedKeyPoints)
+            this.refreshExecution();
+          }
+        }
+      },
+      error: (err) => {
+        this.isCheckingLocation = false;
+        console.error('[Location Check] ❌ Error:', err);
+      }
+    });
+}
 
   private stopLocationCheck(): void {
     if (this.locationCheckSubscription) {
@@ -248,107 +266,135 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   }
 
   private refreshExecution(): void {
-    this.tourExecutionService.getActiveTourExecution().subscribe({
-      next: (execution) => {
-        if (execution) {
-          this.execution = execution;
-          console.log('[Active Tour] 🔄 Execution refreshed, progress:', execution.progressPercentage + '%');
+  console.log('[Active Tour] 🔄 Refreshing execution from backend...');
+  
+  this.tourExecutionService.getActiveTourExecution().subscribe({
+    next: (execution) => {
+      if (execution) {
+        console.log('[Active Tour] ✅ Execution refreshed:', execution);
+        console.log('[Active Tour] 📊 CompletedKeyPoints from backend:', execution.completedKeyPoints);
+        
+        this.execution = execution;
+        
+        // ✅ AŽURIRAJ KeyPoints SA STATUSOM
+        this.updateKeyPointsWithStatus();
+        
+        // ✅ AŽURIRAJ NEXT KEYPOINT
+        this.nextKeyPoint = this.findNextKeyPoint();
+        console.log('[Active Tour] 🎯 New next KeyPoint:', this.nextKeyPoint);
+        
+        // ✅ AŽURIRAJ MAPU
+        if (this.nextKeyPoint) {
+          this.setupMapRoute();
         }
       }
-    });
-  }
+    },
+    error: (err) => {
+      console.error('[Active Tour] ❌ Error refreshing execution:', err);
+    }
+  });
+}
 
-  private showKeyPointCompleted(keyPointId: number, totalCompleted: number): void {
+  // ✅ NOVA METODA - Prikazuje unlock notifikaciju
+  private showKeyPointUnlocked(keyPointId: number, totalCompleted: number): void {
+    const keyPoint = this.keyPoints.find(kp => kp.id === keyPointId);
+    
+    if (!keyPoint) return;
+
     this.snackBar.open(
-      `🎉 Key Point completed! Total: ${totalCompleted}`,
-      'Close',
+      `🔓 "${keyPoint.name}" unlocked! Total: ${totalCompleted}`,
+      'View Secret',
       {
-        duration: 5000,
+        duration: 8000,
         panelClass: ['success-snackbar'],
         horizontalPosition: 'center',
         verticalPosition: 'top'
       }
-    );
+    ).onAction().subscribe(() => {
+      // Scroll to KeyPoint u listi
+      this.scrollToKeyPoint(keyPointId);
+    });
   }
-completeTour(): void {
-  if (!confirm('Are you sure you want to complete this tour?')) return;
 
-  this.stopLocationCheck();
-
-  this.tourExecutionService.completeTour().subscribe({
-    next: (completed) => {
-      console.log('[Active Tour] ✅ Tour completed:', completed);
-      
-      // ✅ AŽURIRAJ EXECUTION SA PODACIMA SA BACKEND-A
-      this.execution = completed;
-      
-      // ✅ FORMATIRAJ COMPLETION TIME
-      const completionTime = new Date(completed.completionTime!).toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short'
-      });
-      
-      // ✅ PRIKAŽI SNACKBAR SA VREMENOM
-      this.snackBar.open(
-        `🎉 Tour completed at ${completionTime}!`,
-        'Close',
-        {
-          duration: 5000,
-          panelClass: ['success-snackbar']
-        }
-      );
-      
-      // ✅ REDIRECT POSLE 3 SEKUNDE (da korisnik vidi vreme)
-      setTimeout(() => {
-        this.router.navigate(['/tourist/tours']);
-      }, 3000);
-    },
-    error: (err) => {
-      console.error('[Active Tour] ❌ Error completing tour:', err);
-      this.snackBar.open('❌ Failed to complete tour', 'Close', { duration: 3000 });
+  // ✅ NOVA METODA - Scroll do KeyPoint u listi
+  private scrollToKeyPoint(keyPointId: number): void {
+    const element = document.getElementById(`keypoint-${keyPointId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-keypoint');
+      setTimeout(() => element.classList.remove('highlight-keypoint'), 2000);
     }
-  });
-}
+  }
 
-abandonTour(): void {
-  if (!confirm('Are you sure you want to abandon this tour?')) return;
+  completeTour(): void {
+    if (!confirm('Are you sure you want to complete this tour?')) return;
 
-  this.stopLocationCheck();
+    this.stopLocationCheck();
 
-  this.tourExecutionService.abandonTour().subscribe({
-    next: (abandoned) => {
-      console.log('[Active Tour] ⚠️ Tour abandoned:', abandoned);
-      
-      // ✅ AŽURIRAJ EXECUTION SA PODACIMA SA BACKEND-A
-      this.execution = abandoned;
-      
-      // ✅ FORMATIRAJ ABANDON TIME
-      const abandonTime = new Date(abandoned.abandonTime!).toLocaleString('en-US', {
-        dateStyle: 'medium',
-        timeStyle: 'short'
-      });
-      
-      // ✅ PRIKAŽI SNACKBAR SA VREMENOM
-      this.snackBar.open(
-        `⚠️ Tour abandoned at ${abandonTime}`,
-        'Close',
-        {
-          duration: 5000,
-          panelClass: ['warning-snackbar']
-        }
-      );
-      
-      // ✅ REDIRECT POSLE 3 SEKUNDE
-      setTimeout(() => {
-        this.router.navigate(['/tourist/tours']);
-      }, 3000);
-    },
-    error: (err) => {
-      console.error('[Active Tour] ❌ Error abandoning tour:', err);
-      this.snackBar.open('❌ Failed to abandon tour', 'Close', { duration: 3000 });
-    }
-  });
-}
+    this.tourExecutionService.completeTour().subscribe({
+      next: (completed) => {
+        console.log('[Active Tour] ✅ Tour completed:', completed);
+        this.execution = completed;
+
+        const completionTime = new Date(completed.completionTime!).toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+
+        this.snackBar.open(
+          `🎉 Tour completed at ${completionTime}!`,
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['success-snackbar']
+          }
+        );
+
+        setTimeout(() => {
+          this.router.navigate(['/tourist/tours']);
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('[Active Tour] ❌ Error completing tour:', err);
+        this.snackBar.open('❌ Failed to complete tour', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  abandonTour(): void {
+    if (!confirm('Are you sure you want to abandon this tour?')) return;
+
+    this.stopLocationCheck();
+
+    this.tourExecutionService.abandonTour().subscribe({
+      next: (abandoned) => {
+        console.log('[Active Tour] ⚠️ Tour abandoned:', abandoned);
+        this.execution = abandoned;
+
+        const abandonTime = new Date(abandoned.abandonTime!).toLocaleString('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+
+        this.snackBar.open(
+          `⚠️ Tour abandoned at ${abandonTime}`,
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['warning-snackbar']
+          }
+        );
+
+        setTimeout(() => {
+          this.router.navigate(['/tourist/tours']);
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('[Active Tour] ❌ Error abandoning tour:', err);
+        this.snackBar.open('❌ Failed to abandon tour', 'Close', { duration: 3000 });
+      }
+    });
+  }
 
   getFormattedStartTime(): string {
     if (!this.execution) return '';
@@ -367,6 +413,15 @@ abandonTour(): void {
     });
   }
 
+  getFormattedCompletedAt(completedAt?: Date): string {
+    if (!completedAt) return '';
+    return new Date(completedAt).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+
   getNextKeyPointName(): string {
     return this.nextKeyPoint?.name || 'N/A';
   }
@@ -375,21 +430,7 @@ abandonTour(): void {
     return this.keyPoints.length;
   }
 
-  getFormattedCompletionTime(): string {
-  if (!this.execution?.completionTime) return 'N/A';
-  return new Date(this.execution.completionTime).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  });
-}
-
-getFormattedAbandonTime(): string {
-  if (!this.execution?.abandonTime) return 'N/A';
-  return new Date(this.execution.abandonTime).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  });
-}
-
-
+  getCompletedKeyPointsCount(): number {
+    return this.keyPointsWithStatus.filter(kp => kp.isCompleted).length;
+  }
 }
