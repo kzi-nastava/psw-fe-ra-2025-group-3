@@ -63,4 +63,12 @@ export class TourReviewsListComponent implements OnInit {
       day: 'numeric'
     });
   }
+  getImageUrl(imageUrl: string): string {
+  return this.reviewService.getImageUrl(imageUrl);
+}
+
+openImageModal(image: any): void {
+  // TODO: Implementiraj modal za full-size prikaz
+  window.open(this.getImageUrl(image.imageUrl), '_blank');
+}
 }

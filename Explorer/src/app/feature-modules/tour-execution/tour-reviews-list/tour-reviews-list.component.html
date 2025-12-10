@@ -38,7 +38,7 @@
             <div class="author-info">
               <mat-icon class="avatar-icon">account_circle</mat-icon>
               <div>
-                <div class="author-name">{{ review.touristName }}</div>
+                <div class="author-name">{{ review.touristName || 'Anonymous' }}</div>
                 <div class="review-meta">
                   <span>{{ getFormattedDate(review.createdAt) }}</span>
                   <span *ngIf="review.isEdited" class="edited-badge">
@@ -63,6 +63,15 @@
           
           <p *ngIf="review.comment" class="review-comment">{{ review.comment }}</p>
           
+          <!-- ✅ ISPRAVLJENO: Images Gallery -->
+          <div *ngIf="review.images && review.images.length > 0" class="review-images">
+            <div class="images-grid-small">
+              <div *ngFor="let img of review.images" class="image-thumbnail" (click)="openImageModal(img)">
+                <img [src]="getImageUrl(img.imageUrl)" alt="Review photo">
+              </div>
+            </div>
+          </div> 
+
           <div class="review-footer">
             <div class="progress-indicator">
               <mat-icon>route</mat-icon>

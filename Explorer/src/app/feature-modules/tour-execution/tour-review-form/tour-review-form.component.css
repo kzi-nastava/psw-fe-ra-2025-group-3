@@ -125,6 +125,8 @@
 
 .form-section {
   margin-bottom: var(--spacing-6);
+  width: 100%;
+  overflow: hidden;
 }
 
 .form-label {
@@ -221,6 +223,113 @@ mat-form-field {
   font-family: inherit;
   font-size: var(--font-size-base);
   line-height: 1.6;
+}
+
+/* ============================================================================
+   IMAGES SECTION
+   ============================================================================ */
+
+.images-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+  max-width: 500px;
+  width: 100%;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.image-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.image-preview img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.image-preview.existing {
+  border: 3px solid var(--color-primary-500);
+}
+
+.image-preview.new {
+  border: 3px dashed var(--color-secondary-500);
+}
+
+.delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(244, 67, 54, 0.9) !important;
+  color: white !important;
+  width: 32px;
+  height: 32px;
+  min-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.delete-btn:hover:not([disabled]) {
+  background: rgba(244, 67, 54, 1) !important;
+  transform: scale(1.1);
+}
+
+.delete-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+.upload-btn {
+  width: 100%;
+  max-width: 500px;
+  height: 48px;
+  border: 2px dashed var(--color-primary-500);
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  margin-top: var(--spacing-2);
+}
+
+.upload-btn:not([disabled]):hover {
+  background: rgba(0, 188, 212, 0.1);
+  border-color: var(--color-primary-700);
+}
+
+.upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-btn mat-icon {
+  margin-right: var(--spacing-2);
+}
+
+.image-hint {
+  display: block;
+  margin-top: var(--spacing-2);
+  max-width: 500px;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  text-align: center;
 }
 
 /* ============================================================================
@@ -331,6 +440,16 @@ mat-form-field {
   .submit-button {
     width: 100%;
   }
+
+  .images-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 100%;
+  }
+
+  .upload-btn,
+  .image-hint {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -346,5 +465,14 @@ mat-form-field {
 
   .form-card mat-card-content {
     padding: var(--spacing-4);
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+  }
+
+  .upload-btn {
+    font-size: var(--font-size-sm);
   }
 }

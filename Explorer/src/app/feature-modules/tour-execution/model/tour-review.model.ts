@@ -9,8 +9,23 @@ export interface TourReview {
   updatedAt?: Date;
   progressPercentage: number;
   isEdited: boolean;
+  images: ReviewImage[]; 
 }
 
+export interface ReviewImage {
+  id: number;
+  tourReviewId: number;
+  imageUrl: string;
+  uploadedAt: Date;
+}
+export interface ImageUploadResponse {
+  imageUrl: string;
+  fileName: string;
+}
+
+export interface AddImageRequest {
+  imageUrl: string;
+}
 export interface TourReviewCreateDto {
   tourId: number;
   rating: number;

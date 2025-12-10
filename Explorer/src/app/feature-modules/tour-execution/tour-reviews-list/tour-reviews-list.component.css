@@ -254,6 +254,46 @@
 }
 
 /* ============================================================================
+   REVIEW IMAGES
+   ============================================================================ */
+
+.review-images {
+  margin: var(--spacing-4) 0;
+}
+
+.images-grid-small {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: var(--spacing-2);
+  max-width: 400px;
+}
+
+.image-thumbnail {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.image-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.image-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================================
    RESPONSIVE
    ============================================================================ */
 
@@ -276,5 +316,9 @@
     font-size: 28px;
     width: 28px;
     height: 28px;
+  }
+
+  .images-grid-small {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
