@@ -16,6 +16,7 @@ export class TourListComponent implements OnInit {
   toursPerPage: number = 6;
   currentPage: number = 1;
   isLoading: boolean = false;
+  expandedTourId: number | null = null;
 
   constructor(
     private tourService: TourService,
@@ -81,6 +82,11 @@ export class TourListComponent implements OnInit {
   }
 
   openEditDialog(tour: Tour): void {
+    if (tour.status === TourStatus.Archived) {
+        this.showError('Cannot edit an archived tour. Reactivate it first.');
+        return;
+    }
+
     const dialogRef = this.dialog.open(TourFormComponent, {
       width: '650px',
       maxWidth: '90vw',
@@ -129,9 +135,40 @@ export class TourListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Publish error:', error);
-        this.showError('Error publishing tour');
+        const errorMsg = error.error || 'Error publishing tour. Check if you have Key Points and Duration set.';
+        this.showError(errorMsg);
       }
     });
+  }
+
+  archiveTour(tour: Tour): void {
+    if (confirm('Are you sure you want to archive this tour?')) {
+        this.tourService.archiveTour(tour.id!).subscribe({
+            next: () => {
+                this.showSuccess('Tour archived successfully');
+                this.loadTours();
+            },
+            error: (error) => {
+                console.error('Archive error:', error);
+                this.showError(error.error || 'Error archiving tour');
+            }
+        });
+    }
+  }
+
+  reactivateTour(tour: Tour): void {
+    if (confirm('Are you sure you want to reactivate this tour?')) {
+        this.tourService.reactivateTour(tour.id!).subscribe({
+            next: () => {
+                this.showSuccess('Tour reactivated successfully');
+                this.loadTours();
+            },
+            error: (error) => {
+                console.error('Reactivation error:', error);
+                this.showError(error.error || 'Error reactivating tour');
+            }
+        });
+    }
   }
 
   getDifficultyLabel(difficulty: TourDifficulty): string {
@@ -143,10 +180,12 @@ export class TourListComponent implements OnInit {
     return labels[difficulty] || 'Unknown';
   }
 
+  // === POPRAVLJENO: Dodat 'Archived' status ===
   getStatusLabel(status: TourStatus): string {
     const labels = {
       [TourStatus.Draft]: 'Draft',
       [TourStatus.Published]: 'Published',
+      [TourStatus.Archived]: 'Archived' 
     };
     return labels[status] || 'Unknown';
   }
@@ -155,6 +194,7 @@ export class TourListComponent implements OnInit {
     const classes = {
       [TourStatus.Draft]: 'status-draft',
       [TourStatus.Published]: 'status-published',
+      [TourStatus.Archived]: 'status-archived'
     };
     return classes[status] || '';
   }
@@ -165,6 +205,18 @@ export class TourListComponent implements OnInit {
 
   canPublish(tour: Tour): boolean {
     return tour?.status === TourStatus.Draft;
+  }
+
+  canArchive(tour: Tour): boolean {
+    return tour?.status === TourStatus.Published;
+  }
+
+  canReactivate(tour: Tour): boolean {
+    return tour?.status === TourStatus.Archived;
+  }
+
+  canEdit(tour: Tour): boolean {   
+      return tour?.status !== TourStatus.Archived;
   }
 
   private showSuccess(message: string): void {
@@ -179,5 +231,13 @@ export class TourListComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  expandReviews(tour: Tour): void {
+    if (this.expandedTourId === tour.id) {
+      this.expandedTourId = null;  // Collapse
+    } else {
+      this.expandedTourId = tour.id;  // Expand
+    }
   }
 }

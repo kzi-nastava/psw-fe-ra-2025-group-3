@@ -18,6 +18,8 @@ import { MonumentListComponent } from 'src/app/feature-modules/administration/mo
 
 import { FacilityListComponent } from 'src/app/feature-modules/administration/facility-list/facility-list.component';
 import { FacilityEditComponent } from 'src/app/feature-modules/administration/facility-edit/facility-edit.component';
+import { TourProblemListAdminComponent } from 'src/app/feature-modules/administration/tour-problem-list-admin/tour-problem-list-admin.component';
+import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/administration/tour-problem-details-admin/tour-problem-details-admin.component';
 
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
@@ -41,8 +43,12 @@ import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/mee
 
 import { AllBlogsComponent } from 'src/app/feature-modules/blog/all-blogs/all-blogs.component';
 import { BlogListComponent } from 'src/app/feature-modules/blog/blog-list/blog-list.component';
+import { KeyPointPageComponent } from 'src/app/feature-modules/tour-authoring/key-points/key-point-page/key-point-page.component';
+
 import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/blog-detail.component';
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
+import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
+
 const routes: Routes = [
 
   // Public
@@ -63,6 +69,10 @@ const routes: Routes = [
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
+
+  // Admin Tour Problems
+  { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
+  { path: 'administration/tour-problems/:id', component: TourProblemDetailsAdminComponent, canActivate: [AuthGuard] },
 
   // Tours
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] },
@@ -89,6 +99,7 @@ const routes: Routes = [
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
@@ -107,6 +118,8 @@ const routes: Routes = [
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
+  // Authoring
+  { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } }
 
 ];
 

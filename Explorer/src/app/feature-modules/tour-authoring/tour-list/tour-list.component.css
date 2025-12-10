@@ -334,4 +334,55 @@ mat-card-actions button[disabled] {
   .header h1 {
     font-size: var(--font-size-xl);
   }
+
+
+  /* ============================================================================
+   REVIEWS SECTION
+   ============================================================================ */
+
+.reviews-preview {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid rgba(0, 188, 212, 0.15);
+}
+
+.view-reviews-btn {
+  width: 100%;
+  font-weight: 600;
+  border: 2px solid var(--color-primary-500);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-3);
+  transition: all var(--transition-normal);
+  margin-bottom: var(--spacing-3);
+}
+
+.view-reviews-btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(0, 188, 212, 0.1) 0%, 
+    rgba(0, 150, 136, 0.1) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.view-reviews-btn mat-icon {
+  color: var(--color-primary-600);
+}
+
+.reviews-content {
+  animation: slideDown 0.3s ease-out;
+  margin-top: var(--spacing-3);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
 }

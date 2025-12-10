@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';        
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
@@ -14,7 +16,12 @@ import { TourProblemDetailsComponent } from './tour-problem-details/tour-problem
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';      
-import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ActiveTourComponent } from './active-tour/active-tour.component'; 
+import { SharedModule } from 'src/app/shared/shared.module';
+import { TourReviewFormComponent } from './tour-review-form/tour-review-form.component';
+import { TourReviewsListComponent } from './tour-reviews-list/tour-reviews-list.component';
+import { TourReviewsComponent } from './tour-reviews/tour-reviews.component';
 
 
 
@@ -22,7 +29,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   declarations: [
     TourProblemListComponent,
     TourProblemFormComponent,
-    TourProblemDetailsComponent
+    TourProblemDetailsComponent,
+    ActiveTourComponent,
+    TourReviewFormComponent,
+    TourReviewsListComponent,
+    TourReviewsComponent
     
   ],
   imports: [
@@ -38,10 +49,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatChipsModule,
     MatTabsModule,     
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDividerModule,       
+    MatSnackBarModule,     
+    SharedModule
   ],
   exports: [
-    TourProblemListComponent
+    TourProblemListComponent,
+    ActiveTourComponent,
+    TourReviewsComponent 
   ]
 })
 export class TourExecutionModule { }

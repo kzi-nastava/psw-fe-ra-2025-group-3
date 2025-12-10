@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/env/environment';
-import { TourProblem, TourProblemCreateDto, TourProblemUpdateDto, Message, AddMessageDto, MarkProblemResolvedDto } from './model/tour-problem.model';
+import { TourProblem, TourProblemCreateDto, TourProblemUpdateDto, Message, AddMessageDto, MarkProblemResolvedDto, AdminDeadlineDto } from './model/tour-problem.model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +60,43 @@ export class TourProblemService {
         console.log('Tour validation error:', error);
         return of(false);
       })
+    );
+  }
+
+  // Admin methods
+  getAllProblems(): Observable<TourProblem[]> {
+    return this.http.get<TourProblem[]>(`${environment.apiHost}admin/tour-problems`);
+  }
+
+  getProblemByIdForAdmin(id: number): Observable<TourProblem> {
+    return this.http.get<TourProblem>(`${environment.apiHost}admin/tour-problems/${id}`);
+  }
+
+  getOverdueProblems(): Observable<TourProblem[]> {
+    return this.http.get<TourProblem[]>(`${environment.apiHost}admin/tour-problems/overdue`);
+  }
+  
+  // Metoda za postavljanje roka
+  setDeadline(problemId: number, dto: AdminDeadlineDto): Observable<void> {
+    return this.http.post<void>(
+      environment.apiHost + 'admin/tour-problems/' + problemId + '/deadline',
+      dto
+    );
+  }
+
+  // Metoda za zatvaranje problema
+  closeProblem(problemId: number): Observable<void> {
+    return this.http.post<void>(
+      environment.apiHost + 'admin/tour-problems/' + problemId + '/close',
+      {}
+    );
+  }
+
+  // Metoda za penalizaciju autora
+  penalizeAuthor(problemId: number): Observable<void> {
+    return this.http.post<void>(
+      environment.apiHost + 'admin/tour-problems/' + problemId + '/penalize',
+      {}
     );
   }
 }

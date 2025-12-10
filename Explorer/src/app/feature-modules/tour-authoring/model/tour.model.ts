@@ -6,9 +6,31 @@ export interface Tour {
   status: TourStatus;
   price: number;
   tags: string[];
+  equipment: Equipment[];
   authorId: number;
   createdAt: Date;
   updatedAt?: Date;
+  publishedAt?: Date;
+  archivedAt?: Date;
+  tourDurations: TourDuration[];
+}
+
+
+export interface Equipment {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export enum TransportType {
+  Walking = 0,
+  Bicycle = 1,
+  Car = 2
+}
+
+export interface TourDuration {
+  timeInMinutes: number;
+  transportType: TransportType;
 }
 
 export enum TourDifficulty {
@@ -20,6 +42,7 @@ export enum TourDifficulty {
 export enum TourStatus {
   Draft = 0,
   Published = 1,
+  Archived = 2 // dodato za tour-execution
 }
 
 export interface TourCreateDto {
@@ -27,6 +50,7 @@ export interface TourCreateDto {
   description: string;
   difficulty: TourDifficulty;
   tags: string[];
+  tourDurations: TourDuration[];
 }
 
 export interface TourUpdateDto {
@@ -35,4 +59,5 @@ export interface TourUpdateDto {
   difficulty: TourDifficulty;
   tags: string[];
   price?: number;
+  tourDurations: TourDuration[];
 }

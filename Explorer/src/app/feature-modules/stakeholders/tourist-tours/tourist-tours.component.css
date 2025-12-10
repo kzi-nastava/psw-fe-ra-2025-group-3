@@ -127,7 +127,23 @@
   font-size: var(--font-size-xs);
   font-weight: 500;
 }
+.reviews-expanded {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 2px solid rgba(0, 188, 212, 0.15);
+  animation: slideDown 0.3s ease-out;
+}
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 3000px;
+  }
+}
 mat-card-actions {
   display: flex;
   justify-content: flex-end;
@@ -153,4 +169,79 @@ mat-card-actions button[mat-stroked-button] mat-icon {
   .tour-card {
     padding: var(--spacing-4);
   }
+}
+
+/* Start Tour button */
+mat-card-actions button[color="accent"] {
+  background: linear-gradient(135deg, #26C6DA, #00ACC1) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+  border: none !important;
+}
+
+mat-card-actions button[color="accent"]:hover:not([disabled]) {
+  background: linear-gradient(135deg, #4DD0E1, #26C6DA) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+mat-card-actions button[color="accent"] mat-spinner {
+  margin-right: var(--spacing-2);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+mat-card-actions button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  mat-card-actions {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  mat-card-actions button {
+    width: 100%;
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all var(--transition-fast);
+}
+
+.status-published {
+  background: rgba(0, 188, 212, 0.12); 
+  color: var(--color-primary-800);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+}
+
+/* Archived badge stil */
+.status-archived {
+  background: rgba(158, 158, 158, 0.15);
+  color: var(--color-neutral-700);
+  border: 1px solid rgba(158, 158, 158, 0.3);
+}
+
+/* Disabled kada postoji aktivna tura */
+
+mat-card-actions button[mat-raised-button][disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(158, 158, 158, 0.3) !important;
+  color: rgba(0, 0, 0, 0.4) !important;
+  box-shadow: none !important;
+}
+
+mat-card-actions button[mat-raised-button] mat-icon[class*="block"] {
+  color: rgba(0, 0, 0, 0.4);
 }

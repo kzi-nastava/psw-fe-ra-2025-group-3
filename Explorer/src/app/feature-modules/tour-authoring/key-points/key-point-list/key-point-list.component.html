@@ -1,0 +1,35 @@
+<div class="kp-list">
+  <p *ngIf="!keyPoints || keyPoints.length === 0" class="kp-empty">
+    No key points yet.
+  </p>
+
+  <ul *ngIf="keyPoints && keyPoints.length > 0" class="kp-list-items">
+    <li *ngFor="let kp of keyPoints" class="kp-item" (click)="onItemClick(kp)">
+      <div class="kp-item-content">
+        <span class="kp-item-title">{{ kp.name }}</span>
+
+        <div class="kp-actions">
+          <!-- EDIT -->
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Edit key point"
+            (click)="onItemClick(kp); $event.stopPropagation()"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <!-- DELETE -->
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Delete key point"
+            (click)="onDeleteClick(kp, $event)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
