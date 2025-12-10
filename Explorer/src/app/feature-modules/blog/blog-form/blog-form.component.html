@@ -1,4 +1,17 @@
-<h2 mat-dialog-title>{{ isEditMode ? 'Edit Blog' : 'Create New Blog' }}</h2>
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Blog' : 'Create New Blog' }}
+  <!--  Status Badge -->
+  <span *ngIf="isEditMode" class="status-badge status-{{ blogStatus }}">
+    {{ getStatusLabel() }}
+  </span>
+</h2>
+
+<!-- Informativna poruka ako je Published ili Archived -->
+<div *ngIf="isEditMode && !canEditTitle" class="info-message">
+  <mat-icon>info</mat-icon>
+  <span *ngIf="blogStatus === 1">Published blogs can only have their description edited.</span>
+  <span *ngIf="blogStatus === 2">Archived blogs cannot be edited. Change status to Draft or Published first.</span>
+</div>
 
 <mat-dialog-content>
   <form [formGroup]="blogForm" class="blog-form">
@@ -11,6 +24,8 @@
       <mat-error *ngIf="blogForm.get('title')?.invalid">
         {{ getErrorMessage('title') }}
       </mat-error>
+      <!-- Hint ako je title disabled -->
+      <mat-hint *ngIf="!canEditTitle">Title cannot be changed for {{ getStatusLabel() }} blogs</mat-hint>
     </mat-form-field>
 
     <!-- Blog Description -->
@@ -30,18 +45,20 @@
     </mat-form-field>
 
     <!-- Images Section -->
-    <div class="images-section">
+    <div class="images-section" [class.disabled]="!canEditImages">
       <div class="images-header">
         <label class="images-label">
           <mat-icon>photo_library</mat-icon>
           Blog Images ({{ imageItems.length }}/10)
+          <!--  Disabled hint -->
+          <span *ngIf="!canEditImages" class="disabled-hint">(locked for {{ getStatusLabel() }} blogs)</span>
         </label>
         <button 
           mat-mini-fab 
           color="primary" 
           type="button"
           (click)="addUrlImage()"
-          [disabled]="imageItems.length >= 10"
+          [disabled]="imageItems.length >= 10 || !canEditImages"
           matTooltip="Add image URL">
           <mat-icon>link</mat-icon>
         </button>
@@ -51,12 +68,13 @@
       <div 
         class="drop-zone"
         [class.dragging]="isDragging"
+        [class.disabled]="!canEditImages"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave($event)"
         (drop)="onDrop($event)">
-        <mat-icon class="upload-icon">cloud_upload</mat-icon>
-        <p class="drop-text">Drag & drop images here</p>
-        <p class="drop-hint">Maximum 10 images, 5MB each (JPG, PNG, GIF, WebP)</p>
+        <mat-icon class="upload-icon">{{ canEditImages ? 'cloud_upload' : 'lock' }}</mat-icon>
+        <p class="drop-text">{{ canEditImages ? 'Drag & drop images here' : 'Images locked' }}</p>
+        <p class="drop-hint" *ngIf="canEditImages">Maximum 10 images, 5MB each (JPG, PNG, GIF, WebP)</p>
       </div>
 
       <!-- Image List -->
@@ -71,6 +89,7 @@
                 matInput 
                 [(ngModel)]="item.url"
                 [ngModelOptions]="{standalone: true}"
+                [disabled]="!canEditImages"
                 (ngModelChange)="updateUrlInFormArray(i, item.url || '')"
                 placeholder="https://example.com/image.jpg">
               <mat-icon matPrefix>link</mat-icon>
@@ -81,24 +100,21 @@
               color="warn" 
               type="button"
               (click)="removeImage(i)"
+              [disabled]="!canEditImages"
               matTooltip="Remove">
               <mat-icon>delete</mat-icon>
             </button>
 
             <!-- URL Preview -->
             <div *ngIf="item.url" class="image-preview preview-url">
-
-              <!-- Placeholder dok se slika ne učita -->
               <div *ngIf="!item.loaded" class="preview-loading">
                 <mat-spinner diameter="26"></mat-spinner>
               </div>
-
-            <img 
-              [src]="item.url" 
-              alt="Preview"
-              (load)="onUrlLoad(item)"
-              (error)="onUrlError(item)" />
-
+              <img 
+                [src]="item.url" 
+                alt="Preview"
+                (load)="onUrlLoad(item)"
+                (error)="onUrlError(item)" />
             </div>
           </div>
 
@@ -116,7 +132,7 @@
               color="warn" 
               type="button"
               (click)="removeImage(i)"
-              [disabled]="item.uploading"
+              [disabled]="item.uploading || !canEditImages"
               matTooltip="Remove">
               <mat-icon>delete</mat-icon>
             </button>
