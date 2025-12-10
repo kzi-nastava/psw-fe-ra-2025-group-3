@@ -3,17 +3,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Tour, TourCreateDto, TourUpdateDto, Equipment } from './model/tour.model';
+import { TourPreview } from './model/tour-preview.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TourService {
   private baseUrl = environment.apiHost + 'tours';
-
   private equipmentUrl = environment.apiHost + 'administration/equipment'; 
-
   private readonly touristBaseUrl = environment.apiHost + 'tourist/tours';
-
+  private readonly tourPreviewUrl = environment.apiHost + 'tourist/tour-previews';
 
   constructor(private http: HttpClient) { }
 
@@ -63,6 +62,11 @@ export class TourService {
 
   getPublishedToursForTourist(): Observable<Tour[]> {
     return this.http.get<Tour[]>(this.touristBaseUrl);
+  }
+
+  // ✅ NOVA METODA - Preuzima objavljene ture sa preview podacima
+  getPublishedTourPreviews(): Observable<TourPreview[]> {
+    return this.http.get<TourPreview[]>(this.tourPreviewUrl);
   }
 
   updateDistance(tourId: number, distanceInKm: number): Observable<Tour> {

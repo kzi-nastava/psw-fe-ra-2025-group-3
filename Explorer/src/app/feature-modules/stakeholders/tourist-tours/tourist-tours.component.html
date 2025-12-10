@@ -2,9 +2,6 @@
   <div class="tour-list-container">
     <div class="header">
       <h1>Available Tours</h1>
-      <p class="cart-subtitle">
-        Browse published tours and add your favorites to the cart.
-      </p>
     </div>
 
     <div *ngIf="isLoading" class="loading-container">
@@ -19,12 +16,13 @@
 
     <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
       <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
+        
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
           <mat-card-subtitle>
             <span 
-              class="status-badge" 
-              [ngClass]="{
+               class="status-badge"
+               [ngClass]="{
                 'status-published': tour.status === TourStatus.Published,
                 'status-archived': tour.status === TourStatus.Archived
               }">
@@ -39,11 +37,16 @@
           <div class="tour-details">
             <div class="detail-item">
               <mat-icon>terrain</mat-icon>
-              <span>{{ tour.difficulty }}</span>
+              <span>{{ getDifficultyLabel(tour.difficulty) }}</span>
             </div>
             <div class="detail-item">
               <mat-icon>attach_money</mat-icon>
               <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+            </div>
+            <div class="detail-item rating-display">
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="rating-text">{{ tour.averageRating | number:'1.1-1' }}</span>
+              <span class="review-count">({{ tour.reviews.length }} reviews)</span>
             </div>
           </div>
 
@@ -53,21 +56,33 @@
             </mat-chip-set>
           </div>
 
-           <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+          <div class="first-keypoint-preview" *ngIf="tour.firstKeyPoint">
+            <h4 class="keypoint-title">
+              <mat-icon>location_on</mat-icon>
+              Start: {{ tour.firstKeyPoint.name }}
+            </h4>
+            <div class="keypoint-content">
+              <p class="keypoint-description">{{ tour.firstKeyPoint.description }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
             <xp-tour-reviews 
               [tourId]="tour.id!"
               [currentUserId]="currentUserId">
             </xp-tour-reviews>
           </div>
+
         </mat-card-content>
 
         <mat-card-actions>
           <button
             mat-button
-            (click)="expandReviews(tour)">
-            <mat-icon>rate_review</mat-icon>
-            {{ expandedTourId === tour.id ? 'Hide' : 'Reviews' }}
+            (click)="toggleReviews(tour.id)">
+            <mat-icon>{{ expandedTourId === tour.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+            {{ expandedTourId === tour.id ? 'Hide Reviews' : 'Show Reviews' }}
           </button>
+          
           <button
             mat-stroked-button
             color="primary"
@@ -76,8 +91,8 @@
             Add to cart
           </button>
 
-          <button    
-            mat-raised-button
+          <button 
+              mat-raised-button
             color="accent"
             (click)="startTour(tour)"
             [disabled]="isStartingTour(tour.id!) || hasActiveTour">

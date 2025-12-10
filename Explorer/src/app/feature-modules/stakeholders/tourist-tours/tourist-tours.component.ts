@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Tour, TourStatus } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { Router } from '@angular/router';
@@ -8,7 +7,8 @@ import { TourExecutionService } from '../../tour-execution/tour-execution.servic
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
-
+import { TourPreview } from '../../tour-authoring/model/tour-preview.model';
+import { TourStatus } from '../../tour-authoring/model/tour.model'; // Dodat import za Enum
 
 @Component({
   selector: 'xp-tourist-tours',
@@ -17,14 +17,16 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 })
 export class TouristToursComponent implements OnInit {
 
-  tours: Tour[] = [];
+  tours: TourPreview[] = [];
   isLoading = false;
   startingTourId: number | null = null;
   hasActiveTour = false;
-  TourStatus = TourStatus;
-
+  
   expandedTourId: number | null = null;
   currentUserId?: number;
+
+  // Dodato da bi HTML prepoznao enum
+  TourStatus = TourStatus;
 
   constructor(
     private tourService: TourService,
@@ -58,20 +60,21 @@ export class TouristToursComponent implements OnInit {
 
   loadTours(): void {
     this.isLoading = true;
-    this.tourService.getPublishedToursForTourist().subscribe({
-      next: (tours: Tour[]) => {
+    this.tourService.getPublishedTourPreviews().subscribe({
+      next: (tours: TourPreview[]) => {
         this.tours = tours || [];
         this.isLoading = false;
+        console.log('Loaded tour previews:', this.tours);
       },
       error: (error: any) => {
-        console.error('Error loading tours for tourist:', error);
+        console.error('Error loading tour previews:', error);
         this.isLoading = false;
         this.showError('Error loading tours');
       }
     });
   }
 
-  addToCart(tour: Tour): void {
+  addToCart(tour: TourPreview): void {
     if (!tour.id) {
       this.showError('Invalid tour.');
       return;
@@ -88,13 +91,12 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-    startTour(tour: Tour): void {
+  startTour(tour: TourPreview): void {
     if (!tour.id) {
       this.showError('Invalid tour.');
       return;
     }
 
-    // ✅ Provera za aktivnu turu
     this.tourExecutionService.getActiveTourExecution().subscribe({
       next: (activeExecution) => {
         if (activeExecution) {
@@ -112,10 +114,10 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-  private proceedWithTourStart(tour: Tour): void {
+  private proceedWithTourStart(tour: TourPreview): void {
     this.startingTourId = tour.id!;
 
-    console.log('[Start Tour] Getting position from Position Simulator (which uses TouristMapService)...');
+    console.log('[Start Tour] Getting position from Position Simulator...');
 
     this.positionSimulator.getCurrentPosition().subscribe({
       next: (position) => {
@@ -159,7 +161,12 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-   getStatusLabel(status: TourStatus): string {
+  getDifficultyLabel(difficulty: string): string {
+    return difficulty;
+  }
+
+  // Vraćena metoda za labelu statusa
+  getStatusLabel(status: TourStatus): string {
     switch (status) {
       case TourStatus.Published:
         return 'Published';
@@ -168,12 +175,25 @@ export class TouristToursComponent implements OnInit {
       case TourStatus.Draft:
         return 'Draft';
       default:
-        return 'Unknown';
+        return 'Published'; // Fallback posto koristimo preview endpoint
     }
   }
 
   isStartingTour(tourId: number): boolean {
     return this.startingTourId === tourId;
+  }
+
+  toggleReviews(tourId: number): void {
+    if (this.expandedTourId === tourId) {
+      this.expandedTourId = null;
+    } else {
+      this.expandedTourId = tourId;
+    }
+  }
+
+  getStarArray(rating: number): boolean[] {
+    const fullStars = Math.floor(rating);
+    return Array(5).fill(false).map((_, i) => i < fullStars);
   }
 
   private showSuccess(message: string): void {
@@ -188,12 +208,5 @@ export class TouristToursComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
-  }
-  expandReviews(tour: Tour): void {
-    if (this.expandedTourId === tour.id) {
-      this.expandedTourId = null;  // Collapse
-    } else {
-      this.expandedTourId = tour.id;  // Expand
-    }
   }
 }
