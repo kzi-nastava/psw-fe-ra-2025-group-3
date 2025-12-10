@@ -46,18 +46,10 @@ export class TourProblemDetailsAdminComponent implements OnInit {
         }
         if (this.problem.adminDeadline) {
           const d = new Date(this.problem.adminDeadline);
-          //const localDate = new Date(
-          //  d.getTime() - d.getTimezoneOffset() * 60000
-          //);
-          //this.deadlineInput = localDate.toISOString().slice(0, 16);
-
           const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
           this.deadlineInput = local.toISOString().slice(0, 16);
 
-          // proveravamo da li je deadline prošao
           this.problem.isDeadlineExpired = d.getTime() < Date.now();
-
-          //this.problem.isDeadlineExpired = d < new Date();
         } else {
           this.problem.isDeadlineExpired = false;
         }
@@ -135,11 +127,6 @@ export class TourProblemDetailsAdminComponent implements OnInit {
     }
 
     this.savingDeadline = true;
-
-    //const localDate = new Date(this.deadlineInput);
-    //const utcDate = new Date(
-    //  localDate.getTime() - localDate.getTimezoneOffset() * 60000
-    //);
 
     const dto: AdminDeadlineDto = {
       deadline: selectedDate.toISOString()  
