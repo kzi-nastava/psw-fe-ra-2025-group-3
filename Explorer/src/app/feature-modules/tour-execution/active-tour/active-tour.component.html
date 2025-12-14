@@ -22,17 +22,26 @@
       <mat-card class="tour-info-card">
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
-          <mat-card-subtitle>Active Tour</mat-card-subtitle>
+         <mat-card-subtitle>
+  <span 
+    class="status-badge" 
+    [ngClass]="{
+      'status-published': tour.status === 1,
+      'status-archived': tour.status === 2
+    }">
+    {{ tour.status === 1 ? 'PUBLISHED' : tour.status === 2 ? 'ARCHIVED' : 'UNKNOWN' }}
+  </span>
+</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <p class="tour-description">{{ tour.description }}</p>
           
           <!-- STATISTICS -->
           <div class="tour-stats">
-            <div class="stat-item">
-              <mat-icon>explore</mat-icon>
-              <span>Progress: {{ execution.progressPercentage | number:'1.0-0' }}%</span>
-            </div>
+                  <div class="stat-item">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>Completed: {{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }}</span>
+      </div>
             
             <div class="stat-item">
               <mat-icon>flag</mat-icon>
@@ -55,9 +64,13 @@
             </div>
           </div>
 
-          <!-- ACTION BUTTONS -->
+                  <!-- ACTION BUTTONS -->
           <div class="action-buttons">
-            <button mat-raised-button color="primary" (click)="completeTour()">
+            <button 
+              mat-raised-button 
+              color="primary" 
+              (click)="completeTour()"
+              [disabled]="!canCompleteTour()">
               <mat-icon>check_circle</mat-icon>
               Complete Tour
             </button>
@@ -66,8 +79,15 @@
               Abandon Tour
             </button>
           </div>
-        </mat-card-content>
-      </mat-card>
+
+          <!-- PORUKA -->
+          <p *ngIf="!canCompleteTour()" class="completion-warning">
+            ⚠️ Complete all {{ getTotalKeyPoints() }} key points to finish the tour 
+            ({{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }} completed)
+          </p>
+
+              </mat-card-content> 
+      </mat-card> 
 
       <!-- ✅ NOVA SEKCIJA - KEY POINTS LISTA -->
       <mat-card class="keypoints-card">

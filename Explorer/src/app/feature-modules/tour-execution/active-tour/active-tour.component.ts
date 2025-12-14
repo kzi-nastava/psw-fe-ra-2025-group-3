@@ -72,26 +72,41 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadTourDetails(tourId: number): void {
-    this.tourService.getPublishedToursForTourist().subscribe({
-      next: (tours) => {
-        this.tour = tours.find(t => t.id === tourId) || null;
+ loadTourDetails(tourId: number): void {
+  console.log('[Active Tour] 🔄 Loading tour details for ID:', tourId);
+  
+  this.tourService.getTourDetails(tourId).subscribe({
+    next: (tourDetails: any) => {
+      console.log('[Active Tour] ✅ Loaded tour details:', tourDetails);
+      
+      this.tour = {
+        id: tourDetails.id,
+        name: tourDetails.name,
+        description: tourDetails.description,
+        difficulty: tourDetails.difficulty,
+        status: tourDetails.status,
+        price: tourDetails.price,
+        distanceInKm: tourDetails.length || 0,
+        authorId: 0,
+        createdAt: new Date(),
+        tags: tourDetails.tags || [],
+        equipment: [],
+        tourDurations: []
+      } as Tour; // dodato  as Tour
 
-        if (!this.tour) {
-          console.error('[Active Tour] ❌ Tour not found');
-          this.isLoading = false;
-          return;
-        }
-
-        console.log('[Active Tour] ✅ Loaded tour:', this.tour);
-        this.loadKeyPoints(tourId);
-      },
-      error: (err) => {
-        console.error('[Active Tour] ❌ Error loading tours:', err);
-        this.isLoading = false;
-      }
-    });
-  }
+      console.log('[Active Tour] ✅ Mapped tour:', this.tour);
+      this.loadKeyPoints(tourId);
+    },
+    error: (err) => {
+      console.error('[Active Tour] ❌ Error loading tour details:', err);
+      this.isLoading = false;
+      this.snackBar.open('Failed to load tour details', 'Close', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  });
+}
 
  loadKeyPoints(tourId: number): void {
   console.log('[Active Tour] 🔄 Loading key points for tour:', tourId);
@@ -173,36 +188,100 @@ private updateKeyPointsWithStatus(): void {
   console.log('[Active Tour] 🔓 KeyPoints with status:', this.keyPointsWithStatus);
 }
 
-  private setupMapRoute(): void {
-    if (!this.execution || !this.nextKeyPoint) {
-      console.error('[Active Tour] ❌ Cannot setup route - missing execution or nextKeyPoint');
-      return;
+private setupMapRoute(): void {
+  if (!this.execution) {
+    console.error('[Active Tour] ❌ Cannot setup route - missing execution');
+    return;
+  }
+
+  console.log('[Active Tour] 🗺️ Setting up map route...');
+
+  // ✅ Dobavi trenutnu poziciju turiste
+  this.positionSimulator.getCurrentPosition().subscribe({
+    next: (currentPosition) => {
+      const touristLat = currentPosition.latitude || this.execution!.startLatitude;
+      const touristLng = currentPosition.longitude || this.execution!.startLongitude;
+
+      // ✅ Ako ima NEXT KeyPoint, crtaj putanju
+      if (this.nextKeyPoint) {
+        this.routeWaypoints = [
+          { lat: touristLat, lng: touristLng },
+          { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
+        ];
+      } else {
+        // ✅ Sve tačke completirane - nema putanje
+        this.routeWaypoints = [];
+      }
+
+      // ✅ PRIKAŽI SVE MARKERE sa pravilnim bojama
+      this.routePoints = [
+        {
+          lat: touristLat,
+          lng: touristLng,
+          name: '📍 Your Current Position'
+        },
+        ...this.keyPoints.map(kp => {
+          const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
+          const isNext = this.nextKeyPoint?.id === kp.id;
+
+          let icon = '⚪'; // Locked (sivo)
+          if (isCompleted) icon = '✅'; // Completed (zeleno)
+          else if (isNext) icon = '🎯'; // Next (crveno)
+
+          return {
+            lat: kp.latitude,
+            lng: kp.longitude,
+            name: `${icon} ${kp.name}`
+          };
+        })
+      ];
+
+      console.log('[Active Tour] ✅ Map updated with tourist position and route to NEXT');
+    },
+    error: (err) => {
+      console.error('[Active Tour] ❌ Failed to get current position:', err);
+      // Fallback: koristi početnu poziciju
+      this.setupMapRouteFallback();
     }
+  });
+}
 
-    console.log('[Active Tour] 🗺️ Setting up map route...');
+// ✅ FALLBACK ako Position Simulator ne radi
+private setupMapRouteFallback(): void {
+  if (!this.execution) return;
 
+  if (this.nextKeyPoint) {
     this.routeWaypoints = [
       { lat: this.execution.startLatitude, lng: this.execution.startLongitude },
       { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
     ];
-
-    this.routePoints = [
-      {
-        lat: this.execution.startLatitude,
-        lng: this.execution.startLongitude,
-        name: '📍 Your Start Position'
-      },
-      ...this.keyPoints.map(kp => ({
-        lat: kp.latitude,
-        lng: kp.longitude,
-        name: `🎯 ${kp.name}`
-      }))
-    ];
-
-    console.log('[Active Tour] ✅ Map route setup complete');
+  } else {
+    this.routeWaypoints = [];
   }
 
-  private startLocationCheck(): void {
+  this.routePoints = [
+    {
+      lat: this.execution.startLatitude,
+      lng: this.execution.startLongitude,
+      name: '📍 Your Start Position'
+    },
+    ...this.keyPoints.map(kp => {
+      const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
+      const isNext = this.nextKeyPoint?.id === kp.id;
+
+      let icon = '⚪';
+      if (isCompleted) icon = '✅';
+      else if (isNext) icon = '🎯';
+
+      return {
+        lat: kp.latitude,
+        lng: kp.longitude,
+        name: `${icon} ${kp.name}`
+      };
+    })
+  ];
+}
+ private startLocationCheck(): void {
   if (!this.execution) return;
 
   console.log('[Active Tour] ✅ Starting location check every 10 seconds');
@@ -224,6 +303,9 @@ private updateKeyPointsWithStatus(): void {
 
         console.log('[Location Check] 📍 Current position:', position);
 
+        // ✅ AŽURIRAJ MAPU SA TRENUTNOM POZICIJOM (bez čekanja backend response)
+        this.updateMapWithCurrentPosition(position.latitude, position.longitude);
+
         const dto: LocationCheckDto = {
           tourId: this.execution!.tourId,
           currentLatitude: position.latitude,
@@ -242,10 +324,7 @@ private updateKeyPointsWithStatus(): void {
           this.execution.lastActivity = result.lastActivity;
 
           if (result.keyPointCompleted && result.completedKeyPointId) {
-            // ✅ PRIKAŽI NOTIFIKACIJU
             this.showKeyPointUnlocked(result.completedKeyPointId, result.totalCompletedKeyPoints);
-
-            // ✅ REFRESH EXECUTION SA BACKEND-A (dobija ažurirane CompletedKeyPoints)
             this.refreshExecution();
           }
         }
@@ -255,6 +334,42 @@ private updateKeyPointsWithStatus(): void {
         console.error('[Location Check] ❌ Error:', err);
       }
     });
+}
+
+// ✅ NOVA METODA: Ažuriraj mapu sa trenutnom pozicijom turiste
+private updateMapWithCurrentPosition(lat: number, lng: number): void {
+  if (!this.execution || !this.nextKeyPoint) return;
+
+  // Ažuriraj putanju da ide od trenutne pozicije do NEXT
+  this.routeWaypoints = [
+    { lat, lng },
+    { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
+  ];
+
+  // Ažuriraj marker za trenutnu poziciju
+  this.routePoints = [
+    {
+      lat,
+      lng,
+      name: '📍 Your Current Position'
+    },
+    ...this.keyPoints.map(kp => {
+      const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
+      const isNext = this.nextKeyPoint?.id === kp.id;
+
+      let icon = '⚪';
+      if (isCompleted) icon = '✅';
+      else if (isNext) icon = '🎯';
+
+      return {
+        lat: kp.latitude,
+        lng: kp.longitude,
+        name: `${icon} ${kp.name}`
+      };
+    })
+  ];
+
+  console.log('[Active Tour] 🗺️ Map updated with tourist position:', { lat, lng });
 }
 
   private stopLocationCheck(): void {
@@ -280,12 +395,19 @@ private updateKeyPointsWithStatus(): void {
         this.updateKeyPointsWithStatus();
         
         // ✅ AŽURIRAJ NEXT KEYPOINT
+        const previousNext = this.nextKeyPoint?.id;
         this.nextKeyPoint = this.findNextKeyPoint();
         console.log('[Active Tour] 🎯 New next KeyPoint:', this.nextKeyPoint);
         
-        // ✅ AŽURIRAJ MAPU
-        if (this.nextKeyPoint) {
+        // ✅ AŽURIRAJ MAPU SAMO AKO SE NEXT KEYPOINT PROMENIO
+        if (this.nextKeyPoint && this.nextKeyPoint.id !== previousNext) {
+          console.log('[Active Tour] 🗺️ Next KeyPoint changed - updating route from start to:', this.nextKeyPoint.name);
           this.setupMapRoute();
+        } else if (!this.nextKeyPoint) {
+          // ✅ SVE TAČKE KOMPLETOVANE - Očisti PUTANJU (ali ostavi markere)
+          console.log('[Active Tour] ✅ All KeyPoints completed - clearing route');
+          this.routeWaypoints = [];
+          // routePoints ostaju - prikazuju se svi markeri
         }
       }
     },
@@ -396,32 +518,52 @@ private updateKeyPointsWithStatus(): void {
     });
   }
 
-  getFormattedStartTime(): string {
-    if (!this.execution) return '';
-    return new Date(this.execution.startTime).toLocaleString('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short'
-    });
-  }
+getFormattedStartTime(): string {
+  if (!this.execution) return '';
+  
+  // ✅ Parsuj datum i dodaj 1h (UTC+1 za Srbiju)
+  const date = new Date(this.execution.startTime);
+  date.setHours(date.getHours() + 1);  // Dodaj 1h za UTC+1
+  
+  return date.toLocaleString('sr-RS', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+}
 
-  getFormattedLastActivity(): string {
-    if (!this.execution?.lastActivity) return 'Never';
-    return new Date(this.execution.lastActivity).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
+getFormattedLastActivity(): string {
+  if (!this.execution?.lastActivity) return 'Never';
+  
+  return new Date(this.execution.lastActivity).toLocaleTimeString('sr-RS', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Europe/Belgrade'  // ✅ Eksplicitno postavi Beograd timezone
+  });
+}
 
-  getFormattedCompletedAt(completedAt?: Date): string {
-    if (!completedAt) return '';
-    return new Date(completedAt).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
+ getFormattedCompletedAt(completedAt?: Date): string {
+  if (!completedAt) return '';
+  
+  return new Date(completedAt).toLocaleTimeString('sr-RS', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Europe/Belgrade'  // ✅ Eksplicitno postavi Beograd timezone
+  });
+}
+    canCompleteTour(): boolean {
+      if (!this.execution || !this.keyPoints.length) return false;
+      
+      const totalKeyPoints = this.keyPoints.length;
+      const completedCount = this.execution.completedKeyPoints?.length || 0;
+      
+      return completedCount === totalKeyPoints;
   }
-
   getNextKeyPointName(): string {
     return this.nextKeyPoint?.name || 'N/A';
   }

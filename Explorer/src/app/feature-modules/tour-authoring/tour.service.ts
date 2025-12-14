@@ -74,4 +74,9 @@ export class TourService {
   getTourDetails(id: number) {
   return this.http.get<TourDetails>(`${this.touristBaseUrl}/${id}/details`);
 }
+
+  getMyPurchasedTours(): Observable<Tour[]> {
+    return this.http.get<Tour[]>(environment.apiHost + 'tourist/tours/my-tours');
+  }
+
 }
