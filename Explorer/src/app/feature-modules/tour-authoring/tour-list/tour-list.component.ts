@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TourService } from '../tour.service';
 import { Tour, TourStatus, TourDifficulty } from '../model/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
+import { TourWizardComponent } from '../tour-wizard/tour-wizard.component';
 
 @Component({
   selector: 'app-tour-list',
@@ -66,9 +67,11 @@ export class TourListComponent implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(TourFormComponent, {
-      width: '650px',
+    const dialogRef = this.dialog.open(TourWizardComponent, {
+      width: '90vw',
       maxWidth: '90vw',
+      height: '85vh',
+      maxHeight: '85vh',
       data: { mode: 'create' },
       disableClose: false,
       autoFocus: true
@@ -87,9 +90,11 @@ export class TourListComponent implements OnInit {
         return;
     }
 
-    const dialogRef = this.dialog.open(TourFormComponent, {
-      width: '650px',
+    const dialogRef = this.dialog.open(TourWizardComponent, {
+      width: '90vw',
       maxWidth: '90vw',
+      height: '85vh',
+      maxHeight: '85vh',
       data: { mode: 'edit', tour: tour },
       disableClose: false,
       autoFocus: true

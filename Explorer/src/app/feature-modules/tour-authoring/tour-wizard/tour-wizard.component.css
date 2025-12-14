@@ -1,0 +1,68 @@
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step {
+  height: 100%;
+  overflow: auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.placeholder {
+  padding: 16px;
+  border: 1px dashed #bbb;
+  border-radius: 12px;
+}
+
+
+.wizard {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;           /* ili 75vh, po želji */
+  max-height: 80vh;
+}
+
+.tabs {
+  flex: 1;
+  min-height: 0;          /* bitno za overflow u flex-u */
+}
+
+/* sadržaj taba */
+.step-content {
+  height: 100%;
+  overflow: auto;         /* skrol unutar taba */
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* da mat-tab-body može da se “rastegne” u flex */
+:host ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+:host ::ng-deep .mat-mdc-tab-body-content {
+  height: 100%;
+  overflow: hidden;       /* overflow kontrolišemo u .step-content */
+}
+
+:host ::ng-deep xp-key-point-page .kp-page {
+  max-width: 100%;
+  padding: 0;
+}

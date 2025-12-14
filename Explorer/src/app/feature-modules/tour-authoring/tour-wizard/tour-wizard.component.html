@@ -1,0 +1,56 @@
+<div class="wizard">
+  <div class="header">
+    <h2>Tour wizard</h2>
+    <div class="actions">
+      <button mat-stroked-button (click)="cancel()">Otkaži</button>
+    </div>
+  </div>
+
+  <mat-tab-group
+    [(selectedIndex)]="selectedIndex"
+    class="tabs"
+    (selectedTabChange)="onTabChange($event)"
+  >
+    <mat-tab label="Osnovni podaci">
+      <div class="step">
+        <app-tour-form
+          [mode]="data.mode"
+          [tour]="data.tour"
+          [embedded]="true"
+          (saved)="onTourFormSaved($event)"
+          (cancelled)="cancel()"
+        ></app-tour-form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Ključne tačke">
+      <div class="step">
+        <xp-key-point-page
+          *ngIf="isOnKeyPoints && tourId as id"
+          [currentTourId]="id"
+        ></xp-key-point-page>
+
+        <div *ngIf="isOnKeyPoints && !tourId" class="empty-state">
+          Prvo sačuvaj turu da bi dodavao ključne tačke.
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="footer">
+    <button mat-stroked-button (click)="back()" [disabled]="isOnBasics">Nazad</button>
+
+    <button
+      mat-raised-button
+      *ngIf="isOnBasics"
+      (click)="goToKeyPoints()"
+      [disabled]="!canOpenKeyPoints && data.mode !== 'edit'"
+    >
+      Dalje
+    </button>
+
+    <button mat-raised-button *ngIf="isOnKeyPoints" (click)="finish()">
+      Završi
+    </button>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,6 +22,13 @@ export class TourFormComponent implements OnInit {
   selectedEquipmentIds: number[] = [];
   isArchived: boolean = false; 
 
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() tour?: Tour;
+  @Input() embedded: boolean = false; // kad je u wizardu
+
+  @Output() saved = new EventEmitter<{success: boolean, tourId?: number}>();
+  @Output() cancelled = new EventEmitter<void>();
+
   tourDurations: TourDuration[] = [];
   transportTypes = [
     { value: TransportType.Walking, label: 'Walking' },
@@ -41,10 +48,11 @@ export class TourFormComponent implements OnInit {
     private fb: FormBuilder,
     private tourService: TourService,
     private snackBar: MatSnackBar,
-    public dialogRef: MatDialogRef<TourFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'create' | 'edit', tour?: Tour }
+    @Optional() public dialogRef?: MatDialogRef<TourFormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: { mode: 'create' | 'edit', tour?: Tour }
   ) {
-    this.isEditMode = data.mode === 'edit';
+    const effectiveMode = this.data?.mode ?? this.mode;
+    this.isEditMode = effectiveMode === 'edit';
     this.tourForm = this.createForm();
   }
 
@@ -53,12 +61,20 @@ export class TourFormComponent implements OnInit {
       next: (equipment) => {
         this.availableEquipment = equipment;
 
-        if (this.isEditMode && this.data.tour) {
+        const effectiveTour = this.getEffectiveTour();
+        if (this.isEditMode && effectiveTour) {
+          if (!this.data) this.data = { mode: this.mode, tour: effectiveTour };
+          else this.data.tour = effectiveTour;
+
           this.initializeEditMode();
         }
       },
       error: () => {
-        if (this.isEditMode && this.data.tour) {
+        const effectiveTour = this.getEffectiveTour();
+        if (this.isEditMode && effectiveTour) {
+          if (!this.data) this.data = { mode: this.mode, tour: effectiveTour };
+          else this.data.tour = effectiveTour;
+
           this.initializeEditMode();
         }
       }
@@ -66,23 +82,24 @@ export class TourFormComponent implements OnInit {
   }
 
   initializeEditMode(): void {
-    if (!this.data.tour) return;
+    const tour = this.data?.tour;
+    if (!tour) return;
 
-    this.tourId = this.data.tour.id;
-    this.tags = [...(this.data.tour.tags || [])];
-    this.tourDurations = [...(this.data.tour.tourDurations || [])];
+    this.tourId = tour.id;
+    this.tags = [...(tour.tags || [])];
+    this.tourDurations = [...(tour.tourDurations || [])];
     
-    this.isArchived = this.data.tour.status === TourStatus.Archived;
+    this.isArchived = tour.status === TourStatus.Archived;
 
-    if (this.data.tour.equipment) {
-        this.selectedEquipmentIds = this.data.tour.equipment.map(e => e.id);
+    if (tour.equipment) {
+        this.selectedEquipmentIds = tour.equipment.map(e => e.id);
     }
 
     this.tourForm.patchValue({
-      name: this.data.tour.name,
-      description: this.data.tour.description,
-      difficulty: this.data.tour.difficulty,
-      price: this.data.tour.price
+      name: tour.name,
+      description: tour.description,
+      difficulty: tour.difficulty,
+      price: tour.price
     });
   }
 
@@ -137,7 +154,7 @@ export class TourFormComponent implements OnInit {
     }
   }
 
-  isEquipmentSelected(equipmentId: number): boolean {
+  isEquipmentSelected(equipmentId: number): string | boolean {
     return this.selectedEquipmentIds.includes(equipmentId);
   }
 
@@ -186,6 +203,7 @@ export class TourFormComponent implements OnInit {
         },
         error: (error) => {
           this.showError('Error updating tour');
+          this.saved.emit({success: false});
         }
       });
     } else {
@@ -198,12 +216,14 @@ export class TourFormComponent implements OnInit {
       };
 
       this.tourService.createTour(createDto).subscribe({
-        next: () => {
+        next: (tour: Tour) => {
           this.showSuccess('Tour successfully created');
-          this.dialogRef.close(true);
+          this.saved.emit({success: true, tourId: tour.id});
+          if (!this.embedded) this.dialogRef?.close(true);
         },
         error: (error) => {
           this.showError('Error creating tour');
+          this.saved.emit({success: false});
         }
       });
     }
@@ -212,16 +232,16 @@ export class TourFormComponent implements OnInit {
   private synchronizeEquipment(): void {
   console.log('=== SYNC START ===');
   console.log('tourId:', this.tourId);
-  console.log('data.tour:', this.data.tour);
+  console.log('data.tour:', this.data?.tour);
   
-  if (!this.tourId || !this.data.tour) {
+  if (!this.tourId || !this.data?.tour) {
     console.log('Early return - no tourId or data.tour');
     this.showSuccess('Tour successfully updated');
-    this.dialogRef.close(true);
+    this.dialogRef?.close(true);
     return;
   }
 
-  const originalEquipmentIds = this.data.tour.equipment?.map(e => e.id) || [];
+  const originalEquipmentIds = this.data?.tour?.equipment?.map(e => e.id) || [];
   console.log('Original equipment IDs:', originalEquipmentIds);
   console.log('Selected equipment IDs:', this.selectedEquipmentIds);
   
@@ -240,7 +260,8 @@ export class TourFormComponent implements OnInit {
   if (allRequests.length === 0) {
     console.log('No equipment changes');
     this.showSuccess('Tour successfully updated');
-    this.dialogRef.close(true);
+    this.saved.emit({success: true, tourId: this.tourId});
+    if (!this.embedded) this.dialogRef?.close(true);
     return;
   }
 
@@ -254,7 +275,8 @@ export class TourFormComponent implements OnInit {
         if (completed === allRequests.length) {
           if (!hasError) {
             this.showSuccess('Tour successfully updated');
-            this.dialogRef.close(true);
+            this.saved.emit({success: true, tourId: this.tourId});
+            if (!this.embedded) this.dialogRef?.close(true);
           }
         }
       },
@@ -263,7 +285,7 @@ export class TourFormComponent implements OnInit {
         completed++;
         if (completed === allRequests.length) {
           this.showError('Error updating equipment');
-          this.dialogRef.close(true);
+          if (!this.embedded) this.dialogRef?.close(true);
         }
       }
     });
@@ -271,7 +293,7 @@ export class TourFormComponent implements OnInit {
 }
 
   onCancel(): void {
-    this.dialogRef.close(false);
+    this.dialogRef?.close(false);
   }
 
   getErrorMessage(fieldName: string): string {
@@ -305,5 +327,9 @@ export class TourFormComponent implements OnInit {
 
   private showError(message: string): void {
     this.snackBar.open(message, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
+  }
+
+  private getEffectiveTour(): Tour | undefined {
+    return this.data?.tour ?? this.tour;
   }
 }

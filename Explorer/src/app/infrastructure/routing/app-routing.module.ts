@@ -50,6 +50,8 @@ import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/p
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
 
+import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
+
 const routes: Routes = [
 
   // Public

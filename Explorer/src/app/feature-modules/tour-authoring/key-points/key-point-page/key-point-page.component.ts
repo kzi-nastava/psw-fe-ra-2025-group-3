@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, Input } from '@angular/core';
 import { KeyPointService } from '../key-point.service';
 import { KeyPoint } from '../model/key-point.model';
 import { KeyPointFormComponent } from '../key-point-form/key-point-form.component';
@@ -9,7 +9,7 @@ import { TourService } from '../../tour.service';
   templateUrl: './key-point-page.component.html',
   styleUrls: ['./key-point-page.component.css']
 })
-export class KeyPointPageComponent implements OnInit {
+export class KeyPointPageComponent implements OnInit, OnChanges {
 
   @ViewChild(KeyPointFormComponent)
   keyPointFormComponent!: KeyPointFormComponent;
@@ -29,8 +29,8 @@ export class KeyPointPageComponent implements OnInit {
   // For list – full key point objects
   keyPoints: KeyPoint[] = [];
 
-  // TODO: kasnije ovo veži za pravu turu (iz rute ili slično)
-  currentTourId: number = 1;
+  @Input() currentTourId!: number;
+
 
   constructor(
     private keyPointService: KeyPointService,
@@ -38,8 +38,14 @@ export class KeyPointPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  if (this.currentTourId) this.loadKeyPoints();
+}
+
+ngOnChanges(changes: SimpleChanges): void {
+  if (changes['currentTourId'] && this.currentTourId) {
     this.loadKeyPoints();
   }
+}
 
   private loadKeyPoints(): void {
     this.keyPointService.getAll(this.currentTourId).subscribe({
@@ -78,7 +84,7 @@ export class KeyPointPageComponent implements OnInit {
   onAddNewKeyPoint(): void {
     this.selectedKeyPoint = null;
     this.selectedPoint = null;
-    this.keyPointFormComponent.resetForm();
+    this.keyPointFormComponent?.resetForm();
   }
 
   // Click on list item – enter EDIT mode
@@ -130,7 +136,7 @@ export class KeyPointPageComponent implements OnInit {
         if (this.selectedKeyPoint && this.selectedKeyPoint.id === kp.id) {
           this.selectedKeyPoint = null;
           this.selectedPoint = null;
-          this.keyPointFormComponent.resetForm();
+          this.keyPointFormComponent?.resetForm();
         }
       },
       error: (err: any) => {
@@ -169,7 +175,7 @@ export class KeyPointPageComponent implements OnInit {
           console.log('Key point updated:', saved);
           this.loadKeyPoints();
 
-          this.keyPointFormComponent.resetForm();
+          this.keyPointFormComponent?.resetForm();
           this.selectedPoint = null;
           this.selectedKeyPoint = null;
         },
@@ -187,7 +193,7 @@ export class KeyPointPageComponent implements OnInit {
         console.log('Key point saved:', saved);
         this.loadKeyPoints();
 
-        this.keyPointFormComponent.resetForm();
+        this.keyPointFormComponent?.resetForm();
         this.selectedPoint = null;
         this.selectedKeyPoint = null;
       },
@@ -201,7 +207,7 @@ export class KeyPointPageComponent implements OnInit {
     console.log('Key point create/edit cancelled.');
     this.selectedKeyPoint = null;
     this.selectedPoint = null;
-    this.keyPointFormComponent.resetForm();
+    this.keyPointFormComponent?.resetForm();
   }
 
   onRouteDistanceChanged(distanceKm: number) {

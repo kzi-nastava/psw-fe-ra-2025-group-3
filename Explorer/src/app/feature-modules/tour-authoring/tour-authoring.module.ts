@@ -11,6 +11,7 @@ import { KeyPointFormComponent } from './key-points/key-point-form/key-point-for
 import { KeyPointListComponent } from './key-points/key-point-list/key-point-list.component';
 import { KeyPointPageComponent } from './key-points/key-point-page/key-point-page.component';
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
+import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TourExecutionModule } from '../tour-execution/tour-execution.module';
     KeyPointListComponent,
     KeyPointPageComponent,
     AuthorProblemListComponent,
-    AuthorProblemDetailsComponent
+    AuthorProblemDetailsComponent,
+    TourWizardComponent
 
   ],
   imports: [
