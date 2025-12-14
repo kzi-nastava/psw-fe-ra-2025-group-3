@@ -92,6 +92,7 @@ export class TourProblemDetailsAdminComponent implements OnInit {
       case ProblemStatus.Open: return '#2196f3';
       case ProblemStatus.Resolved: return '#4caf50';
       case ProblemStatus.Unresolved: return '#f44336';
+      case ProblemStatus.Closed: return '#fbc02d';
       default: return '#9e9e9e';
     }
   }

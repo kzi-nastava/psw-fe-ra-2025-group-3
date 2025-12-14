@@ -46,7 +46,8 @@ export enum ProblemPriority {
 export enum ProblemStatus {
   Open = 0,
   Resolved = 1,
-  Unresolved = 2
+  Unresolved = 2,
+  Closed = 3
 }
 
 export enum AuthorType {

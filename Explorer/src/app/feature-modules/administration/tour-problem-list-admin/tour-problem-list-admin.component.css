@@ -208,6 +208,11 @@
   color: #FFFFFF;
 }
 
+.status-closed {
+  background: #fbc02d;
+  color: #FFFFFF;
+}
+
 .tour-card mat-card-content {
   padding: var(--spacing-4);
   flex-grow: 1;

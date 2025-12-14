@@ -26,7 +26,7 @@
 
   <!-- Problem Info Card -->
   <mat-card class="problem-info-card" 
-            [class.overdue-card]="problem.isOverdue && problem.status === 0">
+            [class.overdue-card]="problem.isOverdue && problem.status === ProblemStatus.Open">
     <mat-card-header>
       <mat-card-title>
         {{ problem.tourName || 'Tour #' + problem.tourId }}
@@ -37,7 +37,7 @@
           <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
             {{getStatusName(problem.status)}}
           </span>
-          <span *ngIf="problem.isOverdue && problem.status === 0" class="overdue-badge">
+          <span *ngIf="problem.isOverdue && problem.status === ProblemStatus.Open" class="overdue-badge">
             ⚠️ OVERDUE ({{problem.daysOpen}} days)
           </span>
         </div>
@@ -65,7 +65,7 @@
           <p>{{problem.resolvedByTouristComment}}</p>
         </div>
 
-        <div class="admin-notice" *ngIf="problem.status === 0">
+        <div class="admin-notice" *ngIf="problem.status === ProblemStatus.Open">
           <mat-icon>info</mat-icon>
           <span>As an administrator, you can set a deadline for the author, monitor its expiration,
                 close the problem or penalize the author if the issue is not resolved.</span>
@@ -109,6 +109,7 @@
 
           <button mat-stroked-button color="accent"
                   class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
                   (click)="onCloseProblem()"
                   [disabled]="closing">
             <mat-icon class="btn-icon">check_circle</mat-icon>
@@ -117,6 +118,7 @@
 
           <button mat-stroked-button color="warn"
                   class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
                   (click)="onPenalizeAuthor()"
                   [disabled]="penalizing">
             <mat-icon class="btn-icon">gavel</mat-icon>
