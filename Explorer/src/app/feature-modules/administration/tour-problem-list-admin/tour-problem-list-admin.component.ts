@@ -37,7 +37,7 @@ export class TourProblemListAdminComponent implements OnInit {
 
   applyFilter(): void {
     if (this.showOnlyOverdue) {
-      this.filteredProblems = this.problems.filter(p => p.isOverdue);
+      this.filteredProblems = this.problems.filter(p => p.isOverdue && p.status === ProblemStatus.Open);
     } else {
       this.filteredProblems = this.problems;
     }
@@ -75,6 +75,7 @@ export class TourProblemListAdminComponent implements OnInit {
       case ProblemStatus.Open: return '#2196f3';
       case ProblemStatus.Resolved: return '#4caf50';
       case ProblemStatus.Unresolved: return '#f44336';
+      case ProblemStatus.Closed: return '#fbc02d';
       default: return '#9e9e9e';
     }
   }

@@ -25,7 +25,7 @@
     <mat-card *ngFor="let problem of filteredProblems" 
               class="tour-card"
               [class.overdue-card]="problem.isOverdue && problem.status === 0"
-              [matTooltip]="problem.isOverdue && problem.status === 0 ? '⚠️ Problem prijavljen pre više od 5 dana' : ''">
+              [matTooltip]="problem.isOverdue && problem.status === 0 ? '⚠️ This problem was reported more than 5 days ago' : ''">
       <mat-card-header>
         <mat-card-title>
           {{ problem.tourName || 'Tour #' + problem.tourId }}
