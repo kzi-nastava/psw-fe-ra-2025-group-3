@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-// TODO: promeni import da odgovara tvom projektu
-import { Tour } from '../model/tour.model'; // npr. '../../tours/model/tour.model'
+// TODO: adjust the import to match your project
+import { Tour } from '../model/tour.model'; // e.g. '../../tours/model/tour.model'
 
 type WizardMode = 'create' | 'edit';
 
@@ -26,7 +26,13 @@ export class TourWizardComponent implements OnInit {
     private dialogRef: MatDialogRef<TourWizardComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TourWizardData,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.dialogRef.keydownEvents().subscribe(e => {
+      if (e.key === 'Escape') {
+        this.closeWizard();
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (this.data.mode === 'edit' && this.data.tour?.id != null) {
@@ -52,9 +58,11 @@ export class TourWizardComponent implements OnInit {
 
   goToKeyPoints(): void {
     if (!this.canOpenKeyPoints) {
-      this.snackBar.open('Prvo sačuvaj turu da bi dodavao ključne tačke.', 'U redu', {
-        duration: 2500,
-      });
+      this.snackBar.open(
+        'Please save the tour first in order to add key points.',
+        'OK',
+        { duration: 2500 }
+      );
       this.goToStep(0);
       return;
     }
@@ -76,11 +84,11 @@ export class TourWizardComponent implements OnInit {
   }
 
   cancel(): void {
-    this.dialogRef.close(false);
+    this.closeWizard();
   }
 
   finish(): void {
-    this.dialogRef.close(true);
+    this.closeWizard();
   }
 
   onTourFormSaved(event: { success: boolean; tourId?: number }): void {
@@ -95,15 +103,27 @@ export class TourWizardComponent implements OnInit {
 
   onTabChange(e: MatTabChangeEvent): void {
     if (e.index === 1 && !this.canOpenKeyPoints) {
-      this.snackBar.open('Ne možeš na ključne tačke dok ne sačuvaš turu.', 'U redu', {
-        duration: 2500,
-      });
+      this.snackBar.open(
+        'You cannot access key points until the tour is saved.',
+        'OK',
+        { duration: 2500 }
+      );
       Promise.resolve().then(() => (this.selectedIndex = 0));
       return;
     }
 
     if (e.index === 1) {
       this.dispatchResizeSoon();
+    }
+  }
+
+  private closeWizard(): void {
+    if (this.tourId) {
+      // Tour already exists → notify parent to refresh the list
+      this.dialogRef.close({ ok: true, tourId: this.tourId });
+    } else {
+      // Nothing was saved
+      this.dialogRef.close(false);
     }
   }
 }

@@ -31,7 +31,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     constructor(private mapService: MapService) {}
 
     private initMap(): void {
-        this.map = L.map('map', {
+        const el = document.getElementById('map');
+        if (!el) return;            // <--- ključno: nema container-a još
+        this.map = L.map(el, {
             center: this.center,
             zoom: this.zoom,
             attributionControl: false,
@@ -243,7 +245,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         L.Marker.prototype.options.icon = DefaultIcon;
         
-        this.initMap();
+        setTimeout(() => {
+            this.initMap();
+            if (this.map) {
+                setTimeout(() => this.map.invalidateSize(), 0);
+                setTimeout(() => this.map.invalidateSize(), 150);
+            }
+        }, 0);
     }
     ngOnChanges(changes: SimpleChanges): void {
     // Ako je promenjena početna tačka i mapa je već inicijalizovana – postavi marker

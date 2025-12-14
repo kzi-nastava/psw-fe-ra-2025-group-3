@@ -2,7 +2,7 @@
   <div class="header">
     <h2>Tour wizard</h2>
     <div class="actions">
-      <button mat-stroked-button (click)="cancel()">Otkaži</button>
+      <button mat-stroked-button (click)="cancel()">Cancel</button>
     </div>
   </div>
 
@@ -11,7 +11,7 @@
     class="tabs"
     (selectedTabChange)="onTabChange($event)"
   >
-    <mat-tab label="Osnovni podaci">
+    <mat-tab label="Basic information">
       <div class="step">
         <app-tour-form
           [mode]="data.mode"
@@ -23,7 +23,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Ključne tačke">
+    <mat-tab label="Key points">
       <div class="step">
         <xp-key-point-page
           *ngIf="isOnKeyPoints && tourId as id"
@@ -31,14 +31,16 @@
         ></xp-key-point-page>
 
         <div *ngIf="isOnKeyPoints && !tourId" class="empty-state">
-          Prvo sačuvaj turu da bi dodavao ključne tačke.
+          Please save the tour first in order to add key points.
         </div>
       </div>
     </mat-tab>
   </mat-tab-group>
 
   <div class="footer">
-    <button mat-stroked-button (click)="back()" [disabled]="isOnBasics">Nazad</button>
+    <button mat-stroked-button (click)="back()" [disabled]="isOnBasics">
+      Back
+    </button>
 
     <button
       mat-raised-button
@@ -46,11 +48,11 @@
       (click)="goToKeyPoints()"
       [disabled]="!canOpenKeyPoints && data.mode !== 'edit'"
     >
-      Dalje
+      Next
     </button>
 
     <button mat-raised-button *ngIf="isOnKeyPoints" (click)="finish()">
-      Završi
+      Finish
     </button>
   </div>
 </div>
