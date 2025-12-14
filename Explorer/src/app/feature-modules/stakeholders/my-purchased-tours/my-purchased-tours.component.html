@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="tour-list-container">
+    <div class="header">
+      <h1>My Purchased Tours</h1>
+      <p class="cart-subtitle">
+        Tours you've purchased. You can start them even if they're archived.
+      </p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length === 0" class="empty-state">
+      <mat-icon>shopping_bag</mat-icon>
+      <h2>No purchased tours yet</h2>
+      <p>Browse available tours and add them to your cart to get started.</p>
+      <button mat-raised-button color="primary" routerLink="/tourist/tours">
+        <mat-icon>explore</mat-icon>
+        Discover Tours
+      </button>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
+      <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
+
+        <mat-card-header>
+          <mat-card-title>{{ tour.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <span 
+              class="status-badge" 
+              [ngClass]="{
+                'status-published': tour.status === TourStatus.Published,
+                'status-archived': tour.status === TourStatus.Archived
+              }">
+              {{ getStatusLabel(tour.status) }}
+            </span>
+            <span class="status-badge badge-owned">
+              <mat-icon>check_circle</mat-icon>
+              PURCHASED
+            </span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="description">{{ tour.description }}</p>
+
+          <div class="tour-details">
+            <div class="detail-item">
+              <mat-icon>terrain</mat-icon>
+              <span>{{ tour.difficulty }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+            </div>
+          </div>
+
+          <div class="tags" *ngIf="tour.tags && tour.tags.length > 0">
+            <mat-chip-set>
+              <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+            <xp-tour-reviews 
+              [tourId]="tour.id!"
+              [currentUserId]="currentUserId">
+            </xp-tour-reviews>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button 
+            mat-button 
+            color="primary" 
+            (click)="viewDetails(tour.id!)">
+            <mat-icon>info</mat-icon>
+            View Details
+          </button>
+
+          <button    
+            mat-raised-button
+            color="accent"
+            (click)="startTour(tour)"
+            [disabled]="isStartingTour(tour.id!) || hasActiveTour">
+
+            <mat-spinner *ngIf="isStartingTour(tour.id!)" diameter="20"></mat-spinner>
+
+            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">play_arrow</mat-icon>
+
+            <span *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
+            <span *ngIf="isStartingTour(tour.id!)">Starting...</span>
+            <span *ngIf="hasActiveTour && !isStartingTour(tour.id!)">Active Tour Running</span>
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+</div>
