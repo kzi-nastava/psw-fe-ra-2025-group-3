@@ -1,57 +1,100 @@
+/* Layout */
 .wizard {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.step {
-  height: 100%;
-  overflow: auto;
-  padding: 12px;
-  box-sizing: border-box;
-}
-
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
-}
-
-.placeholder {
-  padding: 16px;
-  border: 1px dashed #bbb;
-  border-radius: 12px;
-}
-
-
-.wizard {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;           /* ili 75vh, po želji */
+  height: 80vh;
   max-height: 80vh;
+  min-height: 520px;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 16px;
 }
 
-.tabs {
+/* Header */
+.wizard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4, 16px);
+  padding: var(--spacing-6, 24px) var(--spacing-6, 24px);
+  background: var(--color-neutral-0, #fff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.wizard__title-wrap {
+  min-width: 0;
+}
+
+.wizard__title {
+  margin: 0;
+  font-family: var(--font-family-display, Poppins);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-secondary-800, #00695C);
+  line-height: 1.2;
+}
+
+.wizard__subtitle {
+  margin-top: 6px;
+  font-family: var(--font-family-primary, Inter);
+  font-size: 14px;
+  color: var(--color-neutral-800, #424242);
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wizard__actions {
+  flex: 0 0 auto;
+}
+
+/* Tabs take remaining space */
+.wizard__tabs {
   flex: 1;
-  min-height: 0;          /* bitno za overflow u flex-u */
+  min-height: 0; /* critical for inner scroll */
 }
 
-/* sadržaj taba */
+/* Only one scroll: inside tab content */
 .step-content {
   height: 100%;
-  overflow: auto;         /* skrol unutar taba */
-  padding: 12px;
+  overflow: auto;
+  padding: var(--spacing-6, 24px);
   box-sizing: border-box;
 }
 
-/* da mat-tab-body može da se “rastegne” u flex */
+/* Empty state */
+.empty-state {
+  padding: var(--spacing-6, 24px);
+  border: 1px dashed rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  background: rgba(0, 188, 212, 0.08); /* ok, but prefer variable if you have it */
+  color: var(--color-neutral-800, #424242);
+}
+
+/* Footer */
+.wizard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4, 16px);
+  padding: var(--spacing-5, 20px) var(--spacing-6, 24px);
+  background: var(--color-neutral-0, #fff);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.wizard__footer-actions {
+  display: flex;
+  gap: var(--spacing-2, 8px);
+}
+
+/* ---- Material internals: prevent dialog from adding its own scrollbar ---- */
+:host ::ng-deep .mat-mdc-dialog-content {
+  overflow: hidden !important;
+  max-height: none !important;
+  padding: 0 !important;
+}
+
 :host ::ng-deep .mat-mdc-tab-body-wrapper {
   flex: 1;
   min-height: 0;
@@ -59,10 +102,5 @@
 
 :host ::ng-deep .mat-mdc-tab-body-content {
   height: 100%;
-  overflow: hidden;       /* overflow kontrolišemo u .step-content */
-}
-
-:host ::ng-deep xp-key-point-page .kp-page {
-  max-width: 100%;
-  padding: 0;
+  overflow: hidden; /* we scroll only inside .step-content */
 }
