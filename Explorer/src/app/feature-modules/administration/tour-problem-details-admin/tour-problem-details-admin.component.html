@@ -135,7 +135,7 @@
       <mat-card-header>
         <mat-card-title>
           <mat-icon>chat</mat-icon>
-          Conversation (Read-Only)
+          Conversation
         </mat-card-title>
       </mat-card-header>
 
@@ -162,9 +162,23 @@
       </div>
     </div>
 
-    <div class="admin-notice-footer">
-      <mat-icon>visibility</mat-icon>
-      <span>Administrators can view messages but cannot participate in the conversation between tourist and author.</span>
+    <!-- Admin Message Input -->
+    <div class="message-input">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your message as Admin</mat-label>
+        <textarea matInput 
+                  [formControl]="messageControl" 
+                  rows="3" 
+                  placeholder="Type your message to respond to this problem..."></textarea>
+        <mat-icon matPrefix>edit</mat-icon>
+        <mat-error *ngIf="messageControl.hasError('required')">Message is required</mat-error>
+      </mat-form-field>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="sendMessage()" 
+              [disabled]="messageControl.invalid || sendingMessage">
+        <mat-icon>send</mat-icon> Send Message
+      </button>
     </div>
 
       </mat-card-content>

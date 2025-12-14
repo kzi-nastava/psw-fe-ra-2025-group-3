@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TourProblemService } from '../../tour-execution/tour-problem.service';
 import { TourProblem, ProblemStatus, ProblemCategory, ProblemPriority, AuthorType, AdminDeadlineDto} from '../../tour-execution/model/tour-problem.model';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-tour-problem-details-admin',
@@ -19,6 +20,10 @@ export class TourProblemDetailsAdminComponent implements OnInit {
 
   successMessage: string | null = null;
   errorMessage: string | null = null;
+
+  // For admin messaging
+  messageControl = new FormControl('', [Validators.required, Validators.minLength(1)]);
+  sendingMessage: boolean = false;
   
   ProblemStatus = ProblemStatus;
   AuthorType = AuthorType;
@@ -197,6 +202,42 @@ export class TourProblemDetailsAdminComponent implements OnInit {
         } else {
           this.errorMessage = 'Failed to penalize the author. The author might have already been penalized.';
         }
+      }
+    });
+  }
+
+  sendMessage(): void {
+    if (this.messageControl.invalid || !this.problem) return;
+
+    const messageContent = this.messageControl.value!;
+    this.sendingMessage = true;
+
+    this.tourProblemService.addAdminMessage(this.problem.id, { content: messageContent }).subscribe({
+      next: (message) => {
+        if (!this.problem!.messages) {
+          this.problem!.messages = [];
+        }
+        // Ensure the message has correct authorType
+        if (message.authorType === undefined || message.authorType === null) {
+          message.authorType = AuthorType.Admin;
+        }
+        if (!message.content) {
+          message.content = messageContent;
+        }
+        if (!message.timestamp) {
+          message.timestamp = new Date().toISOString();
+        }
+        this.problem!.messages = [...this.problem!.messages, message];
+        this.messageControl.reset();
+        this.sendingMessage = false;
+        this.successMessage = 'Message sent successfully.';
+        setTimeout(() => this.successMessage = null, 3000);
+      },
+      error: (err) => {
+        console.error('Error sending message:', err);
+        this.errorMessage = 'Failed to send message. Please try again.';
+        this.sendingMessage = false;
+        setTimeout(() => this.errorMessage = null, 3000);
       }
     });
   }

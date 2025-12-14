@@ -75,6 +75,11 @@ export class TourProblemService {
   getOverdueProblems(): Observable<TourProblem[]> {
     return this.http.get<TourProblem[]>(`${environment.apiHost}admin/tour-problems/overdue`);
   }
+
+  // Admin method for sending messages
+  addAdminMessage(problemId: number, dto: AddMessageDto): Observable<Message> {
+    return this.http.post<Message>(`${environment.apiHost}admin/tour-problems/${problemId}/messages`, dto);
+  }
   
   // Metoda za postavljanje roka
   setDeadline(problemId: number, dto: AdminDeadlineDto): Observable<void> {
