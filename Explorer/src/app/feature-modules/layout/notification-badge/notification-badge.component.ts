@@ -15,21 +15,18 @@ export class NotificationBadgeComponent implements OnInit, OnDestroy {
 
   constructor(private notificationService: NotificationService) {}
 
-  ngOnInit(): void {
-    this.notificationService.unreadCount$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(count => {
-        this.unreadCount = count;
-      });
+ ngOnInit(): void {
+  this.notificationService.startSignalRConnection();
 
-    this.notificationService.refreshUnreadCount();
+  this.notificationService.unreadCount$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(count => {
+      this.unreadCount = count;
+    });
 
-    interval(30000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.notificationService.refreshUnreadCount();
-      });
-  }
+  this.notificationService.refreshUnreadCount();
+}
+
 
   ngOnDestroy(): void {
     this.destroy$.next();
