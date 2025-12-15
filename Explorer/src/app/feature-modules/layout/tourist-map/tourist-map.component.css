@@ -72,3 +72,30 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* SNACKBAR STILOVI */
+::ng-deep .success-snackbar {
+  background: linear-gradient(135deg, #00C853, #00897B) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+::ng-deep .success-snackbar .mat-simple-snack-bar-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+::ng-deep .error-snackbar {
+  background: linear-gradient(135deg, #F44336, #E57373) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+::ng-deep .error-snackbar .mat-simple-snack-bar-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

@@ -27,6 +27,10 @@
   padding: var(--spacing-8) 0;
 }
 
+/* ============================================================================
+   EMPTY STATE - DISCOVER TOURS DUGME CIJAN BOJA
+   ============================================================================ */
+
 .empty-state {
   text-align: center;
   padding: var(--spacing-8) var(--spacing-4);
@@ -51,6 +55,39 @@
   max-width: 32rem;
   margin: 0 auto var(--spacing-4);
 }
+
+/* DISCOVER TOURS DUGME - CIJAN STIL */
+.empty-state button[mat-raised-button] {
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: var(--font-size-base) !important;
+  padding: 12px 32px !important;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
+  transition: all var(--transition-normal) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.empty-state button[mat-raised-button]:hover {
+  background: linear-gradient(135deg, #26C6DA, #00BCD4) !important;
+  box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* SMANJI IKONU UNUTAR DUGMETA */
+.empty-state button[mat-raised-button] mat-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+}
+
+/* ============================================================================
+   TOURS GRID
+   ============================================================================ */
 
 .tours-grid {
   display: grid;
@@ -162,22 +199,44 @@ mat-card-actions {
   margin-top: var(--spacing-4);
 }
 
+/* START TOUR DUGME - CIJAN */
 mat-card-actions button[mat-raised-button] {
-  background: linear-gradient(135deg, #26C6DA, #00ACC1) !important;
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important;
   color: white !important;
-  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+  font-weight: 600 !important;
+  padding: 10px 24px !important;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+  transition: all var(--transition-normal) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
 mat-card-actions button[mat-raised-button]:hover:not([disabled]) {
-  background: linear-gradient(135deg, #4DD0E1, #26C6DA) !important;
-  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #26C6DA, #00BCD4) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* SMANJI IKONU U START TOUR DUGMETU */
+mat-card-actions button[mat-raised-button] mat-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
 }
 
 mat-card-actions button[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
   background: rgba(158, 158, 158, 0.3) !important;
+  transform: none !important;
+}
+
+mat-card-actions button[disabled]:hover {
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
 }
 
 @media (max-width: 768px) {
