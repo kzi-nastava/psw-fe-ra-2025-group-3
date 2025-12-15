@@ -10,6 +10,7 @@ import { TouristMapComponent } from './tourist-map/tourist-map.component';
 import { NotificationBadgeComponent } from './notification-badge/notification-badge.component';
 import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { NotificationItemComponent } from './notification-item/notification-item
     CommonModule,
     MaterialModule,
     RouterModule,
+    MatSnackBarModule,
     SharedModule
   ],
   exports: [
