@@ -28,6 +28,15 @@ export class TourReviewService {
   getReviewsForTour(tourId: number): Observable<TourReview[]> {
     return this.http.get<TourReview[]>(`${this.baseUrl}/tour/${tourId}`);
   }
+    getTouristName(touristId: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/tourist-name/${touristId}`, { 
+      responseType: 'text' 
+    });
+  }
+  getMyAllReviews(): Observable<TourReview[]> {
+  return this.http.get<TourReview[]>(`${this.baseUrl}/my-reviews`);
+}
+
 
   getMyReview(tourId: number): Observable<TourReview | null> {
     return this.http.get<TourReview>(`${this.baseUrl}/my-review/${tourId}`);

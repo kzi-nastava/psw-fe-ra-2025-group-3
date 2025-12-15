@@ -50,7 +50,7 @@ import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/bl
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
-
+import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 const routes: Routes = [
 
   // Public
@@ -99,11 +99,12 @@ const routes: Routes = [
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/my-tours', component: MyPurchasedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //tour execution
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
+  { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
-
+  
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
   { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },

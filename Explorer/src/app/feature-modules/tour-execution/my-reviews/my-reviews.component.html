@@ -1,0 +1,105 @@
+<!-- src/app/feature-modules/tour-execution/my-reviews/my-reviews.component.html -->
+
+<div class="my-reviews-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>
+      <mat-icon>rate_review</mat-icon>
+      My Reviews
+    </h1>
+    <p class="subtitle">Manage all your tour reviews in one place</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- No Reviews -->
+  <div *ngIf="!isLoading && myReviews.length === 0" class="no-reviews">
+    <mat-icon>rate_review</mat-icon>
+    <h2>No reviews yet</h2>
+    <p>You haven't reviewed any tours yet. Start exploring!</p>
+    <button mat-raised-button color="primary" routerLink="/tourist/tours">
+      <mat-icon>map</mat-icon>
+      Browse Tours
+    </button>
+  </div>
+
+  <!-- Reviews List -->
+  <div *ngIf="!isLoading && myReviews.length > 0" class="reviews-list">
+    <mat-card *ngFor="let review of myReviews" class="review-card">
+      
+      <!-- Card Header -->
+      <mat-card-header>
+        <div class="review-header">
+          <div class="tour-info">
+  <h3>{{ review.tourName }}</h3>
+  <div class="meta">
+    <span class="date">{{ getFormattedDate(review.createdAt) }}</span>
+    <span *ngIf="review.isEdited" class="edited-badge">
+      <mat-icon>edit</mat-icon> Edited
+    </span>
+  </div>
+</div>
+          <div class="rating-badge">
+            <mat-icon>star</mat-icon>
+            <span>{{ review.rating }}/5</span>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <!-- Card Content -->
+      <mat-card-content>
+        <!-- Ako NIJE edit mode -->
+        <div *ngIf="editingReviewId !== review.id">
+          <!-- Stars -->
+          <div class="stars-display">
+            <mat-icon *ngFor="let star of getStarsArray(review.rating)" class="filled">
+              star
+            </mat-icon>
+          </div>
+
+          <!-- Comment -->
+          <p *ngIf="review.comment" class="comment">{{ review.comment }}</p>
+
+          <!-- Images -->
+          <div *ngIf="review.images && review.images.length > 0" class="images-grid">
+            <div *ngFor="let img of review.images" class="image-thumbnail">
+              <img [src]="getImageUrl(img.imageUrl)" alt="Review image">
+            </div>
+          </div>
+
+          <!-- Meta Info -->
+          <div class="review-footer">
+            <div class="progress-info">
+              <mat-icon>route</mat-icon>
+              <span>{{ review.progressPercentage | number:'1.0-0' }}% completed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ako JE edit mode -->
+        <div *ngIf="editingReviewId === review.id" class="edit-section">
+          <xp-tour-review-form
+            [tourId]="review.tourId"
+            [existingReview]="review"
+            (reviewSubmitted)="onReviewUpdated()">
+          </xp-tour-review-form>
+          <button mat-button (click)="cancelEdit()" class="cancel-btn">
+            <mat-icon>close</mat-icon>
+            Cancel
+          </button>
+        </div>
+      </mat-card-content>
+
+      <!-- Card Actions -->
+      <mat-card-actions *ngIf="editingReviewId !== review.id">
+        <button mat-raised-button color="accent" (click)="toggleEdit(review.id)">
+          <mat-icon>edit</mat-icon>
+          Edit Review
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
