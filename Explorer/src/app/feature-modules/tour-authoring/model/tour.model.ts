@@ -13,8 +13,11 @@ export interface Tour {
   publishedAt?: Date;
   archivedAt?: Date;
   tourDurations: TourDuration[];
+  
+  averageRating?: number;
+  firstKeyPoint?: KeyPoint;
+  reviews?: TourReview[];
 }
-
 
 export interface Equipment {
   id: number;
@@ -42,7 +45,7 @@ export enum TourDifficulty {
 export enum TourStatus {
   Draft = 0,
   Published = 1,
-  Archived = 2 // dodato za tour-execution
+  Archived = 2
 }
 
 export interface TourCreateDto {
@@ -60,4 +63,22 @@ export interface TourUpdateDto {
   tags: string[];
   price?: number;
   tourDurations: TourDuration[];
+}
+
+export interface KeyPoint {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string; 
+  latitude: number;
+  longitude: number;
+}
+
+export interface TourReview {
+  id: number;
+  rating: number;
+  comment: string;
+  touristId: number;
+  touristName?: string;
+  createdAt?: Date;
 }
