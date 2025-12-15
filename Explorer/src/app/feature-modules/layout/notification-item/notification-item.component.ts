@@ -86,9 +86,7 @@ export class NotificationItemComponent {
         const route = user.role === 'author' 
           ? `/author/tour-problems/${this.notification.relatedEntityId}`
           : `/tour-execution/tour-problems/${this.notification.relatedEntityId}`;
-        this.router.navigate([route]).then(() => {
-          window.location.reload();
-        });
+        this.router.navigate([route]);
       }
     }).unsubscribe();
     this.notificationClicked.emit();

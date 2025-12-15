@@ -1,23 +1,23 @@
 .full-width {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-4);
 }
 
 .coordinates-row {
   display: flex;
-  gap: 16px;
+  gap: var(--spacing-4);
 }
 
 .half-width {
   flex: 1;
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-4);
 }
 
 mat-dialog-content {
   min-width: 500px;
-  padding: 20px;
+  padding: var(--spacing-6);
 }
 
 mat-dialog-actions {
-  padding: 16px 20px;
+  padding: var(--spacing-4) var(--spacing-6);
 }

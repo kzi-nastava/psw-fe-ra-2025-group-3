@@ -1,6 +1,10 @@
+// tour-reviews-list.component.ts
+
 import { Component, Input, OnInit } from '@angular/core';
 import { TourReviewService } from '../tour-review.service';
 import { TourReview } from '../model/tour-review.model';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'xp-tour-reviews-list',
@@ -9,13 +13,17 @@ import { TourReview } from '../model/tour-review.model';
 })
 export class TourReviewsListComponent implements OnInit {
   @Input() tourId!: number;
+  @Input() currentUserId?: number;
+  @Input() showOnlyMyReviews = false;
   
   reviews: TourReview[] = [];
   isLoading = true;
   averageRating = 0;
   totalReviews = 0;
+  Math = Math;
 
-   Math = Math;
+  // ✅ Cache
+  private nameCache: Map<number, string> = new Map();
 
   constructor(private reviewService: TourReviewService) {}
 
@@ -25,19 +33,55 @@ export class TourReviewsListComponent implements OnInit {
 
   loadReviews(): void {
     this.isLoading = true;
-    this.reviewService.getReviewsForTour(this.tourId).subscribe({
+
+    const reviewsObservable = this.showOnlyMyReviews
+      ? this.reviewService.getMyAllReviews()
+      : this.reviewService.getReviewsForTour(this.tourId);
+
+    reviewsObservable.subscribe({
       next: (reviews) => {
-        this.reviews = reviews.sort((a, b) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        this.reviews = reviews;
         this.calculateAverageRating();
-        this.isLoading = false;
+        this.loadTouristNames();
       },
       error: (err) => {
-        console.error('[Reviews List] Error loading reviews:', err);
+        console.error('Error loading reviews:', err);
         this.isLoading = false;
       }
     });
+  }
+
+  // ✅ Učitaj imena
+  private loadTouristNames(): void {
+    if (this.reviews.length === 0) {
+      this.isLoading = false;
+      return;
+    }
+
+    const uniqueTouristIds = [...new Set(this.reviews.map(r => r.touristId))];
+    
+    const nameRequests = uniqueTouristIds.map(touristId => 
+      this.reviewService.getTouristName(touristId).pipe(
+        catchError(() => of('Anonymous'))
+      )
+    );
+
+    forkJoin(nameRequests).subscribe({
+      next: (names) => {
+        uniqueTouristIds.forEach((touristId, index) => {
+          this.nameCache.set(touristId, names[index]);
+        });
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // ✅ Getter
+  getTouristName(touristId: number): string {
+    return this.nameCache.get(touristId) || 'Anonymous';
   }
 
   private calculateAverageRating(): void {
@@ -63,12 +107,12 @@ export class TourReviewsListComponent implements OnInit {
       day: 'numeric'
     });
   }
-  getImageUrl(imageUrl: string): string {
-  return this.reviewService.getImageUrl(imageUrl);
-}
 
-openImageModal(image: any): void {
-  // TODO: Implementiraj modal za full-size prikaz
-  window.open(this.getImageUrl(image.imageUrl), '_blank');
-}
+  getImageUrl(imageUrl: string): string {
+    return this.reviewService.getImageUrl(imageUrl);
+  }
+
+  openImageModal(image: any): void {
+    window.open(this.getImageUrl(image.imageUrl), '_blank');
+  }
 }

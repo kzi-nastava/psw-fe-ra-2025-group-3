@@ -482,3 +482,33 @@ h3 mat-icon {
 .alert mat-icon {
   font-size: 22px;
 }
+
+.message-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.message-input mat-form-field mat-icon[matPrefix] {
+  margin-right: var(--spacing-2);
+  color: var(--color-primary-600);
+}
+
+.message-input button {
+  align-self: flex-end;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  padding: var(--spacing-2) var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  transition: all var(--transition-normal);
+}
+
+.message-input button:hover:not(:disabled) {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}

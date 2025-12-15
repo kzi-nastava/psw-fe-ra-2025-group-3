@@ -26,7 +26,7 @@
 
   <!-- Problem Info Card -->
   <mat-card class="problem-info-card" 
-            [class.overdue-card]="problem.isOverdue && problem.status === 0">
+            [class.overdue-card]="problem.isOverdue && problem.status === ProblemStatus.Open">
     <mat-card-header>
       <mat-card-title>
         {{ problem.tourName || 'Tour #' + problem.tourId }}
@@ -37,7 +37,7 @@
           <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
             {{getStatusName(problem.status)}}
           </span>
-          <span *ngIf="problem.isOverdue && problem.status === 0" class="overdue-badge">
+          <span *ngIf="problem.isOverdue && problem.status === ProblemStatus.Open" class="overdue-badge">
             ⚠️ OVERDUE ({{problem.daysOpen}} days)
           </span>
         </div>
@@ -65,7 +65,7 @@
           <p>{{problem.resolvedByTouristComment}}</p>
         </div>
 
-        <div class="admin-notice" *ngIf="problem.status === 0">
+        <div class="admin-notice" *ngIf="problem.status === ProblemStatus.Open">
           <mat-icon>info</mat-icon>
           <span>As an administrator, you can set a deadline for the author, monitor its expiration,
                 close the problem or penalize the author if the issue is not resolved.</span>
@@ -109,6 +109,7 @@
 
           <button mat-stroked-button color="accent"
                   class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
                   (click)="onCloseProblem()"
                   [disabled]="closing">
             <mat-icon class="btn-icon">check_circle</mat-icon>
@@ -117,6 +118,7 @@
 
           <button mat-stroked-button color="warn"
                   class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
                   (click)="onPenalizeAuthor()"
                   [disabled]="penalizing">
             <mat-icon class="btn-icon">gavel</mat-icon>
@@ -133,7 +135,7 @@
       <mat-card-header>
         <mat-card-title>
           <mat-icon>chat</mat-icon>
-          Conversation (Read-Only)
+          Conversation
         </mat-card-title>
       </mat-card-header>
 
@@ -160,9 +162,23 @@
       </div>
     </div>
 
-    <div class="admin-notice-footer">
-      <mat-icon>visibility</mat-icon>
-      <span>Administrators can view messages but cannot participate in the conversation between tourist and author.</span>
+    <!-- Admin Message Input -->
+    <div class="message-input">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your message as Admin</mat-label>
+        <textarea matInput 
+                  [formControl]="messageControl" 
+                  rows="3" 
+                  placeholder="Type your message to respond to this problem..."></textarea>
+        <mat-icon matPrefix>edit</mat-icon>
+        <mat-error *ngIf="messageControl.hasError('required')">Message is required</mat-error>
+      </mat-form-field>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="sendMessage()" 
+              [disabled]="messageControl.invalid || sendingMessage">
+        <mat-icon>send</mat-icon> Send Message
+      </button>
     </div>
 
       </mat-card-content>

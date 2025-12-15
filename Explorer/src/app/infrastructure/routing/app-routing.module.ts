@@ -37,6 +37,7 @@ import { PreferenceOverviewComponent } from 'src/app/feature-modules/stakeholder
 import { TouristEquipmentComponent } from 'src/app/feature-modules/stakeholders/tourist-equipment/tourist-equipment.component';
 import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tourist-tours/tourist-tours.component';
 import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
+import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -51,6 +52,7 @@ import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/acti
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
 
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
+import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 
 const routes: Routes = [
 
@@ -98,12 +100,14 @@ const routes: Routes = [
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/my-tours', component: MyPurchasedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //tour execution
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
+  { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
-
+  
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
   { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },

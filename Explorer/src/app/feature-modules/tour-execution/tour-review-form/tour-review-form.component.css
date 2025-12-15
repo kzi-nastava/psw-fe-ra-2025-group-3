@@ -20,11 +20,11 @@
 .warning-card {
   margin-bottom: var(--spacing-6);
   border-radius: var(--border-radius-xl);
-  border-left: 5px solid #FF9800;
+  border-left: 5px solid var(--color-warning);
   box-shadow: var(--shadow-md);
   background: linear-gradient(135deg, 
-    rgba(255, 152, 0, 0.05) 0%, 
-    rgba(255, 152, 0, 0.02) 100%
+    rgba(255, 193, 7, 0.05) 0%, 
+    rgba(255, 193, 7, 0.02) 100%
   );
 }
 
@@ -38,7 +38,7 @@
   font-size: 40px;
   width: 40px;
   height: 40px;
-  color: #FF9800;
+  color: var(--color-warning);
   flex-shrink: 0;
 }
 
@@ -52,7 +52,7 @@
 .warning-content p {
   margin: 0 0 var(--spacing-4) 0;
   font-size: var(--font-size-base);
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-800);
   line-height: 1.6;
 }
 
@@ -75,7 +75,7 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
 }
 
 /* ============================================================================
@@ -92,7 +92,7 @@
 .form-card mat-card-header {
   background: linear-gradient(135deg, 
     rgba(0, 188, 212, 0.05) 0%, 
-    rgba(0, 150, 136, 0.05) 100%
+    rgba(0, 188, 212, 0.05) 100%
   );
   padding: var(--spacing-6);
   border-bottom: 1px solid rgba(0, 188, 212, 0.1);
@@ -112,7 +112,7 @@
   font-size: 28px;
   width: 28px;
   height: 28px;
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
 }
 
 .form-card mat-card-content {
@@ -138,7 +138,7 @@
 }
 
 .required {
-  color: #F44336;
+  color: var(--color-error);
 }
 
 /* ============================================================================
@@ -179,7 +179,7 @@
 }
 
 .star-button mat-icon.filled {
-  color: #FFC107;
+  color: var(--color-warning);
 }
 
 .rating-text {
@@ -191,7 +191,7 @@
 
 mat-error {
   font-size: var(--font-size-sm);
-  color: #F44336;
+  color: var(--color-error);
   margin-top: var(--spacing-2);
 }
 
@@ -268,7 +268,7 @@ mat-form-field {
 }
 
 .image-preview.new {
-  border: 3px dashed var(--color-secondary-500);
+  border: 3px dashed var(--color-primary-500);
 }
 
 .delete-btn {
@@ -287,7 +287,7 @@ mat-form-field {
 }
 
 .delete-btn:hover:not([disabled]) {
-  background: rgba(244, 67, 54, 1) !important;
+  background: var(--color-error) !important;
   transform: scale(1.1);
 }
 
@@ -328,7 +328,7 @@ mat-form-field {
   margin-top: var(--spacing-2);
   max-width: 500px;
   font-size: var(--font-size-sm);
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-800);
   text-align: center;
 }
 
@@ -343,7 +343,7 @@ mat-form-field {
   padding: var(--spacing-3) var(--spacing-4);
   background: linear-gradient(135deg, 
     rgba(0, 188, 212, 0.08) 0%, 
-    rgba(0, 150, 136, 0.08) 100%
+    rgba(0, 188, 212, 0.08) 100%
   );
   border-radius: var(--border-radius-lg);
   border: 1px solid rgba(0, 188, 212, 0.15);
@@ -357,7 +357,7 @@ mat-form-field {
   font-size: 20px;
   width: 20px;
   height: 20px;
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
 }
 
 /* ============================================================================

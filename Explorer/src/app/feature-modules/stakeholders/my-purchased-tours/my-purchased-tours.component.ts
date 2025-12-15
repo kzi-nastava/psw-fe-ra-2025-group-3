@@ -1,47 +1,39 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Tour, TourStatus } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
-import { ShoppingCartService } from '../shopping-cart.service';
-import { Router } from '@angular/router';
 import { TourExecutionService } from '../../tour-execution/tour-execution.service';
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
-interface TouristTourView extends Tour {
-  isPurchased?: boolean;
-}
-
 @Component({
-  selector: 'xp-tourist-tours',
-  templateUrl: './tourist-tours.component.html',
-  styleUrls: ['./tourist-tours.component.css']
+  selector: 'xp-my-purchased-tours',
+  templateUrl: './my-purchased-tours.component.html',
+  styleUrls: ['./my-purchased-tours.component.css']
 })
-export class TouristToursComponent implements OnInit {
-
-  tours: TouristTourView[] = [];
+export class MyPurchasedToursComponent implements OnInit {
+  tours: Tour[] = [];
   isLoading = false;
   startingTourId: number | null = null;
   hasActiveTour = false;
   TourStatus = TourStatus;
-
   expandedTourId: number | null = null;
   currentUserId?: number;
 
   constructor(
     private tourService: TourService,
-    private shoppingCartService: ShoppingCartService,
     private snackBar: MatSnackBar,
     private positionSimulator: PositionSimulatorService,
     private tourExecutionService: TourExecutionService,
     private router: Router,
-    private authService: AuthService 
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.checkActiveTour();
-    this.loadTours();
+    this.loadMyPurchasedTours();
     const user = this.authService.user$.value;
     if (user) {
       this.currentUserId = user.id;
@@ -59,49 +51,19 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-  loadTours(): void {
+  loadMyPurchasedTours(): void {
     this.isLoading = true;
 
-    // --- IZMENA: Koristimo getPublishedTourPreviews umesto getPublishedToursForTourist ---
-    // Ovo radimo samo da bismo dobili rating i firstKeyPoint.
-    // Sve ostalo ostaje isto.
-    this.tourService.getPublishedTourPreviews().subscribe({
+    this.tourService.getMyPurchasedTours().subscribe({
       next: (tours: Tour[]) => {
-        this.tours = tours as TouristTourView[];  // cast
-
-        // ✨ STARA LOGIKA: Provera za svaku turu: da li je kupljena
-        // OVO OSTAJE NEPROMENJENO
-        this.tours.forEach(tour => {
-          if (tour.id) {
-            this.tourService.getTourDetails(tour.id).subscribe(details => {
-              tour.isPurchased = !!details.keyPoints;
-            });
-          }
-        });
-
+        this.tours = tours;
+        console.log('[My Purchased Tours] ✅ Loaded:', this.tours);
         this.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Error loading tours for tourist:', error);
+        console.error('[My Purchased Tours] ❌ Error:', error);
         this.isLoading = false;
-        this.showError('Error loading tours');
-      }
-    });
-  }
-
-  addToCart(tour: Tour): void {
-    if (!tour.id) {
-      this.showError('Invalid tour.');
-      return;
-    }
-
-    this.shoppingCartService.addToCart(tour.id).subscribe({
-      next: () => {
-        this.showSuccess('Tour successfully added to your cart!');
-      },
-      error: (error) => {
-        console.error('Add to cart error:', error);
-        this.showError('This tour is already in your cart.');
+        this.showError('Error loading purchased tours');
       }
     });
   }
@@ -112,7 +74,6 @@ export class TouristToursComponent implements OnInit {
       return;
     }
 
-    // ✅ Provera za aktivnu turu
     this.tourExecutionService.getActiveTourExecution().subscribe({
       next: (activeExecution) => {
         if (activeExecution) {
@@ -120,7 +81,7 @@ export class TouristToursComponent implements OnInit {
           this.router.navigate(['/tour-execution/active']);
           return;
         }
-        
+
         this.proceedWithTourStart(tour);
       },
       error: (err) => {
@@ -133,7 +94,7 @@ export class TouristToursComponent implements OnInit {
   private proceedWithTourStart(tour: Tour): void {
     this.startingTourId = tour.id!;
 
-    console.log('[Start Tour] Getting position from Position Simulator (which uses TouristMapService)...');
+    console.log('[Start Tour] Getting position...');
 
     this.positionSimulator.getCurrentPosition().subscribe({
       next: (position) => {
@@ -177,6 +138,10 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
+  viewDetails(tourId: number): void {
+    this.router.navigate(['/tourist/tours', tourId, 'details']);
+  }
+
   getStatusLabel(status: TourStatus): string {
     switch (status) {
       case TourStatus.Published:
@@ -194,6 +159,14 @@ export class TouristToursComponent implements OnInit {
     return this.startingTourId === tourId;
   }
 
+  expandReviews(tour: Tour): void {
+    if (this.expandedTourId === tour.id) {
+      this.expandedTourId = null;
+    } else {
+      this.expandedTourId = tour.id;
+    }
+  }
+
   private showSuccess(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
@@ -206,13 +179,5 @@ export class TouristToursComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
-  }
-  
-  expandReviews(tour: Tour): void {
-    if (this.expandedTourId === tour.id) {
-      this.expandedTourId = null;  // Collapse
-    } else {
-      this.expandedTourId = tour.id;  // Expand
-    }
   }
 }
