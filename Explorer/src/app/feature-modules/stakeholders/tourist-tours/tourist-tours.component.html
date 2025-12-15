@@ -23,8 +23,8 @@
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
           <mat-card-subtitle>
-            <span 
-              class="status-badge" 
+            <span
+              class="status-badge"
               [ngClass]="{
                 'status-published': tour.status === TourStatus.Published,
                 'status-archived': tour.status === TourStatus.Archived
@@ -34,7 +34,6 @@
           </mat-card-subtitle>
         </mat-card-header>
 
-        <!-- BADGES -->
         <div class="tour-badge preview" *ngIf="!tour.isPurchased && tour.status !== TourStatus.Archived">
           PREVIEW ONLY
         </div>
@@ -59,6 +58,12 @@
               <mat-icon>attach_money</mat-icon>
               <span>{{ tour.price | number:'1.2-2' }} RSD</span>
             </div>
+            
+            <div class="detail-item rating-display" *ngIf="tour.averageRating">
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="rating-text">{{ tour.averageRating | number:'1.1-1' }}</span>
+              <span class="review-count">({{ tour.reviews ? tour.reviews.length : 0 }})</span>
+            </div>
           </div>
 
           <div class="tags" *ngIf="tour.tags && tour.tags.length > 0">
@@ -67,8 +72,18 @@
             </mat-chip-set>
           </div>
 
+          <div class="first-keypoint-preview" *ngIf="tour.firstKeyPoint">
+            <h4 class="keypoint-title">
+              <mat-icon>location_on</mat-icon>
+              Start: {{ tour.firstKeyPoint.name }}
+            </h4>
+            <div class="keypoint-content">
+              <p class="keypoint-description">{{ tour.firstKeyPoint.description }}</p>
+            </div>
+          </div>
+
           <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
-            <xp-tour-reviews 
+            <xp-tour-reviews
               [tourId]="tour.id!"
               [currentUserId]="currentUserId">
             </xp-tour-reviews>
@@ -77,16 +92,14 @@
 
         <mat-card-actions>
 
-          <!-- ⭐ VIEW DETAILS BUTTON (NEW) -->
-          <button 
-            mat-button 
-            color="primary" 
+          <button
+            mat-button
+            color="primary"
             [routerLink]="['/tourist/tours', tour.id, 'details']">
             <mat-icon>info</mat-icon>
             View Details
           </button>
 
-          <!-- BUY -->
           <button
             mat-stroked-button
             color="primary"
@@ -100,7 +113,6 @@
             This tour is archived and cannot be purchased.
           </span>
 
-          <!-- START TOUR -->
           <button    
             mat-raised-button
             color="accent"
