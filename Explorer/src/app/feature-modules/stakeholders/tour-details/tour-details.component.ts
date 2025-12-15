@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { TourDetails } from '../model/tour-details.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-tour-details',
@@ -19,13 +20,17 @@ export class TourDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private tourService: TourService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
+
   ) {}
 
   ngOnInit(): void {
     this.tourId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadDetails();
   }
+  currentUserId = this.authService.user$.getValue()?.id;
+
 
   loadDetails(): void {
     this.tourService.getTourDetails(this.tourId).subscribe({
