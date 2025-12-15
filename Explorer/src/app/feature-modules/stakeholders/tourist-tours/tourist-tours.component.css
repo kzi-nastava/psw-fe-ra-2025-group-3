@@ -86,7 +86,7 @@
 }
 
 .status-published {
-  background: rgba(0, 188, 212, 0.12); 
+  background: rgba(0, 188, 212, 0.12);
   color: var(--color-primary-800);
 }
 
@@ -114,6 +114,44 @@
 .detail-item mat-icon {
   font-size: 20px;
 }
+
+/* --- NOVI STILOVI ZA OCENE I PRVU TACKU --- */
+.star-icon {
+  color: #FFA000 !important;
+}
+
+.rating-text {
+  font-weight: 700;
+  color: #F57C00;
+}
+
+.first-keypoint-preview {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid #e0e0e0;
+}
+
+.keypoint-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0 0 var(--spacing-2) 0;
+  color: var(--color-primary-800);
+  font-size: var(--font-size-base);
+}
+
+.keypoint-title mat-icon {
+  color: var(--color-primary-500);
+  font-size: 18px;
+}
+
+.keypoint-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  margin: 0;
+  font-style: italic;
+}
+/* ------------------------------------------- */
 
 .tags {
   margin-top: var(--spacing-2);
@@ -144,6 +182,7 @@
     max-height: 3000px;
   }
 }
+
 mat-card-actions {
   display: flex;
   justify-content: flex-end;
@@ -220,7 +259,7 @@ mat-card-actions button[disabled] {
 }
 
 .status-published {
-  background: rgba(0, 188, 212, 0.12); 
+  background: rgba(0, 188, 212, 0.12);
   color: var(--color-primary-800);
   border: 1px solid rgba(0, 188, 212, 0.2);
 }

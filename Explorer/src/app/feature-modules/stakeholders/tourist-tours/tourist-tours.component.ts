@@ -8,6 +8,7 @@ import { TourExecutionService } from '../../tour-execution/tour-execution.servic
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+
 interface TouristTourView extends Tour {
   isPurchased?: boolean;
 }
@@ -59,30 +60,34 @@ export class TouristToursComponent implements OnInit {
   }
 
   loadTours(): void {
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.tourService.getPublishedToursForTourist().subscribe({
-    next: (tours: Tour[]) => {
-      this.tours = tours as TouristTourView[];  // cast
+    // --- IZMENA: Koristimo getPublishedTourPreviews umesto getPublishedToursForTourist ---
+    // Ovo radimo samo da bismo dobili rating i firstKeyPoint.
+    // Sve ostalo ostaje isto.
+    this.tourService.getPublishedTourPreviews().subscribe({
+      next: (tours: Tour[]) => {
+        this.tours = tours as TouristTourView[];  // cast
 
-      // ✨ Provera za svaku turu: da li je kupljena
-      this.tours.forEach(tour => {
-        if (tour.id) {
-          this.tourService.getTourDetails(tour.id).subscribe(details => {
-            tour.isPurchased = !!details.keyPoints;
-          });
-        }
-      });
+        // ✨ STARA LOGIKA: Provera za svaku turu: da li je kupljena
+        // OVO OSTAJE NEPROMENJENO
+        this.tours.forEach(tour => {
+          if (tour.id) {
+            this.tourService.getTourDetails(tour.id).subscribe(details => {
+              tour.isPurchased = !!details.keyPoints;
+            });
+          }
+        });
 
-      this.isLoading = false;
-    },
-    error: (error: any) => {
-      console.error('Error loading tours for tourist:', error);
-      this.isLoading = false;
-      this.showError('Error loading tours');
-    }
-  });
-}
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading tours for tourist:', error);
+        this.isLoading = false;
+        this.showError('Error loading tours');
+      }
+    });
+  }
 
   addToCart(tour: Tour): void {
     if (!tour.id) {
@@ -101,7 +106,7 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-    startTour(tour: Tour): void {
+  startTour(tour: Tour): void {
     if (!tour.id) {
       this.showError('Invalid tour.');
       return;
@@ -172,7 +177,7 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-   getStatusLabel(status: TourStatus): string {
+  getStatusLabel(status: TourStatus): string {
     switch (status) {
       case TourStatus.Published:
         return 'Published';
@@ -202,6 +207,7 @@ export class TouristToursComponent implements OnInit {
       panelClass: ['error-snackbar']
     });
   }
+  
   expandReviews(tour: Tour): void {
     if (this.expandedTourId === tour.id) {
       this.expandedTourId = null;  // Collapse

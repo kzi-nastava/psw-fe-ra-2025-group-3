@@ -10,11 +10,11 @@ import { TourDetails } from 'src/app/feature-modules/stakeholders/model/tour-det
 })
 export class TourService {
   private baseUrl = environment.apiHost + 'tours';
-
   private equipmentUrl = environment.apiHost + 'administration/equipment'; 
-
   private readonly touristBaseUrl = environment.apiHost + 'tourist/tours';
-
+  
+  // --- NOVO ---
+  private readonly tourPreviewUrl = environment.apiHost + 'tourist/tour-previews'; 
 
   constructor(private http: HttpClient) { }
 
@@ -66,17 +66,21 @@ export class TourService {
     return this.http.get<Tour[]>(this.touristBaseUrl);
   }
 
+  getPublishedTourPreviews(): Observable<Tour[]> {
+    return this.http.get<Tour[]>(this.tourPreviewUrl);
+  }
+
   updateDistance(tourId: number, distanceInKm: number): Observable<Tour> {
     return this.http.put<Tour>(`${this.baseUrl}/${tourId}/distance`, {
       distanceInKm: distanceInKm
     });
   }
+
   getTourDetails(id: number) {
-  return this.http.get<TourDetails>(`${this.touristBaseUrl}/${id}/details`);
-}
+    return this.http.get<TourDetails>(`${this.touristBaseUrl}/${id}/details`);
+  }
 
   getMyPurchasedTours(): Observable<Tour[]> {
     return this.http.get<Tour[]>(environment.apiHost + 'tourist/tours/my-tours');
   }
-
 }
