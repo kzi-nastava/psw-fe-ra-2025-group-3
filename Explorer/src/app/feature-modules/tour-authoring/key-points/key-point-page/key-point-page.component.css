@@ -147,3 +147,7 @@
     font-size: 18px;
   }
 }
+
+.kp-container {
+  max-width: 100%;
+}

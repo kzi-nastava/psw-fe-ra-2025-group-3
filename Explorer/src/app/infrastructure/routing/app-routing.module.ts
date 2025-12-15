@@ -50,7 +50,10 @@ import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/bl
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
+
+import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
+
 const routes: Routes = [
 
   // Public
