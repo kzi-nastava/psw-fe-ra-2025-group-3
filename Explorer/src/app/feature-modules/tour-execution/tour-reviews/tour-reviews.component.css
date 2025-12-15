@@ -25,7 +25,7 @@
   font-size: 36px;
   width: 36px;
   height: 36px;
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
 }
 
 /* ============================================================================
@@ -39,10 +39,10 @@
 .my-review-card {
   border-radius: var(--border-radius-2xl);
   box-shadow: var(--shadow-lg);
-  border-left: 5px solid var(--color-secondary-500);
+  border-left: 5px solid var(--color-primary-500);
   background: linear-gradient(135deg, 
-    rgba(0, 150, 136, 0.05) 0%, 
-    rgba(0, 150, 136, 0.02) 100%
+    rgba(0, 188, 212, 0.05) 0%, 
+    rgba(0, 188, 212, 0.02) 100%
   );
   margin-bottom: var(--spacing-6);
 }
@@ -53,10 +53,10 @@
   align-items: center;
   padding: var(--spacing-5);
   background: linear-gradient(135deg, 
-    rgba(0, 150, 136, 0.08) 0%, 
-    rgba(0, 150, 136, 0.04) 100%
+    rgba(0, 188, 212, 0.08) 0%, 
+    rgba(0, 188, 212, 0.04) 100%
   );
-  border-bottom: 1px solid rgba(0, 150, 136, 0.15);
+  border-bottom: 1px solid rgba(0, 188, 212, 0.15);
 }
 
 .header-text {
@@ -69,26 +69,31 @@
   font-size: 28px;
   width: 28px;
   height: 28px;
-  color: var(--color-secondary-600);
+  color: var(--color-primary-500);
 }
 
 .header-text h3 {
   margin: 0;
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--color-secondary-800);
+  color: var(--color-primary-800);
 }
 
 .edit-button {
-  border-radius: var(--border-radius-lg);
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--border-radius-lg) !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+  transition: all var(--transition-normal) !important;
 }
 
-.edit-button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+.edit-button:hover:not([disabled]) {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700)) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4) !important;
 }
 
 .edit-button mat-icon {
@@ -117,7 +122,7 @@
 }
 
 .rating-display mat-icon.filled {
-  color: #FFC107;
+  color: var(--color-warning);
 }
 
 .rating-text {
@@ -140,7 +145,7 @@
   flex-wrap: wrap;
   gap: var(--spacing-4);
   padding-top: var(--spacing-4);
-  border-top: 1px solid rgba(0, 150, 136, 0.1);
+  border-top: 1px solid rgba(0, 188, 212, 0.1);
 }
 
 .meta-item {
@@ -149,19 +154,19 @@
   gap: var(--spacing-2);
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--color-neutral-700);
+  color: var(--color-neutral-800);
 }
 
 .meta-item mat-icon {
   font-size: 18px;
   width: 18px;
   height: 18px;
-  color: var(--color-secondary-600);
+  color: var(--color-primary-500);
 }
 
 .meta-item.edited {
-  color: var(--color-secondary-700);
-  background: rgba(0, 150, 136, 0.1);
+  color: var(--color-primary-800);
+  background: rgba(0, 188, 212, 0.1);
   padding: 4px 12px;
   border-radius: var(--border-radius-md);
 }
@@ -182,12 +187,12 @@
 }
 
 .close-button {
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-800);
   transition: all var(--transition-fast);
 }
 
 .close-button:hover {
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
   background: rgba(0, 188, 212, 0.1);
 }
 

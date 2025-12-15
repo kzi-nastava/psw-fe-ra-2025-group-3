@@ -1,8 +1,8 @@
 export interface TourReview {
   id: number;
   tourId: number;
+   tourName: string;
   touristId: number;
-  touristName: string;
   rating: number;
   comment?: string;
   createdAt: Date;
