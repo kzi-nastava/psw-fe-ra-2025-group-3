@@ -26,6 +26,12 @@ export class ClubFormDialogComponent {
   featuredImageUrl: string | null = null; // relative URL from backend
   promoteGalleryImageId: number | null = null;
   isSubmitting = false;
+  isDraggingFeatured = false;
+  isDraggingGallery = false;
+  
+  // Za UI preview zamene slika
+  previewFeaturedUrl: string | null = null;
+  originalFeaturedUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +51,7 @@ export class ClubFormDialogComponent {
       this.existingGallery = data.club.galleryImages || [];
       if (data.club.featuredImage) {
         this.featuredImageUrl = data.club.featuredImage.imageUrl;
+        this.originalFeaturedUrl = data.club.featuredImage.imageUrl;
       }
     }
   }
@@ -56,13 +63,48 @@ export class ClubFormDialogComponent {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
     const file = input.files[0];
+    this.handleFeaturedFile(file);
+  }
+
+  handleFeaturedFile(file: File): void {
+    if (!file.type.startsWith('image/')) {
+      this.showError('Please select a valid image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.showError('Image is too large. Maximum size is 5MB');
+      return;
+    }
     this.featuredImageFile = file;
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.featuredImageUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   onGalleryImagesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
-    this.newGalleryFiles = Array.from(input.files);
+    this.handleGalleryFiles(Array.from(input.files));
+  }
+
+  handleGalleryFiles(files: File[]): void {
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    
+    if (imageFiles.length === 0) {
+      this.showError('Please select valid image files');
+      return;
+    }
+
+    const oversizedFiles = imageFiles.filter(file => file.size > 5 * 1024 * 1024);
+    if (oversizedFiles.length > 0) {
+      this.showError(`Some files are too large. Maximum size is 5MB`);
+      return;
+    }
+
+    this.newGalleryFiles = imageFiles;
   }
 
   removeExistingGalleryImage(image: ClubImageDto): void {
@@ -71,9 +113,75 @@ export class ClubFormDialogComponent {
   }
 
   promoteToFeatured(image: ClubImageDto): void {
-    // Mark this gallery image to be promoted as featured on save
+    // Sačuvaj ID slike koja se promovise (za backend)
     this.promoteGalleryImageId = image.id;
-    this.featuredImageUrl = image.imageUrl;
+    
+    // Sačuvaj originalnu featured sliku ako još nije sačuvana
+    if (!this.originalFeaturedUrl && this.featuredImageUrl) {
+      this.originalFeaturedUrl = this.featuredImageUrl;
+    }
+    
+    // Samo vizuelna promena za UI preview
+    this.previewFeaturedUrl = image.imageUrl;
+    this.featuredImageFile = null; // Resetuj file jer koristimo postojeću sliku
+  }
+  
+  // Helper metoda za prikaz featured slike
+  getFeaturedDisplayUrl(): string | null {
+    return this.previewFeaturedUrl || this.featuredImageUrl;
+  }
+  
+  // Proveri da li je slika promovisan (za vizuelni efekat u galeriji)
+  isImagePromoted(image: ClubImageDto): boolean {
+    return this.promoteGalleryImageId === image.id;
+  }
+
+  // Drag and drop for featured image
+  onDragOverFeatured(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFeatured = true;
+  }
+
+  onDragLeaveFeatured(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFeatured = false;
+  }
+
+  onDropFeatured(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFeatured = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleFeaturedFile(files[0]);
+    }
+  }
+
+  // Drag and drop for gallery images
+  onDragOverGallery(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingGallery = true;
+  }
+
+  onDragLeaveGallery(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingGallery = false;
+  }
+
+  onDropGallery(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingGallery = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleGalleryFiles(Array.from(files));
+    }
   }
 
   submit(): void {

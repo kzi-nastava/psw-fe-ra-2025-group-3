@@ -13,6 +13,52 @@
   margin-top: 16px;
 }
 
+.drag-drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.drag-drop-area.dragging {
+  border-color: #3f51b5;
+  background-color: #e8eaf6;
+  transform: scale(1.02);
+}
+
+.drag-drop-area:hover {
+  border-color: #999;
+  background-color: #f5f5f5;
+}
+
+.upload-instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-instructions mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #757575;
+}
+
+.upload-instructions p {
+  margin: 0;
+  color: #616161;
+}
+
+.upload-instructions .file-info {
+  font-size: 12px;
+  color: #9e9e9e;
+}
+
 .image-upload {
   margin-top: 8px;
 }
@@ -23,6 +69,29 @@
   max-height: 240px;
   border-radius: 4px;
   object-fit: cover;
+}
+
+.preview {
+  position: relative;
+}
+
+.preview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #fff3e0;
+  border: 1px solid #ffb74d;
+  border-radius: 4px;
+  color: #e65100;
+  font-size: 13px;
+}
+
+.preview-badge mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .existing-gallery {
@@ -36,6 +105,39 @@
   position: relative;
 }
 
+.gallery-item.will-promote {
+  opacity: 0.7;
+}
+
+.gallery-item.will-promote img {
+  border: 2px solid #3f51b5;
+  box-shadow: 0 0 12px rgba(63, 81, 181, 0.4);
+}
+
+.promoted-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  background: rgba(63, 81, 181, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 4px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.promoted-overlay mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
 .gallery-item img {
   width: 120px;
   height: 80px;
@@ -46,3 +148,46 @@
 .gallery-item button {
   position: relative;
 }
+
+.new-gallery-preview {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+  color: #2e7d32;
+}
+
+
+
+.create-club-btn {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+}
+
+/* Material dugme override - koristimo globalne stilove */
+::ng-deep .club-list-container .mat-raised-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-normal);
+}
+
+::ng-deep .club-list-container .mat-raised-button.mat-accent {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+  color: var(--color-neutral-0) !important;
+  box-shadow: var(--shadow-md);
+}
+
+::ng-deep .club-list-container .mat-raised-button.mat-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+::ng-deep .club-list-container .mat-raised-button mat-icon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
