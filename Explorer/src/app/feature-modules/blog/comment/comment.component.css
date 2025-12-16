@@ -22,6 +22,12 @@
 .comment-text {
   font-size: var(--font-size-base);
   color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-3);
+}
+
+.comment-actions {
+  display: flex;
+  gap: var(--spacing-2);
 }
 
 .comment-form {
@@ -30,7 +36,8 @@
   gap: var(--spacing-4);
 }
 
-.comment-form textarea {
+.comment-form textarea,
+.edit-area textarea {
   width: 100%;
   min-height: 100px;
   padding: var(--spacing-4);
@@ -39,8 +46,18 @@
   font-family: var(--font-family-primary);
 }
 
+.edit-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
 .delete-btn {
-  margin-top: var(--spacing-2);
-  border-color: var(--color-error);
-  color: var(--color-error);
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
 }

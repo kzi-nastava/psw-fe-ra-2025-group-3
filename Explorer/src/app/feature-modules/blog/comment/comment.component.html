@@ -11,27 +11,69 @@
   </div>
 
   <div *ngFor="let c of comments" class="comment-card">
+
     <div class="comment-header">
-      User #{{ c.authorId }} · {{ c.createdAt | date:'short' }}
+      User #{{ c.authorId }} · {{ c.createdAt | date:'short' }}{{ getEditedLabel(c) }}
     </div>
-    <div class="comment-text">
+
+    <!-- VIEW MODE -->
+    <div *ngIf="editingCommentId !== c.id" class="comment-text">
       {{ c.text }}
     </div>
 
-    <button
-      class="btn btn-outline-light btn-sm delete-btn"
-      (click)="deleteComment(c.id)">
-      Delete
-    </button>
+    <!-- EDIT MODE -->
+    <div *ngIf="editingCommentId === c.id" class="edit-area">
+      <textarea
+        [(ngModel)]="editText"
+        [ngModelOptions]="{ standalone: true }">
+      </textarea>
+
+      <div class="edit-actions">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="saveEdit(c.id)"
+          [disabled]="isSavingEdit || !editText.trim()">
+          Save
+        </button>
+
+        <button
+          class="btn btn-secondary btn-sm"
+          (click)="cancelEdit()"
+          [disabled]="isSavingEdit">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div *ngIf="editingCommentId !== c.id" class="comment-actions">
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="startEdit(c)">
+        Edit
+      </button>
+
+      <button
+        class="btn btn-outline-light btn-sm delete-btn"
+        (click)="deleteComment(c.id)">
+        Delete
+      </button>
+    </div>
+
   </div>
 
+  <!-- ADD NEW COMMENT -->
   <div class="comment-form">
     <textarea
       [(ngModel)]="newComment"
+      [ngModelOptions]="{ standalone: true }"
       placeholder="Write a comment...">
     </textarea>
 
-    <button class="btn btn-primary" (click)="addComment()">
+    <button
+      class="btn btn-primary"
+      (click)="addComment()"
+      [disabled]="!newComment.trim()">
       Post Comment
     </button>
   </div>
