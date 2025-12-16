@@ -72,13 +72,15 @@
             </mat-chip-set>
           </div>
 
-          <div class="first-keypoint-preview" *ngIf="tour.firstKeyPoint">
+          <div class="first-keypoint-preview">
+            <div *ngIf="tour.firstKeyPoint">
             <h4 class="keypoint-title">
               <mat-icon>location_on</mat-icon>
               Start: {{ tour.firstKeyPoint.name }}
             </h4>
             <div class="keypoint-content">
               <p class="keypoint-description">{{ tour.firstKeyPoint.description }}</p>
+            </div>
             </div>
           </div>
 
@@ -95,6 +97,7 @@
           <button
             mat-button
             color="primary"
+            class="view-details-btn"
             [routerLink]="['/tourist/tours', tour.id, 'details']">
             <mat-icon>info</mat-icon>
             View Details
