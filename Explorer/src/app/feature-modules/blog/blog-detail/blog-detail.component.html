@@ -1,7 +1,7 @@
 <!-- src/app/feature-modules/blog/blog-detail/blog-detail.component.html -->
 
 <div class="blog-detail-container">
-  
+
   <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="loading-container">
     <mat-spinner></mat-spinner>
@@ -9,7 +9,7 @@
 
   <!-- Blog Content -->
   <div *ngIf="!isLoading && blog" class="blog-content">
-    
+
     <!-- Back Button -->
     <div class="back-navigation">
       <button mat-button color="primary" (click)="goBack()">
@@ -21,7 +21,7 @@
     <!-- Blog Header -->
     <header class="blog-header">
       <h1 class="blog-title">{{ blog.title }}</h1>
-      
+
       <div class="blog-meta">
         <span class="meta-item">
           <mat-icon>calendar_today</mat-icon>
@@ -37,25 +37,14 @@
     <!-- Image Gallery -->
     <div *ngIf="blog.images.length > 0" class="image-gallery">
       <div class="gallery-main">
-        <img 
-          [src]="getCurrentImage()" 
-          [alt]="blog.title"
-          class="gallery-image">
-        
+        <img [src]="getCurrentImage()" [alt]="blog.title" class="gallery-image">
+
         <!-- Navigation Arrows (if multiple images) -->
         <div *ngIf="blog.images.length > 1" class="gallery-controls">
-          <button 
-            mat-icon-button 
-            class="nav-btn nav-prev" 
-            (click)="previousImage()"
-            matTooltip="Previous image">
+          <button mat-icon-button class="nav-btn nav-prev" (click)="previousImage()" matTooltip="Previous image">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <button 
-            mat-icon-button 
-            class="nav-btn nav-next" 
-            (click)="nextImage()"
-            matTooltip="Next image">
+          <button mat-icon-button class="nav-btn nav-next" (click)="nextImage()" matTooltip="Next image">
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>
@@ -68,10 +57,7 @@
 
       <!-- Thumbnail Strip (if multiple images) -->
       <div *ngIf="blog.images.length > 1" class="gallery-thumbnails">
-        <div 
-          *ngFor="let image of blog.images; let i = index" 
-          class="thumbnail"
-          [class.active]="i === currentImageIndex"
+        <div *ngFor="let image of blog.images; let i = index" class="thumbnail" [class.active]="i === currentImageIndex"
           (click)="currentImageIndex = i">
           <img [src]="image.imageUrl" [alt]="'Image ' + (i + 1)">
         </div>
@@ -82,6 +68,11 @@
     <article class="blog-description">
       <div markdown [data]="blog.description"></div>
     </article>
+
+    <!-- Comments Section -->
+    <section class="comments-section mt-8">
+      <app-comment [blogId]="blog.id"></app-comment>
+    </section>
 
   </div>
 

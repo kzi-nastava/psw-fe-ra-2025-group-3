@@ -8,67 +8,63 @@ import { CommentDto, CommentCreateDto } from './comment.dto';
   styleUrls: ['./comment.component.css']
 })
 export class CommentComponent implements OnInit {
-  @Input() blogId: number; // ID bloga za koji prikazujemo komentare
+
+  @Input() blogId!: number;
+
   comments: CommentDto[] = [];
-  newComment: string = '';
+  newComment = '';
+  loading = false;
 
   constructor(private commentService: CommentService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    if (!this.blogId) {
+      console.error('CommentComponent: blogId is missing');
+      return;
+    }
     this.loadComments();
   }
 
-  loadComments() {
-    // Implementiraj metodu koja učitava komentare (ako backend podržava)
-    this.commentService.getComments(this.blogId).subscribe(
-      (comments) => {
+  loadComments(): void {
+    this.loading = true;
+    this.commentService.getComments(this.blogId).subscribe({
+      next: (comments) => {
         this.comments = comments;
+        this.loading = false;
       },
-      (error) => {
-        console.error('Error fetching comments:', error);
+      error: (err) => {
+        console.error('Error loading comments', err);
+        this.loading = false;
       }
-    );
+    });
   }
 
-  addComment() {
-    if (this.newComment.trim()) {
-      const commentCreateDto: CommentCreateDto = { text: this.newComment };
-      this.commentService.addComment(this.blogId, commentCreateDto).subscribe(
-        (comment) => {
-          this.comments.push(comment); // Dodaj novi komentar u listu
-          this.newComment = ''; // Resetuj polje
-        },
-        (error) => {
-          console.error('Error adding comment:', error);
-        }
-      );
-    }
-  }
+  addComment(): void {
+    if (!this.newComment.trim()) return;
 
-  editComment(commentId: number, newText: string) {
-    const updatedComment: CommentCreateDto = { text: newText };
-    this.commentService.editComment(this.blogId, commentId, updatedComment).subscribe(
-      (updated) => {
-        const comment = this.comments.find(c => c.id === commentId);
-        if (comment) {
-          comment.text = updated.text;
-          comment.editedAt = updated.editedAt;
-        }
+    const dto: CommentCreateDto = { text: this.newComment };
+
+    this.commentService.addComment(this.blogId, dto).subscribe({
+      next: (comment) => {
+        this.comments.push(comment);
+        this.newComment = '';
       },
-      (error) => {
-        console.error('Error editing comment:', error);
+      error: (err) => {
+        console.error('Error adding comment', err);
       }
-    );
+    });
   }
 
-  deleteComment(commentId: number) {
-    this.commentService.deleteComment(this.blogId, commentId).subscribe(
-      () => {
+  deleteComment(commentId: number): void {
+    if (!confirm('Delete this comment?')) return;
+
+    this.commentService.deleteComment(this.blogId, commentId).subscribe({
+      next: () => {
         this.comments = this.comments.filter(c => c.id !== commentId);
       },
-      (error) => {
-        console.error('Error deleting comment:', error);
+      error: (err) => {
+        console.error('Error deleting comment', err);
       }
-    );
+    });
   }
 }
