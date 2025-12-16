@@ -118,7 +118,7 @@ export class TouristMapComponent implements OnInit {
     this.touristMapService.updateMyPosition(dto).subscribe({
       next: () => {
         console.log('Position updated', dto);
-           this.snackBar.open('✅ Pozicija uspešno sačuvana!', 'Zatvori', {
+           this.snackBar.open('✅ Position saved!', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'bottom',

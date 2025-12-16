@@ -61,7 +61,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
 
     get isEditMode(): boolean {
-        return this.mode === 'edit-object' || this.mode === 'route-edit-object';
+        return this.mode === 'edit-object' || this.mode === 'route-edit-object' || this.mode == 'object-view';
     }
 
     get isRouteMode(): boolean {
