@@ -122,10 +122,10 @@ export class BlogDetailComponent implements OnInit {
       },
       error: (err) => {
         if (err.status === 401) {
-          this.showError('Morate biti prijavljeni da biste glasali.');
+          this.showError('You have to be logged in to vote.');
         } else {
           console.error('Failed to upvote', err);
-          this.showError('Greška pri glasanju.');
+          this.showError('Voting error.');
         }
       },
     });
@@ -133,7 +133,7 @@ export class BlogDetailComponent implements OnInit {
 
   onDownvote(): void {
     if (!this.blog || !this.isAuthenticated) {
-      this.showError('Morate biti prijavljeni da biste glasali.');
+      this.showError('You have to be logged in to vote.');
       return;
     }
 
@@ -143,10 +143,10 @@ export class BlogDetailComponent implements OnInit {
       },
       error: (err) => {
         if (err.status === 401) {
-          this.showError('Morate biti prijavljeni da biste glasali.');
+          this.showError('You have to be logged in to vote.');
         } else {
           console.error('Failed to downvote', err);
-          this.showError('Greška pri glasanju.');
+          this.showError('Voting error.');
         }
       },
     });
