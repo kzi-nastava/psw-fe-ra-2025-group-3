@@ -1,0 +1,203 @@
+<div class="container py-8">
+  
+  <!-- Header -->
+  <div class="card mb-6">
+    <div class="flex-row items-center gap-4 mb-4">
+      <mat-icon class="text-primary" style="font-size: 48px; width: 48px; height: 48px;">
+        {{ shouldEdit ? 'edit' : 'add_circle' }}
+      </mat-icon>
+      <div>
+        <h2 class="m-0">{{ shouldEdit ? 'Izmeni Preference' : 'Kreiraj Preference' }}</h2>
+        <p class="text-muted m-0">Prilagodite svoje putovanje prema svojim željama</p>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="preferenceForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Težina ture -->
+    <div class="card mb-6">
+      <h3 class="mb-4">
+        <mat-icon class="inline-icon">terrain</mat-icon>
+        Težina Ture
+      </h3>
+      <p class="text-muted mb-6">Odaberite nivo težine koji vam odgovara</p>
+      
+      <div class="difficulty-grid">
+        <label 
+          *ngFor="let diff of difficulties" 
+          class="difficulty-card"
+          [class.selected]="preferenceForm.get('difficulty')?.value === diff.value">
+          <input 
+            type="radio" 
+            [value]="diff.value" 
+            formControlName="difficulty"
+            style="display: none;">
+          <mat-icon>{{ diff.icon }}</mat-icon>
+          <strong>{{ diff.label }}</strong>
+        </label>
+      </div>
+    </div>
+
+    <!-- Prevozna sredstva -->
+    <div class="card mb-6">
+      <h3 class="mb-4">
+        <mat-icon class="inline-icon">directions</mat-icon>
+        Prevozna Sredstva
+      </h3>
+      <p class="text-muted mb-6">Ocenite koliko volite da koristite svako prevozno sredstvo (0-3)</p>
+
+      <!-- Šetnja -->
+      <div class="transport-section mb-6">
+        <div class="flex-row items-center gap-4 mb-4">
+          <mat-icon class="text-primary transport-icon">directions_walk</mat-icon>
+          <div>
+            <strong style="font-size: var(--font-size-lg);">Šetnja</strong>
+            <p class="text-muted m-0">Hodanje peške</p>
+          </div>
+        </div>
+        <div class="rating-grid">
+          <label 
+            *ngFor="let rating of getRatingArray(3)" 
+            class="rating-card"
+            [class.selected]="preferenceForm.get('walkingRating')?.value === rating">
+            <input 
+              type="radio" 
+              [value]="rating" 
+              formControlName="walkingRating"
+              style="display: none;">
+            <span class="rating-number">{{ rating }}</span>
+            <span class="rating-stars">{{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}</span>
+          </label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Bicikl -->
+      <div class="transport-section mb-6">
+        <div class="flex-row items-center gap-4 mb-4">
+          <mat-icon class="text-primary transport-icon">directions_bike</mat-icon>
+          <div>
+            <strong style="font-size: var(--font-size-lg);">Bicikl</strong>
+            <p class="text-muted m-0">Vožnja biciklom</p>
+          </div>
+        </div>
+        <div class="rating-grid">
+          <label 
+            *ngFor="let rating of getRatingArray(3)" 
+            class="rating-card"
+            [class.selected]="preferenceForm.get('bicycleRating')?.value === rating">
+            <input 
+              type="radio" 
+              [value]="rating" 
+              formControlName="bicycleRating"
+              style="display: none;">
+            <span class="rating-number">{{ rating }}</span>
+            <span class="rating-stars">{{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}</span>
+          </label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Auto -->
+      <div class="transport-section mb-6">
+        <div class="flex-row items-center gap-4 mb-4">
+          <mat-icon class="text-primary transport-icon">directions_car</mat-icon>
+          <div>
+            <strong style="font-size: var(--font-size-lg);">Auto</strong>
+            <p class="text-muted m-0">Vožnja automobilom</p>
+          </div>
+        </div>
+        <div class="rating-grid">
+          <label 
+            *ngFor="let rating of getRatingArray(3)" 
+            class="rating-card"
+            [class.selected]="preferenceForm.get('carRating')?.value === rating">
+            <input 
+              type="radio" 
+              [value]="rating" 
+              formControlName="carRating"
+              style="display: none;">
+            <span class="rating-number">{{ rating }}</span>
+            <span class="rating-stars">{{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}</span>
+          </label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Čamac -->
+      <div class="transport-section">
+        <div class="flex-row items-center gap-4 mb-4">
+          <mat-icon class="text-primary transport-icon">directions_boat</mat-icon>
+          <div>
+            <strong style="font-size: var(--font-size-lg);">Čamac</strong>
+            <p class="text-muted m-0">Plovidba čamcem</p>
+          </div>
+        </div>
+        <div class="rating-grid">
+          <label 
+            *ngFor="let rating of getRatingArray(3)" 
+            class="rating-card"
+            [class.selected]="preferenceForm.get('boatRating')?.value === rating">
+            <input 
+              type="radio" 
+              [value]="rating" 
+              formControlName="boatRating"
+              style="display: none;">
+            <span class="rating-number">{{ rating }}</span>
+            <span class="rating-stars">{{ rating > 0 ? '⭐'.repeat(rating) : '☆' }}</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tagovi -->
+    <div class="card mb-6">
+      <h3 class="mb-4">
+        <mat-icon class="inline-icon">label</mat-icon>
+        Interesovanja
+      </h3>
+      <p class="text-muted mb-6">Odaberite najmanje jedan tag koji vas interesuje</p>
+
+      <div class="tags-grid">
+        <label 
+          *ngFor="let tag of availableTags" 
+          class="tag-card"
+          [class.selected]="isTagSelected(tag)">
+          <input 
+            type="checkbox" 
+            [checked]="isTagSelected(tag)"
+            (change)="toggleTag(tag)"
+            style="display: none;">
+          <mat-icon *ngIf="isTagSelected(tag)" class="check-icon">check_circle</mat-icon>
+          <span>{{ tag }}</span>
+        </label>
+      </div>
+
+      <div *ngIf="selectedTags.length > 0" class="selected-tags-info mt-6">
+        <mat-icon class="text-primary">info</mat-icon>
+        <span>Odabrano: <strong>{{ selectedTags.length }}</strong> tagova</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="card">
+      <div class="flex-row gap-4">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <mat-icon>{{ shouldEdit ? 'save' : 'add' }}</mat-icon>
+          {{ shouldEdit ? 'Sačuvaj Izmene' : 'Kreiraj Preference' }}
+        </button>
+        <button type="button" class="btn btn-secondary btn-lg" (click)="onCancel()">
+          <mat-icon>close</mat-icon>
+          Otkaži
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+</div>

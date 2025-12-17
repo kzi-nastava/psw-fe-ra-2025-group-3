@@ -1,0 +1,81 @@
+<form class="kp-form" [formGroup]="keyPointForm" (ngSubmit)="onSubmit()">
+
+  <div class="kp-form-fields">
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="kp-field full-width">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Enter key point name"
+      />
+
+      <mat-error *ngIf="name?.hasError('required') && name?.touched">
+        Name is required.
+      </mat-error>
+      <mat-error *ngIf="name?.hasError('minlength') && name?.touched">
+        Name must be at least 3 characters long.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="kp-field full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        formControlName="description"
+        placeholder="Enter key point description"
+      ></textarea>
+
+      <mat-error *ngIf="description?.hasError('required') && description?.touched">
+        Description is required.
+      </mat-error>
+      <mat-error *ngIf="description?.hasError('minlength') && description?.touched">
+        Description must be at least 5 characters long.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Image URL -->
+    <mat-form-field appearance="outline" class="kp-field full-width">
+      <mat-label>Image URL</mat-label>
+      <input
+        matInput
+        formControlName="imageUrl"
+        placeholder="https://example.com/image.jpg"
+      />
+
+      <mat-error *ngIf="imageUrl?.hasError('required') && imageUrl?.touched">
+        Image URL is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Secret -->
+    <mat-form-field appearance="outline" class="kp-field full-width">
+      <mat-label>Secret</mat-label>
+      <input
+        matInput
+        formControlName="secret"
+        placeholder="Secret code / key"
+      />
+
+      <mat-error *ngIf="secret?.hasError('required') && secret?.touched">
+        Secret is required.
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <!-- Buttons -->
+  <div class="kp-form-actions">
+    <button mat-stroked-button type="button" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="keyPointForm.invalid">
+      Save
+    </button>
+  </div>
+
+</form>

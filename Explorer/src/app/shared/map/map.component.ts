@@ -14,9 +14,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     private map: any;
     private clickMarker: L.Marker | undefined;
     private routeControl: L.Routing.Control | undefined;
+    private pointMarkers: L.Marker[] = [];
 
     // select-route-points mod??? Tutor 2.5 1.
-    @Input() mode: 'object-view' | 'route-view' | 'edit-object';
+    @Input() mode: 'object-view' | 'route-view' | 'edit-object' | 'route-edit-object';
     @Input() center: [number, number] = [45.2396, 19.8227];
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
@@ -24,12 +25,15 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() points: { lat: number; lng: number; name?: string }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
+    @Output() routeDistanceChanged = new EventEmitter<number>();
 
 
     constructor(private mapService: MapService) {}
 
     private initMap(): void {
-        this.map = L.map('map', {
+        const el = document.getElementById('map');
+        if (!el) return;            // <--- ključno: nema container-a još
+        this.map = L.map(el, {
             center: this.center,
             zoom: this.zoom,
             attributionControl: false,
@@ -44,15 +48,27 @@ export class MapComponent implements AfterViewInit, OnChanges {
         );
         tiles.addTo(this.map);
 
-        if (this.mode === 'object-view' || this.mode === 'edit-object') 
+        if (this.mode === 'object-view' || this.isEditMode) {
             this.loadAllPoints();
+        }
 
-        if (this.mode === 'route-view') 
+        if (this.isRouteMode && this.waypoints && this.waypoints.length > 0) {
             this.setRoute();
+        }
 
         this.setInitialPointMarker();
         this.registerOnClick();
     }
+
+    get isEditMode(): boolean {
+        return this.mode === 'edit-object' || this.mode === 'route-edit-object' || this.mode == 'object-view';
+    }
+
+    get isRouteMode(): boolean {
+        return this.mode === 'route-view' || this.mode === 'route-edit-object';
+    }
+
+
 
     private setInitialPointMarker(): void {
         if (!this.map || !this.initialPoint) return;
@@ -73,19 +89,28 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
 
     private loadAllPoints(): void {
-        this.points.forEach(p => {            
-            var marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
-            if (p.name) {
-            marker.bindPopup(p.name);
-            } else {
-            var address = '';
-            this.mapService.reverseSearch(p.lat, p.lng).subscribe((res) => {
-                address = res.address.road + ' ' + res.address.city;
-                marker.bindPopup(address);
+        if (!this.map) return;   // ako mapa još nije spremna, ne radi ništa
 
-                
+        // skloni sve stare markere sa mape
+        this.pointMarkers.forEach(m => this.map.removeLayer(m));
+        this.pointMarkers = [];
+
+        if (!this.points) return;
+
+        this.points.forEach(p => {            
+            let marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+            this.pointMarkers.push(marker);   // ČUVAMO REFERENCU NA MARKER
+
+            if (p.name) {
+                marker.bindPopup(p.name);
+            } else {
+                let address = '';
+                this.mapService.reverseSearch(p.lat, p.lng).subscribe((res) => {
+                    address = res.address.road + ' ' + res.address.city;
+                    marker.bindPopup(address);
                 });
             }
+
             if (this.mode === 'edit-object') {
                 marker.dragging?.enable();
                 marker.on('dragend', (event: L.LeafletEvent) => {
@@ -96,11 +121,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
                 this.clickMarker = marker;
             }
-        })
+        });
     }
     
 
     setRoute(): void {
+        if (!this.map) return;
+
+        // Ako već postoji ruta – skloni stari kontroler sa mape
         if (this.routeControl) {
             this.map.removeControl(this.routeControl);
             this.routeControl = undefined;
@@ -108,26 +136,27 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         const wp = this.waypoints.map(p => L.latLng(p.lat, p.lng));
 
-        const routeControl = L.Routing.control({
+        // OVDE je ključ: koristimo this.routeControl, ne lokalnu promenljivu
+        this.routeControl = L.Routing.control({
             waypoints: wp,
-            router: (L as any).Routing.mapbox(environment.mapboxApiKey, {profile: 'mapbox/walking'}),
-            addWaypoints: false,           
+            router: (L as any).Routing.mapbox(environment.mapboxApiKey, { profile: 'mapbox/walking' }),
+            addWaypoints: false,
         }).addTo(this.map);
 
-        routeControl.on('routeselected', () => {
-            const plan = (routeControl as any).getPlan?.();
+        this.routeControl.on('routeselected', () => {
+            const plan = (this.routeControl as any).getPlan?.();
             if (!plan) return;
 
             const markers = plan._markers || [];
             markers.forEach((m: L.Marker) => {
-                var address = "";
+                let address = "";
                 this.mapService.reverseSearch(m.getLatLng().lat, m.getLatLng().lng).subscribe((res) => {
                     address = res.address.road + ' ' + res.address.city;
                     console.log(res);
                     console.log(address);
                     (m as any).dragging && (m as any).dragging.disable();
                     m.bindPopup(address);
-                })
+                });
 
                 m.off('drag');
                 m.off('dragstart');
@@ -135,16 +164,22 @@ export class MapComponent implements AfterViewInit, OnChanges {
             });
         });
 
-        routeControl.on('routesfound', function(e: any) {
+        this.routeControl.on('routesfound', (e: any) => {
             const routes = e.routes;
             const summary = routes[0].summary;
+
+            const distanceKm = Math.round(summary.totalDistance) / 1000;
+
             console.log(
                 'Total distance is ' +
-                Math.round(summary.totalDistance) / 1000 +
+                distanceKm +
                 ' km and total time is ' +
                 Math.round((summary.totalTime % 3600) / 60) +
                 ' minutes'
             );
+
+            
+            this.routeDistanceChanged.emit(distanceKm);
         });
     }
 
@@ -171,33 +206,37 @@ export class MapComponent implements AfterViewInit, OnChanges {
                 error: () => { }
             });
 
-            if (this.mode === 'edit-object' && this.clickMarker) {
+            if (this.isEditMode && this.clickMarker) {
                 this.map.removeLayer(this.clickMarker);
                 this.clickMarker = undefined;
             }
 
-            if (!this.clickMarker) {
-                this.clickMarker = L.marker([lat, lng], { draggable: true }).addTo(this.map)                
-                .openPopup();
+            if (this.isEditMode) {
+                if (!this.clickMarker) {
+                    this.clickMarker = L.marker([lat, lng], { draggable: true })
+                        .addTo(this.map)
+                        .openPopup();
 
-                var address
-                this.mapService.reverseSearch(lat, lng).subscribe((res) => {
-                    address = res.address.road + ' ' + res.address.city;
-                    this.clickMarker?.bindPopup(address);
-                })
+                    let address;
+                    this.mapService.reverseSearch(lat, lng).subscribe((res) => {
+                        address = res.address.road + ' ' + res.address.city;
+                        this.clickMarker?.bindPopup(address);
+                    });
 
-                this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
-                    const marker = event.target as L.Marker;
-                    const pos = marker.getLatLng();
-                    this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
-                });
-            } else {
-                this.clickMarker.setLatLng([lat, lng]);
+                    this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                        const marker = event.target as L.Marker;
+                        const pos = marker.getLatLng();
+                        this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+                    });
+                } else {
+                    this.clickMarker.setLatLng([lat, lng]);
+                }
+
+                this.pointSelected.emit({ lat, lng });
             }
-
-            this.pointSelected.emit({ lat, lng });
         });
     }
+
 
     ngAfterViewInit(): void {
         let DefaultIcon = L.icon({
@@ -206,12 +245,28 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         L.Marker.prototype.options.icon = DefaultIcon;
         
-        this.initMap();
+        setTimeout(() => {
+            this.initMap();
+            if (this.map) {
+                setTimeout(() => this.map.invalidateSize(), 0);
+                setTimeout(() => this.map.invalidateSize(), 150);
+            }
+        }, 0);
     }
     ngOnChanges(changes: SimpleChanges): void {
     // Ako je promenjena početna tačka i mapa je već inicijalizovana – postavi marker
     if (changes['initialPoint'] && this.map && this.initialPoint) {
         this.setInitialPointMarker();
     }
+    // Ako su se promenili waypoints nakon što je mapa već tu – ponovo iscrtaj rutu
+    if (changes['waypoints'] && this.map && this.isRouteMode) {
+        this.setRoute();
+    }
+
+    // markeri na mapi prate promenu points:
+    if (changes['points'] && this.map) {
+        this.loadAllPoints();
+    }
+
 }
 }

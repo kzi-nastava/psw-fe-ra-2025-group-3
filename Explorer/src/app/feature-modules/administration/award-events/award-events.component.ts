@@ -25,11 +25,18 @@ export class AwardEventsComponent implements OnInit {
   
   deleteAwardEvent(id: number | undefined): void {
     if (id !== undefined) {
-      this.service.deleteAwardEvent(id).subscribe({
-        next: () => {
-          this.getAwardEvents();
-        },
-      });
+      const isConfirmed = window.confirm('Are you sure you want to delete this award event?');
+
+      if (isConfirmed) {
+        this.service.deleteAwardEvent(id).subscribe({
+          next: () => {
+            this.getAwardEvents();
+          },
+          error: (err) => {
+            console.error('Error deleting award event:', err);
+          }
+        });
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import { Monument } from '../../administration/model/monument.model';
 import { Facility } from '../../administration/model/facility.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { TouristMapService, TouristPositionDto } from './tourist-map.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'xp-tourist-map',
@@ -18,7 +19,9 @@ export class TouristMapComponent implements OnInit {
   selectedPoint: { lat: number; lng: number; name?: string } | null = null;
   initialPoint: { lat: number; lng: number } | undefined;
 
-  constructor(private touristMapService: TouristMapService) {}
+  constructor(private touristMapService: TouristMapService, 
+  private snackBar: MatSnackBar 
+  ) {}
 
   ngOnInit(): void {
     this.loadMonuments();
@@ -115,6 +118,13 @@ export class TouristMapComponent implements OnInit {
     this.touristMapService.updateMyPosition(dto).subscribe({
       next: () => {
         console.log('Position updated', dto);
+           this.snackBar.open('✅ Position saved!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['success-snackbar']
+        });
+
       },
       error: (err) => {
         console.error('Failed to update position', err);

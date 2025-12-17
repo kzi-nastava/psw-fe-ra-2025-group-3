@@ -1,0 +1,58 @@
+<div class="details-container" *ngIf="!isLoading; else loadingBlock">
+
+  <h1 class="title">{{ details.name }}</h1>
+
+  <div class="badge preview" *ngIf="!isPurchased">PREVIEW ONLY</div>
+  <div class="badge purchased" *ngIf="isPurchased">PURCHASED</div>
+
+  <p class="description">{{ details.description }}</p>
+
+  <!-- SLIDESHOW SLIKA -->
+  <div class="images" *ngIf="details?.images?.length">
+    <img *ngFor="let img of details.images" [src]="img" alt="Tour image">
+  </div>
+
+  <!-- INFO -->
+  <div class="info-box">
+    <p><strong>Length:</strong> {{ details.length }} km</p>
+    <p><strong>Average duration:</strong> {{ details.averageDuration }} min</p>
+    <p><strong>Start point:</strong> {{ details.startPoint }}</p>
+  </div>
+
+
+  <!-- KEYPOINTS -->
+  <div class="kp-section">
+
+    <h2>Route Key Points</h2>
+  
+    <!-- CANNOT SEE -->
+    <div *ngIf="!isPurchased" class="locked">
+      <mat-icon>lock</mat-icon>
+      <p>You must purchase this tour to unlock all key points.</p>
+    </div>
+
+    <!-- CAN SEE -->
+    <ul *ngIf="isPurchased">
+      <li *ngFor="let kp of details.keyPoints">
+        <strong>{{ kp.name }}</strong>  
+        <span class="coords">({{ kp.latitude }}, {{ kp.longitude }})</span>
+      </li>
+    </ul>
+
+  </div>
+
+ <!-- REVIEWS -->
+ <h2 class="reviews-title">Reviews</h2>
+  <xp-tour-reviews 
+    [tourId]="details.id"
+    [currentUserId]="currentUserId">
+  </xp-tour-reviews>
+
+</div>
+
+
+<ng-template #loadingBlock>
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

@@ -49,15 +49,59 @@ export class MonumentFormComponent implements OnInit {
   }
 
   private createForm(): FormGroup {
+    const currentYear = new Date().getFullYear();
+
     return this.fb.group({
-      name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      year: [null, [Validators.required, Validators.min(0)]],
-      latitude: [null, [Validators.required]],
-      longitude: [null, [Validators.required]],
+      name: ['', [Validators.required, this.startsWithCapitalValidator()]],
+      description: ['', [Validators.required, this.startsWithCapitalValidator()]],
+      year: [
+        null,
+        [
+          Validators.required,
+          Validators.min(-10000), // ako želiš dozvoliti velike BC godine
+          Validators.max(currentYear),
+          this.noZeroYearValidator()
+        ]
+      ],
+      latitude: [
+        null,
+        [
+          Validators.required,
+          Validators.min(-90),
+          Validators.max(90)
+        ]
+      ],
+      longitude: [
+        null,
+        [
+          Validators.required,
+          Validators.min(-180),
+          Validators.max(180)
+        ]
+      ],
     });
   }
+  private noZeroYearValidator() {
+    return (control: any) => {
+      if (control.value === 0) {
+        return { zeroYear: true };
+      }
+      return null;
+    };
+  }
+  private startsWithCapitalValidator() {
+    return (control: any) => {
+      const val = control.value;
+      if (!val) return null;
 
+      const first = val.charAt(0);
+      if (first !== first.toUpperCase()) {
+        return { startsWithCapital: true };
+      }
+
+      return null;
+    };
+  }
   // xp-map emituje { lat, lng }
   onPointSelected(point: { lat: number; lng: number }): void {
     this.monumentForm.patchValue({
@@ -130,9 +174,28 @@ export class MonumentFormComponent implements OnInit {
 
   getErrorMessage(fieldName: string): string {
     const field = this.monumentForm.get(fieldName);
+    if (!field) return '';
 
-    if (field?.hasError('required')) return 'This field is required';
-    if (field?.hasError('min')) return 'Value must be positive';
+    if (field?.hasError('startsWithCapital')) 
+      return 'Must start with a capital letter';
+
+    if (field.hasError('required')) return 'This field is required';
+
+    if (fieldName === 'year') {
+      if (field.hasError('min')) return 'Year must be a valid positive or BC number';
+      if (field.hasError('max')) return `Year cannot be greater than ${new Date().getFullYear()}`;
+      if (field.hasError('zeroYear')) return 'Year 0 does not exist (use negative numbers for BC)';
+    }
+
+    if (fieldName === 'latitude') {
+      if (field.hasError('min') || field.hasError('max'))
+        return 'Latitude must be between -90 and 90';
+    }
+
+    if (fieldName === 'longitude') {
+      if (field.hasError('min') || field.hasError('max'))
+        return 'Longitude must be between -180 and 180';
+    }
 
     return '';
   }

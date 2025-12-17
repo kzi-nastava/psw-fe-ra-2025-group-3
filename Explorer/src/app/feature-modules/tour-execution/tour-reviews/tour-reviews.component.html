@@ -1,0 +1,90 @@
+<div class="tour-reviews-section">
+  <!-- Header -->
+  <div class="section-header">
+    <h2>
+      <mat-icon>rate_review</mat-icon>
+      Tour Reviews
+    </h2>
+  </div>
+
+  <!-- My Review Section (if logged in as tourist) -->
+  <div *ngIf="currentUserId && !isLoadingMyReview" class="my-review-section">
+    <!-- Existing Review Card -->
+    <mat-card *ngIf="hasMyReview && !showForm" class="my-review-card">
+      <div class="my-review-header">
+        <div class="header-text">
+          <mat-icon>check_circle</mat-icon>
+          <h3>Your Review</h3>
+        </div>
+        <button 
+          mat-raised-button 
+          color="accent"
+          (click)="toggleForm()"
+          class="edit-button">
+          <mat-icon>edit</mat-icon>
+          Edit Review
+        </button>
+      </div>
+      
+      <div class="my-review-content">
+        <div class="rating-display">
+          <mat-icon *ngFor="let star of [1,2,3,4,5]" 
+                    [class.filled]="star <= myReview!.rating">
+            {{ star <= myReview!.rating ? 'star' : 'star_border' }}
+          </mat-icon>
+          <span class="rating-text">{{ myReview!.rating }}/5</span>
+        </div>
+        <p *ngIf="myReview!.comment" class="comment-text">{{ myReview!.comment }}</p>
+        <div class="review-meta">
+          <span class="meta-item">
+            <mat-icon>event</mat-icon>
+            {{ myReview!.createdAt | date:'longDate' }}
+          </span>
+          <span *ngIf="myReview!.isEdited" class="meta-item edited">
+            <mat-icon>edit</mat-icon>
+            Edited
+          </span>
+          <span class="meta-item">
+            <mat-icon>route</mat-icon>
+            {{ myReview!.progressPercentage | number:'1.0-0' }}% completed
+          </span>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Review Form -->
+    <div *ngIf="showForm || !hasMyReview" class="form-section">
+      <div class="form-header">
+        <button 
+          *ngIf="hasMyReview"
+          mat-icon-button 
+          (click)="toggleForm()"
+          class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <xp-tour-review-form
+        [tourId]="tourId"
+        [existingReview]="myReview"
+        (reviewSubmitted)="onReviewSubmitted()">
+      </xp-tour-review-form>
+    </div>
+
+    <!-- Leave Review Button (if no review yet and form hidden) -->
+    <button 
+      *ngIf="!hasMyReview && !showForm"
+      mat-raised-button 
+      color="primary"
+      (click)="toggleForm()"
+      class="leave-review-button">
+      <mat-icon>rate_review</mat-icon>
+      Leave a Review
+    </button>
+  </div>
+
+  <!-- Divider -->
+  <mat-divider *ngIf="currentUserId"></mat-divider>
+
+  <!-- All Reviews List -->
+  <xp-tour-reviews-list [tourId]="tourId"></xp-tour-reviews-list>
+</div>

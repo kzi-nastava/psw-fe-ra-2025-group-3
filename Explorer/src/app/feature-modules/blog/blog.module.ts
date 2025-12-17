@@ -1,6 +1,8 @@
+// src/app/feature-modules/blog/blog.module.ts
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 
 // Angular Material
@@ -13,18 +15,24 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 // Components
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { BlogDetailComponent } from './blog-detail/blog-detail.component';
+import { AllBlogsComponent } from './all-blogs/all-blogs.component'; 
 
 @NgModule({
   declarations: [
     BlogListComponent,
-    BlogFormComponent
+    BlogFormComponent,
+    BlogDetailComponent,
+    AllBlogsComponent 
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MarkdownModule.forChild(),
     // Material modules
@@ -36,7 +44,8 @@ import { BlogFormComponent } from './blog-form/blog-form.component';
     MatDialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ]
 })
 export class BlogModule { }

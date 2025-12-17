@@ -1,0 +1,732 @@
+
+.active-tour-container {
+  padding: var(--spacing-8);
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================================================
+   SUCCESS BANNER - Gradijent hero sekcija
+   ============================================================================ */
+
+.success-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  padding: var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+  
+
+  background: linear-gradient(135deg, 
+    #00C853 0%,      
+    #00897B 50%,    
+    #00ACC1 100%     
+  );
+  
+  color: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-xl);
+  
+  position: relative;
+  overflow: hidden;
+}
+
+
+.success-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.success-banner mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.success-banner div {
+  position: relative;
+  z-index: 1;
+}
+
+.success-banner h2 {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-neutral-0);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.5px;
+}
+
+.success-banner p {
+  margin: var(--spacing-2) 0 0;
+  opacity: 0.95;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+}
+
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+
+
+.tour-info-card {
+  margin-bottom: var(--spacing-8);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  
+ 
+  border-top: 5px solid var(--color-primary-500);
+  
+  transition: all var(--transition-normal);
+  background: var(--color-neutral-0);
+}
+
+.tour-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.tour-info-card mat-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.05) 0%,
+    rgba(0, 150, 136, 0.05) 100%
+  );
+  padding: var(--spacing-6);
+  border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+}
+
+.tour-info-card mat-card-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-2);
+}
+
+.tour-info-card mat-card-subtitle {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-secondary-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tour-info-card mat-card-content {
+  padding: var(--spacing-6);
+}
+
+.tour-description {
+  margin-bottom: var(--spacing-6);
+  line-height: 1.8;
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+}
+
+
+
+.tour-stats {
+  display: flex;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  
+  /* Travel Vista light gradient */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.08) 0%,
+    rgba(0, 150, 136, 0.08) 100%
+  );
+  
+  border-radius: var(--border-radius-xl);
+  border: 1px solid rgba(0, 188, 212, 0.15);
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-800);
+  
+  transition: all var(--transition-fast);
+  flex: 1;
+  min-width: 200px;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-item mat-icon {
+  color: var(--color-primary-500);
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+
+
+.map-card {
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+
+  border-top: 5px solid var(--color-primary-600);
+  
+  background: var(--color-neutral-0);
+}
+
+.map-card mat-card-header {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-700) 0%,
+    var(--color-secondary-800) 100%
+  );
+  padding: var(--spacing-6);
+}
+
+.map-card mat-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-neutral-0);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.map-card mat-card-title::before {
+  content: '📍';
+  font-size: var(--font-size-2xl);
+}
+
+.map-card mat-card-content {
+  padding: 0;
+}
+
+.map-wrapper {
+  height: 500px;
+  width: 100%;
+  position: relative;
+  
+
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+
+.map-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 3px solid rgba(0, 188, 212, 0.1);
+  border-radius: 0;
+}
+
+
+@media (max-width: 768px) {
+  .active-tour-container {
+    padding: var(--spacing-4);
+  }
+
+  .success-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-6);
+    gap: var(--spacing-4);
+  }
+
+  .success-banner mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .success-banner h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .success-banner p {
+    font-size: var(--font-size-base);
+  }
+
+  .tour-info-card mat-card-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .tour-stats {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+  }
+
+  .stat-item {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .map-wrapper {
+    height: 350px;
+  }
+
+  .map-card mat-card-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .active-tour-container {
+    padding: var(--spacing-3);
+  }
+
+  .success-banner {
+    padding: var(--spacing-4);
+  }
+
+  .map-wrapper {
+    height: 280px;
+  }
+}
+
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Location check status indicator */
+.stat-item.checking {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid var(--color-primary-500);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    background: rgba(76, 175, 80, 0.1);
+  }
+  50% {
+    background: rgba(76, 175, 80, 0.2);
+  }
+}
+
+.stat-item.checking mat-icon {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-6);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid rgba(0, 188, 212, 0.15);
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  flex: 1;
+  min-width: 180px;
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+.action-buttons button mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ============================================================================
+   KEY POINTS LISTA
+   ============================================================================ */
+
+.keypoints-card {
+  margin-bottom: var(--spacing-8);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border-top: 5px solid var(--color-secondary-500);
+  background: var(--color-neutral-0);
+}
+
+.keypoints-card mat-card-header {
+  background: linear-gradient(
+    135deg,
+    rgba(156, 39, 176, 0.05) 0%,
+    rgba(103, 58, 183, 0.05) 100%
+  );
+  padding: var(--spacing-6);
+  border-bottom: 1px solid rgba(156, 39, 176, 0.1);
+}
+
+.keypoints-card mat-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-secondary-800);
+  margin: 0;
+}
+
+.keypoints-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* KEY POINT ITEM */
+.keypoint-item {
+  background: var(--color-neutral-50);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-5);
+  border: 2px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.keypoint-item.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(129, 199, 132, 0.08) 100%);
+  border-color: #4CAF50;
+}
+
+.keypoint-item.locked {
+  background: linear-gradient(135deg, rgba(158, 158, 158, 0.05) 0%, rgba(189, 189, 189, 0.05) 100%);
+  border-color: rgba(158, 158, 158, 0.2);
+}
+
+.keypoint-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* HEADER */
+.keypoint-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
+}
+
+.keypoint-number {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+}
+
+.keypoint-item.completed .keypoint-number {
+  background: #4CAF50;
+}
+
+.keypoint-item.locked .keypoint-number {
+  background: rgba(158, 158, 158, 0.5);
+}
+
+.keypoint-info {
+  flex: 1;
+}
+
+.keypoint-info h3 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.keypoint-description {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+.keypoint-status {
+  display: flex;
+  align-items: center;
+}
+
+.icon-unlocked {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: #4CAF50;
+  animation: unlock 0.5s ease-out;
+}
+
+.icon-locked {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: rgba(158, 158, 158, 0.6);
+}
+
+@keyframes unlock {
+  0% {
+    transform: scale(0.8) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* SECRET CONTENT */
+.keypoint-secret {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background: linear-gradient(135deg, rgba(255, 235, 59, 0.15) 0%, rgba(255, 193, 7, 0.15) 100%);
+  border-radius: var(--border-radius-lg);
+  border-left: 4px solid #FFC107;
+  animation: fadeInSecret 0.6s ease-out;
+}
+
+@keyframes fadeInSecret {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.secret-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  font-weight: 600;
+  color: #F57C00;
+}
+
+.secret-header mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #FFC107;
+}
+
+.completed-time {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  font-weight: 500;
+}
+
+.secret-content {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-neutral-900);
+  font-weight: 500;
+  padding: var(--spacing-2);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: var(--border-radius-md);
+}
+
+/* LOCKED MESSAGE */
+.keypoint-locked {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background: rgba(158, 158, 158, 0.1);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  color: var(--color-neutral-600);
+}
+
+.keypoint-locked mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: rgba(158, 158, 158, 0.5);
+}
+
+.keypoint-locked p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+/* HIGHLIGHT ANIMATION */
+.highlight-keypoint {
+  animation: highlightPulse 1s ease-out;
+}
+
+@keyframes highlightPulse {
+  0%, 100% {
+    background: rgba(255, 235, 59, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    background: rgba(255, 235, 59, 0.5);
+    transform: scale(1.02);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .keypoint-header {
+    flex-wrap: wrap;
+  }
+
+  .keypoint-number {
+    min-width: 36px;
+    height: 36px;
+    font-size: var(--font-size-base);
+  }
+
+  .keypoint-status {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .secret-header {
+    flex-wrap: wrap;
+  }
+
+  .completed-time {
+    width: 100%;
+    margin-left: 0;
+    margin-top: var(--spacing-2);
+  }
+}
+
+.completion-warning {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3);
+  background: rgba(255, 152, 0, 0.1);
+  border-left: 4px solid #2c9cb5;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  color: #16d9eb;
+  font-weight: 600;
+}
+
+
+/* COMPLETE DUGME  */
+.action-buttons button.complete-btn {
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important; 
+  color: var(--color-neutral-0) !important;
+  border: none !important;
+  box-shadow: var(--shadow-md);
+}
+
+.action-buttons button.complete-btn:hover {
+  background: linear-gradient(135deg, #00ACC1, #0097A7) !important; 
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ABANDON DUGME  */
+.action-buttons button.abandon-btn {
+  background: linear-gradient(135deg, #F44336, #E57373) !important;
+  color: var(--color-neutral-0) !important;
+  border: none !important;
+  box-shadow: var(--shadow-md);
+}
+
+.action-buttons button.abandon-btn:hover {
+  background: linear-gradient(135deg, #E53935, #E57373) !important;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* DISABLED STATE (oba dugmeta) */
+.action-buttons button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.action-buttons button:disabled:hover {
+  transform: none !important;
+  box-shadow: var(--shadow-md) !important;
+}

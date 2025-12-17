@@ -1,0 +1,269 @@
+.tour-list-container {
+  padding: var(--spacing-8) 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+  margin-bottom: var(--spacing-2);
+}
+
+.cart-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  max-width: 32rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-8) 0;
+}
+
+/* ============================================================================
+   EMPTY STATE - DISCOVER TOURS DUGME CIJAN BOJA
+   ============================================================================ */
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: var(--color-primary-500);
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state h2 {
+  margin-bottom: var(--spacing-2);
+}
+
+.empty-state p {
+  max-width: 32rem;
+  margin: 0 auto var(--spacing-4);
+}
+
+/* DISCOVER TOURS DUGME - CIJAN STIL */
+.empty-state button[mat-raised-button] {
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: var(--font-size-base) !important;
+  padding: 12px 32px !important;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3) !important;
+  transition: all var(--transition-normal) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.empty-state button[mat-raised-button]:hover {
+  background: linear-gradient(135deg, #26C6DA, #00BCD4) !important;
+  box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* SMANJI IKONU UNUTAR DUGMETA */
+.empty-state button[mat-raised-button] mat-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+}
+
+/* ============================================================================
+   TOURS GRID
+   ============================================================================ */
+
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.tour-card {
+  padding: var(--spacing-6);
+  border-top: 4px solid var(--color-primary-500);
+}
+
+.tour-card mat-card-header {
+  margin-bottom: var(--spacing-4);
+}
+
+.tour-card mat-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.tour-card mat-card-subtitle {
+  margin-top: var(--spacing-2);
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-published {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2E7D32;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-archived {
+  background: rgba(255, 152, 0, 0.15);
+  color: #E65100;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.badge-owned {
+  background: rgba(33, 150, 243, 0.15);
+  color: #0D47A1;
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.badge-owned mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-4);
+}
+
+.tour-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.detail-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+}
+
+.detail-item mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.tags {
+  margin-top: var(--spacing-2);
+}
+
+.tags mat-chip-set {
+  max-width: 100%;
+}
+
+.tags mat-chip {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+/* mat-card-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  margin-top: var(--spacing-4);
+} */
+
+mat-card-actions {
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+mat-card-actions button {
+    display: block;
+    margin-top: var(--spacing-4);
+}
+
+/* START TOUR DUGME - CIJAN */
+mat-card-actions button[mat-raised-button] {
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 10px 24px !important;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+  transition: all var(--transition-normal) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+mat-card-actions button[mat-raised-button]:hover:not([disabled]) {
+  background: linear-gradient(135deg, #26C6DA, #00BCD4) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* SMANJI IKONU U START TOUR DUGMETU */
+mat-card-actions button[mat-raised-button] mat-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+}
+
+mat-card-actions button[disabled] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  background: rgba(158, 158, 158, 0.3) !important;
+  transform: none !important;
+}
+
+mat-card-actions button[disabled]:hover {
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tour-card {
+    padding: var(--spacing-4);
+  }
+
+  mat-card-actions {
+    flex-direction: column;
+  }
+
+  mat-card-actions button {
+    width: 100%;
+  }
+}

@@ -17,9 +17,14 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-module';
 import { MarkdownModule } from 'ngx-markdown';
 
+
+
 @NgModule({
   declarations: [
     AppComponent
+  
+   
+
   ],
   imports: [
     BrowserModule,

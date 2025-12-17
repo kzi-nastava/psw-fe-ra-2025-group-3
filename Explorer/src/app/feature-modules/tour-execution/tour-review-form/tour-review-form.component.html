@@ -1,0 +1,175 @@
+<div class="review-form-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Form Content -->
+  <div *ngIf="!isLoading">
+    <!-- Eligibility Warning -->
+    <mat-card *ngIf="eligibility && !eligibility.canReview" class="warning-card">
+      <div class="warning-content">
+        <mat-icon>warning</mat-icon>
+        <div>
+          <h3>Cannot {{ isEditMode ? 'Edit' : 'Post' }} Review</h3>
+          <p>{{ eligibility.reasonIfNot }}</p>
+          <div class="eligibility-details">
+            <div class="detail-item">
+              <mat-icon>route</mat-icon>
+              <span>Current progress: {{ eligibility.currentProgress | number:'1.0-0' }}%</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>Days since last activity: {{ eligibility.daysSinceLastActivity }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Review Form -->
+    <mat-card *ngIf="eligibility?.canReview || isEditMode" class="form-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>{{ isEditMode ? 'edit' : 'rate_review' }}</mat-icon>
+          {{ isEditMode ? 'Edit Your Review' : 'Leave a Review' }}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+          <!-- Rating Section -->
+          <div class="form-section">
+            <label class="form-label">
+              Rating <span class="required">*</span>
+            </label>
+            <div class="star-rating">
+              <button
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                type="button"
+                class="star-button"
+                [class.disabled]="!eligibility?.canReview"
+                (click)="setRating(star)"
+                (mouseenter)="onStarHover(star)"
+                (mouseleave)="onStarLeave()">
+                <mat-icon [class.filled]="getStarIcon(star) === 'star'">
+                  {{ getStarIcon(star) }}
+                </mat-icon>
+              </button>
+            </div>
+            <div class="rating-text" *ngIf="reviewForm.get('rating')?.value > 0">
+              {{ reviewForm.get('rating')?.value }} out of 5 stars
+            </div>
+            <mat-error *ngIf="reviewForm.get('rating')?.touched && reviewForm.get('rating')?.hasError('required')">
+              Please select a rating
+            </mat-error>
+          </div>
+
+          <!-- Comment Section -->
+          <div class="form-section">
+            <label class="form-label" for="comment">
+              Your Experience (Optional)
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <textarea
+                matInput
+                id="comment"
+                formControlName="comment"
+                placeholder="Share your thoughts about this tour..."
+                rows="6"
+                maxlength="1000"></textarea>
+              <mat-hint align="end">
+                {{ reviewForm.get('comment')?.value?.length || 0 }} / 1000
+              </mat-hint>
+            </mat-form-field>
+          </div>
+
+          <!-- Images Section -->
+          <div class="form-section">
+            <label class="form-label">
+              Photos (Optional - Max 5)
+            </label>
+
+            <!-- Existing Images (Edit Mode) -->
+            <div *ngIf="existingImages.length > 0" class="images-grid">
+              <div *ngFor="let img of existingImages" class="image-preview existing">
+                <img [src]="getImageUrl(img.imageUrl)" alt="Review image">
+                <button 
+                  type="button"
+                  mat-icon-button
+                  class="delete-btn"
+                  (click)="deleteExistingImage(img.id)"
+                  [disabled]="!eligibility?.canReview">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- New Images Preview -->
+            <div *ngIf="selectedFiles.length > 0" class="images-grid">
+              <div *ngFor="let file of selectedFiles; let i = index" class="image-preview new">
+                <img [src]="file.preview" alt="Preview">
+                <button 
+                  type="button"
+                  mat-icon-button
+                  class="delete-btn"
+                  (click)="removeSelectedFile(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Button -->
+            <button
+              type="button"
+              mat-stroked-button
+              color="primary"
+              (click)="fileInput.click()"
+              [disabled]="!canAddMoreImages || !eligibility?.canReview"
+              class="upload-btn">
+              <mat-icon>add_photo_alternate</mat-icon>
+              {{ canAddMoreImages ? 'Add Photos (' + totalImagesCount + '/5)' : 'Maximum 5 photos' }}
+            </button>
+
+            <!-- Hidden File Input -->
+            <input
+              #fileInput
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              multiple
+              hidden>
+
+            <mat-hint class="image-hint">
+              Supported formats: JPG, PNG, WEBP. Max size: 5MB per image.
+            </mat-hint>
+          </div>
+
+          <!-- Progress Info -->
+          <div *ngIf="eligibility" class="progress-info">
+            <mat-icon>info</mat-icon>
+            <span>
+              You completed {{ eligibility.currentProgress | number:'1.0-0' }}% of this tour
+            </span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="!canSubmit"
+              class="submit-button">
+              <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+              <span *ngIf="!isSubmitting">
+                <mat-icon>{{ isEditMode ? 'check' : 'send' }}</mat-icon>
+                {{ isEditMode ? 'Save Changes' : 'Post Review' }}
+              </span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

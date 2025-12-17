@@ -3,7 +3,8 @@
   flex-direction: column;
   gap: 20px;
   padding: 8px 0;
-  min-width: 450px;
+  width: 100%;       /* ✔ uklanja X-scroll */
+  min-width: 0;      /* ✔ uklanja X-scroll */
 }
 
 .full-width {
@@ -16,7 +17,7 @@ mat-form-field {
 
 mat-form-field mat-icon[matPrefix] {
   margin-right: 12px;
-  color: #667eea;
+  color: var(--color-primary-700);
 }
 
 mat-label {
@@ -29,13 +30,14 @@ mat-label {
 ::ng-deep .mat-mdc-dialog-surface {
   border-radius: 16px !important;
   overflow: hidden !important;
-  width: 400px !important; /* širina dialoga */
-  max-width: 90vw !important; /* za mobilne uređaje */
+  width: 100% !important;          /* ✔ više nije fiksno 400px */
+  max-width: 550px !important;     /* ✔ dialog se lepo širi bez X-scroll */
+  max-width: 90vw !important;      /* za mobilne uređaje ostavljeno */
 }
 
 /* Dialog title */
 ::ng-deep .mat-mdc-dialog-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
   color: white !important;
   padding: 24px 32px !important;
   margin: 0 !important;
@@ -47,8 +49,9 @@ mat-label {
 ::ng-deep .mat-mdc-dialog-content {
   padding: 24px 32px !important;
   margin: 0 !important;
-  max-height: 60vh !important; /* maksimalna visina */
-  overflow-y: auto !important; /* scroll ako je sadržaj veći */
+  max-height: 60vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;    /* ✔ uklanja horizontalni scroll */
   box-sizing: border-box;
 }
 

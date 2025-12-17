@@ -27,7 +27,8 @@
           Every journey is unique, every story is yours.
         </p>
 
-        <div class="hero-cta">
+        <!-- Dugmad vidljiva samo kada korisnik NIJE ulogovan -->
+        <div class="hero-cta" *ngIf="!isLoggedIn">
           <button class="btn btn-primary btn-xl" routerLink="/login">
             <span>Explore Tours</span>
             <span class="btn-icon">✈</span>
@@ -37,6 +38,8 @@
             <span class="btn-icon">→</span>
           </button>
         </div>
+
+        <!-- Kada je korisnik ulogovan - NIŠTA se ne prikazuje -->
       </div>
 
       <!-- Right side - Illustration -->
@@ -177,7 +180,8 @@
             </div>
           </div>
 
-          <div class="guides-cta-section">
+          <!-- Dugme vidljivo samo kada korisnik NIJE ulogovan -->
+          <div class="guides-cta-section" *ngIf="!isLoggedIn">
             <button class="btn btn-white btn-xl" routerLink="/register">
               <span>Start Your Journey</span>
               <span class="btn-icon">→</span>
