@@ -80,7 +80,13 @@ export class BlogDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/author/blogs']);
+  const fromAllBlogs = this.route.snapshot.url[0]?.path === 'blogs';
+
+    if (fromAllBlogs) {
+      this.router.navigate(['/blogs']);
+    } else {
+      this.router.navigate(['/author/blogs']);
+   }
   }
 
   nextImage(): void {

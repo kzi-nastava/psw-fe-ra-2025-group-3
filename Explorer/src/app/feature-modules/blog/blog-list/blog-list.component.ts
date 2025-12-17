@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BlogService } from '../blog.service';
-import { Blog } from '../model/blog.model';
+import { Blog, BlogStatus } from '../model/blog.model';
 import { BlogFormComponent } from '../blog-form/blog-form.component';
 
 @Component({
@@ -16,6 +16,7 @@ import { BlogFormComponent } from '../blog-form/blog-form.component';
 export class BlogListComponent implements OnInit {
   blogs: Blog[] = [];
   isLoading: boolean = false;
+  isChangingStatus: { [key: number]: boolean } = {}; // ✅ Tracking status changes
 
   constructor(
     private blogService: BlogService,
@@ -61,6 +62,11 @@ export class BlogListComponent implements OnInit {
   }
 
   openEditDialog(blog: Blog): void {
+    if (blog.status === BlogStatus.Archived) {
+      this.showError('Cannot edit archived blog. Change status to Draft or Published first.');
+      return;
+    }
+
     const dialogRef = this.dialog.open(BlogFormComponent, {
       width: '700px',
       data: { mode: 'edit', blog: blog }
@@ -71,6 +77,45 @@ export class BlogListComponent implements OnInit {
         this.loadBlogs();
       }
     });
+  }
+
+  // ✅ NOVA METODA - Menja status
+  changeStatus(blog: Blog, newStatus: BlogStatus): void {
+    if (blog.status === newStatus) {
+      return; // Isti status, ne radi ništa
+    }
+
+    this.isChangingStatus[blog.id] = true;
+
+    this.blogService.changeStatus(blog.id, newStatus).subscribe({
+      next: (updatedBlog) => {
+        blog.status = updatedBlog.status;
+        blog.lastModifiedDate = updatedBlog.lastModifiedDate;
+        this.showSuccess(`Blog status changed to ${this.getStatusLabel(newStatus)}`);
+        this.isChangingStatus[blog.id] = false;
+      },
+      error: (error) => {
+        console.error('Error changing status:', error);
+        this.showError(error.error || 'Failed to change status');
+        this.isChangingStatus[blog.id] = false;
+        // Vrati na stari status u UI
+        this.loadBlogs();
+      }
+    });
+  }
+
+  // ✅ Helper funkcije za status
+  getStatusLabel(status: BlogStatus): string {
+    return this.blogService.getStatusLabel(status);
+  }
+
+  getStatusIcon(status: BlogStatus): string {
+    switch (status) {
+      case BlogStatus.Draft: return 'edit_note';
+      case BlogStatus.Published: return 'publish';
+      case BlogStatus.Archived: return 'archive';
+      default: return 'help';
+    }
   }
 
   formatDate(date: Date): string {
@@ -106,6 +151,13 @@ export class BlogListComponent implements OnInit {
       return blog.images[0].imageUrl;
     }
     return 'https://via.placeholder.com/400x200?text=No+Image';
+  }
+
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
+    });
   }
 
   private showError(message: string): void {

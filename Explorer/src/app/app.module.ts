@@ -18,9 +18,11 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
 import { MarkdownModule } from 'ngx-markdown';
 
 
+
 @NgModule({
   declarations: [
     AppComponent
+  
    
 
   ],

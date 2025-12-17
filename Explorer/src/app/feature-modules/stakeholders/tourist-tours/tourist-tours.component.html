@@ -19,11 +19,12 @@
 
     <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
       <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
+
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
           <mat-card-subtitle>
-            <span 
-              class="status-badge" 
+            <span
+              class="status-badge"
               [ngClass]="{
                 'status-published': tour.status === TourStatus.Published,
                 'status-archived': tour.status === TourStatus.Archived
@@ -32,6 +33,18 @@
             </span>
           </mat-card-subtitle>
         </mat-card-header>
+
+        <div class="tour-badge preview" *ngIf="!tour.isPurchased && tour.status !== TourStatus.Archived">
+          PREVIEW ONLY
+        </div>
+
+        <div class="tour-badge purchased" *ngIf="tour.isPurchased">
+          PURCHASED
+        </div>
+
+        <div class="tour-badge archived" *ngIf="tour.status === TourStatus.Archived">
+          ARCHIVED
+        </div>
 
         <mat-card-content>
           <p class="description">{{ tour.description }}</p>
@@ -45,6 +58,12 @@
               <mat-icon>attach_money</mat-icon>
               <span>{{ tour.price | number:'1.2-2' }} RSD</span>
             </div>
+            
+            <div class="detail-item rating-display" *ngIf="tour.averageRating">
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="rating-text">{{ tour.averageRating | number:'1.1-1' }}</span>
+              <span class="review-count">({{ tour.reviews ? tour.reviews.length : 0 }})</span>
+            </div>
           </div>
 
           <div class="tags" *ngIf="tour.tags && tour.tags.length > 0">
@@ -53,8 +72,20 @@
             </mat-chip-set>
           </div>
 
-           <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
-            <xp-tour-reviews 
+          <div class="first-keypoint-preview">
+            <div *ngIf="tour.firstKeyPoint">
+            <h4 class="keypoint-title">
+              <mat-icon>location_on</mat-icon>
+              Start: {{ tour.firstKeyPoint.name }}
+            </h4>
+            <div class="keypoint-content">
+              <p class="keypoint-description">{{ tour.firstKeyPoint.description }}</p>
+            </div>
+            </div>
+          </div>
+
+          <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+            <xp-tour-reviews
               [tourId]="tour.id!"
               [currentUserId]="currentUserId">
             </xp-tour-reviews>
@@ -62,36 +93,52 @@
         </mat-card-content>
 
         <mat-card-actions>
+
           <button
             mat-button
-            (click)="expandReviews(tour)">
-            <mat-icon>rate_review</mat-icon>
-            {{ expandedTourId === tour.id ? 'Hide' : 'Reviews' }}
+            color="primary"
+            class="view-details-btn"
+            [routerLink]="['/tourist/tours', tour.id, 'details']">
+            <mat-icon>info</mat-icon>
+            View Details
           </button>
+
           <button
             mat-stroked-button
             color="primary"
-            (click)="addToCart(tour)">
+            (click)="addToCart(tour)"
+            [disabled]="tour.status === TourStatus.Archived">
             <mat-icon>add_shopping_cart</mat-icon>
-            Add to cart
+            Buy
           </button>
+
+          <span class="locked-msg" *ngIf="tour.status === TourStatus.Archived">
+            This tour is archived and cannot be purchased.
+          </span>
 
           <button    
             mat-raised-button
             color="accent"
             (click)="startTour(tour)"
-            [disabled]="isStartingTour(tour.id!) || hasActiveTour">
-            
+            [disabled]="!tour.isPurchased || isStartingTour(tour.id!) || hasActiveTour">
+
             <mat-spinner *ngIf="isStartingTour(tour.id!)" diameter="20"></mat-spinner>
-            
-            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">play_arrow</mat-icon>
-            <mat-icon *ngIf="hasActiveTour && !isStartingTour(tour.id!)">block</mat-icon>
-            
-            <span *ngIf="!isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
+
+            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour && tour.isPurchased">play_arrow</mat-icon>
+            <mat-icon *ngIf="!tour.isPurchased">lock</mat-icon>
+
+            <span *ngIf="!tour.isPurchased">Locked</span>
+            <span *ngIf="tour.isPurchased && !isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
             <span *ngIf="isStartingTour(tour.id!)">Starting...</span>
             <span *ngIf="hasActiveTour && !isStartingTour(tour.id!)">Active Tour Running</span>
           </button>
+
+          <span class="locked-msg" *ngIf="!tour.isPurchased">
+            You need to purchase this tour before starting it.
+          </span>
+
         </mat-card-actions>
+
       </mat-card>
     </div>
   </div>

@@ -12,6 +12,12 @@ export interface TourProblem {
   messages: Message[];
   createdAt?: Date;
   updatedAt?: Date;
+  tourName?: string;        // For admin view - tour name
+  touristName?: string;     // For admin view - tourist name
+  isOverdue?: boolean;      // For admin view - problem older than 5 days
+  daysOpen?: number;        // For admin view - number of days problem is open
+  adminDeadline?: string;       // Rok koji je admin postavio
+  isDeadlineExpired?: boolean;
 }
 
 export interface Message {
@@ -40,7 +46,8 @@ export enum ProblemPriority {
 export enum ProblemStatus {
   Open = 0,
   Resolved = 1,
-  Unresolved = 2
+  Unresolved = 2,
+  Closed = 3
 }
 
 export enum AuthorType {
@@ -70,4 +77,8 @@ export interface AddMessageDto {
 
 export interface MarkProblemResolvedDto {
   touristComment: string;
+}
+
+export interface AdminDeadlineDto {
+  deadline: string;   
 }

@@ -1,0 +1,187 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Problem Details</h1>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && problem" class="content-wrapper">
+
+  <!-- Success / error messages -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    <mat-icon>check_circle</mat-icon>
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Problem Info Card -->
+  <mat-card class="problem-info-card" 
+            [class.overdue-card]="problem.isOverdue && problem.status === ProblemStatus.Open">
+    <mat-card-header>
+      <mat-card-title>
+        {{ problem.tourName || 'Tour #' + problem.tourId }}
+        <div class="badges">
+          <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+            {{getPriorityName(problem.priority)}}
+          </span>
+          <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
+            {{getStatusName(problem.status)}}
+          </span>
+          <span *ngIf="problem.isOverdue && problem.status === ProblemStatus.Open" class="overdue-badge">
+            ⚠️ OVERDUE ({{problem.daysOpen}} days)
+          </span>
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div class="subtitle-row">
+          <span><mat-icon>person</mat-icon> {{ problem.touristName || 'Tourist #' + problem.touristId }}</span>
+          <span><mat-icon>category</mat-icon> {{getCategoryName(problem.category)}}</span>
+          <span><mat-icon>schedule</mat-icon> {{problem.time | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+      <mat-card-content>
+        <div class="problem-description">
+          <h3><mat-icon>description</mat-icon>Description</h3>
+          <p>{{problem.description}}</p>
+        </div>
+
+        <div class="resolution-comment" *ngIf="problem.resolvedByTouristComment">
+          <h3>
+            <mat-icon [fontIcon]="problem.status === ProblemStatus.Resolved ? 'check_circle' : 'cancel'"></mat-icon>
+            {{problem.status === ProblemStatus.Resolved ? 'Resolution' : 'Unresolved'}} Comment by Tourist
+          </h3>
+          <p>{{problem.resolvedByTouristComment}}</p>
+        </div>
+
+        <div class="admin-notice" *ngIf="problem.status === ProblemStatus.Open">
+          <mat-icon>info</mat-icon>
+          <span>As an administrator, you can set a deadline for the author, monitor its expiration,
+                close the problem or penalize the author if the issue is not resolved.</span>
+        </div>
+        <!-- Admin actions -->
+        <div *ngIf="problem.status === ProblemStatus.Open" class="admin-actions">
+          <h3><mat-icon>admin_panel_settings</mat-icon> Admin actions</h3>
+
+          <div class="deadline-row">
+            <label class="deadline-label">
+              Set a deadline by which the author must resolve this problem:
+            </label>
+
+            <input
+              type="datetime-local"
+              [(ngModel)]="deadlineInput"
+              [disabled]="savingDeadline"
+            />
+
+            <button mat-raised-button color="primary"
+                    (click)="onSetDeadline()"
+                    [disabled]="savingDeadline || !deadlineInput">
+              <mat-icon>event</mat-icon>
+              {{ problem.adminDeadline ? 'Update deadline' : 'Set deadline' }}
+            </button>
+            </div>
+            <div class="deadline-info" *ngIf="problem.adminDeadline">
+            <mat-icon>info</mat-icon>
+            <span>
+              Current deadline:
+              {{ problem.adminDeadline | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+          </div>
+
+          <div class="deadline-expired" *ngIf="problem.isDeadlineExpired">
+            <mat-icon color="warn">warning</mat-icon>
+            <span>Admin deadline has expired. You can now close the problem or penalize the author.</span>
+          </div>
+
+          <div class="action-buttons" *ngIf="problem.isDeadlineExpired">
+
+          <button mat-stroked-button color="accent"
+                  class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
+                  (click)="onCloseProblem()"
+                  [disabled]="closing">
+            <mat-icon class="btn-icon">check_circle</mat-icon>
+            Close problem
+          </button>
+
+          <button mat-stroked-button color="warn"
+                  class="admin-btn small-btn"
+                  *ngIf="problem.status === ProblemStatus.Open"
+                  (click)="onPenalizeAuthor()"
+                  [disabled]="penalizing">
+            <mat-icon class="btn-icon">gavel</mat-icon>
+            Penalize Author
+          </button>
+                      
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  <!-- Messages Section -->
+    <mat-card class="messages-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>chat</mat-icon>
+          Conversation
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+    
+    <div class="messages-container">
+      <div *ngFor="let message of problem.messages" 
+           class="message" 
+           [ngClass]="{'message-tourist': message.authorType === AuthorType.Tourist, 
+                       'message-author': message.authorType === AuthorType.Author,
+                       'message-admin': message.authorType === AuthorType.Admin}">
+        <div class="message-header">
+          <span class="message-author-label">{{getAuthorTypeName(message.authorType)}}</span>
+          <span class="message-time">{{message.timestamp | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+        <div class="message-content">
+          {{message.content}}
+        </div>
+      </div>
+
+      <div *ngIf="problem.messages.length === 0" class="no-messages">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>No messages in this conversation yet.</p>
+      </div>
+    </div>
+
+    <!-- Admin Message Input -->
+    <div class="message-input">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your message as Admin</mat-label>
+        <textarea matInput 
+                  [formControl]="messageControl" 
+                  rows="3" 
+                  placeholder="Type your message to respond to this problem..."></textarea>
+        <mat-icon matPrefix>edit</mat-icon>
+        <mat-error *ngIf="messageControl.hasError('required')">Message is required</mat-error>
+      </mat-form-field>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="sendMessage()" 
+              [disabled]="messageControl.invalid || sendingMessage">
+        <mat-icon>send</mat-icon> Send Message
+      </button>
+    </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

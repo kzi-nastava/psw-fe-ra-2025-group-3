@@ -1,0 +1,76 @@
+.details-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.badge {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.badge.preview {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge.purchased {
+  background: #c8e6c9;
+  color: #2e7d32;
+}
+
+.description {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.images img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.info-box p {
+  margin: 4px 0;
+}
+
+.kp-section {
+  margin-top: 25px;
+}
+
+.kp-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.kp-section li {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.locked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #c62828;
+  margin: 10px 0;
+}
+
+.reviews-title {
+  margin-top: 30px;
+  font-size: 1.4rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}

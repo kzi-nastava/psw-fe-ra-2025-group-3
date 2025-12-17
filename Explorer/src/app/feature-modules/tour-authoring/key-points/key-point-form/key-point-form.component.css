@@ -1,0 +1,34 @@
+.kp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.kp-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kp-field {
+  width: 100%;
+}
+
+/* Dugmad */
+.kp-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kp-form {
+    gap: 16px;
+  }
+
+  .kp-form-actions {
+    justify-content: space-between;
+  }
+}

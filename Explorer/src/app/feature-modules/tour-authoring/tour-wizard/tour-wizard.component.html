@@ -1,0 +1,68 @@
+<div class="wizard">
+  <div class="wizard__header">
+    <div class="wizard__title-wrap">
+      <h2 class="wizard__title">Tour wizard</h2>
+      <div class="wizard__subtitle">
+        {{ data.mode === 'edit' ? 'Edit existing tour and manage key points' : 'Create a new tour and add key points' }}
+      </div>
+    </div>
+
+    <div class="wizard__actions">
+      <button mat-stroked-button (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+
+  <mat-tab-group
+    [(selectedIndex)]="selectedIndex"
+    class="wizard__tabs"
+    (selectedTabChange)="onTabChange($event)"
+    [dynamicHeight]="false"
+  >
+    <mat-tab label="Basic information">
+      <div class="step-content">
+        <app-tour-form
+          [mode]="data.mode"
+          [tour]="data.tour"
+          [embedded]="true"
+          (saved)="onTourFormSaved($event)"
+          (cancelled)="cancel()"
+        ></app-tour-form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Key points">
+      <div class="step-content">
+        <xp-key-point-page
+          *ngIf="isOnKeyPoints && tourId as id"
+          [currentTourId]="id"
+        ></xp-key-point-page>
+
+        <div *ngIf="isOnKeyPoints && !tourId" class="empty-state">
+          Please save the tour first in order to add key points.
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="wizard__footer">
+    <button mat-stroked-button (click)="back()" [disabled]="isOnBasics">
+      Back
+    </button>
+
+    <div class="wizard__footer-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="isOnBasics"
+        (click)="goToKeyPoints()"
+        [disabled]="!canOpenKeyPoints && data.mode !== 'edit'"
+      >
+        Next
+      </button>
+
+      <button mat-raised-button color="primary" *ngIf="isOnKeyPoints" (click)="finish()">
+        Finish
+      </button>
+    </div>
+  </div>
+</div>

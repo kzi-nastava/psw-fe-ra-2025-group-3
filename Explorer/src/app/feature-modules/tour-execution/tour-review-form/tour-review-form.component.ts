@@ -1,8 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TourReviewService } from '../tour-review.service';
-import { TourReview, TourReviewEligibility } from '../model/tour-review.model';
+import { TourReview, TourReviewEligibility, ReviewImage } from '../model/tour-review.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+interface SelectedFile {
+  file: File;
+  preview: string;
+}
 
 @Component({
   selector: 'xp-tour-review-form',
@@ -20,6 +25,10 @@ export class TourReviewFormComponent implements OnInit {
   isSubmitting = false;
   hoveredStar = 0;
 
+  selectedFiles: SelectedFile[] = [];
+  existingImages: ReviewImage[] = [];
+  isUploadingImages = false;
+
   constructor(
     private fb: FormBuilder,
     private reviewService: TourReviewService,
@@ -29,6 +38,9 @@ export class TourReviewFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.checkEligibility();
+    if (this.existingReview) {
+      this.existingImages = this.existingReview.images || [];
+    }
   }
 
   private initForm(): void {
@@ -38,7 +50,6 @@ export class TourReviewFormComponent implements OnInit {
     });
 
     if (this.existingReview) {
-      // Ako je edit mode, odmah proveri eligibility
       this.reviewForm.disable();
     }
   }
@@ -57,7 +68,6 @@ export class TourReviewFormComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('[Review Form] Error checking eligibility:', err);
         this.isLoading = false;
         this.snackBar.open('Error checking review eligibility', 'Close', { duration: 3000 });
       }
@@ -84,7 +94,80 @@ export class TourReviewFormComponent implements OnInit {
     return position <= displayRating ? 'star' : 'star_border';
   }
 
-  onSubmit(): void {
+  onFileSelected(event: any): void {
+    const files: FileList = event.target.files;
+    
+    if (!files || files.length === 0) return;
+
+    const remainingSlots = 5 - this.totalImagesCount;
+    const filesToAdd = Math.min(files.length, remainingSlots);
+
+    for (let i = 0; i < filesToAdd; i++) {
+      const file = files[i];
+
+      if (file.size > 5 * 1024 * 1024) {
+        this.snackBar.open(`Image "${file.name}" is too large. Max 5MB.`, 'Close', { duration: 3000 });
+        continue;
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        this.snackBar.open(`Image "${file.name}" has invalid format.`, 'Close', { duration: 3000 });
+        continue;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedFiles.push({
+          file: file,
+          preview: e.target.result
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    event.target.value = '';
+  }
+
+  removeSelectedFile(index: number): void {
+    this.selectedFiles.splice(index, 1);
+  }
+
+  deleteExistingImage(imageId: number): void {
+    if (!confirm('Are you sure you want to delete this image?')) return;
+
+    if (!this.existingReview) return;
+
+    this.reviewService.deleteImageFromReview(this.existingReview.id, imageId).subscribe({
+      next: () => {
+        this.existingImages = this.existingImages.filter(img => img.id !== imageId);
+        this.snackBar.open('✅ Image deleted', 'Close', { duration: 2000 });
+      },
+      error: () => {
+        this.snackBar.open('Failed to delete image', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  private async uploadImages(reviewId: number): Promise<void> {
+    this.isUploadingImages = true;
+
+    for (const selectedFile of this.selectedFiles) {
+      try {
+        const uploadResponse = await this.reviewService.uploadImage(selectedFile.file).toPromise();
+        
+        if (!uploadResponse) continue;
+
+        await this.reviewService.addImageToReview(reviewId, uploadResponse.imageUrl).toPromise();
+      } catch (err) {
+        console.error('Error uploading image:', err);
+      }
+    }
+
+    this.isUploadingImages = false;
+  }
+
+  async onSubmit(): Promise<void> {
     if (this.reviewForm.invalid || !this.eligibility?.canReview) {
       return;
     }
@@ -93,7 +176,6 @@ export class TourReviewFormComponent implements OnInit {
     const formValue = this.reviewForm.value;
 
     if (this.existingReview) {
-      // Update existing review
       const updateDto = {
         reviewId: this.existingReview.id,
         rating: formValue.rating,
@@ -101,25 +183,22 @@ export class TourReviewFormComponent implements OnInit {
       };
 
       this.reviewService.updateReview(updateDto).subscribe({
-        next: () => {
-          this.snackBar.open('✅ Review updated successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+        next: async (updatedReview) => {
+          if (this.selectedFiles.length > 0) {
+            await this.uploadImages(updatedReview.id);
+          }
+
+          this.snackBar.open('✅ Review updated successfully!', 'Close', { duration: 3000 });
           this.isSubmitting = false;
+          this.selectedFiles = [];
           this.reviewSubmitted.emit();
         },
         error: (err) => {
-          console.error('[Review Form] Error updating review:', err);
-          this.snackBar.open(err.error?.message || 'Failed to update review', 'Close', {
-            duration: 4000,
-            panelClass: ['error-snackbar']
-          });
+          this.snackBar.open(err.error?.message || 'Failed to update review', 'Close', { duration: 4000 });
           this.isSubmitting = false;
         }
       });
     } else {
-      // Create new review
       const createDto = {
         tourId: this.tourId,
         rating: formValue.rating,
@@ -127,21 +206,19 @@ export class TourReviewFormComponent implements OnInit {
       };
 
       this.reviewService.createReview(createDto).subscribe({
-        next: () => {
-          this.snackBar.open('✅ Review posted successfully!', 'Close', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+        next: async (newReview) => {
+          if (this.selectedFiles.length > 0) {
+            await this.uploadImages(newReview.id);
+          }
+
+          this.snackBar.open('✅ Review posted successfully!', 'Close', { duration: 3000 });
           this.isSubmitting = false;
           this.reviewForm.reset({ rating: 0, comment: '' });
+          this.selectedFiles = [];
           this.reviewSubmitted.emit();
         },
         error: (err) => {
-          console.error('[Review Form] Error creating review:', err);
-          this.snackBar.open(err.error?.message || 'Failed to post review', 'Close', {
-            duration: 4000,
-            panelClass: ['error-snackbar']
-          });
+          this.snackBar.open(err.error?.message || 'Failed to post review', 'Close', { duration: 4000 });
           this.isSubmitting = false;
         }
       });
@@ -155,6 +232,20 @@ export class TourReviewFormComponent implements OnInit {
   get canSubmit(): boolean {
     return this.reviewForm.valid && 
            this.eligibility?.canReview === true && 
-           !this.isSubmitting;
+           !this.isSubmitting &&
+           !this.isUploadingImages;
   }
+
+  get totalImagesCount(): number {
+    return this.existingImages.length + this.selectedFiles.length;
+  }
+
+  get canAddMoreImages(): boolean {
+    return this.totalImagesCount < 5;
+  }
+
+  getImageUrl(imageUrl: string): string {
+    return this.reviewService.getImageUrl(imageUrl);
+  }
+  
 }

@@ -1,8 +1,10 @@
+// src/app/feature-modules/blog/blog.service.ts
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { Blog, BlogCreateDto, BlogUpdateDto, BlogVoteDto, BlogVoteStateDto } from './model/blog.model';
+import { Blog, BlogCreateDto, BlogUpdateDto, BlogStatus, BlogVoteDto, BlogVoteStateDto } from './model/blog.model';
 
 export interface ImageUploadResponse {
   imageUrl: string;
@@ -22,6 +24,10 @@ export class BlogService {
     return this.http.get<Blog[]>(`${this.baseUrl}/my-blogs`);
   }
 
+  getAllBlogs(): Observable<Blog[]> {
+    return this.http.get<Blog[]>(`${this.baseUrl}/all`);
+  }
+
   getBlogById(id: number): Observable<Blog> {
     return this.http.get<Blog>(`${this.baseUrl}/${id}`);
   }
@@ -32,6 +38,13 @@ export class BlogService {
 
   updateBlog(id: number, blog: BlogUpdateDto): Observable<Blog> {
     return this.http.put<Blog>(`${this.baseUrl}/${id}`, blog);
+  }
+
+  // NOVA METODA - Mijenja status
+  changeStatus(id: number, status: BlogStatus): Observable<Blog> {
+    return this.http.patch<Blog>(`${this.baseUrl}/${id}/status`, status, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   deleteBlog(id: number): Observable<void> {
@@ -55,5 +68,36 @@ export class BlogService {
 
   deleteUploadedImage(fileName: string): Observable<void> {
     return this.http.delete<void>(`${this.imageUploadUrl}/${fileName}`);
+  }
+
+  // Helper funkcije za status
+  getStatusLabel(status: BlogStatus): string {
+    switch (status) {
+      case BlogStatus.Draft: return 'Draft';
+      case BlogStatus.Published: return 'Published';
+      case BlogStatus.Archived: return 'Archived';
+      default: return 'Unknown';
+    }
+  }
+
+  getStatusColor(status: BlogStatus): string {
+    switch (status) {
+      case BlogStatus.Draft: return 'warn';
+      case BlogStatus.Published: return 'primary';
+      case BlogStatus.Archived: return 'accent';
+      default: return '';
+    }
+  }
+
+  canEdit(status: BlogStatus): boolean {
+    return status !== BlogStatus.Archived;
+  }
+
+  canEditTitle(status: BlogStatus): boolean {
+    return status === BlogStatus.Draft;
+  }
+
+  canEditImages(status: BlogStatus): boolean {
+    return status === BlogStatus.Draft;
   }
 }

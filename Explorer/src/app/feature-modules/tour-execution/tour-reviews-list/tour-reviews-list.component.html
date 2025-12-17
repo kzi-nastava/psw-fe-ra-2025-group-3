@@ -1,3 +1,5 @@
+<!-- tour-reviews-list.component.html -->
+
 <div class="reviews-section">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-container">
@@ -13,9 +15,9 @@
           <div class="average-rating">{{ averageRating | number:'1.1-1' }}</div>
           <div class="stars-large">
             <mat-icon 
-              *ngFor="let star of getStarsArray(Math.round(averageRating))"
-              [class.filled]="star === 1">
-              {{ star === 1 ? 'star' : 'star_border' }}
+              *ngFor="let filled of getStarsArray(Math.round(averageRating))"
+              [class.filled]="filled === 1">
+              {{ filled === 1 ? 'star' : 'star_border' }}
             </mat-icon>
           </div>
           <div class="review-count">{{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }}</div>
@@ -38,7 +40,8 @@
             <div class="author-info">
               <mat-icon class="avatar-icon">account_circle</mat-icon>
               <div>
-                <div class="author-name">{{ review.touristName }}</div>
+                <!-- ✅ ISPRAVI OVO - koristi metodu umesto property-ja -->
+                <div class="author-name">{{ getTouristName(review.touristId) }}</div>
                 <div class="review-meta">
                   <span>{{ getFormattedDate(review.createdAt) }}</span>
                   <span *ngIf="review.isEdited" class="edited-badge">
@@ -55,14 +58,27 @@
         </mat-card-header>
         
         <mat-card-content>
+          <!-- Zvezdice -->
           <div class="stars-small">
-            <mat-icon *ngFor="let star of getStarsArray(review.rating)" class="filled">
-              star
+            <mat-icon *ngFor="let filled of getStarsArray(review.rating)"
+                      [class.filled]="filled === 1">
+              {{ filled === 1 ? 'star' : 'star_border' }}
             </mat-icon>
           </div>
           
           <p *ngIf="review.comment" class="review-comment">{{ review.comment }}</p>
           
+          <!-- Images Gallery -->
+          <div *ngIf="review.images && review.images.length > 0" class="review-images">
+            <div class="images-grid-small">
+              <div *ngFor="let img of review.images" 
+                   class="image-thumbnail" 
+                   (click)="openImageModal(img)">
+                <img [src]="getImageUrl(img.imageUrl)" alt="Review photo">
+              </div>
+            </div>
+          </div> 
+
           <div class="review-footer">
             <div class="progress-indicator">
               <mat-icon>route</mat-icon>

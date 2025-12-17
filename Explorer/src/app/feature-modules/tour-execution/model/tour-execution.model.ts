@@ -10,6 +10,7 @@ export interface TourExecution {
   abandonTime?: Date;
   lastActivity: Date;
   progressPercentage: number;
+    completedKeyPoints: KeyPointCompletion[]; // 
 }
 
 export enum TourExecutionStatus {
@@ -35,4 +36,23 @@ export interface LocationCheckResultDto {
   completedKeyPointId: number | null;
   lastActivity: Date;
   totalCompletedKeyPoints: number;
+}
+
+//
+export interface KeyPointCompletion {
+  keyPointId: number;
+  completedAt: Date;
+}
+
+// KeyPoint sa statusom completion
+export interface KeyPointWithStatus {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  secret: string;
+  latitude: number;
+  longitude: number;
+  isCompleted: boolean;
+  completedAt?: Date;
 }

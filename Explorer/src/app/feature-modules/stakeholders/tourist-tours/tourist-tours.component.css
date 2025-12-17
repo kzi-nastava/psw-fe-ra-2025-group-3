@@ -86,7 +86,7 @@
 }
 
 .status-published {
-  background: rgba(0, 188, 212, 0.12); 
+  background: rgba(0, 188, 212, 0.12);
   color: var(--color-primary-800);
 }
 
@@ -114,6 +114,49 @@
 .detail-item mat-icon {
   font-size: 20px;
 }
+
+.view-details-btn {
+    color: var(--color-primary-800);
+}
+
+/* --- NOVI STILOVI ZA OCENE I PRVU TACKU --- */
+.star-icon {
+  color: #FFA000 !important;
+}
+
+.rating-text {
+  font-weight: 700;
+  color: #F57C00;
+}
+
+.first-keypoint-preview {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid #e0e0e0;
+  height: 50px;
+}
+
+.keypoint-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0 0 var(--spacing-2) 0;
+  color: var(--color-primary-800);
+  font-size: var(--font-size-base);
+}
+
+.keypoint-title mat-icon {
+  color: var(--color-primary-500);
+  font-size: 18px;
+}
+
+.keypoint-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  margin: 0;
+  font-style: italic;
+}
+/* ------------------------------------------- */
 
 .tags {
   margin-top: var(--spacing-2);
@@ -144,10 +187,15 @@
     max-height: 3000px;
   }
 }
+
 mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: var(--spacing-4);
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+mat-card-actions button {
+    display: block;
+    margin-top: var(--spacing-4);
 }
 
 mat-card-actions button[mat-stroked-button] {
@@ -220,7 +268,7 @@ mat-card-actions button[disabled] {
 }
 
 .status-published {
-  background: rgba(0, 188, 212, 0.12); 
+  background: rgba(0, 188, 212, 0.12);
   color: var(--color-primary-800);
   border: 1px solid rgba(0, 188, 212, 0.2);
 }
@@ -244,4 +292,34 @@ mat-card-actions button[mat-raised-button][disabled] {
 
 mat-card-actions button[mat-raised-button] mat-icon[class*="block"] {
   color: rgba(0, 0, 0, 0.4);
+}
+
+.tour-badge {
+  padding: 4px 10px;
+  display: inline-block;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.tour-badge.preview {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tour-badge.purchased {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.tour-badge.archived {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.locked-msg {
+  font-size: 12px;
+  color: #c62828;
+  margin-top: 4px;
+  display: block;
 }

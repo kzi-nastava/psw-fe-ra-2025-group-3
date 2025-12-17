@@ -9,6 +9,9 @@ import { TourExecutionCreateDto } from '../../tour-execution/model/tour-executio
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
+interface TouristTourView extends Tour {
+  isPurchased?: boolean;
+}
 
 @Component({
   selector: 'xp-tourist-tours',
@@ -17,7 +20,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 })
 export class TouristToursComponent implements OnInit {
 
-  tours: Tour[] = [];
+  tours: TouristTourView[] = [];
   isLoading = false;
   startingTourId: number | null = null;
   hasActiveTour = false;
@@ -58,9 +61,21 @@ export class TouristToursComponent implements OnInit {
 
   loadTours(): void {
     this.isLoading = true;
-    this.tourService.getPublishedToursForTourist().subscribe({
+
+    
+    this.tourService.getPublishedTourPreviews().subscribe({
       next: (tours: Tour[]) => {
-        this.tours = tours || [];
+        this.tours = tours as TouristTourView[];  // cast
+
+        
+        this.tours.forEach(tour => {
+          if (tour.id) {
+            this.tourService.getTourDetails(tour.id).subscribe(details => {
+              tour.isPurchased = !!details.keyPoints;
+            });
+          }
+        });
+
         this.isLoading = false;
       },
       error: (error: any) => {
@@ -88,13 +103,13 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-    startTour(tour: Tour): void {
+  startTour(tour: Tour): void {
     if (!tour.id) {
       this.showError('Invalid tour.');
       return;
     }
 
-    // ✅ Provera za aktivnu turu
+    
     this.tourExecutionService.getActiveTourExecution().subscribe({
       next: (activeExecution) => {
         if (activeExecution) {
@@ -159,7 +174,7 @@ export class TouristToursComponent implements OnInit {
     });
   }
 
-   getStatusLabel(status: TourStatus): string {
+  getStatusLabel(status: TourStatus): string {
     switch (status) {
       case TourStatus.Published:
         return 'Published';
@@ -189,11 +204,12 @@ export class TouristToursComponent implements OnInit {
       panelClass: ['error-snackbar']
     });
   }
+  
   expandReviews(tour: Tour): void {
     if (this.expandedTourId === tour.id) {
-      this.expandedTourId = null;  // Collapse
+      this.expandedTourId = null;  
     } else {
-      this.expandedTourId = tour.id;  // Expand
+      this.expandedTourId = tour.id;  
     }
   }
 }

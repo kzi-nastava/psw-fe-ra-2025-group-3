@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +23,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TourReviewFormComponent } from './tour-review-form/tour-review-form.component';
 import { TourReviewsListComponent } from './tour-reviews-list/tour-reviews-list.component';
 import { TourReviewsComponent } from './tour-reviews/tour-reviews.component';
+import { MyReviewsComponent } from './my-reviews/my-reviews.component';
 
 
 
@@ -33,12 +35,14 @@ import { TourReviewsComponent } from './tour-reviews/tour-reviews.component';
     ActiveTourComponent,
     TourReviewFormComponent,
     TourReviewsListComponent,
-    TourReviewsComponent
+    TourReviewsComponent,
+    MyReviewsComponent
     
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -56,6 +60,7 @@ import { TourReviewsComponent } from './tour-reviews/tour-reviews.component';
   ],
   exports: [
     TourProblemListComponent,
+    TourProblemFormComponent,
     ActiveTourComponent,
     TourReviewsComponent 
   ]

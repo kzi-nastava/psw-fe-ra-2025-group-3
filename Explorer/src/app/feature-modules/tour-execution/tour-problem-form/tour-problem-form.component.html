@@ -6,7 +6,15 @@
   <mat-card-content>
     <form [formGroup]="problemForm" (ngSubmit)="onSubmit()">
       
-      <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
+      <!-- Ako je tourName prosleđen, prikaži ga kao disabled field -->
+      <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode && tourName">
+        <mat-label>Tour</mat-label>
+        <input matInput [value]="tourName" disabled>
+        <mat-icon matSuffix style="color: #4caf50;">check_circle</mat-icon>
+      </mat-form-field>
+
+      <!-- Inače prikaži standardno Tour ID polje -->
+      <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode && !tourName">
         <mat-label>Tour ID</mat-label>
         <input matInput type="text" formControlName="tourId" placeholder="Enter tour ID" pattern="[0-9]*">
         
@@ -28,7 +36,7 @@
       </mat-form-field>
 
       <!-- Poruka o grešci -->
-      <div *ngIf="tourNotFoundError && !isEditMode" class="tour-not-found-error">
+      <div *ngIf="tourNotFoundError && !isEditMode && !tourName" class="tour-not-found-error">
         <mat-icon>error</mat-icon>
         <span>Tour with ID {{problemForm.get('tourId')?.value}} does not exist. Please enter a valid tour ID.</span>
       </div>
