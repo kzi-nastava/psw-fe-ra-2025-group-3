@@ -21,7 +21,7 @@
       </button>
     </div>
 
-    <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
+    <div *ngIf="!isLoading && tours.length > 0 && !showForm" class="tours-grid">
       <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
 
         <mat-card-header>
@@ -40,6 +40,13 @@
               PURCHASED
             </span>
           </mat-card-subtitle>
+          <button 
+            mat-icon-button 
+            color="warn"
+            (click)="reportTour(tour)"
+            matTooltip="Report Tour">
+            <mat-icon>flag</mat-icon>
+        </button>
         </mat-card-header>
 
         <mat-card-content>
@@ -97,5 +104,17 @@
 
       </mat-card>
     </div>
+
+    <!-- Form za prijavljivanje problema -->
+    <app-tour-problem-form 
+      *ngIf="showForm"
+      [tourId]="reportingTourId"
+      [tourName]="reportingTourName"
+      [problem]="selectedProblem"
+      [isEditMode]="isEditMode"
+      (problemCreated)="onProblemCreated($any($event))"
+      (problemUpdated)="onProblemUpdated($any($event))"
+      (formCanceled)="onFormCanceled()">
+    </app-tour-problem-form>
   </div>
 </div>

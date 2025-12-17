@@ -11,7 +11,7 @@ import { ClubFormDialogComponent } from './components/club-form-dialog/club-form
 
 const routes: Routes = [
   { path: 'clubs', component: ClubListComponent, canActivate: [AuthGuard] },
-  { path: 'clubs/my', component: MyClubsComponent, canActivate: [AuthGuard] },
+  { path: 'my-clubs', component: MyClubsComponent, canActivate: [AuthGuard] },
   { path: 'clubs/create', component: ClubListComponent, canActivate: [AuthGuard] }, // create handled via dialog on list
   { path: 'clubs/:id', component: ClubDetailComponent, canActivate: [AuthGuard] },
 ];

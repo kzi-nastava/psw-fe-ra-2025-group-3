@@ -12,6 +12,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class TourProblemFormComponent implements OnInit {
   @Input() problem: TourProblem | null = null;
   @Input() isEditMode: boolean = false;
+  @Input() tourId: number | null = null; // Novi input za tourId
+  @Input() tourName: string | null = null; // Novi input za tourName
   @Output() problemCreated = new EventEmitter<TourProblemCreateDto>();
   @Output() problemUpdated = new EventEmitter<TourProblemUpdateDto>();
   @Output() formCanceled = new EventEmitter<void>();
@@ -62,6 +64,12 @@ export class TourProblemFormComponent implements OnInit {
   ngOnInit(): void {
     this.generateYears();
     this.initializeForm();
+    
+    // Ako je tourId prosleđen kao input, setuj ga u formu
+    if (this.tourId) {
+      this.problemForm.patchValue({ tourId: this.tourId });
+      this.validateTourExists(this.tourId);
+    }
     
     if (this.problem && this.isEditMode) {
       this.populateForm();

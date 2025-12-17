@@ -29,7 +29,7 @@ export class TouristEquipmentComponent implements OnInit {
         this.updateMyEquipment();
       },
       error: () => {
-        this.showError('Došlo je do greške prilikom učitavanja opreme.');
+        this.showError('Error with loading equipment.');
       }
     });
   }
@@ -49,7 +49,7 @@ export class TouristEquipmentComponent implements OnInit {
       this.addEquipment(equipment.id);
     } else {
       // Confirmation pre brisanja
-      if (confirm(`Da li ste sigurni da želite da uklonite "${equipment.name}" iz vašeg spiska?`)) {
+      if (confirm(`Are you sure you want to remove "${equipment.name}" from your list?`)) {
         this.removeEquipment(equipment.id);
       } else {
         // Vrati checkbox na prethodno stanje
@@ -66,10 +66,10 @@ export class TouristEquipmentComponent implements OnInit {
           equipment.isOwnedByTourist = true;
         }
         this.updateMyEquipment();
-        this.showSuccess('Oprema je uspešno dodata u vaš spisak');
+        this.showSuccess('Item successfully added to the list.');
       },
       error: () => {
-        this.showError('Došlo je do greške. Molimo pokušajte ponovo.');
+        this.showError('An error occurred. Please try again.');
         this.loadAllEquipment();
       }
     });
@@ -83,10 +83,10 @@ export class TouristEquipmentComponent implements OnInit {
           equipment.isOwnedByTourist = false;
         }
         this.updateMyEquipment();
-        this.showSuccess('Oprema je uspešno uklonjena iz vašeg spiska');
+        this.showSuccess('Item successfully removed from your list.');
       },
       error: () => {
-        this.showError('Došlo je do greške. Molimo pokušajte ponovo.');
+        this.showError('An error occurred. Please try again.');
         this.loadAllEquipment();
       }
     });
@@ -96,7 +96,7 @@ export class TouristEquipmentComponent implements OnInit {
     const equipment = this.myEquipment.find(eq => eq.id === equipmentId);
     
     // Confirmation dialog
-    if (confirm(`Da li ste sigurni da želite da uklonite "${equipment?.name}" iz vašeg spiska?`)) {
+    if (confirm(`Are you sure you want to remove "${equipment?.name}" from your list?`)) {
       this.removeEquipment(equipmentId);
     }
   }
