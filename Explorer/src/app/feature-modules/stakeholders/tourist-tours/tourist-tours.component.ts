@@ -62,15 +62,12 @@ export class TouristToursComponent implements OnInit {
   loadTours(): void {
     this.isLoading = true;
 
-    // --- IZMENA: Koristimo getPublishedTourPreviews umesto getPublishedToursForTourist ---
-    // Ovo radimo samo da bismo dobili rating i firstKeyPoint.
-    // Sve ostalo ostaje isto.
+    
     this.tourService.getPublishedTourPreviews().subscribe({
       next: (tours: Tour[]) => {
         this.tours = tours as TouristTourView[];  // cast
 
-        // ✨ STARA LOGIKA: Provera za svaku turu: da li je kupljena
-        // OVO OSTAJE NEPROMENJENO
+        
         this.tours.forEach(tour => {
           if (tour.id) {
             this.tourService.getTourDetails(tour.id).subscribe(details => {
@@ -112,7 +109,7 @@ export class TouristToursComponent implements OnInit {
       return;
     }
 
-    // ✅ Provera za aktivnu turu
+    
     this.tourExecutionService.getActiveTourExecution().subscribe({
       next: (activeExecution) => {
         if (activeExecution) {
@@ -210,9 +207,9 @@ export class TouristToursComponent implements OnInit {
   
   expandReviews(tour: Tour): void {
     if (this.expandedTourId === tour.id) {
-      this.expandedTourId = null;  // Collapse
+      this.expandedTourId = null;  
     } else {
-      this.expandedTourId = tour.id;  // Expand
+      this.expandedTourId = tour.id;  
     }
   }
 }
