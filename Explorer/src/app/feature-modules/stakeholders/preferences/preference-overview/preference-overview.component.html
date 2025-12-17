@@ -3,25 +3,25 @@
   <!-- Header Section -->
   <div class="flex-between mb-8">
     <div>
-      <h1 class="mb-4">Moje Preference</h1>
-      <p class="text-muted">Prilagodite svoje putovanje prema svojim željama</p>
+      <h1 class="mb-4">My preferences</h1>
+      <p class="text-muted">Customize your journey according to your preferences</p>
     </div>
   </div>
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="card text-center animate-fade-in-up">
     <mat-icon class="text-primary" style="font-size: 48px; width: 48px; height: 48px;">hourglass_empty</mat-icon>
-    <p class="mt-4">Učitavanje...</p>
+    <p class="mt-4">Loading...</p>
   </div>
 
   <!-- Empty State - Nema preferenci -->
   <div *ngIf="!isLoading && !hasPreference && !shouldRenderPreferenceForm" class="card text-center animate-fade-in-up">
     <mat-icon class="text-primary" style="font-size: 64px; width: 64px; height: 64px;">tune</mat-icon>
-    <h3 class="mt-4 mb-4">Još nemate postavljene preference</h3>
-    <p class="text-muted mb-6">Kreirajte svoje preference kako bismo vam preporučili savršenu turu!</p>
+    <h3 class="mt-4 mb-4">You don't have any preferences set yet</h3>
+    <p class="text-muted mb-6">Create your preferences so we can recommend the perfect tour for you!</p>
     <button class="btn btn-primary btn-lg mx-auto" (click)="onAddClicked()">
       <mat-icon>add</mat-icon>
-      Kreiraj Preference
+      Create Preferences
     </button>
   </div>
 
@@ -34,8 +34,8 @@
       <!-- Težina ture -->
       <div class="flex-between mb-6">
         <div>
-          <h3 class="m-0">Težina Ture</h3>
-          <p class="text-muted m-0">Preferirana težina vaših avantura</p>
+          <h3 class="m-0">Tour Difficulty</h3>
+          <p class="text-muted m-0">Preferred difficulty of your adventures</p>
         </div>
         <span class="badge" [ngClass]="getDifficultyBadgeClass(preference!.difficulty)">
           {{ getDifficultyText(preference!.difficulty) }}
@@ -45,7 +45,7 @@
       <hr style="border: none; border-top: 1px solid var(--color-neutral-100); margin: var(--spacing-6) 0;">
 
       <!-- Prevozna Sredstva Grid -->
-      <h3 class="mb-4">Prevozna Sredstva</h3>
+      <h3 class="mb-4">Transportation</h3>
       <div class="grid-2 mb-6">
         
         <!-- Šetnja -->
@@ -53,7 +53,7 @@
           <div class="flex-row items-center gap-4">
             <mat-icon class="text-primary">directions_walk</mat-icon>
             <div>
-              <strong>Šetnja</strong>
+              <strong>Walking</strong>
               <p class="m-0">{{ getRatingStars(preference!.walkingRating) }}</p>
             </div>
           </div>
@@ -64,7 +64,7 @@
           <div class="flex-row items-center gap-4">
             <mat-icon class="text-primary">directions_bike</mat-icon>
             <div>
-              <strong>Bicikl</strong>
+              <strong>Bicycle</strong>
               <p class="m-0">{{ getRatingStars(preference!.bicycleRating) }}</p>
             </div>
           </div>
@@ -75,7 +75,7 @@
           <div class="flex-row items-center gap-4">
             <mat-icon class="text-primary">directions_car</mat-icon>
             <div>
-              <strong>Auto</strong>
+              <strong>Car</strong>
               <p class="m-0">{{ getRatingStars(preference!.carRating) }}</p>
             </div>
           </div>
@@ -86,7 +86,7 @@
           <div class="flex-row items-center gap-4">
             <mat-icon class="text-primary">directions_boat</mat-icon>
             <div>
-              <strong>Čamac</strong>
+              <strong>Boat</strong>
               <p class="m-0">{{ getRatingStars(preference!.boatRating) }}</p>
             </div>
           </div>
@@ -97,7 +97,7 @@
       <hr style="border: none; border-top: 1px solid var(--color-neutral-100); margin: var(--spacing-6) 0;">
 
       <!-- Tagovi -->
-      <h3 class="mb-4">Interesovanja</h3>
+      <h3 class="mb-4">Interests</h3>
       <div class="flex-row gap-2" style="flex-wrap: wrap;">
         <span *ngFor="let tag of preference!.tags" class="badge badge-primary">
           {{ tag }}
@@ -110,11 +110,11 @@
     <div class="flex-row gap-4">
       <button class="btn btn-primary" (click)="onEditClicked()">
         <mat-icon>edit</mat-icon>
-        Izmeni
+        Edit
       </button>
       <button class="btn btn-secondary" (click)="deletePreference()">
         <mat-icon>delete</mat-icon>
-        Obriši
+        Delete
       </button>
     </div>
 
