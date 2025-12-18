@@ -55,6 +55,9 @@
   gap: var(--spacing-6);
   flex-wrap: wrap;
 }
+.comments-section {
+  margin-top: var(--spacing-12);
+}
 
 .meta-item {
   display: flex;

@@ -337,6 +337,14 @@
   display: flex;
   justify-content: flex-end;
 }
+.comment-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-neutral-600);
+  font-size: 14px;
+}
+
 
 /* Card Action Button - mat-button */
 .blog-card mat-card-actions button[mat-button] {
