@@ -7,7 +7,11 @@
   </div>
 
   <div *ngIf="!loading && comments.length === 0" class="text-muted">
-    No comments yet. Be the first to comment.
+    No comments yet.
+  </div>
+
+  <div *ngIf="isReadOnly()" class="text-muted">
+    This blog is read-only. Comments are disabled.
   </div>
 
   <div *ngFor="let c of comments" class="comment-card">
@@ -22,7 +26,7 @@
     </div>
 
     <!-- EDIT MODE -->
-    <div *ngIf="editingCommentId === c.id" class="edit-area">
+    <div *ngIf="editingCommentId === c.id && !isReadOnly()" class="edit-area">
       <textarea
         [(ngModel)]="editText"
         [ngModelOptions]="{ standalone: true }">
@@ -46,7 +50,7 @@
     </div>
 
     <!-- ACTIONS -->
-    <div *ngIf="editingCommentId !== c.id" class="comment-actions">
+    <div *ngIf="editingCommentId !== c.id && !isReadOnly()" class="comment-actions">
       <button
         class="btn btn-secondary btn-sm"
         (click)="startEdit(c)">
@@ -67,13 +71,14 @@
     <textarea
       [(ngModel)]="newComment"
       [ngModelOptions]="{ standalone: true }"
-      placeholder="Write a comment...">
+      placeholder="Write a comment..."
+      [disabled]="isReadOnly()">
     </textarea>
 
     <button
       class="btn btn-primary"
       (click)="addComment()"
-      [disabled]="!newComment.trim()">
+      [disabled]="isReadOnly() || !newComment.trim()">
       Post Comment
     </button>
   </div>

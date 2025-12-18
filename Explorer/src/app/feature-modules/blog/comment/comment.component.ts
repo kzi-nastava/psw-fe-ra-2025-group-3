@@ -10,6 +10,7 @@ import { CommentDto, CommentCreateDto } from './comment.dto';
 export class CommentComponent implements OnInit {
 
   @Input() blogId!: number;
+  @Input() blogStatus!: number; // ✅ NOVO
 
   comments: CommentDto[] = [];
   newComment = '';
@@ -30,6 +31,10 @@ export class CommentComponent implements OnInit {
     this.loadComments();
   }
 
+  isReadOnly(): boolean {
+    return this.blogStatus === 5; // ReadOnly
+  }
+
   loadComments(): void {
     this.loading = true;
     this.commentService.getComments(this.blogId).subscribe({
@@ -45,6 +50,7 @@ export class CommentComponent implements OnInit {
   }
 
   addComment(): void {
+    if (this.isReadOnly()) return;
     if (!this.newComment.trim()) return;
 
     const dto: CommentCreateDto = { text: this.newComment };
@@ -61,6 +67,7 @@ export class CommentComponent implements OnInit {
   }
 
   startEdit(comment: CommentDto): void {
+    if (this.isReadOnly()) return;
     this.editingCommentId = comment.id;
     this.editText = comment.text;
   }
@@ -72,11 +79,12 @@ export class CommentComponent implements OnInit {
   }
 
   saveEdit(commentId: number): void {
+    if (this.isReadOnly()) return;
+
     const text = this.editText.trim();
     if (!text) return;
 
     this.isSavingEdit = true;
-
     const dto: CommentCreateDto = { text };
 
     this.commentService.editComment(this.blogId, commentId, dto).subscribe({
@@ -86,8 +94,6 @@ export class CommentComponent implements OnInit {
           existing.text = updated.text;
           existing.editedAt = updated.editedAt;
         }
-
-        this.isSavingEdit = false;
         this.cancelEdit();
       },
       error: (err) => {
@@ -98,13 +104,12 @@ export class CommentComponent implements OnInit {
   }
 
   deleteComment(commentId: number): void {
+    if (this.isReadOnly()) return;
     if (!confirm('Delete this comment?')) return;
 
     this.commentService.deleteComment(this.blogId, commentId).subscribe({
       next: () => {
         this.comments = this.comments.filter(c => c.id !== commentId);
-
-        // ako obrišeš komentar koji je bio u edit modu
         if (this.editingCommentId === commentId) this.cancelEdit();
       },
       error: (err) => {

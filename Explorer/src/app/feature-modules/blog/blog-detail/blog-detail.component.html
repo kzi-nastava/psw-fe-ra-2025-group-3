@@ -36,13 +36,8 @@
 
     <!-- Voting section -->
     <section class="vote-section" *ngIf="isAuthenticated; else loginInfo">
-      <button
-        mat-raised-button
-        color="primary"
-        class="vote-button upvote"
-        [class.active]="isUpvoteActive()"
-        (click)="onUpvote()"
-      >
+      <button mat-raised-button color="primary" class="vote-button upvote" [class.active]="isUpvoteActive()"
+        (click)="onUpvote()">
         ▲ Upvote
       </button>
 
@@ -51,13 +46,8 @@
         ({{ voteState.upvoteCount }} ↑ / {{ voteState.downvoteCount }} ↓)
       </span>
 
-      <button
-        mat-raised-button
-        color="warn"
-        class="vote-button downvote"
-        [class.active]="isDownvoteActive()"
-        (click)="onDownvote()"
-      >
+      <button mat-raised-button color="warn" class="vote-button downvote" [class.active]="isDownvoteActive()"
+        (click)="onDownvote()">
         ▼ Downvote
       </button>
     </section>
@@ -103,7 +93,8 @@
 
     <!-- Comments Section -->
     <section class="comments-section mt-8">
-      <app-comment [blogId]="blog.id"></app-comment>
+      <app-comment [blogId]="blog.id" [blogStatus]="blog.status">
+      </app-comment>
     </section>
 
   </div>
