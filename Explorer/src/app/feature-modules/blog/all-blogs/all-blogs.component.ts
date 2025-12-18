@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BlogService } from '../blog.service';
-import { Blog } from '../model/blog.model';
+import { Blog, BlogStatus } from '../model/blog.model';
 
 @Component({
   selector: 'app-all-blogs',
@@ -50,6 +50,17 @@ export class AllBlogsComponent implements OnInit {
       month: 'short',
       year: 'numeric'
     });
+  }
+
+  getBlogStatus(status: BlogStatus): string {
+    if (status == BlogStatus.Active) 
+        return "ACTIVE";
+    else if (status == BlogStatus.Famous) 
+        return "FAMOUS";
+    else if (status == BlogStatus.ReadOnly)
+        return "READ-ONLY";
+    else 
+        return "";
   }
 
   truncateMarkdown(text: string, maxLength: number = 120): string {

@@ -34,6 +34,37 @@
   color: var(--color-primary-500) !important;
 }
 
+.status-famous {
+    background: purple;
+    border: 1px solid purple;
+    border-radius: 10px;
+    color: white;
+    padding: var(--spacing-2) var(--spacing-4);
+    margin-left: -10px;
+    margin-right: 10px;
+}
+
+.status-active {
+    background: darkblue;
+    border: 1px solid darkblue;
+    border-radius: 10px;
+    color: white;
+    padding: var(--spacing-2) var(--spacing-4);
+    margin-left: -10px;
+    margin-right: 10px;
+}
+
+.status-readonly {
+    background: darkslategrey;
+    border: 1px solid darkslategrey;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    padding: var(--spacing-2) var(--spacing-4);
+    margin-left: -10px;
+    margin-right: 10px;
+}
+
 /* Header Button - mat-raised-button */
 .header button[mat-raised-button],
 .header .mat-mdc-raised-button {
