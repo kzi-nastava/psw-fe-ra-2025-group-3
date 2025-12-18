@@ -31,7 +31,7 @@ export class FacilityListComponent implements OnInit {
   }
 
   deleteFacility(id: number): void {
-    if (!confirm('Da li sigurno želiš da obrišeš objekat?')) return;
+    if (!confirm('Are you sure you want to delete this facility?')) return;
 
     this.facilityService.delete(id).subscribe(() => {
       this.loadFacilities();
@@ -42,10 +42,10 @@ export class FacilityListComponent implements OnInit {
   getCategoryLabel(category: number): string {
     switch (category) {
       case 0: return 'WC';
-      case 1: return 'Restoran';
+      case 1: return 'Restaurant';
       case 2: return 'Parking';
-      case 3: return 'Ostalo';
-      default: return 'Nepoznato';
+      case 3: return 'Other';
+      default: return 'Unknown';
     }
   }
 }

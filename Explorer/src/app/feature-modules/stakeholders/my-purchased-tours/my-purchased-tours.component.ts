@@ -7,6 +7,8 @@ import { TourExecutionService } from '../../tour-execution/tour-execution.servic
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { TourProblemService } from '../../tour-execution/tour-problem.service';
+import { TourProblem, TourProblemCreateDto, TourProblemUpdateDto } from '../../tour-execution/model/tour-problem.model';
 
 @Component({
   selector: 'xp-my-purchased-tours',
@@ -22,13 +24,20 @@ export class MyPurchasedToursComponent implements OnInit {
   expandedTourId: number | null = null;
   currentUserId?: number;
 
+  showForm: boolean = false;
+  selectedProblem: TourProblem | null = null;
+  isEditMode: boolean = false;
+  reportingTourId: number | null = null;
+  reportingTourName: string | null = null;
+
   constructor(
     private tourService: TourService,
     private snackBar: MatSnackBar,
     private positionSimulator: PositionSimulatorService,
     private tourExecutionService: TourExecutionService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private tourProblemService: TourProblemService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +47,53 @@ export class MyPurchasedToursComponent implements OnInit {
     if (user) {
       this.currentUserId = user.id;
     }
+  }
+
+  onProblemCreated(event: TourProblemCreateDto): void {
+    
+    
+    this.tourProblemService.createProblem(event).subscribe({
+      next: (response) => {
+        console.log('SUCCESS! Response:', response);
+        this.showForm = false;
+        this.reportingTourId = null;
+        this.showSuccess('Problem successfully reported!');
+      },
+      error: (err) => {
+        console.error('ERROR creating problem:', err);
+        console.error('Error details:', err.error);
+        console.error('Error status:', err.status);
+        this.showError('Error creating problem!');
+      }
+    });
+  }
+
+  onProblemUpdated(event: TourProblemUpdateDto): void {
+    console.log('=== ON PROBLEM UPDATED ===');
+    console.log('Received data:', event);
+    
+    if (this.selectedProblem) {
+      this.tourProblemService.updateProblem(this.selectedProblem.id, event).subscribe({
+        next: (response) => {
+          console.log('SUCCESS! Response:', response);
+          this.showForm = false;
+          this.selectedProblem = null;
+          this.reportingTourId = null;
+          this.showSuccess('Problem successfully updated!');
+        },
+        error: (err) => {          
+          this.showError('Error updating problem!');
+        }
+      });
+    }
+  }
+
+  onFormCanceled(): void {
+    this.showForm = false;
+    this.selectedProblem = null;
+    this.isEditMode = false;
+    this.reportingTourId = null;
+    this.reportingTourName = null;
   }
 
   checkActiveTour(): void {
@@ -153,6 +209,14 @@ export class MyPurchasedToursComponent implements OnInit {
       default:
         return 'Unknown';
     }
+  }
+
+  reportTour(tour: Tour): void {
+    this.reportingTourId = tour.id!;
+    this.reportingTourName = tour.name;
+    this.selectedProblem = null;
+    this.isEditMode = false;
+    this.showForm = true;
   }
 
   isStartingTour(tourId: number): boolean {

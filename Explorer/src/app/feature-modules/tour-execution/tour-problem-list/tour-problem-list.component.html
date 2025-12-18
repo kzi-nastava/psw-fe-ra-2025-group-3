@@ -1,10 +1,10 @@
 <div class="tour-list-container">
   <div class="header">
     <h1>My Reported Problems</h1>
-    <button mat-raised-button color="primary" (click)="onAddNew()" *ngIf="!showForm">
+    <!-- <button mat-raised-button color="primary" (click)="onAddNew()" *ngIf="!showForm">
       <mat-icon>add</mat-icon>
       Report New Problem
-    </button>
+    </button> -->
   </div>
 
   <app-tour-problem-form 
@@ -19,10 +19,14 @@
   <div *ngIf="problems.length === 0 && !showForm" class="empty-state">
     <mat-icon>report_off</mat-icon>
     <h2>No problems reported yet</h2>
-    <p>Click the "Report New Problem" button to report your first issue.</p>
-    <button mat-raised-button color="primary" (click)="onAddNew()">
+    <p>Report a problem on <a routerLink="/tourist/my-tours">
+        your purchased tours
+    </a></p>
+    
+    <!-- <p>Click the "Report New Problem" button to report your first issue.</p> -->
+    <!-- <button mat-raised-button color="primary" (click)="onAddNew()">
       Report First Problem
-    </button>
+    </button> -->
   </div>
 
   <div *ngIf="problems.length > 0 && !showForm" class="tours-grid">

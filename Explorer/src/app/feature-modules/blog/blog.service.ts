@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { Blog, BlogCreateDto, BlogUpdateDto, BlogStatus } from './model/blog.model';
+import { Blog, BlogCreateDto, BlogUpdateDto, BlogStatus, BlogVoteDto, BlogVoteStateDto } from './model/blog.model';
 
 export interface ImageUploadResponse {
   imageUrl: string;
@@ -49,6 +49,15 @@ export class BlogService {
 
   deleteBlog(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  getVoteState(id: number): Observable<BlogVoteStateDto> {
+    return this.http.get<BlogVoteStateDto>(`${this.baseUrl}/${id}/vote`);
+  }
+
+  vote(id: number, isUpvote: boolean): Observable<BlogVoteStateDto> {
+    const body: BlogVoteDto = { blogId: id, isUpvote };
+    return this.http.post<BlogVoteStateDto>(`${this.baseUrl}/${id}/vote`, body);
   }
 
   uploadImage(file: File): Observable<ImageUploadResponse> {

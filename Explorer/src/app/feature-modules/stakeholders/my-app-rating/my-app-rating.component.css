@@ -15,9 +15,13 @@
 }
 
 .rating-header {
-  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
   padding: 18px 24px;
   border-radius: 16px 16px 0 0;
+}
+
+.submit-btn {
+    background: var(--color-primary-700);
 }
 
 .rating-header h2 {

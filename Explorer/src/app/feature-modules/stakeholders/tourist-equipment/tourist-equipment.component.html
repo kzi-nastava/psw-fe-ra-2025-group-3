@@ -2,9 +2,9 @@
   <div class="card">
     <!-- Header -->
     <div class="flex-between mb-6">
-      <h2>Moja Oprema</h2>
+      <h2>My equipment</h2>
       <div class="badge badge-primary">
-        {{ ownedEquipmentCount }} {{ ownedEquipmentCount === 1 ? 'stavka' : 'stavki' }}
+        {{ ownedEquipmentCount }} {{ ownedEquipmentCount === 1 ? 'item' : 'items' }}
       </div>
     </div>
 
@@ -20,14 +20,14 @@
     <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="mt-4">
       
       <!-- Tab: Sva oprema -->
-      <mat-tab label="Sva oprema">
+      <mat-tab label="All equipment">
         <div class="equipment-list mt-6">
           <table class="equipment-table">
             <thead>
               <tr>
                 <th style="width: 50px;"></th>
-                <th>Naziv</th>
-                <th>Opis</th>
+                <th>Title</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody>
@@ -48,17 +48,17 @@
       </mat-tab>
 
       <!-- Tab: Moja oprema -->
-      <mat-tab label="Moja oprema">
+      <mat-tab label="My equipment">
         <div class="equipment-list mt-6">
           <div *ngIf="myEquipment.length === 0" class="empty-state">
-            <p class="text-muted">Nemate evidentirane opreme</p>
+            <p class="text-muted">You don't have any equipment</p>
           </div>
 
           <table *ngIf="myEquipment.length > 0" class="equipment-table">
             <thead>
               <tr>
-                <th>Naziv</th>
-                <th>Opis</th>
+                <th>Title</th>
+                <th>Description</th>
                 <th style="width: 150px;"></th>
               </tr>
             </thead>
@@ -72,7 +72,7 @@
                     (click)="onRemoveFromMyEquipment(eq.id)" 
                     mat-raised-button
                     color="warn">
-                    Ukloni
+                    Remove
                   </button>
                 </td>
               </tr>

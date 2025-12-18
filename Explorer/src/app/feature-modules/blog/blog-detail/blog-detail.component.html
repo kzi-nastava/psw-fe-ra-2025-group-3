@@ -34,6 +34,38 @@
       </div>
     </header>
 
+    <!-- Voting section -->
+    <section class="vote-section" *ngIf="isAuthenticated; else loginInfo">
+      <button
+        mat-raised-button
+        color="primary"
+        class="vote-button upvote"
+        [class.active]="isUpvoteActive()"
+        (click)="onUpvote()"
+      >
+        ▲ Upvote
+      </button>
+
+      <span class="score" *ngIf="voteState">
+        Score: {{ voteState.score }}
+        ({{ voteState.upvoteCount }} ↑ / {{ voteState.downvoteCount }} ↓)
+      </span>
+
+      <button
+        mat-raised-button
+        color="warn"
+        class="vote-button downvote"
+        [class.active]="isDownvoteActive()"
+        (click)="onDownvote()"
+      >
+        ▼ Downvote
+      </button>
+    </section>
+
+    <ng-template #loginInfo>
+      <p class="login-hint">Prijavite se da biste mogli da glasate.</p>
+    </ng-template>
+
     <!-- Image Gallery -->
     <div *ngIf="blog.images.length > 0" class="image-gallery">
       <div class="gallery-main">

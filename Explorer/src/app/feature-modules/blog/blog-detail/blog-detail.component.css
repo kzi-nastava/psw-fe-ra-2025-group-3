@@ -262,6 +262,33 @@
   border-radius: var(--border-radius-lg);
 }
 
+/* Voting */
+.vote-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+.vote-button.active.upvote {
+  border: 1px solid #2e7d32;
+  background-color: #c8e6c9;
+}
+
+.vote-button.active.downvote {
+  border: 1px solid #c62828;
+  background-color: #ffcdd2;
+}
+
+.score {
+  font-weight: 600;
+}
+
+.login-hint {
+  margin-top: var(--spacing-4);
+  color: var(--color-neutral-600);
+}
+
 .blog-description ::ng-deep code {
   background: var(--color-neutral-100);
   padding: var(--spacing-1) var(--spacing-2);

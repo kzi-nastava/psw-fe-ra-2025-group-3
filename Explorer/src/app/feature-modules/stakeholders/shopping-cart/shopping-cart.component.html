@@ -1,6 +1,6 @@
 <div class="cart-page container">
   <div class="cart-header">
-    <h1>Your Cart</h1>
+    <h1>My Cart</h1>
     <p class="cart-subtitle">
       Review your selected tours before booking your next adventure.
     </p>
@@ -17,6 +17,7 @@
     <button
       mat-raised-button
       color="primary"
+      class="cart-btn"
       (click)="goToTours()">
       <mat-icon>explore</mat-icon>
       Discover tours
@@ -72,13 +73,13 @@
       </div>
 
       <button
-  mat-raised-button
-  color="primary"
-  class="checkout-button"
-  (click)="onCheckout()">
-  <mat-icon>shopping_bag</mat-icon>
-  Proceed to checkout
-</button>
+        mat-raised-button
+        color="primary"
+        class="checkout-button cart-btn"
+        (click)="onCheckout()">
+        <mat-icon>shopping_bag</mat-icon>
+        Proceed to checkout
+      </button>
 
       <p class="summary-note">
         You will be able to review details of each tour before final confirmation.

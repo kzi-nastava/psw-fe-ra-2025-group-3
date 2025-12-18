@@ -6,7 +6,7 @@ import { TourProblem, ProblemCategory, ProblemPriority, ProblemStatus, TourProbl
 @Component({
   selector: 'app-tour-problem-list',
   templateUrl: './tour-problem-list.component.html',
-  styleUrls: ['./tour-problem-list.component.css']
+  styleUrls: ['./tour-problem-list.component.css'],
 })
 export class TourProblemListComponent implements OnInit {
   problems: TourProblem[] = [];

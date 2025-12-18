@@ -42,3 +42,16 @@ export interface BlogUpdateDto {
 export interface BlogStatusUpdateDto {
   status: BlogStatus;
 }
+
+export interface BlogVoteDto {
+  blogId: number;
+  isUpvote: boolean;
+}
+
+export interface BlogVoteStateDto {
+  blogId: number;
+  isUpvote: boolean | null;
+  score: number;
+  upvoteCount: number;
+  downvoteCount: number;
+}

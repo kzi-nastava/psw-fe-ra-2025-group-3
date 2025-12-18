@@ -1,12 +1,12 @@
 <div class="container animate-fade-in-up">
 
   <div class="list-header flex-between mb-6">
-    <h1>Turistički objekti</h1>
+    <h1>Facilities</h1>
 
     <button 
       class="btn btn-primary"
       routerLink="/administration/facilities/new">
-      ➕ Dodaj objekat
+      ➕ Add Facility
     </button>
   </div>
 
@@ -15,7 +15,7 @@
   </div>
 
   <div *ngIf="!loading && facilities.length === 0" class="empty-box card text-center">
-    <p>Nema nijednog objekta.</p>
+    <p>No facilities.</p>
   </div>
 
   <div *ngIf="facilities.length > 0" class="card">
@@ -23,11 +23,11 @@
     <table class="styled-table">
       <thead>
         <tr>
-          <th>Naziv</th>
-          <th>Kategorija</th>
+          <th>Title</th>
+          <th>Category</th>
           <th>Latitude</th>
           <th>Longitude</th>
-          <th>Akcije</th>
+          <th>Actions</th>
         </tr>
       </thead>
 
@@ -45,12 +45,12 @@
 
             <button class="btn btn-secondary btn-sm"
               [routerLink]="['/administration/facilities/edit', f.id]">
-              ✏ Izmeni
+              ✏ Edit
             </button>
 
             <button class="btn btn-outline-light btn-sm delete-btn"
               (click)="deleteFacility(f.id)">
-              🗑 Obriši
+              🗑 Delete
             </button>
 
           </td>

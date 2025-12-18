@@ -115,6 +115,10 @@
   font-size: 20px;
 }
 
+.view-details-btn {
+    color: var(--color-primary-800);
+}
+
 /* --- NOVI STILOVI ZA OCENE I PRVU TACKU --- */
 .star-icon {
   color: #FFA000 !important;
@@ -129,6 +133,7 @@
   margin-top: var(--spacing-4);
   padding-top: var(--spacing-4);
   border-top: 1px solid #e0e0e0;
+  height: 50px;
 }
 
 .keypoint-title {
@@ -184,9 +189,13 @@
 }
 
 mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: var(--spacing-4);
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+mat-card-actions button {
+    display: block;
+    margin-top: var(--spacing-4);
 }
 
 mat-card-actions button[mat-stroked-button] {
