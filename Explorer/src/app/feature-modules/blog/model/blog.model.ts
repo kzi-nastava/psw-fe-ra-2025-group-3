@@ -3,7 +3,10 @@
 export enum BlogStatus {
   Draft = 0,
   Published = 1,
-  Archived = 2
+  Archived = 2,
+  Active = 3,
+  Famous = 4,
+  ReadOnly = 5
 }
 
 export interface Blog {
@@ -54,4 +57,5 @@ export interface BlogVoteStateDto {
   score: number;
   upvoteCount: number;
   downvoteCount: number;
+  blogStatus: number;
 }

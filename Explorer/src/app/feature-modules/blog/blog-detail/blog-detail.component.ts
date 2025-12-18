@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlogService } from '../blog.service';
-import { Blog } from '../model/blog.model';
+import { Blog, BlogStatus } from '../model/blog.model';
 import { BlogVoteStateDto } from '../model/blog.model';
 
 @Component({
@@ -20,6 +20,13 @@ export class BlogDetailComponent implements OnInit {
 
   // TODO: zameniti pravom autentikacijom
   isAuthenticated = true;
+
+  isActive = false;
+  isFamous = false;
+  isPublished = false;
+  isDraft = false;
+  isReadOnly = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +53,7 @@ export class BlogDetailComponent implements OnInit {
       next: (blog) => {
         this.blog = blog;
         this.isLoading = false;
+        this.checkStatus();
       },
       error: (error) => {
         console.error('Error loading blog:', error);
@@ -56,6 +64,14 @@ export class BlogDetailComponent implements OnInit {
     });
   }
 
+  private checkStatus(): void {
+    this.isActive = this.blog?.status == BlogStatus.Active;
+    this.isFamous = this.blog?.status == BlogStatus.Famous;
+    this.isPublished = this.blog?.status == BlogStatus.Published;
+    this.isDraft = this.blog?.status == BlogStatus.Draft;
+    this.isReadOnly = this.blog?.status == BlogStatus.ReadOnly;
+  }
+
   private loadVoteState(id: number): void {
     if (!this.isAuthenticated) {
       return;
@@ -64,11 +80,21 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.getVoteState(id).subscribe({
       next: (state) => {
         this.voteState = state;
+        if (this.blog) {
+          this.blog.status = state.blogStatus as BlogStatus;
+          this.checkStatus();
+        }
       },
       error: (err) => {
         console.error('Error loading vote state:', err);
       },
     });
+  }
+
+  refreshBlogStatus(): void {
+    if (this.blog) {
+      this.loadVoteState(this.blog.id);
+    }
   }
 
   formatDate(date: Date): string {
@@ -119,6 +145,10 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.vote(this.blog.id, true).subscribe({
       next: (state) => {
         this.voteState = state;
+        if (this.blog) {
+          this.blog.status = state.blogStatus as BlogStatus;
+          this.checkStatus();
+        }        
       },
       error: (err) => {
         if (err.status === 401) {
@@ -140,6 +170,10 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.vote(this.blog.id, false).subscribe({
       next: (state) => {
         this.voteState = state;
+        if (this.blog) {
+          this.blog.status = state.blogStatus as BlogStatus;
+        }
+        this.checkStatus();
       },
       error: (err) => {
         if (err.status === 401) {

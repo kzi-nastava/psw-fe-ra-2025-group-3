@@ -31,6 +31,11 @@
           <mat-icon>photo_library</mat-icon>
           {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
         </span>
+        <span class="meta-item">
+            <span *ngIf="isActive" class="status-active">ACTIVE</span>
+            <span *ngIf="isFamous" class="status-famous">FAMOUS</span>
+            <span *ngIf="isReadOnly" class="status-readonly">READ-ONLY</span>
+        </span>
       </div>
     </header>
 
@@ -114,6 +119,12 @@
     <article class="blog-description">
       <div markdown [data]="blog.description"></div>
     </article>
+
+    <!-- Comments Section -->
+    <section class="comments-section mt-8">
+      <app-comment [blogId]="blog.id" [blogStatus]="blog.status" (commentChanged)="refreshBlogStatus()">
+      </app-comment>
+    </section>
 
   </div>
 
