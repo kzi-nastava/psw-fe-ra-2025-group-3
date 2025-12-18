@@ -22,6 +22,7 @@ import { BlogListComponent } from './blog-list/blog-list.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
 import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 import { AllBlogsComponent } from './all-blogs/all-blogs.component'; 
+import { CommentModule } from './comment/comment.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AllBlogsComponent } from './all-blogs/all-blogs.component';
   ],
   imports: [
     CommonModule,
+    CommentModule,
     FormsModule,
     ReactiveFormsModule,
     MarkdownModule.forChild(),
