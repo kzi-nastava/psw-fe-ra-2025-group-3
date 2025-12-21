@@ -16,7 +16,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-module';
 import { MarkdownModule } from 'ngx-markdown';
-
+import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 
 
 @NgModule({
@@ -30,6 +30,7 @@ import { MarkdownModule } from 'ngx-markdown';
     BrowserModule,
     AppRoutingModule,   
     LayoutModule,
+    DiaryModule,
     BrowserAnimationsModule,
     MaterialModule,
     AdministrationModule,

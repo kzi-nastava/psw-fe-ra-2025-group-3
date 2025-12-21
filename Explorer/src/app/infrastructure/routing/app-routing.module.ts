@@ -50,6 +50,8 @@ import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/bl
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
+import { DiaryListComponent } from 'src/app/feature-modules/tour-execution/diary/pages/diary-list.component';
+import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary/pages/diary-form.component';
 
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
@@ -128,6 +130,25 @@ const routes: Routes = [
   // Authoring
   { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
+},
+  // Diaries (Tour execution – Tourist)
+{ 
+  path: 'tourist/diaries', 
+  component: DiaryListComponent, 
+  canActivate: [AuthGuard], 
+  data: { role: 'tourist' } 
+},
+{ 
+  path: 'tourist/diaries/new', 
+  component: DiaryFormComponent, 
+  canActivate: [AuthGuard], 
+  data: { role: 'tourist' } 
+},
+{ 
+  path: 'tourist/diaries/edit/:id', 
+  component: DiaryFormComponent, 
+  canActivate: [AuthGuard], 
+  data: { role: 'tourist' } 
 },
 
 ];

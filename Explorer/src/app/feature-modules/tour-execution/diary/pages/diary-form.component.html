@@ -1,0 +1,31 @@
+<div class="container diary-form-wrapper py-8">
+  <div class="card diary-form-card">
+    <div class="diary-form-header">
+      <h2>Create Diary Entry</h2>
+      <p class="text-muted">
+        Capture moments from your journey ✨
+      </p>
+    </div>
+
+    <form [formGroup]="form" class="diary-form">
+      <mat-form-field appearance="filled" class="full-width">
+        <mat-label>Diary content</mat-label>
+        <textarea
+          matInput
+          rows="6"
+          formControlName="content">
+        </textarea>
+      </mat-form-field>
+
+      <div class="diary-form-actions">
+        <button class="btn btn-outline-light" routerLink="/tourist/diaries">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary" type="submit">
+          Save diary
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

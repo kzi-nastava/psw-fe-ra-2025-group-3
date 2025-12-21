@@ -1,0 +1,27 @@
+<div class="container diary-list py-8">
+  <div class="diary-header flex-between">
+    <h2>My Travel Diaries</h2>
+    <button class="btn btn-primary" routerLink="/tourist/diaries/new">
+      <mat-icon>add</mat-icon>
+      New Diary
+    </button>
+  </div>
+
+  <div class="grid-3">
+    <div class="card diary-card" *ngFor="let diary of diaries">
+      <div class="diary-meta">
+        <span class="badge badge-primary">{{ diary.status }}</span>
+        <span>{{ diary.createdAt | date }}</span>
+      </div>
+
+      <div class="diary-content">
+        {{ diary.content }}
+      </div>
+
+      <div class="diary-actions">
+        <button mat-button color="primary">Edit</button>
+        <button mat-button color="warn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
