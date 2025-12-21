@@ -12,10 +12,6 @@
   margin-bottom: var(--spacing-6);
 }
 
-.diary-form-header h2 {
-  margin-bottom: var(--spacing-2);
-}
-
 .diary-form {
   display: flex;
   flex-direction: column;
@@ -30,8 +26,4 @@
   display: flex;
   justify-content: space-between;
   margin-top: var(--spacing-8);
-}
-
-.diary-form-actions .btn {
-  min-width: 140px;
 }

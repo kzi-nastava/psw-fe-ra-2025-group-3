@@ -1,27 +1,36 @@
-<div class="container diary-list py-8">
-  <div class="diary-header flex-between">
-    <h2>My Travel Diaries</h2>
-    <button class="btn btn-primary" routerLink="/tourist/diaries/new">
-      <mat-icon>add</mat-icon>
-      New Diary
-    </button>
-  </div>
+<div class="container py-8">
 
-  <div class="grid-3">
-    <div class="card diary-card" *ngFor="let diary of diaries">
-      <div class="diary-meta">
-        <span class="badge badge-primary">{{ diary.status }}</span>
-        <span>{{ diary.createdAt | date }}</span>
-      </div>
-
-      <div class="diary-content">
-        {{ diary.content }}
-      </div>
-
-      <div class="diary-actions">
-        <button mat-button color="primary">Edit</button>
-        <button mat-button color="warn">Delete</button>
-      </div>
+    <div class="flex-between mb-6">
+        <h2>My Diaries</h2>
+        <button mat-raised-button color="primary" routerLink="new">
+            <mat-icon>add</mat-icon>
+            New Diary
+        </button>
     </div>
-  </div>
+
+    <div *ngIf="loading" class="text-center">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading && diaries.length === 0" class="text-center">
+        <p>No diaries yet.</p>
+    </div>
+
+    <div class="grid-2" *ngIf="!loading">
+        <div class="card" *ngFor="let d of diaries">
+            <h3>{{ d.title }}</h3>
+            <p>{{ d.country }}<span *ngIf="d.city">, {{ d.city }}</span></p>
+            <p class="text-muted">Created: {{ d.createdAt | date:'short' }}</p>
+
+            <button mat-button color="warn" (click)="delete(d.id)">
+                Delete
+            </button>
+            <button mat-button color="primary" [routerLink]="[d.id, 'edit']">
+                Edit
+            </button>
+
+           
+        </div>
+    </div>
+
 </div>

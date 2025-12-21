@@ -1,31 +1,31 @@
-<div class="container diary-form-wrapper py-8">
-  <div class="card diary-form-card">
-    <div class="diary-form-header">
-      <h2>Create Diary Entry</h2>
-      <p class="text-muted">
-        Capture moments from your journey ✨
-      </p>
+<div class="container py-8">
+    <div class="card mx-auto" style="max-width: 600px">
+        <h2>{{ isEdit ? 'Edit Diary' : 'Create Diary' }}</h2>
+
+
+
+
+        <form [formGroup]="form" (ngSubmit)="onSave()" class="flex-col gap-4">
+
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <input matInput formControlName="title">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Country</mat-label>
+                <input matInput formControlName="country">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>City (optional)</mat-label>
+                <input matInput formControlName="city">
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit">
+                {{ isEdit ? 'Update' : 'Save' }}
+            </button>
+
+        </form>
     </div>
-
-    <form [formGroup]="form" class="diary-form">
-      <mat-form-field appearance="filled" class="full-width">
-        <mat-label>Diary content</mat-label>
-        <textarea
-          matInput
-          rows="6"
-          formControlName="content">
-        </textarea>
-      </mat-form-field>
-
-      <div class="diary-form-actions">
-        <button class="btn btn-outline-light" routerLink="/tourist/diaries">
-          Cancel
-        </button>
-
-        <button class="btn btn-primary" type="submit">
-          Save diary
-        </button>
-      </div>
-    </form>
-  </div>
 </div>

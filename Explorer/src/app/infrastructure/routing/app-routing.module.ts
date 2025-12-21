@@ -131,24 +131,13 @@ const routes: Routes = [
   { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
 },
-  // Diaries (Tour execution – Tourist)
-{ 
-  path: 'tourist/diaries', 
-  component: DiaryListComponent, 
-  canActivate: [AuthGuard], 
-  data: { role: 'tourist' } 
-},
-{ 
-  path: 'tourist/diaries/new', 
-  component: DiaryFormComponent, 
-  canActivate: [AuthGuard], 
-  data: { role: 'tourist' } 
-},
-{ 
-  path: 'tourist/diaries/edit/:id', 
-  component: DiaryFormComponent, 
-  canActivate: [AuthGuard], 
-  data: { role: 'tourist' } 
+{
+  path: 'tourist/diaries',
+  loadChildren: () =>
+    import('src/app/feature-modules/tour-execution/diary/diary.module')
+      .then(m => m.DiaryModule),
+  canActivate: [AuthGuard],
+  data: { role: 'tourist' }
 },
 
 ];

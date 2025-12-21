@@ -1,45 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { DiaryService } from '../../diary.service';
-import { Diary } from '../../../model/diary.model';
+import { DiaryService } from '../diary.service';
+import { Diary } from '../../model/diary.model';
 
 @Component({
-  selector: 'app-diary-list',
-  templateUrl: './diary-list.component.html'
+  selector: 'xp-diary-list',
+  templateUrl: './diary-list.component.html',
+  styleUrls: ['./diary-list.component.css']
 })
 export class DiaryListComponent implements OnInit {
 
   diaries: Diary[] = [];
+  loading = true;
 
-  constructor(
-    private diaryService: DiaryService,
-    private router: Router
-  ) {}
+  constructor(private diaryService: DiaryService) {}
 
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
-    this.diaryService.getMyDiaries()
-      .subscribe(d => this.diaries = d);
-  }
-
-  create(): void {
-    this.router.navigate(['my-diaries/new']);
-  }
-
-  edit(id: number): void {
-    this.router.navigate(['my-diaries/edit', id]);
-  }
-
-  archive(id: number): void {
-    this.diaryService.archive(id).subscribe(() => this.load());
+    this.loading = true;
+    this.diaryService.getMyDiaries().subscribe({
+      next: d => {
+        this.diaries = d;
+        this.loading = false;
+      },
+      error: err => {
+        console.error(err);
+        this.loading = false;
+      }
+    });
   }
 
   delete(id: number): void {
-    if (confirm('Delete diary?')) {
-      this.diaryService.delete(id).subscribe(() => this.load());
-    }
+    if (!confirm('Delete diary?')) return;
+
+    this.diaryService.deleteDiary(id).subscribe(() => {
+      this.load();
+    });
   }
 }

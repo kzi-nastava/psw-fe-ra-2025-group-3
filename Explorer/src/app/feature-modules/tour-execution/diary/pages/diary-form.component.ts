@@ -2,50 +2,64 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiaryService } from '../diary.service';
-import { DiaryCreate } from '../../model/diary-create.model';
 
 @Component({
-  selector: 'app-diary-form',
-  templateUrl: './diary-form.component.html'
+  selector: 'xp-diary-form',
+  templateUrl: './diary-form.component.html',
+  styleUrls: ['./diary-form.component.css']
 })
 export class DiaryFormComponent implements OnInit {
 
-  form!: FormGroup;
+  form: FormGroup;
   diaryId?: number;
   isEdit = false;
 
   constructor(
     private fb: FormBuilder,
-    private service: DiaryService,
+    private diaryService: DiaryService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       country: ['', Validators.required],
       city: ['']
     });
+  }
 
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
-      this.isEdit = true;
       this.diaryId = +id;
+      this.isEdit = true;
+
+      this.diaryService.getMyDiaries().subscribe(diaries => {
+        const diary = diaries.find(d => d.id === this.diaryId);
+        if (diary) {
+          this.form.patchValue({
+            title: diary.title,
+            country: diary.country,
+            city: diary.city
+          });
+        }
+      });
     }
   }
 
-  submit(): void {
+  onSave(): void {
     if (this.form.invalid) return;
 
-    const dto: DiaryCreate = this.form.value;
+    const action = this.isEdit && this.diaryId
+      ? this.diaryService.updateDiary(this.diaryId, this.form.value)
+      : this.diaryService.createDiary(this.form.value);
 
-    if (this.isEdit && this.diaryId) {
-      this.service.update(this.diaryId, dto)
-        .subscribe(() => this.router.navigate(['my-diaries']));
-    } else {
-      this.service.create(dto)
-        .subscribe(() => this.router.navigate(['my-diaries']));
-    }
+    action.subscribe({
+      next: () => this.router.navigate(['/tourist/diaries']),
+      error: err => {
+        console.error(err);
+        alert('Diary could not be saved');
+      }
+    });
   }
 }
