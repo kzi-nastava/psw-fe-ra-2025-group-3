@@ -32,10 +32,11 @@
           [alt]="blog.title"
           class="blog-image">
         <div class="image-overlay">
+            <span *ngIf="getBlogStatus(blog.status)" [ngClass]="{'status-active': getBlogStatus(blog.status) == 'ACTIVE', 'status-famous': getBlogStatus(blog.status) == 'FAMOUS', 'status-readonly': getBlogStatus(blog.status) == 'READ-ONLY'}">{{ getBlogStatus(blog.status) }}</span>
           <span class="blog-date">
             <mat-icon>calendar_today</mat-icon>
             {{ formatDate(blog.creationDate) }}
-          </span>
+          </span>          
         </div>
       </div>
 

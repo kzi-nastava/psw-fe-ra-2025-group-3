@@ -7,8 +7,8 @@
         {{ shouldEdit ? 'edit' : 'add_circle' }}
       </mat-icon>
       <div>
-        <h2 class="m-0">{{ shouldEdit ? 'Izmeni Preference' : 'Kreiraj Preference' }}</h2>
-        <p class="text-muted m-0">Prilagodite svoje putovanje prema svojim željama</p>
+        <h2 class="m-0">{{ shouldEdit ? 'Edit Preferences' : 'Create Preferences' }}</h2>
+        <p class="text-muted m-0">Customize your journey according to your preferences</p>
       </div>
     </div>
   </div>
@@ -19,9 +19,9 @@
     <div class="card mb-6">
       <h3 class="mb-4">
         <mat-icon class="inline-icon">terrain</mat-icon>
-        Težina Ture
+        Tour Difficulty
       </h3>
-      <p class="text-muted mb-6">Odaberite nivo težine koji vam odgovara</p>
+      <p class="text-muted mb-6">Select the difficulty level that suits you</p>
       
       <div class="difficulty-grid">
         <label 
@@ -43,17 +43,17 @@
     <div class="card mb-6">
       <h3 class="mb-4">
         <mat-icon class="inline-icon">directions</mat-icon>
-        Prevozna Sredstva
+        Transportation
       </h3>
-      <p class="text-muted mb-6">Ocenite koliko volite da koristite svako prevozno sredstvo (0-3)</p>
+      <p class="text-muted mb-6">Rate how much you like to use each means of transportation (0-3)</p>
 
       <!-- Šetnja -->
       <div class="transport-section mb-6">
         <div class="flex-row items-center gap-4 mb-4">
           <mat-icon class="text-primary transport-icon">directions_walk</mat-icon>
           <div>
-            <strong style="font-size: var(--font-size-lg);">Šetnja</strong>
-            <p class="text-muted m-0">Hodanje peške</p>
+            <strong style="font-size: var(--font-size-lg);">Walking</strong>
+            <p class="text-muted m-0">Walking on foot</p>
           </div>
         </div>
         <div class="rating-grid">
@@ -79,8 +79,8 @@
         <div class="flex-row items-center gap-4 mb-4">
           <mat-icon class="text-primary transport-icon">directions_bike</mat-icon>
           <div>
-            <strong style="font-size: var(--font-size-lg);">Bicikl</strong>
-            <p class="text-muted m-0">Vožnja biciklom</p>
+            <strong style="font-size: var(--font-size-lg);">Bicycle</strong>
+            <p class="text-muted m-0">Cycling</p>
           </div>
         </div>
         <div class="rating-grid">
@@ -106,8 +106,8 @@
         <div class="flex-row items-center gap-4 mb-4">
           <mat-icon class="text-primary transport-icon">directions_car</mat-icon>
           <div>
-            <strong style="font-size: var(--font-size-lg);">Auto</strong>
-            <p class="text-muted m-0">Vožnja automobilom</p>
+            <strong style="font-size: var(--font-size-lg);">Car</strong>
+            <p class="text-muted m-0">Driving by car</p>
           </div>
         </div>
         <div class="rating-grid">
@@ -133,8 +133,8 @@
         <div class="flex-row items-center gap-4 mb-4">
           <mat-icon class="text-primary transport-icon">directions_boat</mat-icon>
           <div>
-            <strong style="font-size: var(--font-size-lg);">Čamac</strong>
-            <p class="text-muted m-0">Plovidba čamcem</p>
+            <strong style="font-size: var(--font-size-lg);">Boat</strong>
+            <p class="text-muted m-0">Boating</p>
           </div>
         </div>
         <div class="rating-grid">
@@ -159,9 +159,9 @@
     <div class="card mb-6">
       <h3 class="mb-4">
         <mat-icon class="inline-icon">label</mat-icon>
-        Interesovanja
+        Interests
       </h3>
-      <p class="text-muted mb-6">Odaberite najmanje jedan tag koji vas interesuje</p>
+      <p class="text-muted mb-6">Select at least one tag that interests you</p>
 
       <div class="tags-grid">
         <label 
@@ -180,7 +180,7 @@
 
       <div *ngIf="selectedTags.length > 0" class="selected-tags-info mt-6">
         <mat-icon class="text-primary">info</mat-icon>
-        <span>Odabrano: <strong>{{ selectedTags.length }}</strong> tagova</span>
+        <span>Selected: <strong>{{ selectedTags.length }}</strong> tags</span>
       </div>
     </div>
 
@@ -189,11 +189,11 @@
       <div class="flex-row gap-4">
         <button type="submit" class="btn btn-primary btn-lg">
           <mat-icon>{{ shouldEdit ? 'save' : 'add' }}</mat-icon>
-          {{ shouldEdit ? 'Sačuvaj Izmene' : 'Kreiraj Preference' }}
+          {{ shouldEdit ? 'Save Changes' : 'Create Preferences' }}
         </button>
         <button type="button" class="btn btn-secondary btn-lg" (click)="onCancel()">
           <mat-icon>close</mat-icon>
-          Otkaži
+          Cancel
         </button>
       </div>
     </div>

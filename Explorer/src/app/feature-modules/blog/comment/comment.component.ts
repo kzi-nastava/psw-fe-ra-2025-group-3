@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommentService } from './comment.service';
 import { CommentDto, CommentCreateDto } from './comment.dto';
 
@@ -11,6 +11,7 @@ export class CommentComponent implements OnInit {
 
   @Input() blogId!: number;
   @Input() blogStatus!: number; // ✅ NOVO
+  @Output() commentChanged = new EventEmitter<void>();
 
   comments: CommentDto[] = [];
   newComment = '';
@@ -59,6 +60,7 @@ export class CommentComponent implements OnInit {
       next: (comment) => {
         this.comments.push(comment);
         this.newComment = '';
+        this.commentChanged.emit();
       },
       error: (err) => {
         console.error('Error adding comment', err);
@@ -111,6 +113,7 @@ export class CommentComponent implements OnInit {
       next: () => {
         this.comments = this.comments.filter(c => c.id !== commentId);
         if (this.editingCommentId === commentId) this.cancelEdit();
+        this.commentChanged.emit();
       },
       error: (err) => {
         console.error('Error deleting comment', err);
