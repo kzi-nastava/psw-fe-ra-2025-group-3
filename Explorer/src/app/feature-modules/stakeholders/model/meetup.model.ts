@@ -6,6 +6,7 @@ export interface Meetup {
   latitude: number;
   longitude: number;
   creatorId: number;
+  tourId?: number;
 }
 
 export interface MeetupCreateDto {
@@ -14,6 +15,7 @@ export interface MeetupCreateDto {
   dateTime: Date;
   latitude: number;
   longitude: number;
+  tourId?: number;
 }
 
 export interface MeetupUpdateDto {
@@ -22,4 +24,5 @@ export interface MeetupUpdateDto {
   dateTime: Date;
   latitude: number;
   longitude: number;
+  tourId?: number;
 }

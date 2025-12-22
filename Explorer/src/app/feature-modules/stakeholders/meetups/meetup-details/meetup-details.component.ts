@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MeetupService } from '../meetup.service';
 import { Meetup } from '../../model/meetup.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-meetup-details',
@@ -11,14 +12,18 @@ import { Meetup } from '../../model/meetup.model';
 export class MeetupDetailsComponent implements OnInit {
   meetup: Meetup | null = null;
   isLoading: boolean = true;
+  userRole: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private meetupService: MeetupService
+    private meetupService: MeetupService,
+    private authService: AuthService 
   ) {}
 
   ngOnInit(): void {
+    this.userRole = this.authService.user$.getValue().role.toLowerCase();
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadMeetup(id);
@@ -45,5 +50,16 @@ export class MeetupDetailsComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/meetups']);
+  }
+
+  goToRelatedTour(): void {
+    if (this.meetup && this.meetup.tourId) {
+      
+      if (this.userRole === 'author') {
+         this.router.navigate(['/author/tours']); 
+      } else {
+         this.router.navigate(['/tourist/tours', this.meetup.tourId, 'details']);
+      }
+    }
   }
 }
