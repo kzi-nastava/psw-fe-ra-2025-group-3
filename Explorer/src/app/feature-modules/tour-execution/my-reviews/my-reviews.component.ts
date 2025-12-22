@@ -16,6 +16,10 @@ export class MyReviewsComponent implements OnInit {
   isLoading = true;
   editingReviewId: number | null = null;
 
+  isLightboxOpen = false;
+  currentImageIndex = 0;
+  lightboxImages: string[] = [];
+
   constructor(
     private reviewService: TourReviewService,
     private authService: AuthService,
@@ -74,5 +78,34 @@ getStarsArray(rating: number): number[] {
 
   getImageUrl(imageUrl: string): string {
     return this.reviewService.getImageUrl(imageUrl);
+  }
+
+  openLightbox(images: string[], startIndex: number = 0): void {
+    this.lightboxImages = images;
+    this.currentImageIndex = startIndex;
+    this.isLightboxOpen = true;
+  }
+
+  closeLightbox(): void {
+    this.isLightboxOpen = false;
+  }
+
+  previousImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.lightboxImages.length - 1) {
+      this.currentImageIndex++;
+    }
+  }
+
+  openImageLightbox(review: TourReview, startIndex: number): void {
+    if (review.images) {
+      const imageUrls = review.images.map(img => this.getImageUrl(img.imageUrl));
+      this.openLightbox(imageUrls, startIndex);
+    }
   }
 }
