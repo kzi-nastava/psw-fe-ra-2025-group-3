@@ -90,15 +90,31 @@
               Photos (Optional - Max 5)
             </label>
 
+            <!-- Drag and Drop Zone -->
+            <div 
+              class="drag-drop-zone"
+              [class.drag-over]="isDragOver"
+              [class.disabled]="!canAddMoreImages || !eligibility?.canReview"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              (click)="fileInput.click()">
+              <div class="drag-drop-content">
+                <mat-icon class="drag-drop-icon">cloud_upload</mat-icon>
+                <p class="drag-drop-text">Drag and drop photos here or click to select</p>
+                <p class="drag-drop-counter">{{ totalImagesCount }} / 5 photos</p>
+              </div>
+            </div>
+
             <!-- Existing Images (Edit Mode) -->
             <div *ngIf="existingImages.length > 0" class="images-grid">
-              <div *ngFor="let img of existingImages" class="image-preview existing">
+              <div *ngFor="let img of existingImages" class="image-preview existing" (click)="openLightbox(img, true)">
                 <img [src]="getImageUrl(img.imageUrl)" alt="Review image">
                 <button 
                   type="button"
                   mat-icon-button
                   class="delete-btn"
-                  (click)="deleteExistingImage(img.id)"
+                  (click)="deleteExistingImage(img.id); $event.stopPropagation()"
                   [disabled]="!eligibility?.canReview">
                   <mat-icon>close</mat-icon>
                 </button>
@@ -107,29 +123,17 @@
 
             <!-- New Images Preview -->
             <div *ngIf="selectedFiles.length > 0" class="images-grid">
-              <div *ngFor="let file of selectedFiles; let i = index" class="image-preview new">
+              <div *ngFor="let file of selectedFiles; let i = index" class="image-preview new" (click)="openLightbox(file, false)">
                 <img [src]="file.preview" alt="Preview">
                 <button 
                   type="button"
                   mat-icon-button
                   class="delete-btn"
-                  (click)="removeSelectedFile(i)">
+                  (click)="removeSelectedFile(i); $event.stopPropagation()">
                   <mat-icon>close</mat-icon>
                 </button>
               </div>
             </div>
-
-            <!-- Upload Button -->
-            <button
-              type="button"
-              mat-stroked-button
-              color="primary"
-              (click)="fileInput.click()"
-              [disabled]="!canAddMoreImages || !eligibility?.canReview"
-              class="upload-btn">
-              <mat-icon>add_photo_alternate</mat-icon>
-              {{ canAddMoreImages ? 'Add Photos (' + totalImagesCount + '/5)' : 'Maximum 5 photos' }}
-            </button>
 
             <!-- Hidden File Input -->
             <input
@@ -171,5 +175,42 @@
         </form>
       </mat-card-content>
     </mat-card>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
+    <div class="lightbox-container" (click)="$event.stopPropagation()">
+      <!-- Close Button -->
+      <button class="lightbox-close-btn" (click)="closeLightbox()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <!-- Main Image -->
+      <div class="lightbox-image-wrapper">
+        <img [src]="getCurrentImageSrc()" alt="Preview" class="lightbox-image">
+      </div>
+
+      <!-- Navigation Bar (Fixed at bottom) -->
+      <div class="lightbox-nav">
+        <!-- Previous Button -->
+        <button 
+          class="lightbox-nav-btn"
+          [disabled]="currentImageIndex === 0"
+          (click)="previousImage()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <!-- Image Counter -->
+        <span class="lightbox-counter">{{ currentImageIndex + 1 }} / {{ allImages.length }}</span>
+
+        <!-- Next Button -->
+        <button 
+          class="lightbox-nav-btn"
+          [disabled]="currentImageIndex === allImages.length - 1"
+          (click)="nextImage()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
