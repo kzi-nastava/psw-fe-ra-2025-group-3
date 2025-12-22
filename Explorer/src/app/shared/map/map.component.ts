@@ -22,7 +22,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number; name?: string }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string; color?: string }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
     @Output() routeDistanceChanged = new EventEmitter<number>();
@@ -97,8 +97,20 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         if (!this.points) return;
 
-        this.points.forEach(p => {            
-            let marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+        this.points.forEach(p => {
+            let markerIcon = undefined;
+            if (p.color) {
+                markerIcon = L.icon({
+                    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${p.color}.png`,
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+            }
+            
+            let marker = new L.Marker([p.lat, p.lng], markerIcon ? { icon: markerIcon } : {}).addTo(this.map);
             this.pointMarkers.push(marker);   // ČUVAMO REFERENCU NA MARKER
 
             if (p.name) {
