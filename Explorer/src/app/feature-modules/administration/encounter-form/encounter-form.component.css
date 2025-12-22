@@ -1,0 +1,183 @@
+/* Dialog styling */
+::ng-deep .mat-dialog-container {
+  border-radius: 16px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+::ng-deep .mat-dialog-title {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
+  color: white;
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .mat-dialog-content {
+  padding: 24px 32px !important;
+  margin: 0 !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  box-sizing: border-box;
+}
+
+::ng-deep .mat-dialog-actions {
+  padding: 20px 32px !important;
+  margin: 0 !important;
+  background: #fafbfc;
+  border-top: 2px solid #f1f3f5;
+  justify-content: flex-end !important;
+  gap: 12px;
+}
+
+.encounter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Enhanced form fields */
+::ng-deep .mat-form-field {
+  transition: all 0.3s ease;
+}
+
+/* Sakrivanje zvezdica koje se preklapaju */
+::ng-deep .mat-form-field-required-marker {
+  display: none !important;
+}
+
+::ng-deep .mat-form-field:hover {
+  transform: translateY(-2px);
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--color-primary-700);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix mat-icon {
+  color: var(--color-primary-700);
+  transition: all 0.3s ease;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-prefix mat-icon {
+  transform: scale(1.1);
+  color: var(--color-primary-800);
+}
+
+::ng-deep .mat-hint {
+  color: #636e72 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mat-error {
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+mat-label {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  display: block;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+}
+
+/* Map section styling */
+.full-width > mat-label {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+::ng-deep xp-map {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+::ng-deep xp-map:hover {
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+  transform: scale(1.01);
+}
+
+.coords-preview {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.coords-preview:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  border-color: rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Button styling */
+::ng-deep .mat-dialog-actions button {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 12px 28px !important;
+  font-size: 15px !important;
+  transition: all 0.3s ease !important;
+}
+
+::ng-deep .mat-dialog-actions button:not(.mat-raised-button) {
+  color: #636e72 !important;
+}
+
+::ng-deep .mat-dialog-actions button:not(.mat-raised-button):hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  color: var(--color-primary-700) !important;
+}
+
+::ng-deep .mat-dialog-actions .mat-raised-button {
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+::ng-deep .mat-dialog-actions .mat-raised-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+}
+
+::ng-deep .mat-dialog-actions .mat-raised-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}

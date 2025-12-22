@@ -21,6 +21,9 @@ import { FacilityEditComponent } from 'src/app/feature-modules/administration/fa
 import { TourProblemListAdminComponent } from 'src/app/feature-modules/administration/tour-problem-list-admin/tour-problem-list-admin.component';
 import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/administration/tour-problem-details-admin/tour-problem-details-admin.component';
 
+import { EncounterListComponent } from 'src/app/feature-modules/administration/encounter-list/encounter-list.component';
+import { EncounterFormComponent } from 'src/app/feature-modules/administration/encounter-form/encounter-form.component';
+
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component';
@@ -74,6 +77,9 @@ const routes: Routes = [
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
+
+  // Encounters
+  { path: 'administration/encounters', component: EncounterListComponent, canActivate: [AuthGuard] },
 
   // Admin Tour Problems
   { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
