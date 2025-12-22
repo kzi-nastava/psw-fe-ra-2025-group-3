@@ -2,6 +2,7 @@
 
 <mat-dialog-content>
   <form [formGroup]="meetupForm">
+    
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" placeholder="Enter meetup title" required>
@@ -32,6 +33,16 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="outline" class="full-width" *ngIf="availableTours.length > 0">
+        <mat-label>Link to Tour (Optional)</mat-label>
+        <mat-select formControlName="tourId">
+            <mat-option [value]="null">-- None --</mat-option>
+            <mat-option *ngFor="let tour of availableTours" [value]="tour.id">
+                {{ tour.name }}
+            </mat-option>
+        </mat-select>
+        <mat-hint>Connect this meetup with one of your tours.</mat-hint>
+    </mat-form-field>
     <div class="coordinates-row">
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>Latitude</mat-label>
@@ -55,6 +66,7 @@
         </mat-error>
       </mat-form-field>
     </div>
+
   </form>
 </mat-dialog-content>
 

@@ -5,6 +5,10 @@ import { TourDetails } from '../model/tour-details.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
+import { Router } from '@angular/router'; 
+import { MeetupService } from 'src/app/feature-modules/stakeholders/meetups/meetup.service';
+import { Meetup } from 'src/app/feature-modules/stakeholders/model/meetup.model';
+
 @Component({
   selector: 'xp-tour-details',
   templateUrl: './tour-details.component.html',
@@ -16,18 +20,22 @@ export class TourDetailsComponent implements OnInit {
   details!: TourDetails;
   isPurchased = false;
   isLoading = true;
+  meetups: Meetup[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private tourService: TourService,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private meetupService: MeetupService, 
+    private router: Router 
 
   ) {}
 
   ngOnInit(): void {
     this.tourId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadDetails();
+    this.loadMeetups();
   }
   currentUserId = this.authService.user$.getValue()?.id;
 
@@ -46,5 +54,20 @@ export class TourDetailsComponent implements OnInit {
         });
       }
     });
+  }
+
+  loadMeetups(): void {
+    this.meetupService.getMeetupsByTourId(this.tourId).subscribe({
+      next: (data) => {
+        this.meetups = data;
+      },
+      error: (err) => {
+        console.error('Failed to load meetups', err);
+      }
+    });
+  }
+
+  openMeetup(meetupId: number): void {
+    this.router.navigate(['/meetups', meetupId]); 
   }
 }
