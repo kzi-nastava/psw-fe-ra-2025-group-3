@@ -34,10 +34,15 @@ import { AwardEventFormComponent } from './award-event-form/award-event-form.com
 // Facilities
 import { FacilityListComponent } from './facility-list/facility-list.component';
 import { FacilityEditComponent } from './facility-edit/facility-edit.component';
+import { FacilityFormComponent } from './facility-form/facility-form.component';
 
 // Tour Problems Admin
 import { TourProblemListAdminComponent } from './tour-problem-list-admin/tour-problem-list-admin.component';
 import { TourProblemDetailsAdminComponent } from './tour-problem-details-admin/tour-problem-details-admin.component';
+
+// Encounters
+import { EncounterListComponent } from './encounter-list/encounter-list.component';
+import { EncounterFormComponent } from './encounter-form/encounter-form.component';
 
 @NgModule({
   declarations: [
@@ -51,8 +56,11 @@ import { TourProblemDetailsAdminComponent } from './tour-problem-details-admin/t
     AwardEventFormComponent,
     FacilityListComponent,
     FacilityEditComponent,
+    FacilityFormComponent,
     TourProblemListAdminComponent,
-    TourProblemDetailsAdminComponent
+    TourProblemDetailsAdminComponent,
+    EncounterListComponent,
+    EncounterFormComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +83,10 @@ import { TourProblemDetailsAdminComponent } from './tour-problem-details-admin/t
     AwardEventsComponent,
     AwardEventFormComponent,
     FacilityListComponent,
-    FacilityEditComponent
+    FacilityEditComponent,
+    FacilityFormComponent,
+    EncounterListComponent,
+    EncounterFormComponent
   ]
 })
 export class AdministrationModule { }
