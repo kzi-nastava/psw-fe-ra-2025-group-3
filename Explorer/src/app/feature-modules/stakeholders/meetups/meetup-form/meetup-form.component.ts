@@ -61,8 +61,17 @@ export class MeetupFormComponent implements OnInit {
     });
 
     this.mapService.reverseSearch(pos.lat, pos.lng).subscribe((res) => {
-      const address = res.display_name;
-      this.meetupForm.patchValue({ address: address });
+      const addr = res.address;    
+      const street = addr.road || '';
+      const number = addr.house_number || '';
+      const city = addr.city || addr.town || addr.village || '';
+
+      let formattedAddress = '';
+      if (street) formattedAddress += street;
+      if (number) formattedAddress += ' ' + number;
+      if (city) formattedAddress += (formattedAddress ? ', ' : '') + city;
+
+      this.meetupForm.patchValue({ address: formattedAddress.trim() });
     });
   }
 
