@@ -21,3 +21,24 @@ mat-dialog-content {
 mat-dialog-actions {
   padding: var(--spacing-4) var(--spacing-6);
 }
+
+.meetup-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding-top: var(--spacing-4);
+}
+
+.map-wrapper {
+  height: 350px;
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  border: 2px solid var(--color-primary-500);
+  margin: var(--spacing-2) 0;
+}
+
+::ng-deep xp-map, ::ng-deep #map{
+  height: 100% !important;
+  width: 100% !important;
+}

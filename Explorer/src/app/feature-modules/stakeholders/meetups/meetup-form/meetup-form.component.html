@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{ isEditMode ? 'Edit Meetup' : 'Create New Meetup' }}</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="meetupForm">
+  <form [formGroup]="meetupForm" class="meetup-form-container">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Title</mat-label>
       <input matInput formControlName="title" placeholder="Enter meetup title" required>
@@ -32,7 +32,25 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="coordinates-row">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" placeholder="Dunavska 1, Novi Sad" required>
+      <button mat-icon-button matSuffix (click)="onAddressSearch()" type="button" color="primary">
+        <mat-icon>search</mat-icon>
+      </button>
+      <mat-hint>Type address and click search icon or click directly on map</mat-hint>
+    </mat-form-field>
+
+    <div class="map-wrapper">
+      <xp-map 
+        mode="edit-object" 
+        [initialPoint]="initialPoint"
+        (pointSelected)="onPointSelected($event)"
+        [zoom]="13">
+      </xp-map>
+    </div>
+
+    <div class="coordinates-row mt-4">
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>Latitude</mat-label>
         <input matInput type="number" formControlName="latitude" placeholder="-90 to 90" required>

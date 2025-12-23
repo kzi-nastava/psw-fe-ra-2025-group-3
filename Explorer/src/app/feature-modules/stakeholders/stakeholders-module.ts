@@ -36,6 +36,7 @@ import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourDetails } from './model/tour-details.model';
 import { TourDetailsComponent } from './tour-details/tour-details.component';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -76,6 +77,7 @@ import { RouterModule } from '@angular/router';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSnackBarModule,
+    SharedModule,
     MaterialModule,
     TourExecutionModule,
     RouterModule
