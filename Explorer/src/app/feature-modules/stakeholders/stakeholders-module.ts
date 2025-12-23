@@ -35,6 +35,7 @@ import { PurchaseSuccessComponent } from './purchase/purchase-success.component'
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourDetails } from './model/tour-details.model';
 import { TourDetailsComponent } from './tour-details/tour-details.component';
+import { TouristEncountersComponent } from './tourist-encounters/tourist-encounters.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 
@@ -57,7 +58,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TouristEquipmentComponent,
     PurchaseSuccessComponent,
     TourDetailsComponent,
-    MyPurchasedToursComponent // t execution
+    MyPurchasedToursComponent, // t execution
+    TouristEncountersComponent
     
   ],
   imports: [
@@ -80,7 +82,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SharedModule,
     MaterialModule,
     TourExecutionModule,
-    RouterModule
+    RouterModule,
+    SharedModule,
+    SharedModule
   ],
   exports: [
     ProfileComponent,

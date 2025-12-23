@@ -4,6 +4,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MeetupService } from '../meetup.service';
 import { Meetup, MeetupCreateDto, MeetupUpdateDto } from '../../model/meetup.model';
 import { MapService } from 'src/app/shared/map/map.service';
+import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
+import { Tour } from 'src/app/feature-modules/tour-authoring/model/tour.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-meetup-form',
@@ -14,6 +17,7 @@ export class MeetupFormComponent implements OnInit {
   meetupForm: FormGroup;
   isEditMode: boolean = false;
   meetupId?: number;
+  availableTours: Tour[] = []; 
 
   initialPoint?: { lat: number, lng: number };
 
@@ -21,6 +25,8 @@ export class MeetupFormComponent implements OnInit {
     private fb: FormBuilder,
     private meetupService: MeetupService,
     private mapService: MapService,
+    private tourService: TourService,
+    private authService: AuthService,
     public dialogRef: MatDialogRef<MeetupFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { mode: 'create' | 'edit', meetup?: Meetup }
   ) {
@@ -29,6 +35,8 @@ export class MeetupFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadTours();
+
     if (this.isEditMode && this.data.meetup) {
       this.meetupId = this.data.meetup.id;
       this.initialPoint = { lat: this.data.meetup.latitude, lng: this.data.meetup.longitude };
@@ -38,7 +46,8 @@ export class MeetupFormComponent implements OnInit {
         dateTime: this.data.meetup.dateTime,
         address: this.data.meetup.address,
         latitude: this.data.meetup.latitude,
-        longitude: this.data.meetup.longitude
+        longitude: this.data.meetup.longitude,
+        tourId: this.data.meetup.tourId 
       });
     }
   }
@@ -50,7 +59,8 @@ export class MeetupFormComponent implements OnInit {
       dateTime: ['', Validators.required],
       address: ['', Validators.required],
       latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
-      longitude: ['', [Validators.required, Validators.min(-180), Validators.max(180)]]
+      longitude: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
+      tourId: [null]
     });
   }
 
@@ -96,6 +106,19 @@ export class MeetupFormComponent implements OnInit {
   }
 
 
+  loadTours(): void {
+    const userRole = this.authService.user$.getValue().role.toLowerCase();
+    
+    if (userRole === 'author') {
+        this.tourService.getMyTours().subscribe({
+            next: (result: Tour[]) => {
+                this.availableTours = result;
+            },
+            error: (err: any) => console.error('Failed to load tours', err)
+        });
+    } 
+  }
+
   onSubmit(): void {
     if (this.meetupForm.invalid) {
       this.meetupForm.markAllAsTouched();
@@ -104,40 +127,36 @@ export class MeetupFormComponent implements OnInit {
 
     const formValue = this.meetupForm.value;
     
-    if (this.isEditMode && this.meetupId) {
-      const updateDto: MeetupUpdateDto = {
+    const meetupData = {
         title: formValue.title,
         description: formValue.description,
         dateTime: new Date(formValue.dateTime),
         address: formValue.address,
         latitude: formValue.latitude,
-        longitude: formValue.longitude
-      };
+        longitude: formValue.longitude,
+        tourId: formValue.tourId 
+    };
+
+    if (this.isEditMode && this.meetupId) {
+      const updateDto: MeetupUpdateDto = meetupData;
 
       this.meetupService.updateMeetup(this.meetupId, updateDto).subscribe({
         next: () => {
           this.dialogRef.close(true);
         },
-        error: (error) => {
+        error: (error: any) => { 
           console.error('Error updating meetup:', error);
           alert('Error updating meetup: ' + (error.error?.message || 'Unknown error'));
         }
       });
     } else {
-      const createDto: MeetupCreateDto = {
-        title: formValue.title,
-        description: formValue.description,
-        dateTime: new Date(formValue.dateTime),
-        address: formValue.address,
-        latitude: formValue.latitude,
-        longitude: formValue.longitude
-      };
+      const createDto: MeetupCreateDto = meetupData;
 
       this.meetupService.createMeetup(createDto).subscribe({
         next: () => {
           this.dialogRef.close(true);
         },
-        error: (error) => {
+        error: (error: any) => { 
           console.error('Error creating meetup:', error);
           alert('Error creating meetup: ' + (error.error?.message || 'Unknown error'));
         }

@@ -1,0 +1,104 @@
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Encounter' : 'Create New Encounter' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="encounterForm" class="encounter-form">
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter encounter name" maxlength="100">
+      <mat-icon matPrefix>title</mat-icon>
+      <mat-hint align="end">{{encounterForm.get('name')?.value?.length || 0}}/100</mat-hint>
+      <mat-error *ngIf="encounterForm.get('name')?.invalid">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="3"
+        cdkAutosizeMaxRows="6"
+        placeholder="What should the tourist do?"
+        maxlength="500">
+      </textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-hint align="end">{{encounterForm.get('description')?.value?.length || 0}}/500</mat-hint>
+      <mat-error *ngIf="encounterForm.get('description')?.invalid">
+        {{ getErrorMessage('description') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- XP -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>XP (Experience Points)</mat-label>
+      <input matInput type="number" formControlName="xp" placeholder="Enter XP reward">
+      <mat-icon matPrefix>star</mat-icon>
+      <mat-error *ngIf="encounterForm.get('xp')?.invalid">
+        {{ getErrorMessage('xp') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of encounterStatuses" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>flag</mat-icon>
+      <mat-error *ngIf="encounterForm.get('status')?.invalid">
+        {{ getErrorMessage('status') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Type -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let type of encounterTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>category</mat-icon>
+      <mat-error *ngIf="encounterForm.get('type')?.invalid">
+        {{ getErrorMessage('type') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Location Map -->
+    <div class="full-width">
+      <mat-label>Location</mat-label>
+
+      <xp-map
+        [mode]="'edit-object'"
+        [points]="mapPoints"
+        (pointSelected)="onPointSelected($event)">
+      </xp-map>
+
+      <div class="coords-preview">
+        Selected: {{ encounterForm.value.latitude }},
+                  {{ encounterForm.value.longitude }}
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="encounterForm.invalid">
+    {{ isEditMode ? 'Save Changes' : 'Create Encounter' }}
+  </button>
+</mat-dialog-actions>

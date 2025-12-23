@@ -7,6 +7,7 @@ export interface Meetup {
   latitude: number;
   longitude: number;
   creatorId: number;
+  tourId?: number;
 }
 
 export interface MeetupCreateDto {
@@ -16,6 +17,7 @@ export interface MeetupCreateDto {
   address: string;
   latitude: number;
   longitude: number;
+  tourId?: number;
 }
 
 export interface MeetupUpdateDto {
@@ -25,4 +27,5 @@ export interface MeetupUpdateDto {
   address: string;
   latitude: number;
   longitude: number;
+  tourId?: number;
 }
