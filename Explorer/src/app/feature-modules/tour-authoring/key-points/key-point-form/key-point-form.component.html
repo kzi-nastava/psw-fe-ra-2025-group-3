@@ -37,19 +37,53 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Image URL -->
-    <mat-form-field appearance="outline" class="kp-field full-width">
-      <mat-label>Image URL</mat-label>
-      <input
-        matInput
-        formControlName="imageUrl"
-        placeholder="https://example.com/image.jpg"
-      />
+    <!-- Image Upload (drag & drop) -->
+    <div class="upload-field">
 
-      <mat-error *ngIf="imageUrl?.hasError('required') && imageUrl?.touched">
-        Image URL is required.
-      </mat-error>
-    </mat-form-field>
+      <label
+        class="upload-box"
+        [class.dragover]="dragActive"
+        [class.invalid]="imageUrl?.invalid && imageUrl?.touched"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+      >
+        <div class="upload-content">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+
+          <div class="upload-text-main">
+            Drag and drop photo here
+          </div>
+
+          <div class="upload-counter">
+            {{ preview ? '1 / 1 photos' : '0 / 1 photos' }}
+          </div>
+        </div>
+      </label>
+
+      <div class="upload-error"
+          *ngIf="imageUrl?.hasError('required') && imageUrl?.touched">
+        Image is required.
+      </div>
+
+    </div>
+
+    <!-- Preview image -->
+    <div *ngIf="preview" class="preview-item">
+
+      <img [src]="preview" class="preview-img">
+
+      <button 
+        class="remove-btn"
+        type="button"
+        (click)="removeImage($event)">
+          ✕
+      </button>
+
+    </div>
+
+    <!-- Hidden url -->
+    <input type="hidden" formControlName="imageUrl">
 
     <!-- Secret -->
     <mat-form-field appearance="outline" class="kp-field full-width">
@@ -69,7 +103,7 @@
 
   <!-- Buttons -->
   <div class="kp-form-actions">
-    <button mat-stroked-button type="button" (click)="onCancel()">
+    <button mat-stroked-button type="button"  (click)="onCancel()">
       Cancel
     </button>
 
