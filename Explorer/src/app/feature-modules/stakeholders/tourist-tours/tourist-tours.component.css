@@ -20,6 +20,319 @@
   max-width: 32rem;
 }
 
+/*  FILTER PANEL */
+
+.filter-panel {
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-lg);
+  padding: 0;
+  margin-bottom: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-6);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--color-neutral-100);
+  transition: background-color var(--transition-normal);
+}
+
+.filter-header:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.filter-content {
+  padding: var(--spacing-4) var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+.filter-row.single-column {
+  grid-template-columns: 1fr;
+}
+
+.filter-row.compact {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.toggle-btn {
+  color: var(--color-primary-500);
+}
+
+.filter-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+  color: var(--color-primary-800);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+}
+
+.filter-title mat-icon {
+  color: var(--color-primary-500);
+}
+
+.active-filters-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin-left: var(--spacing-2);
+}
+
+.filter-section {
+  margin-bottom: 0;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.label-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary-500);
+}
+
+.selected-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-500);
+  font-weight: 600;
+  margin-left: var(--spacing-1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Compact form fields */
+.filter-section mat-form-field {
+  font-size: var(--font-size-sm);
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0;
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-form-field-infix {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  min-height: 40px;
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-floating-label {
+  font-size: var(--font-size-sm);
+}
+
+.filter-section mat-form-field ::ng-deep input {
+  font-size: var(--font-size-sm);
+  padding-left: 4px;
+}
+
+/* Tags Filter */
+.tags-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  max-height: 120px;
+  overflow-y: auto;
+  padding: var(--spacing-2);
+  background: var(--color-neutral-50);
+  border-radius: var(--border-radius-md);
+}
+
+.tags-filter::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tags-filter::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+  border-radius: 3px;
+}
+
+.tags-filter::-webkit-scrollbar-thumb {
+  background: var(--color-primary-500);
+  border-radius: 3px;
+}
+
+.tags-filter mat-chip {
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-800);
+  border: 1px solid var(--color-neutral-100);
+  font-size: var(--font-size-sm);
+}
+
+.tags-filter mat-chip:hover {
+  background-color: #E0F7FA;
+  border-color: var(--color-primary-500);
+  transform: translateY(-1px);
+}
+
+.tags-filter mat-chip.selected {
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  border-color: var(--color-primary-500);
+  font-weight: 500;
+}
+
+.chip-check {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: var(--spacing-1);
+}
+
+/* Difficulty Checkboxes */
+.difficulty-checkboxes {
+  display: flex;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.difficulty-checkboxes mat-checkbox {
+  font-size: var(--font-size-sm);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-form-field {
+  font-size: var(--font-size-sm);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-checkbox__background {
+  border-color: var(--color-primary-500);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-checkbox--selected .mdc-checkbox__background {
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+}
+
+/* Price Inputs */
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  max-width: 600px;
+}
+
+.price-inputs mat-form-field {
+  flex: 1;
+  min-width: 120px;
+}
+
+.price-separator {
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  margin-top: -8px;
+}
+
+/* Filter Actions */
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.results-count {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+.results-count mat-icon {
+  color: var(--color-primary-500);
+  font-size: 20px;
+}
+
+.star-icon-inline {
+  color: #FFC107;
+  font-size: 18px;
+  vertical-align: middle;
+  margin-left: var(--spacing-1);
+}
+
+/* Responsive Filter Panel */
+@media (max-width: 1024px) {
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-header {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .filter-content {
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
+  .filter-row {
+    gap: var(--spacing-4);
+  }
+
+  .difficulty-checkboxes {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .price-inputs {
+    flex-direction: column;
+  }
+
+  .price-separator {
+    display: none;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-actions button {
+    width: 100%;
+  }
+}
+
+/* LOADING & EMPTY STATE */
+
 .loading-container {
   display: flex;
   justify-content: center;

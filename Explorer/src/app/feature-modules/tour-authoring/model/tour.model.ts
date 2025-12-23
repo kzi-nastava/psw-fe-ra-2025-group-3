@@ -82,3 +82,12 @@ export interface TourReview {
   touristName?: string;
   createdAt?: Date;
 }
+
+export interface TourSearchParams {
+  name?: string;
+  tags?: string[];
+  difficulties?: TourDifficulty[];
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+}
