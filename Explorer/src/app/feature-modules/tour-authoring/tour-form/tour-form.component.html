@@ -28,6 +28,23 @@
             {{ diff.label }}
             </mat-option>
         </mat-select>
+
+        <!-- small info tooltip and persistent hint to explain meaning of difficulty -->
+        <button
+          class="help-btn"
+          mat-icon-button
+          matSuffix
+          [matTooltip]="difficultyTooltip"
+          matTooltipShowDelay="200"
+          matTooltipHideDelay="100"
+          matTooltipClass="tooltip-blue"
+          aria-label="Difficulty help">
+
+          <mat-icon>help_outline</mat-icon>
+        </button>
+
+        <mat-hint class="difficulty-hint" align="start">Overall tour difficulty (duration and pace).</mat-hint>
+
         <mat-icon matPrefix>terrain</mat-icon>
         </mat-form-field>
 
