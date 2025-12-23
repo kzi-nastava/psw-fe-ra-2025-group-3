@@ -42,4 +42,20 @@ export class KeyPointService {
   delete(id: number) {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  uploadImage(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<any>(
+      environment.apiHost + 'keypoints/images/upload',
+      formData
+    );
+  }
+
+  deleteImage(fileName: string) {
+    return this.http.delete(
+      `${environment.apiHost}images/${fileName}`
+    );
+  }
 }
