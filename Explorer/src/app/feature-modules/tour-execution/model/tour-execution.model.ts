@@ -36,6 +36,7 @@ export interface LocationCheckResultDto {
   completedKeyPointId: number | null;
   lastActivity: Date;
   totalCompletedKeyPoints: number;
+   progressPercentage: number; // za procenat 
 }
 
 //
