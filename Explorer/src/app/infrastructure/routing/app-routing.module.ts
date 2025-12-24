@@ -42,6 +42,7 @@ import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tour
 import { TouristEncountersComponent } from 'src/app/feature-modules/stakeholders/tourist-encounters/tourist-encounters.component';
 import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
+import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -115,6 +116,7 @@ const routes: Routes = [
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/recommended-tours', component: RecommendedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },

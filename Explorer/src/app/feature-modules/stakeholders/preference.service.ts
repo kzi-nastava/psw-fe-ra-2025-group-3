@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Preference, PreferenceCreateDto, PreferenceUpdateDto } from './model/preference.model';
-
+import { RecommendedTour } from './model/recommended-tour.model'; // 
 @Injectable({
   providedIn: 'root'
 })
@@ -26,5 +26,10 @@ export class PreferenceService {
 
   deletePreference(): Observable<void> {
     return this.http.delete<void>(this.baseUrl);
+  }
+
+   //
+  getRecommendedTours(): Observable<RecommendedTour[]> {
+    return this.http.get<RecommendedTour[]>(`${this.baseUrl}/recommended-tours`);
   }
 }
