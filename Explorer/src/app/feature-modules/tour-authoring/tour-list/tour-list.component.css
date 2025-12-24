@@ -248,9 +248,27 @@ mat-card-actions button {
   font-size: 0.85rem;
 }
 
-mat-card-actions button:hover:not([disabled]) {
-  transform: translateY(-2px);
+.tour-card mat-card-actions .edit-button {
+  flex: unset;
+  color: var(--color-primary-500) !important;
+  border-radius: var(--border-radius-lg) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: var(--spacing-2) var(--spacing-4) !important;
 }
+
+.tour-card mat-card-actions .edit-button:hover:not([disabled]) {
+  background-color: rgba(0, 188, 212, 0.1) !important;
+  transform: none;
+}
+
+.tour-card mat-card-actions .edit-button mat-icon {
+  margin-right: var(--spacing-2);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
 
 mat-card-actions button[disabled] {
   opacity: 0.5;
@@ -336,43 +354,50 @@ mat-card-actions button[disabled] {
   }
 
 
-  /* ============================================================================
+/* ============================================================================ 
+   REVIEWS SECTION
+   ============================================================================ */
+/* View Reviews dugme */
+/* ============================================================================ 
    REVIEWS SECTION
    ============================================================================ */
 
-.reviews-preview {
-  margin-top: var(--spacing-4);
-  padding-top: var(--spacing-3);
-  border-top: 1px solid rgba(0, 188, 212, 0.15);
+/* View Reviews dugme - GLAVNI SELEKTOR */
+::ng-deep .view-reviews-btn.mat-mdc-button {
+  --mdc-text-button-label-text-color: #0277bd !important;
+  border-color: #0288d1 !important;
 }
 
-.view-reviews-btn {
-  width: 100%;
-  font-weight: 600;
-  border: 2px solid var(--color-primary-500);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-3);
-  transition: all var(--transition-normal);
-  margin-bottom: var(--spacing-3);
+::ng-deep .view-reviews-btn .mdc-button__label {
+  color: #0277bd !important;
 }
 
-.view-reviews-btn:hover {
-  background: linear-gradient(135deg, 
-    rgba(0, 188, 212, 0.1) 0%, 
-    rgba(0, 150, 136, 0.1) 100%
-  );
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+::ng-deep .view-reviews-btn mat-icon {
+  color: #0277bd !important;
 }
 
-.view-reviews-btn mat-icon {
-  color: var(--color-primary-600);
+::ng-deep .view-reviews-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
 }
 
-.reviews-content {
-  animation: slideDown 0.3s ease-out;
-  margin-top: var(--spacing-3);
+/* View Problems dugme - GLAVNI SELEKTOR */
+::ng-deep .view-problems-btn.mat-mdc-button {
+  --mdc-text-button-label-text-color: #0277bd !important;
+  border-color: #0288d1 !important;
 }
+
+::ng-deep .view-problems-btn .mdc-button__label {
+  color: #0277bd !important;
+}
+
+::ng-deep .view-problems-btn mat-icon {
+  color: #0277bd !important;
+}
+
+::ng-deep .view-problems-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
 
 @keyframes slideDown {
   from {
