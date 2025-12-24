@@ -17,6 +17,11 @@ export class AuthorProblemService {
     return this.http.get<TourProblem[]>(`${this.baseUrl}/my-tours`);
   }
 
+  // GET problemi sa specifične ture
+  getTourProblems(tourId: number): Observable<TourProblem[]> {
+    return this.http.get<TourProblem[]>(`${this.baseUrl}/my-tours`);
+  }
+
   // GET detalji problema
   getProblemById(id: number): Observable<TourProblem> {
     return this.http.get<TourProblem>(`${this.baseUrl}/${id}`);
