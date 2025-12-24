@@ -1,0 +1,107 @@
+<!-- src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component.html -->
+<div class="container py-8">
+  
+  <!-- Header -->
+  <div class="card mb-6">
+    <div class="flex-row items-center justify-between mb-4">
+      <div class="flex-row items-center gap-4">
+        <mat-icon class="text-primary" style="font-size: 48px; width: 48px; height: 48px;">
+          recommend
+        </mat-icon>
+        <div>
+          <h2 class="m-0">Recommended Tours</h2>
+          <p class="text-muted m-0">Tours tailored to your preferences</p>
+        </div>
+      </div>
+      <button class="btn btn-secondary" (click)="goToPreferences()">
+        <mat-icon>settings</mat-icon>
+        Edit Preferences
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="card text-center py-8">
+    <mat-spinner class="mx-auto mb-4"></mat-spinner>
+    <p class="text-muted">Loading recommended tours...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && error" class="card error-card">
+    <div class="flex-row items-center gap-4">
+      <mat-icon class="text-error" style="font-size: 48px; width: 48px; height: 48px;">
+        error_outline
+      </mat-icon>
+      <div>
+        <h3 class="m-0 mb-2">No Preferences Set</h3>
+        <p class="m-0 mb-4">{{ error }}</p>
+        <button class="btn btn-primary" (click)="goToPreferences()">
+          <mat-icon>add</mat-icon>
+          Set Your Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!isLoading && !error && recommendedTours.length === 0" class="card text-center py-8">
+    <mat-icon class="text-muted mb-4" style="font-size: 72px; width: 72px; height: 72px;">
+      search_off
+    </mat-icon>
+    <h3>No Matching Tours Found</h3>
+    <p class="text-muted mb-4">We couldn't find any tours that match your current preferences.</p>
+    <button class="btn btn-primary" (click)="goToPreferences()">
+      <mat-icon>tune</mat-icon>
+      Adjust Preferences
+    </button>
+  </div>
+
+  <!-- Tour Cards -->
+  <div *ngIf="!isLoading && !error && recommendedTours.length > 0" class="tours-grid">
+    <div *ngFor="let tour of recommendedTours" class="tour-card">
+      
+      <!-- Match Score Badge -->
+      <div class="match-badge" [style.background]="getScoreColor(tour.matchScore)">
+        <div class="score-number">{{ tour.matchScore }}%</div>
+        <div class="score-label">{{ getScoreLabel(tour.matchScore) }}</div>
+      </div>
+
+      <!-- Tour Info -->
+      <div class="tour-header">
+        <h3 class="tour-title">{{ tour.name }}</h3>
+        <div class="flex-row items-center gap-2 text-muted">
+          <mat-icon>{{ difficultyIcons[tour.difficulty] }}</mat-icon>
+          <span>{{ difficultyLabels[tour.difficulty] }}</span>
+        </div>
+      </div>
+
+      <p class="tour-description">{{ tour.description }}</p>
+
+      <!-- Tour Details -->
+      <div class="tour-details">
+        <div class="detail-item">
+          <mat-icon class="text-primary">attach_money</mat-icon>
+          <span>€{{ tour.price }}</span>
+        </div>
+        <div class="detail-item">
+          <mat-icon class="text-primary">route</mat-icon>
+          <span>{{ tour.distanceInKm }} km</span>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="tour-tags">
+        <span *ngFor="let tag of tour.tags" class="tag">
+          {{ tag }}
+        </span>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn btn-primary btn-block mt-4" (click)="viewTourDetails(tour.id)">
+        <mat-icon>visibility</mat-icon>
+        View Details
+      </button>
+    </div>
+  </div>
+
+</div>

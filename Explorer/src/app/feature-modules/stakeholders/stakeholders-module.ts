@@ -20,6 +20,7 @@ import { ProfileListComponent } from './profile-list/profile-list.component';
 import { TouristToursComponent } from './tourist-tours/tourist-tours.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from './my-purchased-tours/my-purchased-tours.component';  //tour execution
+import { RecommendedToursComponent } from './preferences/recommended-tours/recommended-tours.component'; //tour recommendstions 
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -59,7 +60,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     PurchaseSuccessComponent,
     TourDetailsComponent,
     MyPurchasedToursComponent, // t execution
-    TouristEncountersComponent
+    TouristEncountersComponent,
+    RecommendedToursComponent // tour recommendations
     
   ],
   imports: [

@@ -35,3 +35,96 @@
     gap: var(--spacing-4);
   }
 }
+
+/* ============================================================================
+   RECOMMENDED TOURS BUTTON - CYAN
+   ============================================================================ */
+
+.btn-success {
+  background: linear-gradient(135deg, #00BCD4, #0097A7);
+  color: white;
+  border: none;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #00ACC1, #00838F);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+}
+
+.btn-success:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+}
+
+.btn-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+.btn-lg.btn-block mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+/* ============================================================================
+   TRANSPORT ITEMS
+   ============================================================================ */
+
+.transport-item {
+  padding: var(--spacing-4);
+  background: var(--color-neutral-100);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.transport-item:hover {
+  background: #E0F7FA;
+  transform: translateX(4px);
+}
+
+.transport-item mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+/* ============================================================================
+   BADGE STYLING
+   ============================================================================ */
+
+.badge-warning {
+  background: var(--color-warning);
+  color: var(--color-neutral-900);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+  }
+
+  .btn-lg.btn-block {
+    font-size: var(--font-size-base);
+  }
+
+  .btn-lg.btn-block mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}

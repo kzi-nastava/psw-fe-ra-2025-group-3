@@ -107,6 +107,13 @@
     </div>
 
     <!-- Action Buttons -->
+    <div class="card mb-6">
+      <button class="btn btn-success btn-lg btn-block" routerLink="/tourist/recommended-tours">
+        <mat-icon>recommend</mat-icon>
+        View Recommended Tours Based on Your Preferences
+      </button>
+    </div>
+
     <div class="flex-row gap-4">
       <button class="btn btn-primary" (click)="onEditClicked()">
         <mat-icon>edit</mat-icon>
@@ -119,6 +126,9 @@
     </div>
 
   </div>
+
+
+
 
   <!-- Forma za kreiranje/izmenu -->
   <div *ngIf="shouldRenderPreferenceForm" class="animate-fade-in-up">
