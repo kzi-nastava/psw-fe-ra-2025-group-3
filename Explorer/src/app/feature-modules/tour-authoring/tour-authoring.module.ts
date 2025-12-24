@@ -12,6 +12,7 @@ import { KeyPointListComponent } from './key-points/key-point-list/key-point-lis
 import { KeyPointPageComponent } from './key-points/key-point-page/key-point-page.component';
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
+import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problems-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +23,8 @@ import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
     KeyPointPageComponent,
     AuthorProblemListComponent,
     AuthorProblemDetailsComponent,
-    TourWizardComponent
-
+    TourWizardComponent,
+    TourProblemsDialogComponent
   ],
   imports: [
     CommonModule,

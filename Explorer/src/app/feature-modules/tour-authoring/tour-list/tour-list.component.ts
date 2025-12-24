@@ -5,6 +5,7 @@ import { TourService } from '../tour.service';
 import { Tour, TourStatus, TourDifficulty } from '../model/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
 import { TourWizardComponent } from '../tour-wizard/tour-wizard.component';
+import { TourProblemsDialogComponent } from '../tour-problems-dialog/tour-problems-dialog.component';
 
 @Component({
   selector: 'app-tour-list',
@@ -244,5 +245,21 @@ export class TourListComponent implements OnInit {
     } else {
       this.expandedTourId = tour.id;  // Expand
     }
+  }
+
+  openProblemsDialog(tour: Tour): void {
+    const dialogRef = this.dialog.open(TourProblemsDialogComponent, {
+      width: '90vw',
+      maxWidth: '90vw',
+      height: '85vh',
+      maxHeight: '85vh',
+      data: { tourId: tour.id, tourName: tour.name },
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Nema potrebe da reloadujem jer samo gledam probleme
+    });
   }
 }

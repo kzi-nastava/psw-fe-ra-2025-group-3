@@ -207,47 +207,70 @@ export class MapComponent implements AfterViewInit, OnChanges {
         });
     }
 
-    registerOnClick(): void {
-        this.map.on('click', (e: L.LeafletMouseEvent) => {
-            const coord = e.latlng;
-            const lat = coord.lat;
-            const lng = coord.lng;
+registerOnClick(): void {
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+        const coord = e.latlng;
+        const lat = coord.lat;
+        const lng = coord.lng;
 
+        // ✅ Route-view mod: SAMO pomeri marker
+        if (this.isRouteMode) {
+            if (this.clickMarker) {
+                this.clickMarker.setLatLng([lat, lng]);
+                this.pointSelected.emit({ lat, lng });
+            }
+            return;
+        }
+
+        // ✅ Object-view mod: SAMO pomeri marker
+        if (this.mode === 'object-view') {
+            if (this.clickMarker) {
+                this.clickMarker.setLatLng([lat, lng]);
+                this.pointSelected.emit({ lat, lng });
+            }
+            return;
+        }
+
+        // ✅ Edit mod: Standardna logika sa API pozivima
+        if (this.mode === 'edit-object') {
             this.mapService.reverseSearch(lat, lng).subscribe({
                 next: () => { },
                 error: () => { }
             });
 
-            if (this.isEditMode && this.clickMarker) {
+            if (this.clickMarker) {
                 this.map.removeLayer(this.clickMarker);
                 this.clickMarker = undefined;
             }
 
-            if (this.isEditMode) {
-                if (!this.clickMarker) {
-                    this.clickMarker = L.marker([lat, lng], { draggable: true })
-                        .addTo(this.map)
-                        .openPopup();
+            this.clickMarker = L.marker([lat, lng], { draggable: true })
+                .addTo(this.map)
+                .openPopup();
 
-                    let address;
-                    this.mapService.reverseSearch(lat, lng).subscribe((res) => {
-                        address = res.address.road + ' ' + res.address.city;
-                        this.clickMarker?.bindPopup(address);
-                    });
-
-                    this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
-                        const marker = event.target as L.Marker;
-                        const pos = marker.getLatLng();
-                        this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
-                    });
-                } else {
-                    this.clickMarker.setLatLng([lat, lng]);
+            this.mapService.reverseSearch(lat, lng).subscribe({
+                next: (res) => {
+                    const address = res.address.road + ' ' + res.address.city;
+                    if (this.clickMarker) {
+                        this.clickMarker.bindPopup(address);
+                    }
+                },
+                error: () => {
+                    if (this.clickMarker) {
+                        this.clickMarker.bindPopup(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+                    }
                 }
+            });
 
-                this.pointSelected.emit({ lat, lng });
-            }
-        });
-    }
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
+
+            this.pointSelected.emit({ lat, lng });
+        }
+    });
+}
 
 
     ngAfterViewInit(): void {
@@ -281,4 +304,4 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
 
 }
-}
+} 
