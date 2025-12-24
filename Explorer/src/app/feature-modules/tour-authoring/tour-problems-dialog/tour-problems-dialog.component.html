@@ -1,0 +1,77 @@
+<div class="tour-list-container" *ngIf="!selectedProblem">
+  <div class="header">
+    <div class="header-content">
+      <h2>
+        Tour Problems - {{ tourName }}
+        <p class="subtitle">Problems reported by tourists on this tour</p>
+      </h2>
+    </div>
+    <button mat-icon-button (click)="closeDialog()" class="close-button" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && problems.length === 0" class="empty-state">
+    <mat-icon>check_circle</mat-icon>
+    <h2>No Problems Reported</h2>
+    <p>No problems have been reported on this tour yet.</p>
+  </div>
+
+  <div *ngIf="!loading && problems.length > 0" class="tours-grid">
+    <mat-card *ngFor="let problem of problems" class="tour-card">
+      <mat-card-header>
+        <mat-card-title>
+          {{ problem.description }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          <div class="status-badges">
+            <span class="priority-badge" [style.background-color]="getPriorityColor(problem.priority)">
+              {{ getPriorityName(problem.priority) }}
+            </span>
+            <span class="status-badge" [style.background-color]="getStatusColor(problem.status)">
+              {{ getStatusName(problem.status) }}
+            </span>
+          </div>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="tour-details">
+          <div class="detail-item">
+            <mat-icon>category</mat-icon>
+            <span>{{ getCategoryName(problem.category) }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ problem.time | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>person</mat-icon>
+            <span>Tourist #{{ problem.touristId }}</span>
+          </div>
+          <div class="detail-item" *ngIf="problem.messages && problem.messages.length > 0">
+            <mat-icon>chat</mat-icon>
+            <span>{{ problem.messages.length }} messages</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onViewDetails(problem.id)">
+          <mat-icon>visibility</mat-icon> View & Respond
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Problem Details View -->
+<app-author-problem-details 
+  *ngIf="selectedProblem" 
+  [problemId]="selectedProblem.id"
+  (back)="goBack()">
+</app-author-problem-details>

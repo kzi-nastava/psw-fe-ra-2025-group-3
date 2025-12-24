@@ -44,6 +44,12 @@ export class TourFormComponent implements OnInit {
     { value: TourDifficulty.Hard, label: 'Hard' }
   ];
 
+  difficultyTooltip =
+    'Difficulty reflects the overall tour difficulty, considering duration and pace.\n' +
+    'Easy — short and relaxed.\n' +
+    'Medium — moderate and balanced.\n' +
+    'Hard — long or intensive.';
+
   constructor(
     private fb: FormBuilder,
     private tourService: TourService,

@@ -27,6 +27,54 @@ mat-label {
   color: var(--color-secondary-800);
 }
 
+/* Tooltip help button style */
+.help-btn {
+  width: 26px;
+  height: 26px;
+  margin-left: 0px;
+  margin-right: 4px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  top: 4px; 
+}
+
+.help-btn mat-icon {
+  font-size: 0.95rem;
+  color: var(--color-primary-600);
+}
+
+.difficulty-hint {
+  font-size: 0.75rem;          
+  font-weight: 500;           
+  color: var(--color-primary-600);
+  margin-top: 2px;
+}
+
+.help-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .tooltip-blue {
+  --mdc-plain-tooltip-container-color: var(--color-primary-600);
+  --mdc-plain-tooltip-supporting-text-color: var(--color-neutral-0);
+  --mdc-plain-tooltip-supporting-text-size: 13.5px;
+  --mdc-plain-tooltip-container-shape: 14px;
+  --mdc-plain-tooltip-container-elevation-shadow: var(--shadow-md);
+  white-space: pre-line;
+}
+
+::ng-deep .tooltip-blue .mdc-tooltip__surface {
+  padding: 10px 12px;                 
+  border: 1px solid rgba(0, 0, 0, 0.25); 
+  border-radius: 14px;                
+}
+
 .tags-section {
   margin-top: var(--spacing-2);
 }

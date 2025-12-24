@@ -21,6 +21,9 @@ import { FacilityEditComponent } from 'src/app/feature-modules/administration/fa
 import { TourProblemListAdminComponent } from 'src/app/feature-modules/administration/tour-problem-list-admin/tour-problem-list-admin.component';
 import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/administration/tour-problem-details-admin/tour-problem-details-admin.component';
 
+import { EncounterListComponent } from 'src/app/feature-modules/administration/encounter-list/encounter-list.component';
+import { EncounterFormComponent } from 'src/app/feature-modules/administration/encounter-form/encounter-form.component';
+
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component';
@@ -36,6 +39,7 @@ import { AuthorProblemDetailsComponent } from 'src/app/feature-modules/tour-auth
 import { PreferenceOverviewComponent } from 'src/app/feature-modules/stakeholders/preferences/preference-overview/preference-overview.component';
 import { TouristEquipmentComponent } from 'src/app/feature-modules/stakeholders/tourist-equipment/tourist-equipment.component';
 import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tourist-tours/tourist-tours.component';
+import { TouristEncountersComponent } from 'src/app/feature-modules/stakeholders/tourist-encounters/tourist-encounters.component';
 import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 
@@ -77,6 +81,9 @@ const routes: Routes = [
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
 
+  // Encounters
+  { path: 'administration/encounters', component: EncounterListComponent, canActivate: [AuthGuard] },
+
   // Admin Tour Problems
   { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
   { path: 'administration/tour-problems/:id', component: TourProblemDetailsAdminComponent, canActivate: [AuthGuard] },
@@ -101,6 +108,7 @@ const routes: Routes = [
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/encounters', component: TouristEncountersComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/my-tours', component: MyPurchasedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //tour execution
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},

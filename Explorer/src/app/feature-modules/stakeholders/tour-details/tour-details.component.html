@@ -41,6 +41,26 @@
 
   </div>
 
+ <!-- MEETUPS -->
+<div class="meetups-section" *ngIf="meetups && meetups.length > 0">
+    <h2>Related Meetups</h2>
+    
+    
+    <div class="meetup-list">
+      <div 
+        class="meetup-card" 
+        *ngFor="let m of meetups" 
+        (click)="openMeetup(m.id)">
+        
+        <div class="meetup-header">
+          <strong>{{ m.title }}</strong>
+          <span class="meetup-date">{{ m.dateTime | date:'mediumDate' }}</span>
+        </div>
+        <p class="meetup-desc">{{ m.description | slice:0:100 }}{{ m.description.length > 100 ? '...' : '' }}</p>
+      </div>
+    </div>
+  </div>
+
  <!-- REVIEWS -->
  <h2 class="reviews-title">Reviews</h2>
   <xp-tour-reviews 

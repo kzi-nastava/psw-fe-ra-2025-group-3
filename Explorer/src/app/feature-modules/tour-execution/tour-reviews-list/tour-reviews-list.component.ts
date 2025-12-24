@@ -22,6 +22,10 @@ export class TourReviewsListComponent implements OnInit {
   totalReviews = 0;
   Math = Math;
 
+  isLightboxOpen = false;
+  currentImageIndex = 0;
+  lightboxImages: string[] = [];
+
   // ✅ Cache
   private nameCache: Map<number, string> = new Map();
 
@@ -51,7 +55,7 @@ export class TourReviewsListComponent implements OnInit {
     });
   }
 
-  // ✅ Učitaj imena
+  // Učitaj imena
   private loadTouristNames(): void {
     if (this.reviews.length === 0) {
       this.isLoading = false;
@@ -79,7 +83,7 @@ export class TourReviewsListComponent implements OnInit {
     });
   }
 
-  // ✅ Getter
+  // Getter
   getTouristName(touristId: number): string {
     return this.nameCache.get(touristId) || 'Anonymous';
   }
@@ -114,5 +118,34 @@ export class TourReviewsListComponent implements OnInit {
 
   openImageModal(image: any): void {
     window.open(this.getImageUrl(image.imageUrl), '_blank');
+  }
+
+  openLightbox(imageUrls: string[], startIndex: number = 0): void {
+    this.lightboxImages = imageUrls;
+    this.currentImageIndex = startIndex;
+    this.isLightboxOpen = true;
+  }
+
+  closeLightbox(): void {
+    this.isLightboxOpen = false;
+  }
+
+  previousImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.lightboxImages.length - 1) {
+      this.currentImageIndex++;
+    }
+  }
+
+  openReviewImageLightbox(review: TourReview, startIndex: number): void {
+    if (review.images) {
+      const imageUrls = review.images.map(img => this.getImageUrl(img.imageUrl));
+      this.openLightbox(imageUrls, startIndex);
+    }
   }
 }

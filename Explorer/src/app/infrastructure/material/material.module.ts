@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
@@ -36,6 +37,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatMenuModule,
+    MatTooltipModule,
     MatDividerModule
   ],
   exports: [
@@ -59,7 +61,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatInputModule,
     MatTableModule,
     MatIconModule,
-    MatTabsModule,     
+    MatTabsModule,
+    MatTooltipModule,
     MatCheckboxModule,
     MatPaginatorModule,
     MatMenuModule,

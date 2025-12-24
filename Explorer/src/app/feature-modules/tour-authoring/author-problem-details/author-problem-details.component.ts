@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorProblemService } from '../author-problem.service';
 import { TourProblem, Message, ProblemStatus, ProblemCategory, ProblemPriority, AuthorType } from '../../tour-execution/model/tour-problem.model';
@@ -10,10 +10,14 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./author-problem-details.component.css']
 })
 export class AuthorProblemDetailsComponent implements OnInit {
+  @Input() problemId: number | null = null;
+  @Output() back = new EventEmitter<void>();
+  
   problem: TourProblem | null = null;
   loading: boolean = true;
   messageControl = new FormControl('', [Validators.required, Validators.minLength(1)]);
   sendingMessage: boolean = false;
+  isDialog: boolean = false;
   
   ProblemStatus = ProblemStatus;
   AuthorType = AuthorType;
@@ -25,9 +29,16 @@ export class AuthorProblemDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.loadProblem(id);
+    // Ako je problemId prosleđen kao input, koristi ga (dialog mode)
+    if (this.problemId) {
+      this.isDialog = true;
+      this.loadProblem(this.problemId);
+    } else {
+      // Inače učitaj iz rute (standard mode)
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      if (id) {
+        this.loadProblem(id);
+      }
     }
   }
 
@@ -122,6 +133,12 @@ export class AuthorProblemDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/author/tour-problems']);
+    if (this.isDialog) {
+      // Ako je u dialog modu, emituj event nazad
+      this.back.emit();
+    } else {
+      // Inače navigiraj na prethodnu stranicu
+      this.router.navigate(['/author/tour-problems']);
+    }
   }
 }

@@ -28,6 +28,11 @@ export class TourReviewFormComponent implements OnInit {
   selectedFiles: SelectedFile[] = [];
   existingImages: ReviewImage[] = [];
   isUploadingImages = false;
+  isDragOver = false;
+
+  isLightboxOpen = false;
+  currentImageIndex = 0;
+  allImages: (ReviewImage | SelectedFile)[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -94,11 +99,38 @@ export class TourReviewFormComponent implements OnInit {
     return position <= displayRating ? 'star' : 'star_border';
   }
 
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (!files) return;
+
+    this.processFiles(files);
+  }
+
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
     
     if (!files || files.length === 0) return;
 
+    this.processFiles(files);
+  }
+
+  private processFiles(files: FileList): void {
     const remainingSlots = 5 - this.totalImagesCount;
     const filesToAdd = Math.min(files.length, remainingSlots);
 
@@ -125,11 +157,10 @@ export class TourReviewFormComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
-
-    event.target.value = '';
   }
 
   removeSelectedFile(index: number): void {
+    if (!confirm('Are you sure you want to delete this image?')) return;
     this.selectedFiles.splice(index, 1);
   }
 
@@ -246,6 +277,42 @@ export class TourReviewFormComponent implements OnInit {
 
   getImageUrl(imageUrl: string): string {
     return this.reviewService.getImageUrl(imageUrl);
+  }
+
+  openLightbox(image: ReviewImage | SelectedFile, isExisting: boolean): void {
+    this.allImages = [...this.existingImages, ...this.selectedFiles];
+    const index = isExisting 
+      ? this.allImages.findIndex(img => (img as ReviewImage).id === (image as ReviewImage).id)
+      : this.existingImages.length + this.allImages.indexOf(image);
+    
+    this.currentImageIndex = index >= 0 ? index : 0;
+    this.isLightboxOpen = true;
+  }
+
+  closeLightbox(): void {
+    this.isLightboxOpen = false;
+  }
+
+  previousImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.allImages.length - 1) {
+      this.currentImageIndex++;
+    }
+  }
+
+  getCurrentImageSrc(): string {
+    const img = this.allImages[this.currentImageIndex];
+    if (!img) return '';
+    
+    const isExisting = (img as ReviewImage).id !== undefined;
+    return isExisting 
+      ? this.getImageUrl((img as ReviewImage).imageUrl)
+      : (img as SelectedFile).preview;
   }
   
 }

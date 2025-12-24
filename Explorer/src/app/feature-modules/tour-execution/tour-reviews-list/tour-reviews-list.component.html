@@ -71,9 +71,9 @@
           <!-- Images Gallery -->
           <div *ngIf="review.images && review.images.length > 0" class="review-images">
             <div class="images-grid-small">
-              <div *ngFor="let img of review.images" 
+              <div *ngFor="let img of review.images; let i = index" 
                    class="image-thumbnail" 
-                   (click)="openImageModal(img)">
+                   (click)="openReviewImageLightbox(review, i)">
                 <img [src]="getImageUrl(img.imageUrl)" alt="Review photo">
               </div>
             </div>
@@ -87,6 +87,43 @@
           </div>
         </mat-card-content>
       </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
+  <div class="lightbox-container" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="lightbox-close-btn" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Main Image -->
+    <div class="lightbox-image-wrapper">
+      <img [src]="lightboxImages[currentImageIndex]" alt="Review image" class="lightbox-image">
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="lightbox-nav">
+      <!-- Previous Button -->
+      <button 
+        class="lightbox-nav-btn"
+        [disabled]="currentImageIndex === 0"
+        (click)="previousImage()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <!-- Image Counter -->
+      <span class="lightbox-counter">{{ currentImageIndex + 1 }} / {{ lightboxImages.length }}</span>
+
+      <!-- Next Button -->
+      <button 
+        class="lightbox-nav-btn"
+        [disabled]="currentImageIndex === lightboxImages.length - 1"
+        (click)="nextImage()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
     </div>
   </div>
 </div>
