@@ -74,6 +74,24 @@ button[mat-raised-button][color="primary"] {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+button[mat-raised-button].edit-button,
+button[mat-raised-button].save-button {
+    background: linear-gradient(135deg, #00bcd4 0%, #009688 100%); /* zeleni gradient */
+    color: var(--color-neutral-0); /* bijeli tekst */
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+    transition: all 0.3s ease;
+}
+
+button[mat-raised-button].edit-button:hover,
+button[mat-raised-button].save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4);
+}
+
+
 @media (max-width: 768px) {
     .profile-container {
         padding: 20px;
