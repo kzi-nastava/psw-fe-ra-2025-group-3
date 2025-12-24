@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MeetupService } from '../meetup.service';
 import { Meetup, MeetupCreateDto, MeetupUpdateDto } from '../../model/meetup.model';
+import { MapService } from 'src/app/shared/map/map.service';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { Tour } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
@@ -18,9 +19,12 @@ export class MeetupFormComponent implements OnInit {
   meetupId?: number;
   availableTours: Tour[] = []; 
 
+  initialPoint?: { lat: number, lng: number };
+
   constructor(
     private fb: FormBuilder,
     private meetupService: MeetupService,
+    private mapService: MapService,
     private tourService: TourService,
     private authService: AuthService,
     public dialogRef: MatDialogRef<MeetupFormComponent>,
@@ -35,10 +39,12 @@ export class MeetupFormComponent implements OnInit {
 
     if (this.isEditMode && this.data.meetup) {
       this.meetupId = this.data.meetup.id;
+      this.initialPoint = { lat: this.data.meetup.latitude, lng: this.data.meetup.longitude };
       this.meetupForm.patchValue({
         title: this.data.meetup.title,
         description: this.data.meetup.description,
         dateTime: this.data.meetup.dateTime,
+        address: this.data.meetup.address,
         latitude: this.data.meetup.latitude,
         longitude: this.data.meetup.longitude,
         tourId: this.data.meetup.tourId 
@@ -51,11 +57,54 @@ export class MeetupFormComponent implements OnInit {
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       dateTime: ['', Validators.required],
+      address: ['', Validators.required],
       latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
       longitude: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
       tourId: [null]
     });
   }
+
+  onPointSelected(pos: { lat: number; lng: number }): void {
+    this.meetupForm.patchValue({
+      latitude: pos.lat,
+      longitude: pos.lng
+    });
+
+    this.mapService.reverseSearch(pos.lat, pos.lng).subscribe((res) => {
+      const addr = res.address;    
+      const street = addr.road || '';
+      const number = addr.house_number || '';
+      const city = addr.city || addr.town || addr.village || '';
+
+      let formattedAddress = '';
+      if (street) formattedAddress += street;
+      if (number) formattedAddress += ' ' + number;
+      if (city) formattedAddress += (formattedAddress ? ', ' : '') + city;
+
+      this.meetupForm.patchValue({ address: formattedAddress.trim() });
+    });
+  }
+
+  onAddressSearch(): void {
+    const address = this.meetupForm.get('address')?.value;
+    if (address) {
+      this.mapService.search(address).subscribe({
+        next: (result) => {
+          if (result && result.length > 0) {
+            const lat = parseFloat(result[0].lat);
+            const lon = parseFloat(result[0].lon);
+            
+            this.initialPoint = { lat, lng: lon };
+            this.meetupForm.patchValue({
+              latitude: lat,
+              longitude: lon
+            });
+          }
+        }
+      });
+    }
+  }
+
 
   loadTours(): void {
     const userRole = this.authService.user$.getValue().role.toLowerCase();
@@ -82,6 +131,7 @@ export class MeetupFormComponent implements OnInit {
         title: formValue.title,
         description: formValue.description,
         dateTime: new Date(formValue.dateTime),
+        address: formValue.address,
         latitude: formValue.latitude,
         longitude: formValue.longitude,
         tourId: formValue.tourId 

@@ -79,6 +79,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSnackBarModule,
+    SharedModule,
     MaterialModule,
     TourExecutionModule,
     RouterModule,
