@@ -41,7 +41,7 @@
 
     <!-- Voting section -->
     <section class="vote-section" *ngIf="isAuthenticated; else loginInfo">
-      <button mat-raised-button color="primary" class="vote-button upvote" [class.active]="isUpvoteActive()"
+      <button mat-raised-button class="vote-button upvote" [class.active]="isUpvoteActive()"
         (click)="onUpvote()">
         ▲ Upvote
       </button>
@@ -51,7 +51,7 @@
         ({{ voteState.upvoteCount }} ↑ / {{ voteState.downvoteCount }} ↓)
       </span>
 
-      <button mat-raised-button color="warn" class="vote-button downvote" [class.active]="isDownvoteActive()"
+      <button mat-raised-button class="vote-button downvote" [class.active]="isDownvoteActive()"
         (click)="onDownvote()">
         ▼ Downvote
       </button>
