@@ -1,0 +1,31 @@
+<div class="container py-8">
+    <div class="card mx-auto" style="max-width: 600px">
+        <h2>{{ isEdit ? 'Edit Diary' : 'Create Diary' }}</h2>
+
+
+
+
+        <form [formGroup]="form" (ngSubmit)="onSave()" class="flex-col gap-4">
+
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <input matInput formControlName="title">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Country</mat-label>
+                <input matInput formControlName="country">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>City (optional)</mat-label>
+                <input matInput formControlName="city">
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit">
+                {{ isEdit ? 'Update' : 'Save' }}
+            </button>
+
+        </form>
+    </div>
+</div>
