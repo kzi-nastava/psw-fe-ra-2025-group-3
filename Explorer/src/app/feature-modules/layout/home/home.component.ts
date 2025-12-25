@@ -65,35 +65,50 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   // 🔹 Newsletter subscribe
-  subscribeToNewsletter(): void {
-    if (!this.newsletterEmail || !this.newsletterEmail.includes('@')) {
-      this.snackBar.open('Please enter a valid email address.', 'Close', {
+ subscribeToNewsletter(): void {
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!this.newsletterEmail || !emailRegex.test(this.newsletterEmail)) {
+    this.snackBar.open(
+      'Please enter a valid email address (e.g. name@example.com).',
+      'Close',
+      {
         duration: 4000,
         panelClass: ['error-snackbar']
-      });
-      return;
-    }
+      }
+    );
+    return;
+  }
 
-    this.isSubscribing = true;
+  this.isSubscribing = true;
 
-    this.newsletterService.subscribe(this.newsletterEmail).subscribe({
-      next: () => {
-        this.snackBar.open(
-          'You have successfully subscribed to our newsletter 🎉',
-          'Close',
-          { duration: 5000 }
-        );
-        this.newsletterEmail = '';
-        this.isSubscribing = false;
-      },
-      error: () => {
+  this.newsletterService.subscribe(this.newsletterEmail).subscribe({
+    next: () => {
+      this.snackBar.open(
+        'You’re in! 🎉 We’ll keep you inspired.',
+        'Close',
+        { duration: 5000 }
+      );
+      this.newsletterEmail = '';
+      this.isSubscribing = false;
+    },
+    error: (err) => {
+      if (err?.status === 409) {
         this.snackBar.open(
           'This email is already subscribed.',
           'Close',
           { duration: 5000, panelClass: ['error-snackbar'] }
         );
-        this.isSubscribing = false;
+      } else {
+        this.snackBar.open(
+          'Something went wrong. Please try again later.',
+          'Close',
+          { duration: 5000, panelClass: ['error-snackbar'] }
+        );
       }
-    });
-  }
+      this.isSubscribing = false;
+    }
+  });
+}
 }
