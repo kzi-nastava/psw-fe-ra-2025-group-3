@@ -11,7 +11,7 @@ import { NotificationBadgeComponent } from './notification-badge/notification-ba
 import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -24,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MaterialModule,
     RouterModule,
     MatSnackBarModule,

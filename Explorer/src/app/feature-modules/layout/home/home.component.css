@@ -1317,4 +1317,70 @@
   .guides-visual-description {
     font-size: 0.9rem;
   }
+
+
+
+  /* ===================================================================
+   NEWSLETTER CTA
+   =================================================================== */
+
+.newsletter-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #E0F7FA, #B2EBF2);
+}
+
+.newsletter-container {
+  display: flex;
+  justify-content: center;
+}
+
+.newsletter-content {
+  max-width: 700px;
+  text-align: center;
+  background: white;
+  padding: 4rem 3rem;
+  border-radius: 24px;
+  box-shadow: 0 15px 50px rgba(0, 131, 143, 0.25);
+}
+
+.newsletter-content h2 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #00695C;
+  margin-bottom: 1rem;
+}
+
+.newsletter-content p {
+  font-size: 1.15rem;
+  color: #424242;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.newsletter-form input {
+  flex: 1;
+  max-width: 320px;
+  padding: 0.9rem 1.2rem;
+  border-radius: 10px;
+  border: 2px solid #B2EBF2;
+  font-size: 1rem;
+}
+
+.newsletter-form input:focus {
+  outline: none;
+  border-color: #00ACC1;
+}
+
+.newsletter-note {
+  font-size: 0.9rem;
+  color: #757575;
+  font-style: italic;
+}
 }
