@@ -35,9 +35,19 @@ export class StakeholderService {
     return this.http.get<Person[]>(`${this.baseUrl}/all`);
   }
 
+  // GET ALL TOURISTS
+  getAllTourists(): Observable<Person[]> {
+    return this.http.get<Person[]>(`${this.baseUrl}/tourists`);
+  }
+
   // GET BY ID
   getPersonById(id: number): Observable<Person> {
     return this.http.get<Person>(`${this.baseUrl}/${id}`);
+  }
+
+  // GET BY USER ID
+  getPersonByUserId(userId: number): Observable<Person> {
+    return this.http.get<Person>(`${this.baseUrl}/user/${userId}`);
   }
 
   // CREATE
