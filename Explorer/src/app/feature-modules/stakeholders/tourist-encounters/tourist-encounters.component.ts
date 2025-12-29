@@ -21,7 +21,9 @@ export class TouristEncountersComponent implements OnInit {
   isLoading = false;
   selectedPoint: { lat: number; lng: number } | null = null;
   myPosition: { lat: number; lng: number } | null = null;
-  positionMarker: { lat: number; lng: number; name?: string; color?: string } | null = null;
+  currentZoom: number = 15;
+  selectedFilter: string | null = null; // null = show all
+  highlightedEncounterId: number | null = null;
 
   constructor(
     private encounterService: TouristEncounterService,
@@ -31,8 +33,60 @@ export class TouristEncountersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMyPosition();
-    this.loadNearbyEncounters();
     this.loadActiveEncounterActivations();
+    // Load nearby encounters if position exists, otherwise load all active encounters
+    this.loadEncounters();
+  }
+
+  loadEncounters(): void {
+    // First check if position is already loaded
+    if (this.myPosition) {
+      this.loadNearbyEncounters();
+    } else {
+      // Try to load position first, then encounters
+      this.activationService.getMyPosition().subscribe({
+        next: (position) => {
+          if (position) {
+            this.myPosition = { lat: position.latitude, lng: position.longitude };
+            this.loadNearbyEncounters();
+          } else {
+            // No position, load all active encounters without distance
+            this.loadActiveEncountersWithoutDistance();
+          }
+        },
+        error: () => {
+          // No position, load all active encounters without distance
+          this.loadActiveEncountersWithoutDistance();
+        }
+      });
+    }
+  }
+
+  loadActiveEncountersWithoutDistance(): void {
+    this.isLoading = true;
+    this.encounterService.getActiveEncounters().subscribe({
+      next: (activeEncounters) => {
+        // Convert to NearbyEncounterDto format without distance info
+        this.encounters = activeEncounters.map(e => ({
+          id: e.id!,
+          name: e.name,
+          description: e.description,
+          latitude: e.latitude,
+          longitude: e.longitude,
+          xp: e.xp,
+          type: e.type as any,
+          distanceInMeters: 0,
+          canActivate: false,
+          isCompleted: false
+        }));
+        this.updateMapPoints();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.showError('Error loading encounters');
+        this.isLoading = false;
+      }
+    });
   }
 
   loadMyPosition(): void {
@@ -40,7 +94,6 @@ export class TouristEncountersComponent implements OnInit {
       next: (position) => {
         if (position) {
           this.myPosition = { lat: position.latitude, lng: position.longitude };
-          this.updatePositionMarker();
         }
       },
       error: (err) => {
@@ -57,9 +110,15 @@ export class TouristEncountersComponent implements OnInit {
         this.updateMapPoints();
         this.isLoading = false;
       },
-      error: () => {
-        this.showError('Error loading nearby encounters');
-        this.isLoading = false;
+      error: (err) => {
+        console.error('Error loading nearby encounters', err);
+        // If error is because position is not set, load without distance
+        if (err.status === 400 || err.status === 404) {
+          this.loadActiveEncountersWithoutDistance();
+        } else {
+          this.showError('Error loading encounters');
+          this.isLoading = false;
+        }
       }
     });
   }
@@ -92,30 +151,94 @@ export class TouristEncountersComponent implements OnInit {
         lat: e.latitude,
         lng: e.longitude,
         name: `${e.name} - ${e.xp} XP`,
-        color: color
+        color: color,
+        id: e.id // Add ID for marker click identification
       };
     });
 
-    // Add position marker if exists
-    if (this.positionMarker) {
-      this.mapPoints.push(this.positionMarker);
-    }
-  }
-
-  updatePositionMarker(): void {
-    if (this.myPosition) {
-      this.positionMarker = {
-        lat: this.myPosition.lat,
-        lng: this.myPosition.lng,
-        name: '📍 My Position',
-        color: 'blue'
-      };
-      this.updateMapPoints();
-    }
+    // Don't add position/selected markers through points
+    // They are handled by initialPoint binding which creates the draggable marker
   }
 
   onPointSelected(point: { lat: number; lng: number }): void {
     this.selectedPoint = point;
+    // The map's initialPoint binding will automatically update the draggable marker
+  }
+
+  onZoomChanged(zoom: number): void {
+    this.currentZoom = zoom;
+  }
+
+  getFilteredAndSortedEncounters(): NearbyEncounterDto[] {
+    let filtered = this.encounters;
+
+    // Apply filter - if no filter selected, show all
+    if (this.selectedFilter) {
+      filtered = this.encounters.filter(e => {
+        if (this.selectedFilter === 'in-progress') {
+          return this.isEncounterActive(e.id) && !e.isCompleted;
+        } else if (this.selectedFilter === 'can-activate') {
+          return e.canActivate && !e.isCompleted && !this.isEncounterActive(e.id);
+        } else if (this.selectedFilter === 'too-far') {
+          return !e.canActivate && !e.isCompleted && !this.isEncounterActive(e.id) && this.myPosition;
+        } else if (this.selectedFilter === 'completed') {
+          return e.isCompleted;
+        }
+        return true;
+      });
+    }
+
+    // Sort by priority: In Progress > Can Activate > Too Far > Completed
+    return filtered.sort((a, b) => {
+      const getPriority = (encounter: NearbyEncounterDto): number => {
+        if (this.isEncounterActive(encounter.id) && !encounter.isCompleted) {
+          return 1; // In Progress
+        } else if (encounter.canActivate && !encounter.isCompleted && !this.isEncounterActive(encounter.id)) {
+          return 2; // Can Activate
+        } else if (!encounter.canActivate && !encounter.isCompleted && !this.isEncounterActive(encounter.id)) {
+          return 3; // Too Far
+        } else {
+          return 4; // Completed
+        }
+      };
+
+      return getPriority(a) - getPriority(b);
+    });
+  }
+
+  toggleFilter(filter: string): void {
+    // If clicking the same filter, deselect it (show all)
+    if (this.selectedFilter === filter) {
+      this.selectedFilter = null;
+    } else {
+      // Otherwise, select the new filter
+      this.selectedFilter = filter;
+    }
+  }
+
+  isFilterActive(filter: string): boolean {
+    return this.selectedFilter === filter;
+  }
+
+  onMarkerClick(markerId: number): void {
+    // Clear filter to show all encounters
+    this.selectedFilter = null;
+    
+    // Highlight the encounter
+    this.highlightedEncounterId = markerId;
+    
+    // Scroll to the encounter card
+    setTimeout(() => {
+      const element = document.getElementById(`encounter-${markerId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        this.highlightedEncounterId = null;
+      }, 3000);
+    }, 100);
   }
 
   savePosition(): void {
@@ -127,7 +250,8 @@ export class TouristEncountersComponent implements OnInit {
     this.activationService.updatePosition(this.selectedPoint.lat, this.selectedPoint.lng).subscribe({
       next: () => {
         this.myPosition = { ...this.selectedPoint! };
-        this.updatePositionMarker();
+        // Don't clear selectedPoint immediately to avoid triggering initialPoint change
+        // It will be cleared on next map click
         this.showSuccess('Position saved successfully!');
         this.loadNearbyEncounters(); // Reload to get updated distances
       },

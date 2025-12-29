@@ -21,10 +21,14 @@
 
       <div class="map-container">
         <xp-map 
-          [mode]="'object-view'" 
+          [mode]="'edit-object'" 
+          [center]="myPosition ? [myPosition.lat, myPosition.lng] : [45.2396, 19.8227]"
+          [zoom]="currentZoom"
           [points]="mapPoints"
-          [initialPoint]="myPosition || undefined"
+          [initialPoint]="selectedPoint || myPosition || undefined"
           (pointSelected)="onPointSelected($event)"
+          (zoomChanged)="onZoomChanged($event)"
+          (markerClicked)="onMarkerClick($event)"
         ></xp-map>
         
         <!-- Legend inside map -->
@@ -45,7 +49,7 @@
             </div>
             <div class="legend-item">
               <span class="legend-marker blue"></span>
-              <span>Your Position</span>
+              <span>My Position</span>
             </div>
             <div class="legend-item">
               <span class="legend-marker grey"></span>
@@ -78,13 +82,66 @@
 
     <!-- List Section -->
     <div *ngIf="encounters.length > 0" class="list-section">
-      <h2>
-        <mat-icon>list</mat-icon>
-        Encounter List
-      </h2>
+      <div class="list-header">
+        <h2>
+          <mat-icon>list</mat-icon>
+          Encounter List
+        </h2>
+        
+        <!-- Filter Toggle Buttons -->
+        <div class="filter-buttons">
+          <button 
+            mat-stroked-button
+            [class.active]="isFilterActive('in-progress')"
+            (click)="toggleFilter('in-progress')"
+            class="filter-btn in-progress">
+            <mat-icon>hourglass_empty</mat-icon>
+            In Progress
+          </button>
+          <button 
+            mat-stroked-button
+            [class.active]="isFilterActive('can-activate')"
+            (click)="toggleFilter('can-activate')"
+            class="filter-btn can-activate">
+            <mat-icon>play_circle</mat-icon>
+            Can Activate
+          </button>
+          <button 
+            mat-stroked-button
+            [class.active]="isFilterActive('too-far')"
+            (click)="toggleFilter('too-far')"
+            class="filter-btn too-far">
+            <mat-icon>lock</mat-icon>
+            Too Far
+          </button>
+          <button 
+            mat-stroked-button
+            [class.active]="isFilterActive('completed')"
+            (click)="toggleFilter('completed')"
+            class="filter-btn completed">
+            <mat-icon>check_circle</mat-icon>
+            Completed
+          </button>
+        </div>
+      </div>
+      
+      <!-- Empty state for filtered results -->
+      <div *ngIf="getFilteredAndSortedEncounters().length === 0 && encounters.length > 0" class="empty-filter-state">
+        <mat-icon>filter_alt_off</mat-icon>
+        <h3>No Encounters Found</h3>
+        <p>There are no encounters matching the selected filter.</p>
+        <button mat-raised-button color="primary" (click)="selectedFilter = null">
+          <mat-icon>refresh</mat-icon>
+          Show All Encounters
+        </button>
+      </div>
       
       <div class="encounters-grid">
-        <mat-card *ngFor="let encounter of encounters" class="encounter-card">
+        <mat-card 
+          *ngFor="let encounter of getFilteredAndSortedEncounters()" 
+          class="encounter-card"
+          [class.highlighted]="highlightedEncounterId === encounter.id"
+          [id]="'encounter-' + encounter.id">
           <!-- Card Header -->
           <mat-card-header>
             <div class="card-header-content">
@@ -154,7 +211,7 @@
             <ng-container *ngIf="canShowActionButtons(encounter)">
               <button 
                 mat-raised-button 
-                color="accent"
+                class="complete-button"
                 (click)="completeEncounter(encounter.id)">
                 <mat-icon>check</mat-icon>
                 Complete
