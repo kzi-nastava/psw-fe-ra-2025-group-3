@@ -24,6 +24,8 @@ import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/admini
 import { EncounterListComponent } from 'src/app/feature-modules/administration/encounter-list/encounter-list.component';
 import { EncounterFormComponent } from 'src/app/feature-modules/administration/encounter-form/encounter-form.component';
 
+import { AdminTouristsComponent } from 'src/app/feature-modules/administration/admin-tourists/admin-tourists.component';
+
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component';
@@ -43,6 +45,7 @@ import { TouristEncountersComponent } from 'src/app/feature-modules/stakeholders
 import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
+import { MyWalletComponent } from 'src/app/feature-modules/stakeholders/my-wallet/my-wallet.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -85,6 +88,8 @@ const routes: Routes = [
   // Encounters
   { path: 'administration/encounters', component: EncounterListComponent, canActivate: [AuthGuard] },
 
+  { path: 'administration/tourists', component: AdminTouristsComponent, canActivate: [AuthGuard] },
+
   // Admin Tour Problems
   { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
   { path: 'administration/tour-problems/:id', component: TourProblemDetailsAdminComponent, canActivate: [AuthGuard] },
@@ -114,6 +119,7 @@ const routes: Routes = [
   { path: 'tourist/my-tours', component: MyPurchasedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //tour execution
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },

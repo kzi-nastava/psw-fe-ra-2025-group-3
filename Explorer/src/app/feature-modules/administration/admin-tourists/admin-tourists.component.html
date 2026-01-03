@@ -1,0 +1,75 @@
+<div class="profile-list-container">
+
+  <div class="header">
+    <h1>Tourists</h1>
+    <p class="subtitle">
+        Here you can top up Adventure Coins (AC) for any tourist.
+    </p>
+    </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && persons.length === 0" class="empty-state">
+    <mat-icon>person_off</mat-icon>
+    <h2>No tourists found</h2>
+    <p>The system currently has no tourists listed.</p>
+  </div>
+
+  <div *ngIf="!isLoading && persons.length > 0" class="profiles-grid">
+
+    <mat-card *ngFor="let person of displayedPersons" class="profile-card">
+
+      <mat-card-header>
+        <mat-card-title>
+          {{ person.name }} {{ person.surname }}
+        </mat-card-title>
+
+        <mat-card-subtitle>
+          <span class="status-badge" [ngClass]="person.isActive ? 'status-active' : 'status-blocked'">
+            {{ getStatusText(person) }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="profile-details">
+
+          <div class="detail-item" *ngIf="person.profilePictureUrl">
+            <img [src]="person.profilePictureUrl" alt="Profile Picture" class="profile-picture">
+          </div>
+
+          <div class="detail-item" *ngIf="person.email">
+            <mat-icon>email</mat-icon>
+            <span>{{ person.email }}</span>
+          </div>
+
+          <div class="detail-item" *ngIf="person.biography">
+            <mat-icon>description</mat-icon>
+            <span>{{ person.biography }}</span>
+          </div>
+
+          <div class="detail-item" *ngIf="person.quote">
+            <mat-icon>format_quote</mat-icon>
+            <i>"{{ person.quote }}"</i>
+          </div>
+
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="actions-center">
+        <button mat-raised-button color="primary" (click)="openTopUp(person)" [disabled]="person.isActive === false">
+            <mat-icon>paid</mat-icon>
+            Top up AC
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+  </div>
+
+  <div *ngIf="hasMore()" class="show-more-container">
+    <button mat-raised-button (click)="showMore()">Show More</button>
+  </div>
+
+</div>
