@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Person } from './model/person.model';
 import { environment } from 'src/env/environment';
 import { AccountRegistrationDto } from './model/account-registration.dto';
+import { WalletDto, WalletTopUpDto } from './model/wallet.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -64,4 +66,11 @@ export class StakeholderService {
   unblockPerson(id: number): Observable<Person> {
     return this.http.put<Person>(`${this.baseUrl}/${id}/unblock`, {});
   }
+
+  private readonly adminWalletUrl = environment.apiHost + 'administrator/wallet';
+
+  topUpWallet(dto: { touristUserId: number; amountAc: number }) {
+    return this.http.post<any>(`${this.adminWalletUrl}/topup`, dto);
+  }
+
 }

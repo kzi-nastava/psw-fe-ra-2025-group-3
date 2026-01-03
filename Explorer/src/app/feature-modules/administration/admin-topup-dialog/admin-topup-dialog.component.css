@@ -1,0 +1,166 @@
+/* Topup dialog */
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: var(--border-radius-2xl) !important;
+  overflow: hidden !important;
+  background: var(--color-neutral-0) !important;
+  box-shadow: var(--shadow-xl) !important;
+  min-height: 370px;
+}
+
+/* Layout */
+.topup-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/*  Header */
+.topup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  padding: var(--spacing-6) var(--spacing-8);
+  background: var(--color-primary-800);
+  color: var(--color-neutral-0);
+}
+
+.title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; 
+}
+
+.title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  line-height: 1.05; 
+  color: #e9fbff;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.05; 
+  color: rgba(233, 251, 255, 0.9);
+  transform: translateY(-2px); 
+}
+
+
+.close-btn {
+  margin-top: -6px;
+  color: rgba(233, 251, 255, 0.92);
+}
+.close-btn:hover { color: #fff; }
+
+/* Content */
+.topup-content {
+  padding: var(--spacing-8) var(--spacing-8) 0 var(--spacing-8);
+}
+
+/*  Form Field */
+.cdk-overlay-pane.topup-dialog-panel .mdc-line-ripple,
+.cdk-overlay-pane.topup-dialog-panel .mdc-line-ripple::before,
+.cdk-overlay-pane.topup-dialog-panel .mdc-line-ripple::after {
+  display: none !important;
+}
+
+/* Background color */
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-text-field-wrapper {
+  background-color: #E0F7FA !important;
+  border-radius: var(--border-radius-lg) !important;
+}
+
+/* Outline */
+.cdk-overlay-pane.topup-dialog-panel .mdc-notched-outline__leading,
+.cdk-overlay-pane.topup-dialog-panel .mdc-notched-outline__notch,
+.cdk-overlay-pane.topup-dialog-panel .mdc-notched-outline__trailing {
+  border-color: rgba(0, 188, 212, 0.55) !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.cdk-overlay-pane.topup-dialog-panel
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.cdk-overlay-pane.topup-dialog-panel
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--color-primary-500) !important;
+  border-width: 2px !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel .mdc-floating-label {
+  color: var(--color-primary-700) !important;
+  font-weight: 700 !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel input.mat-mdc-input-element {
+  color: rgba(15, 23, 42, 0.78) !important;
+  font-weight: 600 !important;
+}
+
+/* Placeholder */
+.cdk-overlay-pane.topup-dialog-panel input.mat-mdc-input-element::placeholder {
+  color: rgba(15, 23, 42, 0.45) !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 10px !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-form-field-hint,
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-hint {
+  color: var(--color-primary-600) !important;
+  font-size: 0.92rem !important;
+  line-height: 1.25 !important;
+}
+
+/* Actions */
+.topup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-8);
+  border-top: none !important;
+}
+
+/* Cancel */
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-outlined-button,
+.cdk-overlay-pane.topup-dialog-panel button[mat-stroked-button] {
+  color: var(--color-primary-700) !important;
+  border-color: rgba(0, 188, 212, 0.65) !important;
+  border-radius: var(--border-radius-lg) !important;
+  font-weight: 800 !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-outlined-button:hover,
+.cdk-overlay-pane.topup-dialog-panel button[mat-stroked-button]:hover {
+  background: rgba(0, 188, 212, 0.08) !important;
+}
+
+/* Top up */
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-raised-button.mat-primary,
+.cdk-overlay-pane.topup-dialog-panel button[mat-raised-button].mat-primary {
+  --mdc-filled-button-container-color: var(--color-primary-500) !important;
+  --mdc-filled-button-label-text-color: var(--color-neutral-0) !important;
+  border-radius: var(--border-radius-lg) !important;
+  font-weight: 900 !important;
+}
+
+.cdk-overlay-pane.topup-dialog-panel .mat-mdc-raised-button.mat-primary:hover {
+  filter: brightness(1.04);
+}
+
+.cdk-overlay-pane.topup-dialog-panel button mat-icon {
+  margin-right: 6px;
+}
+
+.topup-header .title {
+  color: #ffffff !important;
+}

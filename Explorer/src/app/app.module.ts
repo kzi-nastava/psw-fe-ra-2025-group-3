@@ -17,11 +17,13 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-module';
 import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
+import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MyWalletComponent
   
    
 

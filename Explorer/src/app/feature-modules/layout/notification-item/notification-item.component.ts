@@ -29,6 +29,8 @@ export class NotificationItemComponent {
         return 'check_circle';
       case NotificationType.ProblemUnresolved:
         return 'cancel';
+      case NotificationType.WalletTopUp:
+        return 'account_balance_wallet';
       default:
         return 'notifications';
     }
@@ -42,6 +44,8 @@ export class NotificationItemComponent {
         return '#4caf50';
       case NotificationType.ProblemUnresolved:
         return '#f44336';
+      case NotificationType.WalletTopUp:
+        return 'var(--color-primary-500)';
       default:
         return '#757575';
     }
@@ -82,7 +86,17 @@ export class NotificationItemComponent {
     }
 
     this.authService.user$.subscribe(user => {
+      if (!user) return; 
+
       if (user) {
+        if (this.notification.type === NotificationType.WalletTopUp) {
+          if (user.role === 'tourist') {
+            this.router.navigate(['/tourist/wallet']);
+          }
+          this.notificationClicked.emit();
+          return;
+        }
+        
         const route = user.role === 'author' 
           ? `/author/tour-problems/${this.notification.relatedEntityId}`
           : `/tour-execution/tour-problems/${this.notification.relatedEntityId}`;

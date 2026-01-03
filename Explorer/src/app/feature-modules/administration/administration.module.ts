@@ -44,6 +44,10 @@ import { TourProblemDetailsAdminComponent } from './tour-problem-details-admin/t
 import { EncounterListComponent } from './encounter-list/encounter-list.component';
 import { EncounterFormComponent } from './encounter-form/encounter-form.component';
 
+// Tourists Admin
+import { AdminTouristsComponent } from './admin-tourists/admin-tourists.component';
+import { AdminTopupDialogComponent } from './admin-topup-dialog/admin-topup-dialog.component';
+
 @NgModule({
   declarations: [
     EquipmentComponent,
@@ -60,7 +64,9 @@ import { EncounterFormComponent } from './encounter-form/encounter-form.componen
     TourProblemListAdminComponent,
     TourProblemDetailsAdminComponent,
     EncounterListComponent,
-    EncounterFormComponent
+    EncounterFormComponent,
+    AdminTouristsComponent,
+    AdminTopupDialogComponent
   ],
   imports: [
     CommonModule,
