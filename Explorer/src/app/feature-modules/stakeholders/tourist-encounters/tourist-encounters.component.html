@@ -14,10 +14,21 @@
   <div *ngIf="!isLoading">
     <!-- Map Section -->
     <div class="map-section">
-      <h2>
-        <mat-icon>map</mat-icon>
-        Encounter Map
-      </h2>
+      <div class="map-header">
+        <h2>
+          <mat-icon>map</mat-icon>
+          Encounter Map
+        </h2>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="add-encounter-button"
+          (click)="onAddClicked()">
+          <mat-icon>add</mat-icon>
+          Add Encounter
+        </button>
+      </div>
 
       <div class="map-container">
         <xp-map 

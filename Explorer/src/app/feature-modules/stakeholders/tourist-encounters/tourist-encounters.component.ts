@@ -406,4 +406,8 @@ export class TouristEncountersComponent implements OnInit {
   private showSuccess(msg: string): void {
     this.snackBar.open(msg, 'Close', { duration: 3000, panelClass: ['success-snackbar'] });
   }
+
+  onAddClicked(): void {
+    
+  }
 }
