@@ -150,3 +150,32 @@
 .no-members {
   padding: var(--spacing-8);
 }
+
+.requests-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.req-name {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.req-email {
+    color: #666;
+    font-size: 0.9em;
+}
