@@ -1,14 +1,34 @@
 <div class="success-container card animate-fade-in-up">
+  <mat-icon class="success-icon">check_circle</mat-icon>
   <h1>Purchase Successful!</h1>
-  <p>Your tours are now unlocked. Keep your tokens safe.</p>
+  <p class="success-message">
+    Your tours have been unlocked and added to your collection!
+  </p>
 
-  <div class="token-list">
+  <!-- PURCHASE RECORDS -->
+  <div class="purchase-summary" *ngIf="purchaseRecords.length > 0">
+    <h2>Purchase Summary</h2>
+    <div class="record-list">
+      <div class="record-item" *ngFor="let record of purchaseRecords">
+        <div class="record-header">
+          <span class="tour-badge">TOUR #{{ record.tourId }}</span>
+          <span class="price-badge">{{ record.priceAc }} AC</span>
+        </div>
+        <div class="record-date">
+          {{ record.purchasedAt | date:'medium' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOKENS (if needed) -->
+  <div class="token-list" *ngIf="tokens.length > 0">
+    <h3>Your Access Tokens</h3>
     <div class="token-item" *ngFor="let t of tokens">
       <div>
         <strong>Tour ID:</strong> {{ t.tourId }}<br />
-        <strong>Token:</strong> {{ t.token }}
+        <strong>Token:</strong> <code>{{ t.token }}</code>
       </div>
-
       <div class="date">
         {{ t.createdAt | date:'medium' }}
       </div>
@@ -16,7 +36,7 @@
   </div>
 
   <button mat-raised-button color="primary" class="explore-btn" (click)="goExplore()">
-  Continue exploring
-</button>
-
+    <mat-icon>tour</mat-icon>
+    View My Purchased Tours
+  </button>
 </div>

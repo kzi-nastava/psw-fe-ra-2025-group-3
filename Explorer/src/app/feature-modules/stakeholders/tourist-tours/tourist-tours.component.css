@@ -636,3 +636,17 @@ mat-card-actions button[mat-raised-button] mat-icon[class*="block"] {
   margin-top: 4px;
   display: block;
 }
+
+
+.detail-item.price-highlight {
+  background: rgba(0, 188, 212, 0.1);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+}
+
+.price-value {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-700);
+}
