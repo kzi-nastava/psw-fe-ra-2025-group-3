@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { Tour, TourCreateDto, TourUpdateDto, Equipment } from './model/tour.model';
+import { Tour, TourCreateDto, TourUpdateDto, Equipment, TourSearchParams } from './model/tour.model';
 import { TourDetails } from 'src/app/feature-modules/stakeholders/model/tour-details.model';
+import { HighlightedTour } from './model/highlighted-tour.model';
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +83,38 @@ export class TourService {
 
   getMyPurchasedTours(): Observable<Tour[]> {
     return this.http.get<Tour[]>(environment.apiHost + 'tourist/tours/my-tours');
+  }
+
+  searchTours(searchParams: TourSearchParams): Observable<Tour[]> {
+    let params = new HttpParams();
+
+    if (searchParams.name) {
+      params = params.set('name', searchParams.name);
+    }
+    if (searchParams.tags && searchParams.tags.length > 0) {
+      searchParams.tags.forEach(tag => {
+        params = params.append('tags', tag);
+      });
+    }
+    if (searchParams.difficulties && searchParams.difficulties.length > 0) {
+      searchParams.difficulties.forEach(difficulty => {
+        params = params.append('difficulties', difficulty.toString());
+      });
+    }
+    if (searchParams.minPrice !== undefined && searchParams.minPrice !== null) {
+      params = params.set('minPrice', searchParams.minPrice.toString());
+    }
+    if (searchParams.maxPrice !== undefined && searchParams.maxPrice !== null) {
+      params = params.set('maxPrice', searchParams.maxPrice.toString());
+    }
+    if (searchParams.minRating !== undefined && searchParams.minRating !== null) {
+      params = params.set('minRating', searchParams.minRating.toString());
+    }
+
+    return this.http.get<Tour[]>(`${environment.apiHost}tourist/tours/search`, { params });
+  }
+
+  getHighlightedTours(): Observable<HighlightedTour[]> {
+    return this.http.get<HighlightedTour[]>(`${environment.apiHost}tourist/tours/highlighted`);
   }
 }

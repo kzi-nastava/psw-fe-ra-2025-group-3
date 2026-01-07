@@ -28,13 +28,17 @@
           {{ formatDate(blog.creationDate) }}
         </span>
         <span class="meta-item">
+          <mat-icon>schedule</mat-icon>
+          {{ (blog.estimatedReadMinutes || 1) }} min read
+        </span>
+        <span class="meta-item">
           <mat-icon>photo_library</mat-icon>
           {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
         </span>
         <span class="meta-item">
-            <span *ngIf="isActive" class="status-active">ACTIVE</span>
-            <span *ngIf="isFamous" class="status-famous">FAMOUS</span>
-            <span *ngIf="isReadOnly" class="status-readonly">READ-ONLY</span>
+          <span *ngIf="isActive" class="status-active">ACTIVE</span>
+          <span *ngIf="isFamous" class="status-famous">FAMOUS</span>
+          <span *ngIf="isReadOnly" class="status-readonly">READ-ONLY</span>
         </span>
       </div>
     </header>

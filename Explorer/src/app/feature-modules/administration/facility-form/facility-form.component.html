@@ -2,69 +2,45 @@
 
   <div class="card form-card">
 
-    <h2 class="mb-6">Dodaj novi objekat</h2>
+    <h2 class="mb-6">Create Facility</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
 
-     
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Naziv objekta</mat-label>
-        <input matInput formControlName="name">
+        <mat-label>Facility Name</mat-label>
         <mat-icon matPrefix>location_on</mat-icon>
-        <mat-error *ngIf="form.get('name')?.hasError('required')">
-          Naziv je obavezan.
-        </mat-error>
+        <input matInput formControlName="name">
       </mat-form-field>
 
-      
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Latitude</mat-label>
-        <input matInput type="number" formControlName="latitude">
         <mat-icon matPrefix>explore</mat-icon>
-        <mat-error *ngIf="form.get('latitude')?.hasError('required')">
-          Latitude je obavezan.
-        </mat-error>
-        <mat-error *ngIf="form.get('latitude')?.hasError('pattern')">
-          Mora biti broj.
-        </mat-error>
+        <input matInput type="number" formControlName="latitude">
       </mat-form-field>
 
-     
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Longitude</mat-label>
-        <input matInput type="number" formControlName="longitude">
         <mat-icon matPrefix>explore</mat-icon>
-        <mat-error *ngIf="form.get('longitude')?.hasError('required')">
-          Longitude je obavezan.
-        </mat-error>
-        <mat-error *ngIf="form.get('longitude')?.hasError('pattern')">
-          Mora biti broj.
-        </mat-error>
+        <input matInput type="number" formControlName="longitude">
       </mat-form-field>
 
-      
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Kategorija</mat-label>
-        <mat-select formControlName="category">
-          <mat-option [value]="0">WC</mat-option>
-          <mat-option [value]="1">Restoran</mat-option>
-          <mat-option [value]="2">Parking</mat-option>
-          <mat-option [value]="3">Ostalo</mat-option>
-        </mat-select>
+        <mat-label>Category</mat-label>
         <mat-icon matPrefix>category</mat-icon>
-        <mat-error *ngIf="form.get('category')?.hasError('required')">
-          Kategorija je obavezna.
-        </mat-error>
+        <mat-select formControlName="category">
+          <mat-option value="0">WC</mat-option>
+          <mat-option value="1">Restaurant</mat-option>
+          <mat-option value="2">Parking</mat-option>
+          <mat-option value="3">Other</mat-option>
+        </mat-select>
       </mat-form-field>
 
-      
       <button 
         mat-raised-button 
         color="primary" 
         class="submit-btn"
-        type="submit"
-        [disabled]="isSubmitting || form.invalid">
-        Kreiraj objekat
+        type="submit">
+        Create Facility
       </button>
 
       <p class="error-text" *ngIf="backendError">{{ backendError }}</p>

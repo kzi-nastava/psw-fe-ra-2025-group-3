@@ -64,6 +64,10 @@
             <mat-icon>comment</mat-icon>
             {{ blog.commentsCount }} {{ blog.commentsCount === 1 ? 'comment' : 'comments' }}
           </span>
+          <span class="read-time">
+            <mat-icon>schedule</mat-icon>
+            {{ (blog.estimatedReadMinutes || 1) }} min read
+          </span>
 
           <span *ngIf="blog.lastModifiedDate" class="last-modified">
             <mat-icon>update</mat-icon>

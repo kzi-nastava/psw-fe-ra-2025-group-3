@@ -12,7 +12,6 @@ import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/
 
 import { EquipmentComponent } from 'src/app/feature-modules/administration/equipment/equipment.component';
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component';
-
 import { AwardEventsComponent } from 'src/app/feature-modules/administration/award-events/award-events.component';
 import { MonumentListComponent } from 'src/app/feature-modules/administration/monuments/monument-list/monument-list.component';
 
@@ -23,6 +22,8 @@ import { TourProblemDetailsAdminComponent } from 'src/app/feature-modules/admini
 
 import { EncounterListComponent } from 'src/app/feature-modules/administration/encounter-list/encounter-list.component';
 import { EncounterFormComponent } from 'src/app/feature-modules/administration/encounter-form/encounter-form.component';
+
+import { AdminTouristsComponent } from 'src/app/feature-modules/administration/admin-tourists/admin-tourists.component';
 
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
 
@@ -42,6 +43,8 @@ import { TouristToursComponent } from 'src/app/feature-modules/stakeholders/tour
 import { TouristEncountersComponent } from 'src/app/feature-modules/stakeholders/tourist-encounters/tourist-encounters.component';
 import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
+import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
+import { MyWalletComponent } from 'src/app/feature-modules/stakeholders/my-wallet/my-wallet.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -54,13 +57,15 @@ import { BlogDetailComponent } from 'src/app/feature-modules/blog/blog-detail/bl
 import { PurchaseSuccessComponent } from 'src/app/feature-modules/stakeholders/purchase/purchase-success.component';
 import { ActiveTourComponent } from 'src/app/feature-modules/tour-execution/active-tour/active-tour.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/stakeholders/tour-details/tour-details.component';
+import { DiaryListComponent } from 'src/app/feature-modules/tour-execution/diary/pages/diary-list.component';
+import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary/pages/diary-form.component';
 
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 
 const routes: Routes = [
 
-  // Public
+
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
@@ -68,19 +73,22 @@ const routes: Routes = [
 
   { path: 'map-test', component: MapTestComponent },
 
-  // Admin
+
   { path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] },
   { path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard] },
 
-  // Facilities
+  
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
 
+
   // Encounters
   { path: 'administration/encounters', component: EncounterListComponent, canActivate: [AuthGuard] },
+
+  { path: 'administration/tourists', component: AdminTouristsComponent, canActivate: [AuthGuard] },
 
   // Admin Tour Problems
   { path: 'administration/tour-problems', component: TourProblemListAdminComponent, canActivate: [AuthGuard] },
@@ -91,30 +99,40 @@ const routes: Routes = [
   { path: 'author/tour-problems', component: AuthorProblemListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems/:id', component: AuthorProblemDetailsComponent, canActivate: [AuthGuard] },
 
-  // Ratings
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
   { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
-  // Profile
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
   { path: 'administration/profile-form', component: ProfileFormComponent, canActivate: [AuthGuard] },
 
-  // Tourist-only features
+
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
+
+
+ 
+  { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
+
+
+  { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
+  { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },
+
+
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/encounters', component: TouristEncountersComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/my-tours', component: MyPurchasedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } }, //tour execution
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/active', component: ActiveTourComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/recommended-tours', component: RecommendedToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   
   // Meetups
   { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
@@ -126,6 +144,7 @@ const routes: Routes = [
   { path: 'blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard] },
 
   // Author – My Blogs
+
   { path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'author/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'author' } },
 
@@ -136,6 +155,14 @@ const routes: Routes = [
   // Authoring
   { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
+},
+{
+  path: 'tourist/diaries',
+  loadChildren: () =>
+    import('src/app/feature-modules/tour-execution/diary/diary.module')
+      .then(m => m.DiaryModule),
+  canActivate: [AuthGuard],
+  data: { role: 'tourist' }
 },
 
 ];

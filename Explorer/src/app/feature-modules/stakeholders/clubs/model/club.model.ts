@@ -9,6 +9,8 @@ export interface ClubDto {
   name: string;
   description: string;
   ownerId: number;
+  status: string;
+  memberIds: number[];
   featuredImageId?: number | null;
   featuredImage?: ClubImageDto | null;
   galleryImages: ClubImageDto[];

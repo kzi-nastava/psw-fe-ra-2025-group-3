@@ -1,0 +1,41 @@
+.diary-list {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.diary-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.diary-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.diary-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+}
+
+.diary-content {
+  line-height: 1.7;
+}
+
+.diary-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-4);
+}
+
+.diary-empty {
+  text-align: center;
+  padding: var(--spacing-12);
+}
+
+.diary-empty mat-icon {
+  font-size: 48px;
+  color: var(--color-primary-500);
+  margin-bottom: var(--spacing-4);
+}

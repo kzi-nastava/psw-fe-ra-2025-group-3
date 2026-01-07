@@ -8,6 +8,11 @@ import { ClubListComponent } from './components/club-list/club-list.component';
 import { MyClubsComponent } from './components/my-clubs/my-clubs.component';
 import { ClubDetailComponent } from './components/club-detail/club-detail.component';
 import { ClubFormDialogComponent } from './components/club-form-dialog/club-form-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { MatListModule } from '@angular/material/list'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 const routes: Routes = [
   { path: 'clubs', component: ClubListComponent, canActivate: [AuthGuard] },
@@ -27,6 +32,10 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
+    FormsModule,       
+    MatListModule,    
+    MatTooltipModule,
+    MatAutocompleteModule,
     RouterModule.forChild(routes)
   ],
   exports: []

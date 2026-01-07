@@ -21,5 +21,6 @@ export enum NotificationType {
   NewMessage = 0,
   ProblemResolved = 1,
   ProblemUnresolved = 2,
-  DeadlineSet = 3
+  DeadlineSet = 3,
+  WalletTopUp = 4
 }

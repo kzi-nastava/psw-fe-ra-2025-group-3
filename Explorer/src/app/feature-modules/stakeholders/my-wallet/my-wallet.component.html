@@ -1,0 +1,37 @@
+<div class="wallet-page">
+  <div class="wallet-card">
+
+    <!-- HEADER  -->
+    <div class="wallet-card-header">
+        <div class="wallet-header-left">
+            <mat-icon class="wallet-header-icon">account_balance_wallet</mat-icon>
+            <div class="wallet-header-text">
+            <div class="wallet-title">MY WALLET</div>
+            <div class="wallet-subtitle">Adventure Coins overview</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="wallet-card-body">
+      <div class="wallet-balance-box">
+        <div class="wallet-label">AVAILABLE ADVENTURE COINS</div>
+
+        <div class="wallet-amount-row">
+          <div class="wallet-amount">{{ wallet?.balanceAc ?? 0 }}</div>
+          <div class="wallet-unit">AC</div>
+        </div>
+
+        <div class="wallet-hint">
+          Use AC to purchase tours and bundles.
+        </div>
+      </div>
+
+      <div class="wallet-info">
+        <mat-icon>info</mat-icon>
+        <span>Wallet is automatically updated when admin tops you up.</span>
+      </div>
+    </div>
+
+  </div>
+</div>

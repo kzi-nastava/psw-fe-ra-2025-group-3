@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -20,6 +20,7 @@ import { ProfileListComponent } from './profile-list/profile-list.component';
 import { TouristToursComponent } from './tourist-tours/tourist-tours.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from './my-purchased-tours/my-purchased-tours.component';  //tour execution
+import { RecommendedToursComponent } from './preferences/recommended-tours/recommended-tours.component'; //tour recommendstions 
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -38,6 +39,8 @@ import { TourDetailsComponent } from './tour-details/tour-details.component';
 import { TouristEncountersComponent } from './tourist-encounters/tourist-encounters.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatListModule } from '@angular/material/list'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -59,12 +62,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
     PurchaseSuccessComponent,
     TourDetailsComponent,
     MyPurchasedToursComponent, // t execution
-    TouristEncountersComponent
+    TouristEncountersComponent,
+    RecommendedToursComponent // tour recommendations
     
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,   
@@ -84,7 +89,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TourExecutionModule,
     RouterModule,
     SharedModule,
-    SharedModule
+    SharedModule,
+    MatListModule,
+    MatTooltipModule
   ],
   exports: [
     ProfileComponent,
