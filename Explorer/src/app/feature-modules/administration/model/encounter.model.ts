@@ -7,6 +7,7 @@ export interface Encounter {
   xp: number;
   status: EncounterStatus;
   type: EncounterType;
+  actionDescription?: string;
 }
 
 export enum EncounterStatus {
