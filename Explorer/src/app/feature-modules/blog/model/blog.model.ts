@@ -19,6 +19,7 @@ export interface Blog {
   status: BlogStatus; 
   images: BlogImage[];
   commentsCount: number;
+  estimatedReadMinutes: number;
 }
 
 export interface BlogImage {
