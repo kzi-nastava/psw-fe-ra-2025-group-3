@@ -11,7 +11,7 @@ import { Encounter, EncounterStatus, EncounterType } from '../model/encounter.mo
   styleUrls: ['./encounter-form.component.css']
 })
 export class EncounterFormComponent implements OnInit {
-
+  
   EncounterStatus = EncounterStatus;
   EncounterType = EncounterType;
   encounterForm: FormGroup;

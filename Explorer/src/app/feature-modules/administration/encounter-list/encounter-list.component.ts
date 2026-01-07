@@ -10,7 +10,7 @@ import { EncounterFormComponent } from '../encounter-form/encounter-form.compone
   styleUrls: ['./encounter-list.component.css']
 })
 export class EncounterListComponent implements OnInit {
-
+  
   EncounterStatus = EncounterStatus;
   EncounterType = EncounterType;
   encounters: Encounter[] = [];

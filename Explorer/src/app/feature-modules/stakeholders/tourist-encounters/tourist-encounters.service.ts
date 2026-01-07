@@ -16,4 +16,7 @@ export class TouristEncounterService {
   getActiveEncounters(): Observable<Encounter[]> {
     return this.http.get<Encounter[]>(`${this.apiUrl}/active`);
   }
+  canTouristCreate(): Observable<boolean> {
+    return this.http.get<boolean>(environment.apiHost + 'tourist/encounters/can-create');
+  }
 }

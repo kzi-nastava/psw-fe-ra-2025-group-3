@@ -39,4 +39,5 @@ export class EncounterService {
   delete(actor: Actor, id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl(actor)}/${id}`);
   }
+  
 }

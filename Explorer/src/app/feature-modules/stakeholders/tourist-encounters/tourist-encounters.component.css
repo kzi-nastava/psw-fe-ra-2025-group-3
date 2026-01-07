@@ -691,3 +691,19 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5) !important;
 }
+
+.add-encounter-button[disabled],
+.add-encounter-button.mat-mdc-button-disabled {
+  background: #cfcfcf !important;   
+  color: rgba(0, 0, 0, 0.38) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;           
+}
+
+.add-encounter-button:hover[disabled],
+.add-encounter-button.mat-mdc-button-disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

@@ -11,12 +11,16 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { EncounterFormComponent } from '../../administration/encounter-form/encounter-form.component';
 
+
 @Component({
   selector: 'xp-tourist-encounters',
   templateUrl: './tourist-encounters.component.html',
   styleUrls: ['./tourist-encounters.component.css']
 })
 export class TouristEncountersComponent implements OnInit {
+
+  canAddEncounter: boolean = true;
+
   encounters: NearbyEncounterDto[] = [];
   activeEncounterIds: Set<number> = new Set();
   mapPoints: { lat: number; lng: number; name?: string; color?: string }[] = [];
@@ -35,6 +39,12 @@ export class TouristEncountersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // turist: pitaj backend
+    this.encounterService.canTouristCreate().subscribe({
+      next: ok => this.canAddEncounter = ok,
+      error: () => this.canAddEncounter = false
+    });
+
     this.loadMyPosition();
     this.loadActiveEncounterActivations();
     // Load nearby encounters if position exists, otherwise load all active encounters

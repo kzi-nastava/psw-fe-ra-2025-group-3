@@ -84,5 +84,12 @@ export class AuthService {
 
   this.user$.next(user);
 }
+  isTourist(): boolean {
+    return this.user$.value.role === 'tourist';
+  }
+
+  isAdministrator(): boolean {
+    return this.user$.value.role === 'administrator';
+  }
 
 }
