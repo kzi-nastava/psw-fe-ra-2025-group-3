@@ -370,3 +370,19 @@
     padding: var(--spacing-3) var(--spacing-5) !important;
   }
 }
+
+.read-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-neutral-600);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.read-time mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-neutral-600) !important;
+}

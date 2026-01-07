@@ -13,18 +13,15 @@ export class FacilityEditComponent implements OnInit {
 
   id!: number;
   isEditMode = false;
-
-  // da znamo kad da prikažemo xp-map
   dataLoaded = false;
 
-  // marker(i) na mapi
   mapPoints: { lat: number; lng: number }[] = [];
 
   form = this.fb.group({
     name: ['', Validators.required],
     latitude: ['', Validators.required],
     longitude: ['', Validators.required],
-    category: ['', Validators.required]  
+    category: ['0', Validators.required]   // DEFAULT VALUE = WC
   });
 
   constructor(
@@ -35,23 +32,24 @@ export class FacilityEditComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     const idParam = this.route.snapshot.paramMap.get('id');
 
-    // CREATE mod
+    // CREATE MODE
     if (!idParam) {
       this.isEditMode = false;
-      this.dataLoaded = true;   // odmah možemo prikazati mapu praznu
-      return;   
+      this.dataLoaded = true;
+      return;
     }
 
-    // EDIT mod
+    // EDIT MODE
     this.isEditMode = true;
     this.id = Number(idParam);
 
     this.facilityService.getAll().subscribe((facilities: Facility[]) => {
       const facility = facilities.find(f => f.id === this.id);
       if (!facility) {
-        this.dataLoaded = true; // da se ne zaglavi UI
+        this.dataLoaded = true;
         return;
       }
 
@@ -62,7 +60,6 @@ export class FacilityEditComponent implements OnInit {
         category: facility.category.toString()
       });
 
-      // postavi postojeći marker na mapu
       if (facility.latitude != null && facility.longitude != null) {
         this.mapPoints = [{
           lat: facility.latitude,
@@ -70,11 +67,10 @@ export class FacilityEditComponent implements OnInit {
         }];
       }
 
-      this.dataLoaded = true;   // tek sad renderuj mapu
+      this.dataLoaded = true;
     });
   }
 
-  // xp-map emituje { lat, lng } – isto kao kod monumenta
   onPointSelected(point: { lat: number; lng: number }): void {
     this.form.patchValue({
       latitude: point.lat.toString(),

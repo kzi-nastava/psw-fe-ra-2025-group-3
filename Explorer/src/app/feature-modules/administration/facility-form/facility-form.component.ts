@@ -17,7 +17,7 @@ export class FacilityFormComponent {
     name: ['', Validators.required],
     latitude: ['', [Validators.required, Validators.pattern(/^-?\d+(\.\d+)?$/)]],
     longitude: ['', [Validators.required, Validators.pattern(/^-?\d+(\.\d+)?$/)]],
-    category: ['', Validators.required]
+    category: ['0', Validators.required]   // DEFAULT CATEGORY
   });
 
   constructor(
@@ -27,32 +27,32 @@ export class FacilityFormComponent {
   ) {}
 
   onSubmit() {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
-  }
-
-  this.isSubmitting = true;
-  this.backendError = '';
-
-  const payload = {
-    name: this.form.value.name!,
-    latitude: Number(this.form.value.latitude),
-    longitude: Number(this.form.value.longitude),
-    category: Number(this.form.value.category)   
-  };
-
-  this.facilityService.create(payload).subscribe({
-    next: () => {
-      this.isSubmitting = false;
-      this.router.navigate(['/administration/facilities']);
-    },
-    error: (err) => {
-      this.isSubmitting = false;
-      this.backendError = 'Server error: Could not create facility.';
-      console.error(err);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
-  });
-}
+
+    this.isSubmitting = true;
+    this.backendError = '';
+
+    const payload = {
+      name: this.form.value.name!,
+      latitude: Number(this.form.value.latitude),
+      longitude: Number(this.form.value.longitude),
+      category: Number(this.form.value.category)
+    };
+
+    this.facilityService.create(payload).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/administration/facilities']);
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.backendError = 'Server error: Failed to create facility.';
+        console.error(err);
+      }
+    });
+  }
 
 }

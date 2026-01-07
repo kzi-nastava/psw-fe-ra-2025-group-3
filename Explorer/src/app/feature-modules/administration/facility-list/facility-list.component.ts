@@ -38,7 +38,6 @@ export class FacilityListComponent implements OnInit {
     });
   }
 
-  
   getCategoryLabel(category: number): string {
     switch (category) {
       case 0: return 'WC';
