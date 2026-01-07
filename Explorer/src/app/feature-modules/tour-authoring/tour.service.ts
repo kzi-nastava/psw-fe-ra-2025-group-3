@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Tour, TourCreateDto, TourUpdateDto, Equipment, TourSearchParams } from './model/tour.model';
 import { TourDetails } from 'src/app/feature-modules/stakeholders/model/tour-details.model';
+import { HighlightedTour } from './model/highlighted-tour.model';
 
 @Injectable({
   providedIn: 'root'
@@ -111,5 +112,9 @@ export class TourService {
     }
 
     return this.http.get<Tour[]>(`${environment.apiHost}tourist/tours/search`, { params });
+  }
+
+  getHighlightedTours(): Observable<HighlightedTour[]> {
+    return this.http.get<HighlightedTour[]>(`${environment.apiHost}tourist/tours/highlighted`);
   }
 }
