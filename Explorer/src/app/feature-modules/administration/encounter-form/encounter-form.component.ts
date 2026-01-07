@@ -37,7 +37,7 @@ export class EncounterFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<EncounterFormComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { mode: 'create' | 'edit'; encounter: Encounter | null }
+    public data: { mode: 'create' | 'edit'; encounter: Encounter | null; actor: 'admin' | 'tourist'; }
   ) {
     this.isEditMode = data.mode === 'edit';
     this.encounterForm = this.createForm();
@@ -64,35 +64,24 @@ export class EncounterFormComponent implements OnInit {
   }
 
   private createForm(): FormGroup {
-    return this.fb.group({
-      name: ['', [
-        Validators.required, 
-        Validators.minLength(3),
-        Validators.maxLength(100)
-      ]],
-      description: ['', [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(500)
-      ]],
-      xp: [null, [
-        Validators.required, 
-        Validators.min(1),
-        Validators.max(10000)
-      ]],
-      latitude: [null, [
-        Validators.required, 
-        Validators.min(-90), 
-        Validators.max(90)
-      ]],
-      longitude: [null, [
-        Validators.required, 
-        Validators.min(-180), 
-        Validators.max(180)
-      ]],
-      status: ['', Validators.required],
+    const form = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      xp: [null, [Validators.required, Validators.min(1), Validators.max(10000)]],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      status: [''],
       type: ['', Validators.required]
     });
+
+    if (this.data.actor === 'admin') {
+      form.get('status')!.setValidators([Validators.required]);
+    } else {
+      form.get('status')!.clearValidators();
+    }
+    form.get('status')?.updateValueAndValidity();
+
+    return form;
   }
 
   onPointSelected(point: { lat: number; lng: number }): void {
@@ -119,7 +108,7 @@ export class EncounterFormComponent implements OnInit {
         latitude: formValue.latitude,
         longitude: formValue.longitude,
         xp: formValue.xp,
-        status: formValue.status as EncounterStatus,
+        status: this.data.actor === 'tourist'? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
         type: formValue.type as EncounterType
       };
 
@@ -138,7 +127,7 @@ export class EncounterFormComponent implements OnInit {
         latitude: formValue.latitude,
         longitude: formValue.longitude,
         xp: formValue.xp,
-        status: formValue.status as EncounterStatus,
+        status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
         type: formValue.type as EncounterType
       };
 

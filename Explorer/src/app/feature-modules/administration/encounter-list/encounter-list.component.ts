@@ -46,12 +46,13 @@ export class EncounterListComponent implements OnInit {
     });
   }
 
-  openForm(mode: 'create' | 'edit', encounter?: Encounter): void {
+  openForm(mode: 'create' | 'edit', encounter?: Encounter, actor: 'admin' | 'tourist' = 'admin'): void {
     const dialogRef = this.dialog.open(EncounterFormComponent, {
       width: '800px',
       data: {
         mode,
-        encounter: encounter ?? null
+        encounter: encounter ?? null,
+        actor
       }
     });
 

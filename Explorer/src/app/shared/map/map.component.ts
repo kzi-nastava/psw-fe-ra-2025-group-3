@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { MapService } from './map.service';
 import { environment } from 'src/env/environment';
+import { ElementRef } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 
 
 @Component({
@@ -30,10 +32,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Output() markerClicked = new EventEmitter<number>();
 
 
-    constructor(private mapService: MapService) {}
+    constructor(private mapService: MapService, private host: ElementRef) {}
 
     private initMap(): void {
-        const el = document.getElementById('map');
+        const el = this.host.nativeElement.querySelector('#map') as HTMLElement | null;
         if (!el) return;            // <--- ključno: nema container-a još
         this.map = L.map(el, {
             center: this.center,
@@ -346,4 +348,8 @@ registerOnClick(): void {
     }
 
 }
+    ngOnDestroy(): void {
+        this.map?.remove();
+        this.map = undefined;
+    }
 } 

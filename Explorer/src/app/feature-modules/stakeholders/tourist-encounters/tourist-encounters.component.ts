@@ -8,6 +8,8 @@ import {
   EncounterActivationDto, 
   EncounterActivationStatus 
 } from '../model/encounter-activation.model';
+import { MatDialog } from '@angular/material/dialog';
+import { EncounterFormComponent } from '../../administration/encounter-form/encounter-form.component';
 
 @Component({
   selector: 'xp-tourist-encounters',
@@ -28,7 +30,8 @@ export class TouristEncountersComponent implements OnInit {
   constructor(
     private encounterService: TouristEncounterService,
     private activationService: EncounterActivationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -408,6 +411,23 @@ export class TouristEncountersComponent implements OnInit {
   }
 
   onAddClicked(): void {
+    this.openForm('create', undefined, 'tourist');
+  }
     
+  openForm(mode: 'create' | 'edit', encounter?: Encounter, actor: 'admin' | 'tourist' = 'admin'): void {
+    const dialogRef = this.dialog.open(EncounterFormComponent, {
+      width: '800px',
+      data: {
+        mode,
+        encounter: encounter ?? null,
+        actor
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadEncounters();
+      }
+    });
   }
 }
