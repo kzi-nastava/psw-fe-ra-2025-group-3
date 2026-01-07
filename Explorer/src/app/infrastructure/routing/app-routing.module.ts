@@ -26,6 +26,7 @@ import { EncounterFormComponent } from 'src/app/feature-modules/administration/e
 import { AdminTouristsComponent } from 'src/app/feature-modules/administration/admin-tourists/admin-tourists.component';
 
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
+import { BundleListComponent } from 'src/app/feature-modules/tour-authoring/bundle-list/bundle-list.component';
 
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-app-rating/my-app-rating.component';
@@ -98,6 +99,7 @@ const routes: Routes = [
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems', component: AuthorProblemListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems/:id', component: AuthorProblemDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'author/bundles', component: BundleListComponent, canActivate: [AuthGuard] },
 
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
   { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } },
