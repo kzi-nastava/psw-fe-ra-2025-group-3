@@ -38,6 +38,20 @@ export class ClubService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
+  changeStatus(id: number, status: string): Observable<ClubDto> {
+    return this.http.put<ClubDto>(`${this.baseUrl}/${id}/status`, JSON.stringify(status), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  inviteMember(clubId: number, touristId: number): Observable<ClubDto> {
+    return this.http.post<ClubDto>(`${this.baseUrl}/${clubId}/invite/${touristId}`, {});
+  }
+
+  kickMember(clubId: number, memberId: number): Observable<ClubDto> {
+    return this.http.delete<ClubDto>(`${this.baseUrl}/${clubId}/kick/${memberId}`);
+  }
+
   uploadFeaturedImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('files', file);

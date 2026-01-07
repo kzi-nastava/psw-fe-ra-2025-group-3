@@ -22,10 +22,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number; name?: string; color?: string }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
     @Output() routeDistanceChanged = new EventEmitter<number>();
+    @Output() zoomChanged = new EventEmitter<number>();
+    @Output() markerClicked = new EventEmitter<number>();
 
 
     constructor(private mapService: MapService) {}
@@ -37,6 +39,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
             center: this.center,
             zoom: this.zoom,
             attributionControl: false,
+        });
+
+        // Listen to zoom changes
+        this.map.on('zoomend', () => {
+            const currentZoom = this.map.getZoom();
+            this.zoomChanged.emit(currentZoom);
         });
 
         const tiles = L.tileLayer(
@@ -77,7 +85,21 @@ export class MapComponent implements AfterViewInit, OnChanges {
             this.map.removeLayer(this.clickMarker);
         }
 
-        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { draggable: true}).addTo(this.map);
+        // Use default icon with proper anchor
+        const defaultIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41], // Point of the icon which corresponds to marker's location
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { 
+            draggable: true,
+            icon: defaultIcon,
+            autoPan: false
+        }).addTo(this.map);
 
         this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
             const marker = event.target as L.Marker;
@@ -85,7 +107,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
             this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
         })
 
-        this.map.setView([this.initialPoint.lat, this.initialPoint.lng], this.zoom);
+        // Don't change zoom/view when marker is set - keep user's current view
     }
 
     private loadAllPoints(): void {
@@ -112,6 +134,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
             
             let marker = new L.Marker([p.lat, p.lng], markerIcon ? { icon: markerIcon } : {}).addTo(this.map);
             this.pointMarkers.push(marker);   // ČUVAMO REFERENCU NA MARKER
+
+            // Add click event if marker has an id
+            if (p.id !== undefined) {
+                marker.on('click', () => {
+                    this.markerClicked.emit(p.id!);
+                });
+            }
 
             if (p.name) {
                 marker.bindPopup(p.name);
@@ -243,7 +272,20 @@ registerOnClick(): void {
                 this.clickMarker = undefined;
             }
 
-            this.clickMarker = L.marker([lat, lng], { draggable: true })
+            // Use default icon with proper anchor to ensure accurate positioning
+            const defaultIcon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41], // Point of the icon which corresponds to marker's location
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            this.clickMarker = L.marker([lat, lng], { 
+                draggable: true,
+                icon: defaultIcon
+            })
                 .addTo(this.map)
                 .openPopup();
 

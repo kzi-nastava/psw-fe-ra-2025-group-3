@@ -39,6 +39,8 @@ import { TourDetailsComponent } from './tour-details/tour-details.component';
 import { TouristEncountersComponent } from './tourist-encounters/tourist-encounters.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatListModule } from '@angular/material/list'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -87,7 +89,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TourExecutionModule,
     RouterModule,
     SharedModule,
-    SharedModule
+    SharedModule,
+    MatListModule,
+    MatTooltipModule
   ],
   exports: [
     ProfileComponent,
