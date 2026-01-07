@@ -10,7 +10,7 @@ import { EncounterFormComponent } from '../encounter-form/encounter-form.compone
   styleUrls: ['./encounter-list.component.css']
 })
 export class EncounterListComponent implements OnInit {
-  
+
   EncounterStatus = EncounterStatus;
   EncounterType = EncounterType;
   encounters: Encounter[] = [];
@@ -96,5 +96,28 @@ export class EncounterListComponent implements OnInit {
       case 'Misc': return 'extension';
       default: return 'help';
     }
+  }
+  approveEncounter(encounter: Encounter): void {
+    if (!encounter.id) return;
+
+    if (encounter.status !== 'PendingApproval') return;
+
+    this.encounterService.approve(encounter.id).subscribe({
+      next: () => this.loadEncounters(),
+      error: () => alert('Error approving encounter')
+    });
+  }
+
+  rejectEncounter(encounter: Encounter): void {
+    if (!encounter.id) return;
+
+    if (encounter.status !== 'PendingApproval') return;
+
+    if (!confirm('Are you sure you want to reject this encounter?')) return;
+
+    this.encounterService.reject(encounter.id).subscribe({
+      next: () => this.loadEncounters(),
+      error: () => alert('Error rejecting encounter')
+    });
   }
 }

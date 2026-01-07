@@ -39,5 +39,11 @@ export class EncounterService {
   delete(actor: Actor, id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl(actor)}/${id}`);
   }
-  
+  approve(id: number): Observable<Encounter> {
+    return this.http.put<Encounter>(`${this.adminUrl}/${id}/approve`, {});
+  }
+
+  reject(id: number): Observable<Encounter> {
+    return this.http.put<Encounter>(`${this.adminUrl}/${id}/reject`, {});
+  }
 }

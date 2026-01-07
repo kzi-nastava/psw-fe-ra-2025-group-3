@@ -11,7 +11,7 @@ import { Encounter, EncounterStatus, EncounterType } from '../model/encounter.mo
   styleUrls: ['./encounter-form.component.css']
 })
 export class EncounterFormComponent implements OnInit {
-  
+
   EncounterStatus = EncounterStatus;
   EncounterType = EncounterType;
   encounterForm: FormGroup;
@@ -133,7 +133,12 @@ export class EncounterFormComponent implements OnInit {
 
       this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
-          this.showSuccess('Encounter successfully created');
+          if(this.data.actor === 'tourist') {
+            this.showSuccess('Encounter submitted for approval');
+          }
+          else {
+            this.showSuccess('Encounter successfully created');
+          }
           this.dialogRef.close(true);
         },
         error: () => this.showError('Error creating encounter')
