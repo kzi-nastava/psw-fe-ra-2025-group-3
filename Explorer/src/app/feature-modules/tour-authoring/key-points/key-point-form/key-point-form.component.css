@@ -1,0 +1,131 @@
+.kp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.kp-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kp-field {
+  width: 100%;
+}
+
+/* Dugmad */
+.kp-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kp-form {
+    gap: 16px;
+  }
+
+  .kp-form-actions {
+    justify-content: space-between;
+  }
+}
+
+/* Upload image box styling */
+
+.upload-box {
+  border: 2px dashed #4ba3f9;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  background-color: rgba(75,163,249,0.05);
+  transition: .2s ease;
+}
+
+.upload-box.dragover {
+  background-color: rgba(75,163,249,0.15);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #2667b5;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.upload-icon {
+  font-size: 36px;
+  line-height: 1;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-text-main {
+  font-size: 14px;
+}
+
+.upload-counter {
+  font-size: 12px;
+  background-color: #20c4d8;
+  color: #ffffff;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.preview-item {
+  margin-top: 10px;
+  position: relative;
+  border: 2px solid #4ba3f9;
+  width: 180px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: white;
+  background: #d9534f;
+  border-radius: 50%;
+  border: none;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upload-box.invalid {
+  border-color: #e53935 !important;
+  background-color: rgba(229, 57, 53, 0.04);
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-error {
+  margin-top: 4px;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #e53935;
+  font-weight: 400;
+}

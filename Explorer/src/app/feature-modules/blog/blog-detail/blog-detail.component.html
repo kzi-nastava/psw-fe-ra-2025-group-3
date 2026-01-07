@@ -1,0 +1,118 @@
+<!-- src/app/feature-modules/blog/blog-detail/blog-detail.component.html -->
+
+<div class="blog-detail-container">
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Blog Content -->
+  <div *ngIf="!isLoading && blog" class="blog-content">
+
+    <!-- Back Button -->
+    <div class="back-navigation">
+      <button mat-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to My Blogs
+      </button>
+    </div>
+
+    <!-- Blog Header -->
+    <header class="blog-header">
+      <h1 class="blog-title">{{ blog.title }}</h1>
+
+      <div class="blog-meta">
+        <span class="meta-item">
+          <mat-icon>calendar_today</mat-icon>
+          {{ formatDate(blog.creationDate) }}
+        </span>
+        <span class="meta-item">
+          <mat-icon>photo_library</mat-icon>
+          {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+        </span>
+        <span class="meta-item">
+            <span *ngIf="isActive" class="status-active">ACTIVE</span>
+            <span *ngIf="isFamous" class="status-famous">FAMOUS</span>
+            <span *ngIf="isReadOnly" class="status-readonly">READ-ONLY</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Voting section -->
+    <section class="vote-section" *ngIf="isAuthenticated; else loginInfo">
+      <button mat-raised-button color="primary" class="vote-button upvote" [class.active]="isUpvoteActive()"
+        (click)="onUpvote()">
+        ▲ Upvote
+      </button>
+
+      <span class="score" *ngIf="voteState">
+        Score: {{ voteState.score }}
+        ({{ voteState.upvoteCount }} ↑ / {{ voteState.downvoteCount }} ↓)
+      </span>
+
+      <button mat-raised-button color="warn" class="vote-button downvote" [class.active]="isDownvoteActive()"
+        (click)="onDownvote()">
+        ▼ Downvote
+      </button>
+    </section>
+
+    <ng-template #loginInfo>
+      <p class="login-hint">Prijavite se da biste mogli da glasate.</p>
+    </ng-template>
+
+    <!-- Image Gallery -->
+    <div *ngIf="blog.images.length > 0" class="image-gallery">
+      <div class="gallery-main">
+        <img [src]="getCurrentImage()" [alt]="blog.title" class="gallery-image">
+
+        <!-- Navigation Arrows (if multiple images) -->
+        <div *ngIf="blog.images.length > 1" class="gallery-controls">
+          <button mat-icon-button class="nav-btn nav-prev" (click)="previousImage()" matTooltip="Previous image">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-icon-button class="nav-btn nav-next" (click)="nextImage()" matTooltip="Next image">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <!-- Image Counter -->
+        <div *ngIf="blog.images.length > 1" class="image-counter">
+          {{ currentImageIndex + 1 }} / {{ blog.images.length }}
+        </div>
+      </div>
+
+      <!-- Thumbnail Strip (if multiple images) -->
+      <div *ngIf="blog.images.length > 1" class="gallery-thumbnails">
+        <div *ngFor="let image of blog.images; let i = index" class="thumbnail" [class.active]="i === currentImageIndex"
+          (click)="currentImageIndex = i">
+          <img [src]="image.imageUrl" [alt]="'Image ' + (i + 1)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Description (Markdown) -->
+    <article class="blog-description">
+      <div markdown [data]="blog.description"></div>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="comments-section mt-8">
+      <app-comment [blogId]="blog.id" [blogStatus]="blog.status" (commentChanged)="refreshBlogStatus()">
+      </app-comment>
+    </section>
+
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !blog" class="error-state">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>Blog not found</h2>
+    <p>The blog you're looking for doesn't exist or has been removed.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to My Blogs
+    </button>
+  </div>
+
+</div>

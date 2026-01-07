@@ -1,0 +1,32 @@
+<div class="topup-dialog">
+  <div class="topup-header">
+    <div class="title-wrap">
+      <h2 class="title">Top up Adventure Coins</h2>
+      <div class="subtitle">
+        Tourist: <b>{{ data.fullName }}</b>
+      </div>
+    </div>
+
+    <button mat-icon-button class="close-btn" (click)="cancel()" aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="topup-content">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Amount (AC)</mat-label>
+      <input matInput type="number" [formControl]="amountAc" placeholder="e.g. 100">
+      <mat-hint>Enter how many Adventure Coins you want to add.</mat-hint>
+      <mat-error *ngIf="amountAc.hasError('required')">Amount is required</mat-error>
+      <mat-error *ngIf="amountAc.hasError('min')">Minimum is 1 AC</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="topup-actions">
+    <button mat-stroked-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="confirm()" [disabled]="amountAc.invalid">
+      <mat-icon>payments</mat-icon>
+      Top up
+    </button>
+  </div>
+</div>

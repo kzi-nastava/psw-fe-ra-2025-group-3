@@ -12,6 +12,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class TourProblemFormComponent implements OnInit {
   @Input() problem: TourProblem | null = null;
   @Input() isEditMode: boolean = false;
+  @Input() tourId: number | null = null; // Novi input za tourId
+  @Input() tourName: string | null = null; // Novi input za tourName
   @Output() problemCreated = new EventEmitter<TourProblemCreateDto>();
   @Output() problemUpdated = new EventEmitter<TourProblemUpdateDto>();
   @Output() formCanceled = new EventEmitter<void>();
@@ -43,12 +45,11 @@ export class TourProblemFormComponent implements OnInit {
   minutes: number[] = Array.from({length: 60}, (_, i) => i);
   
   categories = [
-    { value: ProblemCategory.Transportation, label: 'Transportation' },
     { value: ProblemCategory.Accommodation, label: 'Accommodation' },
-    { value: ProblemCategory.Guide, label: 'Guide' },
     { value: ProblemCategory.Location, label: 'Location' },
-    { value: ProblemCategory.Food, label: 'Food' },
-    { value: ProblemCategory.Other, label: 'Other' }
+    { value: ProblemCategory.Transportation, label: 'Transportation' },
+    { value: ProblemCategory.Other, label: 'Other' },
+    { value: ProblemCategory.Food, label: 'Food' }
   ];
 
   priorities = [
@@ -63,6 +64,12 @@ export class TourProblemFormComponent implements OnInit {
   ngOnInit(): void {
     this.generateYears();
     this.initializeForm();
+    
+    // Ako je tourId prosleđen kao input, setuj ga u formu
+    if (this.tourId) {
+      this.problemForm.patchValue({ tourId: this.tourId });
+      this.validateTourExists(this.tourId);
+    }
     
     if (this.problem && this.isEditMode) {
       this.populateForm();
@@ -213,12 +220,15 @@ export class TourProblemFormComponent implements OnInit {
         return;
       }
       
+      // Convert to ISO string for backend
+      const timeString = combinedDateTime.toISOString();
+      
       if (this.isEditMode && this.problem) {
         const updateDto: TourProblemUpdateDto = {
           category: formValue.category,
           priority: formValue.priority,
           description: formValue.description,
-          time: combinedDateTime
+          time: timeString
         };
         console.log('Emitting UPDATE:', updateDto);
         this.problemUpdated.emit(updateDto);
@@ -228,7 +238,7 @@ export class TourProblemFormComponent implements OnInit {
           category: formValue.category,
           priority: formValue.priority,
           description: formValue.description,
-          time: combinedDateTime
+          time: timeString
         };
         console.log('Emitting CREATE:', createDto);
         this.problemCreated.emit(createDto);

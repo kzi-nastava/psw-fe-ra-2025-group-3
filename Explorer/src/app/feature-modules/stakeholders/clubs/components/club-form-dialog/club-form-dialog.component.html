@@ -18,11 +18,31 @@
 
     <div class="image-section">
       <h3>Featured image *</h3>
-      <div class="image-upload">
-        <input type="file" accept="image/*" (change)="onFeaturedImageSelected($event)" />
+      <div class="drag-drop-area" 
+           [class.dragging]="isDraggingFeatured"
+           (dragover)="onDragOverFeatured($event)"
+           (dragleave)="onDragLeaveFeatured($event)"
+           (drop)="onDropFeatured($event)">
+        <div class="upload-instructions">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Drag and drop an image here or</p>
+          <input type="file" 
+                 #featuredInput
+                 accept="image/*" 
+                 (change)="onFeaturedImageSelected($event)"
+                 style="display: none" />
+          <button mat-stroked-button type="button" (click)="featuredInput.click()">
+            Browse Files
+          </button>
+          <p class="file-info">Maximum file size: 5MB</p>
+        </div>
       </div>
-      <div class="preview" *ngIf="featuredImageUrl">
-        <img [src]="clubService.buildImageUrl(featuredImageUrl)" alt="Featured preview" />
+      <div class="preview" *ngIf="getFeaturedDisplayUrl()">
+        <img [src]="featuredImageFile ? getFeaturedDisplayUrl() : clubService.buildImageUrl(getFeaturedDisplayUrl()!)" alt="Featured preview" />
+        <div class="preview-badge" *ngIf="previewFeaturedUrl">
+          <mat-icon>info</mat-icon>
+          <span>Will be updated on save</span>
+        </div>
       </div>
     </div>
 
@@ -30,8 +50,12 @@
       <h3>Gallery images</h3>
 
       <div class="existing-gallery" *ngIf="existingGallery.length > 0">
-        <div class="gallery-item" *ngFor="let img of existingGallery">
+        <div class="gallery-item" *ngFor="let img of existingGallery" [class.will-promote]="isImagePromoted(img)">
           <img [src]="clubService.buildImageUrl(img.imageUrl)" alt="Gallery image" />
+          <div class="promoted-overlay" *ngIf="isImagePromoted(img)">
+            <mat-icon>arrow_upward</mat-icon>
+            <span>Will be featured</span>
+          </div>
           <button mat-icon-button color="primary" type="button" (click)="promoteToFeatured(img)" matTooltip="Set as featured">
             <mat-icon>star</mat-icon>
           </button>
@@ -41,8 +65,28 @@
         </div>
       </div>
 
-      <div class="image-upload">
-        <input type="file" accept="image/*" multiple (change)="onGalleryImagesSelected($event)" />
+      <div class="drag-drop-area" 
+           [class.dragging]="isDraggingGallery"
+           (dragover)="onDragOverGallery($event)"
+           (dragleave)="onDragLeaveGallery($event)"
+           (drop)="onDropGallery($event)">
+        <div class="upload-instructions">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Drag and drop images here or</p>
+          <input type="file" 
+                 #galleryInput
+                 accept="image/*" 
+                 multiple 
+                 (change)="onGalleryImagesSelected($event)"
+                 style="display: none" />
+          <button mat-stroked-button type="button" (click)="galleryInput.click()">
+            Browse Files
+          </button>
+          <p class="file-info">Maximum file size per image: 5MB</p>
+        </div>
+      </div>
+      <div class="new-gallery-preview" *ngIf="newGalleryFiles.length > 0">
+        <p><strong>{{ newGalleryFiles.length }} new image(s) selected</strong></p>
       </div>
     </div>
   </form>
@@ -50,7 +94,7 @@
 
 <div mat-dialog-actions align="end">
   <button mat-button mat-dialog-close [disabled]="isSubmitting">Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()" [disabled]="isSubmitting">
+  <button mat-raised-button color="primary" class="create-club-btn" (click)="submit()" [disabled]="isSubmitting">
     {{ isEditMode ? 'Save changes' : 'Create club' }}
   </button>
 </div>

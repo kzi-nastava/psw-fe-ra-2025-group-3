@@ -22,6 +22,18 @@
       </div>
     </div>
 
+    <div class="related-tour-box mb-8 p-6" *ngIf="meetup.tourId && userRole === 'tourist'">
+        <div class="flex-between">
+            <div>
+                <h3 class="m-0 text-white">Part of a Tour</h3>
+                <p class="text-white m-0" style="opacity: 0.9;">This event is organized for a specific tour.</p>
+            </div>
+            <button class="btn btn-outline-light btn-lg" (click)="goToRelatedTour()">
+                View Tour Details &rarr;
+            </button>
+        </div>
+    </div>
+
     <div class="description-section">
       <h2>Description</h2>
       <div class="description-content">

@@ -1,0 +1,73 @@
+<div class="step-content">
+  <div class="kp-page">
+    <div class="kp-container">
+
+      <!-- Top: map + sidebar -->
+      <div class="kp-main">
+
+        <!-- Map as the main card -->
+        <div class="kp-card kp-map">
+          <div class="kp-card-header">
+            <h2 class="kp-title">Key point route</h2>
+            <p class="kp-subtitle">
+              Overview of the route and positions of all key points on the map.
+            </p>
+          </div>
+
+          <div class="kp-map-wrapper">
+            <xp-map
+              [mode]="'route-edit-object'"
+              [waypoints]="routeWayPoints"
+              [points]="routePoints"
+              [initialPoint]="selectedPoint || undefined"
+              (pointSelected)="onPointSelected($event)"
+              (routeDistanceChanged)="onRouteDistanceChanged($event)">
+            </xp-map>
+          </div>
+
+          <p *ngIf="selectedPoint" class="kp-selected">
+            Selected point:
+            <span>{{ selectedPoint.lat | number:'1.5-5' }}, {{ selectedPoint.lng | number:'1.5-5' }}</span>
+          </p>
+        </div>
+
+        <!-- Sidebar: button + list -->
+        <div class="kp-card kp-side">
+          <div class="kp-card-header kp-side-header">
+            <h3 class="kp-side-title">Key points</h3>
+            <button mat-raised-button color="primary" (click)="onAddNewKeyPoint()">
+              Add key point
+            </button>
+          </div>
+
+          <xp-key-point-list
+            [keyPoints]="keyPoints"
+            (keyPointSelected)="onKeyPointSelectedFromList($event)"
+            (keyPointDelete)="onKeyPointDelete($event)">
+          </xp-key-point-list>
+        </div>
+
+      </div>
+
+      <!-- Bottom: form -->
+      <div class="kp-card kp-form">
+        <div class="kp-card-header">
+          <h3 class="kp-form-title">
+            {{ selectedKeyPoint ? 'Edit key point' : 'New key point' }}
+          </h3>
+          <p class="kp-subtitle">
+            Enter the details and choose a location on the map to save a key point.
+          </p>
+        </div>
+
+        <xp-key-point-form
+          [isEditMode]="!!selectedKeyPoint"
+          [keyPoint]="selectedKeyPoint"
+          (save)="onKeyPointSave($event)"
+          (cancel)="onKeyPointCancel()">
+        </xp-key-point-form>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -77,7 +77,7 @@ export class FacilityEditComponent implements OnInit {
       longitude: point.lng.toString()
     });
 
-    this.mapPoints = [{ lat: point.lat, lng: point.lng }];
+    // this.mapPoints = [{ lat: point.lat, lng: point.lng }];
   }
 
   onSubmit(): void {

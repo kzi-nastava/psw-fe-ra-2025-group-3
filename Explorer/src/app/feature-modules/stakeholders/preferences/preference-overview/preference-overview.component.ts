@@ -38,9 +38,9 @@ export class PreferenceOverviewComponent implements OnInit {
 
   getDifficultyText(difficulty: TourDifficulty): string {
     switch(difficulty) {
-      case TourDifficulty.Easy: return 'Lako';
-      case TourDifficulty.Medium: return 'Srednje';
-      case TourDifficulty.Hard: return 'Teško';
+      case TourDifficulty.Easy: return 'Easy';
+      case TourDifficulty.Medium: return 'Medium';
+      case TourDifficulty.Hard: return 'Hard';
       default: return 'N/A';
     }
   }
@@ -69,7 +69,7 @@ export class PreferenceOverviewComponent implements OnInit {
   }
 
   deletePreference(): void {
-    if (confirm('Da li ste sigurni da želite da obrišete svoje preference?')) {
+    if (confirm('Are you sure you want to delete your preferences?')) {
       this.service.deletePreference().subscribe({
         next: () => {
           this.preference = null;
@@ -77,7 +77,7 @@ export class PreferenceOverviewComponent implements OnInit {
           this.shouldRenderPreferenceForm = false;
         },
         error: (err: any) => {
-          alert('Greška pri brisanju preferenci');
+          alert('Error deleting preferences');
         }
       });
     }

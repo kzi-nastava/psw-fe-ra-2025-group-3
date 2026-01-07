@@ -1,0 +1,282 @@
+<div class="container">
+  <div class="tour-list-container">
+    <div class="header">
+      <h1>Available Tours</h1>
+      <p class="cart-subtitle">
+        Browse published tours and add your favorites to the cart.
+      </p>
+    </div>
+
+    <!-- Search & Filter Panel -->
+    <div class="filter-panel card">
+      <div class="filter-header" (click)="toggleFilters()">
+        <h3 class="filter-title">
+          <mat-icon>filter_list</mat-icon>
+          Search & Filters
+          <span class="active-filters-badge" *ngIf="activeFiltersCount > 0">
+            {{ activeFiltersCount }}
+          </span>
+        </h3>
+        <button mat-icon-button class="toggle-btn">
+          <mat-icon>{{ isFiltersExpanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="filter-content" [@expandCollapse]="isFiltersExpanded ? 'expanded' : 'collapsed'">
+        
+        <!-- Search and Difficulty Row -->
+        <div class="filter-row">
+          <!-- Search by Name -->
+          <div class="filter-section">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Search tours</mat-label>
+              <input matInput [formControl]="searchControl" placeholder="Type to search...">
+              <mat-icon matPrefix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">terrain</mat-icon>
+              Difficulty
+            </label>
+            <div class="difficulty-checkboxes">
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Easy)"
+                (change)="onDifficultyToggle(TourDifficulty.Easy)">
+                Easy
+              </mat-checkbox>
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Medium)"
+                (change)="onDifficultyToggle(TourDifficulty.Medium)">
+                Medium
+              </mat-checkbox>
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Hard)"
+                (change)="onDifficultyToggle(TourDifficulty.Hard)">
+                Hard
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price and Rating Row -->
+        <div class="filter-row compact">
+          <!-- Price Range Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">attach_money</mat-icon>
+              Price (RSD)
+            </label>
+            <div class="price-inputs">
+              <mat-form-field appearance="outline">
+                <mat-label>Min</mat-label>
+                <input matInput type="number" [(ngModel)]="minPrice" (ngModelChange)="onPriceChange()" min="0">
+              </mat-form-field>
+              <span class="price-separator">-</span>
+              <mat-form-field appearance="outline">
+                <mat-label>Max</mat-label>
+                <input matInput type="number" [(ngModel)]="maxPrice" (ngModelChange)="onPriceChange()" min="0">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Rating Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">star</mat-icon>
+              Min Rating
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Any rating</mat-label>
+              <mat-select [(ngModel)]="selectedMinRating" (ngModelChange)="onRatingChange()">
+                <mat-option [value]="null">Any</mat-option>
+                <mat-option *ngFor="let rating of ratingOptions" [value]="rating">
+                  {{ rating }}.0+
+                  <mat-icon class="star-icon-inline">star</mat-icon>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Tags Filter - Full Width -->
+        <div class="filter-row single-column" *ngIf="availableTags.length > 0">
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">label</mat-icon>
+              Tags
+              <span class="selected-count" *ngIf="selectedTags.length > 0">
+                ({{ selectedTags.length }} selected)
+              </span>
+            </label>
+            <div class="tags-filter">
+              <mat-chip-set>
+                <mat-chip 
+                  *ngFor="let tag of availableTags"
+                  [class.selected]="isTagSelected(tag)"
+                  (click)="onTagToggle(tag)">
+                  {{ tag }}
+                  <mat-icon *ngIf="isTagSelected(tag)" class="chip-check">check</mat-icon>
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Count & Reset -->
+        <div class="filter-actions">
+          <div class="results-count">
+            <mat-icon>info</mat-icon>
+            <span>{{ totalResults }} {{ totalResults === 1 ? 'tour' : 'tours' }} found</span>
+          </div>
+          <button mat-stroked-button color="primary" (click)="resetFilters()">
+            <mat-icon>refresh</mat-icon>
+          Reset Filters
+        </button>
+      </div>
+      </div> <!-- Close filter-content -->
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length === 0" class="empty-state">
+      <mat-icon>explore_off</mat-icon>
+      <h2>No tours found</h2>
+      <p *ngIf="searchControl.value || selectedTags.length > 0 || selectedDifficulties.length > 0 || minPrice || maxPrice || selectedMinRating">
+        There are no tours matching the selected filters. Try adjusting your search criteria.
+      </p>
+      <p *ngIf="!searchControl.value && selectedTags.length === 0 && selectedDifficulties.length === 0 && !minPrice && !maxPrice && !selectedMinRating">
+        There are currently no published tours. Please check back later.
+      </p>
+    </div>
+
+    <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
+      <mat-card *ngFor="let tour of tours" class="tour-card card animate-fade-in-up">
+
+        <mat-card-header>
+          <mat-card-title>{{ tour.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <span
+              class="status-badge"
+              [ngClass]="{
+                'status-published': tour.status === TourStatus.Published,
+                'status-archived': tour.status === TourStatus.Archived
+              }">
+              {{ getStatusLabel(tour.status) }}
+            </span>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <div class="tour-badge preview" *ngIf="!tour.isPurchased && tour.status !== TourStatus.Archived">
+          PREVIEW ONLY
+        </div>
+
+        <div class="tour-badge purchased" *ngIf="tour.isPurchased">
+          PURCHASED
+        </div>
+
+        <div class="tour-badge archived" *ngIf="tour.status === TourStatus.Archived">
+          ARCHIVED
+        </div>
+
+        <mat-card-content>
+          <p class="description">{{ tour.description }}</p>
+
+          <div class="tour-details">
+            <div class="detail-item" *ngIf="tour.difficulty !== undefined && tour.difficulty !== null">
+              <mat-icon>terrain</mat-icon>
+              <span>{{ getDifficultyLabel(tour.difficulty) }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+            </div>
+            
+            <div class="detail-item rating-display" *ngIf="tour.averageRating">
+              <mat-icon class="star-icon">star</mat-icon>
+              <span class="rating-text">{{ tour.averageRating | number:'1.1-1' }}</span>
+              <span class="review-count">({{ tour.reviews ? tour.reviews.length : 0 }})</span>
+            </div>
+          </div>
+
+          <div class="tags" *ngIf="tour.tags && tour.tags.length > 0">
+            <mat-chip-set>
+              <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <div class="first-keypoint-preview">
+            <div *ngIf="tour.firstKeyPoint">
+            <h4 class="keypoint-title">
+              <mat-icon>location_on</mat-icon>
+              Start: {{ tour.firstKeyPoint.name }}
+            </h4>
+            <div class="keypoint-content">
+              <p class="keypoint-description">{{ tour.firstKeyPoint.description }}</p>
+            </div>
+            </div>
+          </div>
+
+          <div *ngIf="expandedTourId === tour.id" class="reviews-expanded">
+            <xp-tour-reviews
+              [tourId]="tour.id!"
+              [currentUserId]="currentUserId">
+            </xp-tour-reviews>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+
+          <button
+            mat-button
+            color="primary"
+            class="view-details-btn"
+            [routerLink]="['/tourist/tours', tour.id, 'details']">
+            <mat-icon>info</mat-icon>
+            View Details
+          </button>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="addToCart(tour)"
+            [disabled]="tour.status === TourStatus.Archived">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Buy
+          </button>
+
+          <span class="locked-msg" *ngIf="tour.status === TourStatus.Archived">
+            This tour is archived and cannot be purchased.
+          </span>
+
+          <button    
+            mat-raised-button
+            color="accent"
+            (click)="startTour(tour)"
+            [disabled]="!tour.isPurchased || isStartingTour(tour.id!) || hasActiveTour">
+
+            <mat-spinner *ngIf="isStartingTour(tour.id!)" diameter="20"></mat-spinner>
+
+            <mat-icon *ngIf="!isStartingTour(tour.id!) && !hasActiveTour && tour.isPurchased">play_arrow</mat-icon>
+            <mat-icon *ngIf="!tour.isPurchased">lock</mat-icon>
+
+            <span *ngIf="!tour.isPurchased">Locked</span>
+            <span *ngIf="tour.isPurchased && !isStartingTour(tour.id!) && !hasActiveTour">Start Tour</span>
+            <span *ngIf="isStartingTour(tour.id!)">Starting...</span>
+            <span *ngIf="hasActiveTour && !isStartingTour(tour.id!)">Active Tour Running</span>
+          </button>
+
+          <span class="locked-msg" *ngIf="!tour.isPurchased">
+            You need to purchase this tour before starting it.
+          </span>
+
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+</div>

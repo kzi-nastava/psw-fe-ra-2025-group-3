@@ -1,0 +1,638 @@
+.tour-list-container {
+  padding: var(--spacing-8) 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+  margin-bottom: var(--spacing-2);
+}
+
+.cart-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  max-width: 32rem;
+}
+
+/*  FILTER PANEL */
+
+.filter-panel {
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-lg);
+  padding: 0;
+  margin-bottom: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-6);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--color-neutral-100);
+  transition: background-color var(--transition-normal);
+}
+
+.filter-header:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.filter-content {
+  padding: var(--spacing-4) var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+.filter-row.single-column {
+  grid-template-columns: 1fr;
+}
+
+.filter-row.compact {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.toggle-btn {
+  color: var(--color-primary-500);
+}
+
+.filter-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0;
+  color: var(--color-primary-800);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+}
+
+.filter-title mat-icon {
+  color: var(--color-primary-500);
+}
+
+.active-filters-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin-left: var(--spacing-2);
+}
+
+.filter-section {
+  margin-bottom: 0;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.label-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary-500);
+}
+
+.selected-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-500);
+  font-weight: 600;
+  margin-left: var(--spacing-1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Compact form fields */
+.filter-section mat-form-field {
+  font-size: var(--font-size-sm);
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0;
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-form-field-infix {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
+  min-height: 40px;
+}
+
+.filter-section mat-form-field ::ng-deep .mat-mdc-floating-label {
+  font-size: var(--font-size-sm);
+}
+
+.filter-section mat-form-field ::ng-deep input {
+  font-size: var(--font-size-sm);
+  padding-left: 4px;
+}
+
+/* Tags Filter */
+.tags-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  max-height: 120px;
+  overflow-y: auto;
+  padding: var(--spacing-2);
+  background: var(--color-neutral-50);
+  border-radius: var(--border-radius-md);
+}
+
+.tags-filter::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tags-filter::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+  border-radius: 3px;
+}
+
+.tags-filter::-webkit-scrollbar-thumb {
+  background: var(--color-primary-500);
+  border-radius: 3px;
+}
+
+.tags-filter mat-chip {
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-800);
+  border: 1px solid var(--color-neutral-100);
+  font-size: var(--font-size-sm);
+}
+
+.tags-filter mat-chip:hover {
+  background-color: #E0F7FA;
+  border-color: var(--color-primary-500);
+  transform: translateY(-1px);
+}
+
+.tags-filter mat-chip.selected {
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  border-color: var(--color-primary-500);
+  font-weight: 500;
+}
+
+.chip-check {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: var(--spacing-1);
+}
+
+/* Difficulty Checkboxes */
+.difficulty-checkboxes {
+  display: flex;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.difficulty-checkboxes mat-checkbox {
+  font-size: var(--font-size-sm);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-form-field {
+  font-size: var(--font-size-sm);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-checkbox__background {
+  border-color: var(--color-primary-500);
+}
+
+.difficulty-checkboxes mat-checkbox ::ng-deep .mdc-checkbox--selected .mdc-checkbox__background {
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+}
+
+/* Price Inputs */
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  max-width: 600px;
+}
+
+.price-inputs mat-form-field {
+  flex: 1;
+  min-width: 120px;
+}
+
+.price-separator {
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  margin-top: -8px;
+}
+
+/* Filter Actions */
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.results-count {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+.results-count mat-icon {
+  color: var(--color-primary-500);
+  font-size: 20px;
+}
+
+.star-icon-inline {
+  color: #FFC107;
+  font-size: 18px;
+  vertical-align: middle;
+  margin-left: var(--spacing-1);
+}
+
+/* Responsive Filter Panel */
+@media (max-width: 1024px) {
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-header {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .filter-content {
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
+  .filter-row {
+    gap: var(--spacing-4);
+  }
+
+  .difficulty-checkboxes {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .price-inputs {
+    flex-direction: column;
+  }
+
+  .price-separator {
+    display: none;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-actions button {
+    width: 100%;
+  }
+}
+
+/* LOADING & EMPTY STATE */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-8) 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  color: var(--color-primary-500);
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state h2 {
+  margin-bottom: var(--spacing-2);
+}
+
+.empty-state p {
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.tour-card {
+  padding: var(--spacing-6);
+  border-top: 4px solid var(--color-primary-500);
+}
+
+.tour-card mat-card-header {
+  margin-bottom: var(--spacing-4);
+}
+
+.tour-card mat-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.tour-card mat-card-subtitle {
+  margin-top: var(--spacing-2);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-published {
+  background: rgba(0, 188, 212, 0.12);
+  color: var(--color-primary-800);
+}
+
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-4);
+}
+
+.tour-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.detail-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+}
+
+.detail-item mat-icon {
+  font-size: 20px;
+}
+
+.view-details-btn {
+    color: var(--color-primary-800);
+}
+
+/* --- NOVI STILOVI ZA OCENE I PRVU TACKU --- */
+.star-icon {
+  color: #FFA000 !important;
+}
+
+.rating-text {
+  font-weight: 700;
+  color: #F57C00;
+}
+
+.first-keypoint-preview {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid #e0e0e0;
+  height: 50px;
+}
+
+.keypoint-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin: 0 0 var(--spacing-2) 0;
+  color: var(--color-primary-800);
+  font-size: var(--font-size-base);
+}
+
+.keypoint-title mat-icon {
+  color: var(--color-primary-500);
+  font-size: 18px;
+}
+
+.keypoint-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  margin: 0;
+  font-style: italic;
+}
+/* ------------------------------------------- */
+
+.tags {
+  margin-top: var(--spacing-2);
+}
+
+.tags mat-chip-set {
+  max-width: 100%;
+}
+
+.tags mat-chip {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+.reviews-expanded {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 2px solid rgba(0, 188, 212, 0.15);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 3000px;
+  }
+}
+
+mat-card-actions {
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+mat-card-actions button {
+    display: block;
+    margin-top: var(--spacing-4);
+}
+
+mat-card-actions button[mat-stroked-button] {
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  padding-inline: var(--spacing-4);
+}
+
+mat-card-actions button[mat-stroked-button] mat-icon {
+  margin-right: var(--spacing-2);
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tour-card {
+    padding: var(--spacing-4);
+  }
+}
+
+/* Start Tour button */
+mat-card-actions button[color="accent"] {
+  background: linear-gradient(135deg, #26C6DA, #00ACC1) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+  border: none !important;
+}
+
+mat-card-actions button[color="accent"]:hover:not([disabled]) {
+  background: linear-gradient(135deg, #4DD0E1, #26C6DA) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4);
+  transform: translateY(-2px);
+}
+
+mat-card-actions button[color="accent"] mat-spinner {
+  margin-right: var(--spacing-2);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+mat-card-actions button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  mat-card-actions {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  mat-card-actions button {
+    width: 100%;
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all var(--transition-fast);
+}
+
+.status-published {
+  background: rgba(0, 188, 212, 0.12);
+  color: var(--color-primary-800);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+}
+
+/* Archived badge stil */
+.status-archived {
+  background: rgba(158, 158, 158, 0.15);
+  color: var(--color-neutral-700);
+  border: 1px solid rgba(158, 158, 158, 0.3);
+}
+
+/* Disabled kada postoji aktivna tura */
+
+mat-card-actions button[mat-raised-button][disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(158, 158, 158, 0.3) !important;
+  color: rgba(0, 0, 0, 0.4) !important;
+  box-shadow: none !important;
+}
+
+mat-card-actions button[mat-raised-button] mat-icon[class*="block"] {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.tour-badge {
+  padding: 4px 10px;
+  display: inline-block;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.tour-badge.preview {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tour-badge.purchased {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.tour-badge.archived {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.locked-msg {
+  font-size: 12px;
+  color: #c62828;
+  margin-top: 4px;
+  display: block;
+}

@@ -50,10 +50,34 @@
             <mat-chip *ngFor="let tag of tour.tags">{{ tag }}</mat-chip>
           </mat-chip-set>
         </div>
+        <div class="reviews-preview" *ngIf="tour.status !== 2">
+          <button 
+            mat-stroked-button 
+            color="primary" 
+            (click)="expandReviews(tour)"
+            class="view-reviews-btn"
+            *ngIf="tour.status === 1">
+            <mat-icon>{{ expandedTourId === tour.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+            {{ expandedTourId === tour.id ? 'Hide' : 'View' }} Reviews
+          </button>
+          <button 
+            mat-stroked-button 
+            color="primary" 
+            (click)="openProblemsDialog(tour)"
+            class="view-problems-btn">
+            <mat-icon>error_outline</mat-icon>
+            View Problems
+          </button>
+          
+          <!-- Reviews se prikazuju kada je expanded -->
+          <div *ngIf="expandedTourId === tour.id && tour.status === 1" class="reviews-content">
+            <xp-tour-reviews [tourId]="tour.id"></xp-tour-reviews>
+          </div>
+        </div>
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="openEditDialog(tour)">
+        <button mat-button color="primary" (click)="openEditDialog(tour)" [disabled]="!canEdit(tour)">
           <mat-icon>edit</mat-icon>
           Edit
         </button>
@@ -72,6 +96,21 @@
           *ngIf="canPublish(tour)">
           <mat-icon>publish</mat-icon>
           Publish
+        </button>
+        <button 
+          mat-button 
+          color="warn" 
+          (click)="archiveTour(tour)"
+          *ngIf="canArchive(tour)">
+          <mat-icon>archive</mat-icon>
+          Archive
+        </button>
+        <button 
+          mat-button 
+          color="primary" 
+          (click)="reactivateTour(tour)"
+          *ngIf="canReactivate(tour)">
+          <mat-icon>restore</mat-icon> Reactivate
         </button>
       </mat-card-actions>
     </mat-card>

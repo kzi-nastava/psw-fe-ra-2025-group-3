@@ -1,0 +1,58 @@
+<!-- src/app/feature-modules/blog/all-blogs/all-blogs.component.html -->
+
+<div class="blog-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>public</mat-icon>
+      All Blogs
+    </h1>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && blogs.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">description</mat-icon>
+    <h2>No blogs available</h2>
+    <p>Be the first to share your travel experiences!</p>
+  </div>
+
+  <!-- Blog Grid -->
+  <div *ngIf="!isLoading && blogs.length > 0" class="blog-grid">
+    <mat-card *ngFor="let blog of blogs" class="blog-card" (click)="viewBlog(blog.id)">
+      <!-- Blog Image -->
+      <div class="blog-image-container">
+        <img 
+          mat-card-image 
+          [src]="getImageUrl(blog)" 
+          [alt]="blog.title"
+          class="blog-image">
+        <div class="image-overlay">
+            <span *ngIf="getBlogStatus(blog.status)" [ngClass]="{'status-active': getBlogStatus(blog.status) == 'ACTIVE', 'status-famous': getBlogStatus(blog.status) == 'FAMOUS', 'status-readonly': getBlogStatus(blog.status) == 'READ-ONLY'}">{{ getBlogStatus(blog.status) }}</span>
+          <span class="blog-date">
+            <mat-icon>calendar_today</mat-icon>
+            {{ formatDate(blog.creationDate) }}
+          </span>          
+        </div>
+      </div>
+
+      <!-- Blog Content -->
+      <mat-card-content>
+        <h2 class="blog-title">{{ blog.title }}</h2>
+        <div class="blog-description" markdown>{{ truncateMarkdown(blog.description, 120) }}</div>
+        
+        <!-- Image Count Badge -->
+        <div class="blog-meta">
+          <span class="image-count">
+            <mat-icon>photo_library</mat-icon>
+            {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

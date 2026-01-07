@@ -1,15 +1,24 @@
-<div class="club-detail-container" *ngIf="club as c; else loadingTpl">
+<div class="club-detail-container card animate-fade-in-up" *ngIf="club as c; else loadingTpl">
   <div class="header">
-    <h1>{{ c.name }}</h1>
+    <div class="title-section">
+      <h1>{{ c.name }}</h1>
+      <span class="status-badge" [class.active]="c.status === 'Active'" [class.closed]="c.status === 'Closed'">
+        {{ c.status }}
+      </span>
+    </div>
 
     <div class="actions" *ngIf="isOwner()">
-      <button mat-stroked-button color="primary" (click)="openEditDialog()">
-        <mat-icon>edit</mat-icon>
-        Edit
+      <button mat-stroked-button color="primary" (click)="openEditDialog()" [disabled]="c.status === 'Closed'">
+        <mat-icon>edit</mat-icon> Edit
       </button>
+
       <button mat-stroked-button color="warn" (click)="deleteClub()">
-        <mat-icon>delete</mat-icon>
-        Delete
+        <mat-icon>delete</mat-icon> Delete
+      </button>
+
+      <button mat-stroked-button [color]="c.status === 'Active' ? 'accent' : 'primary'" (click)="toggleStatus()">
+        <mat-icon>{{ c.status === 'Active' ? 'lock' : 'lock_open' }}</mat-icon>
+        {{ c.status === 'Active' ? 'Close Club' : 'Activate Club' }}
       </button>
     </div>
   </div>
@@ -18,18 +27,79 @@
     <img [src]="url" alt="Featured image" />
   </div>
 
-  <p class="description">{{ c.description }}</p>
+  <div class="content-section">
+    <h3>About this club</h3>
+    <p class="description">{{ c.description }}</p>
+  </div>
 
-  <div class="gallery" *ngIf="galleryUrls.length > 0">
+  <div class="gallery content-section" *ngIf="galleryUrls.length > 0">
     <h2>Gallery</h2>
     <div class="gallery-grid">
-      <img *ngFor="let url of galleryUrls" [src]="url" alt="Club image" />
+      <div class="gallery-item" *ngFor="let url of galleryUrls">
+        <img [src]="url" alt="Club image" />
+      </div>
     </div>
+  </div>
+
+  <div class="members-section" *ngIf="isOwner()">
+    <div class="section-header">
+      <h3>Member Management</h3>
+    </div>
+
+    <div class="invite-box" *ngIf="c.status === 'Active'; else closedRestriction">
+      <mat-form-field appearance="fill" class="tourist-select">
+        <mat-label>Search Tourist</mat-label>
+        <input type="text" matInput [formControl]="touristControl" [matAutocomplete]="auto"
+          placeholder="Type name or surname...">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTourist">
+          <mat-option *ngFor="let tourist of filteredTourists | async" [value]="tourist">
+            {{ tourist.name }} {{ tourist.surname }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button class="btn btn-primary" (click)="inviteMember()" [disabled]="!touristControl.value">
+        <mat-icon>person_add</mat-icon> Invite Member
+      </button>
+    </div>
+
+    <div class="members-list-wrapper">
+      <p class="text-muted">
+        Current Members: <strong>{{ c.memberIds.length }}</strong>
+      </p>
+
+      <mat-list *ngIf="c.memberIds && c.memberIds.length > 0">
+        <mat-list-item *ngFor="let mId of c.memberIds" class="member-item">
+          <div class="member-content">
+            <div class="member-info">
+              <mat-icon color="primary">person</mat-icon>
+              <span>{{ getMemberName(mId) }}</span>
+            </div>
+            <button mat-icon-button color="warn" (click)="kickMember(mId)" *ngIf="c.status === 'Active'"
+              matTooltip="Kick Member">
+              <mat-icon>person_remove</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+
+      <div *ngIf="!c.memberIds || c.memberIds.length === 0" class="no-members text-center">
+        <mat-icon class="text-muted">group_off</mat-icon>
+        <p>No members yet.</p>
+      </div>
+    </div>
+
+    <ng-template #closedRestriction>
+      <div class="restriction-banner">
+        <mat-icon>info_outline</mat-icon>
+        <span>Club is closed. Member management is disabled.</span>
+      </div>
+    </ng-template>
   </div>
 </div>
 
 <ng-template #loadingTpl>
-  <div class="loading-container" *ngIf="isLoading">
-    <mat-spinner></mat-spinner>
+  <div class="loading-container flex-col flex-center py-8">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p class="mt-4 text-primary">Loading club details...</p>
   </div>
 </ng-template>

@@ -1,4 +1,17 @@
-<h2 mat-dialog-title>{{ isEditMode ? 'Edit Blog' : 'Create New Blog' }}</h2>
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Blog' : 'Create New Blog' }}
+  <!--  Status Badge -->
+  <span *ngIf="isEditMode" class="status-badge status-{{ blogStatus }}">
+    {{ getStatusLabel() }}
+  </span>
+</h2>
+
+<!-- Informativna poruka ako je Published ili Archived -->
+<div *ngIf="isEditMode && !canEditTitle" class="info-message">
+  <mat-icon>info</mat-icon>
+  <span *ngIf="blogStatus === 1">Published blogs can only have their description edited.</span>
+  <span *ngIf="blogStatus === 2">Archived blogs cannot be edited. Change status to Draft or Published first.</span>
+</div>
 
 <mat-dialog-content>
   <form [formGroup]="blogForm" class="blog-form">
@@ -11,20 +24,18 @@
       <mat-error *ngIf="blogForm.get('title')?.invalid">
         {{ getErrorMessage('title') }}
       </mat-error>
+      <!-- Hint ako je title disabled -->
+      <mat-hint *ngIf="!canEditTitle">Title cannot be changed for {{ getStatusLabel() }} blogs</mat-hint>
     </mat-form-field>
 
-    <!-- Blog Description (Markdown supported) -->
+    <!-- Blog Description -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Description (Markdown supported)</mat-label>
       <textarea 
         matInput 
         formControlName="description" 
         rows="8"
-        placeholder="Write your blog content here. You can use Markdown syntax:
-# Heading
-**Bold text**
-*Italic text*
-- List item">
+        placeholder="Write your blog content here...">
       </textarea>
       <mat-icon matPrefix>description</mat-icon>
       <mat-hint>Use Markdown syntax for rich text formatting</mat-hint>
@@ -34,37 +45,54 @@
     </mat-form-field>
 
     <!-- Images Section -->
-    <div class="images-section">
+    <div class="images-section" [class.disabled]="!canEditImages">
       <div class="images-header">
         <label class="images-label">
           <mat-icon>photo_library</mat-icon>
-          Blog Images (Optional)
+          Blog Images ({{ imageItems.length }}/10)
+          <!--  Disabled hint -->
+          <span *ngIf="!canEditImages" class="disabled-hint">(locked for {{ getStatusLabel() }} blogs)</span>
         </label>
         <button 
           mat-mini-fab 
           color="primary" 
           type="button"
-          (click)="addImage()"
-          [disabled]="images.length >= 10"
-          matTooltip="Add image">
-          <mat-icon>add</mat-icon>
+          (click)="addUrlImage()"
+          [disabled]="imageItems.length >= 10 || !canEditImages"
+          matTooltip="Add image URL">
+          <mat-icon>link</mat-icon>
         </button>
       </div>
 
-      <!-- Image URL Fields -->
-      <div formArrayName="images" class="images-list">
-        <div *ngFor="let image of images.controls; let i = index" class="image-item">
-          <div [formGroupName]="i" class="image-form-group">
+      <!-- Drag & Drop Zone -->
+      <div 
+        class="drop-zone"
+        [class.dragging]="isDragging"
+        [class.disabled]="!canEditImages"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+        <mat-icon class="upload-icon">{{ canEditImages ? 'cloud_upload' : 'lock' }}</mat-icon>
+        <p class="drop-text">{{ canEditImages ? 'Drag & drop images here' : 'Images locked' }}</p>
+        <p class="drop-hint" *ngIf="canEditImages">Maximum 10 images, 5MB each (JPG, PNG, GIF, WebP)</p>
+      </div>
+
+      <!-- Image List -->
+      <div class="images-list" *ngIf="imageItems.length > 0">
+        <div *ngFor="let item of imageItems; let i = index" class="image-item">
+          
+          <!-- URL Input Type -->
+          <div *ngIf="item.type === 'url'" class="image-url-container">
             <mat-form-field appearance="outline" class="image-url-field">
               <mat-label>Image URL {{ i + 1 }}</mat-label>
               <input 
                 matInput 
-                formControlName="imageUrl" 
+                [(ngModel)]="item.url"
+                [ngModelOptions]="{standalone: true}"
+                [disabled]="!canEditImages"
+                (ngModelChange)="updateUrlInFormArray(i, item.url || '')"
                 placeholder="https://example.com/image.jpg">
               <mat-icon matPrefix>link</mat-icon>
-              <mat-error *ngIf="image.get('imageUrl')?.invalid">
-                {{ getErrorMessage('imageUrl', i) }}
-              </mat-error>
             </mat-form-field>
 
             <button 
@@ -72,23 +100,52 @@
               color="warn" 
               type="button"
               (click)="removeImage(i)"
-              [disabled]="images.length === 1 && !isEditMode"
-              matTooltip="Remove image">
+              [disabled]="!canEditImages"
+              matTooltip="Remove">
               <mat-icon>delete</mat-icon>
             </button>
+
+            <!-- URL Preview -->
+            <div *ngIf="item.url" class="image-preview preview-url">
+              <div *ngIf="!item.loaded" class="preview-loading">
+                <mat-spinner diameter="26"></mat-spinner>
+              </div>
+              <img 
+                [src]="item.url" 
+                alt="Preview"
+                (load)="onUrlLoad(item)"
+                (error)="onUrlError(item)" />
+            </div>
           </div>
 
-          <!-- Image Preview -->
-          <div *ngIf="image.get('imageUrl')?.valid" class="image-preview">
-            <img [src]="image.get('imageUrl')?.value" alt="Preview">
+          <!-- File Upload Type -->
+          <div *ngIf="item.type === 'file'" class="image-file-container">
+            <div class="file-info">
+              <mat-icon color="primary">image</mat-icon>
+              <span class="file-name">{{ item.fileName }}</span>
+              <mat-spinner *ngIf="item.uploading" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="item.uploadedUrl && !item.uploading" color="accent">check_circle</mat-icon>
+            </div>
+
+            <button 
+              mat-icon-button 
+              color="warn" 
+              type="button"
+              (click)="removeImage(i)"
+              [disabled]="item.uploading || !canEditImages"
+              matTooltip="Remove">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <!-- File Preview -->
+            <div *ngIf="item.preview" class="image-preview">
+              <img [src]="item.preview" alt="Preview">
+            </div>
           </div>
+
         </div>
       </div>
 
-      <mat-hint class="images-hint">
-        <mat-icon>info</mat-icon>
-        You can add up to 10 images. Enter valid image URLs starting with http:// or https://
-      </mat-hint>
     </div>
 
   </form>

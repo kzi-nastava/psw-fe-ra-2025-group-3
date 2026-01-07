@@ -40,7 +40,7 @@ export class MyClubsComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.showError('Error loading your clubs');
+        this.showError('Error loading my clubs');
       }
     });
   }
