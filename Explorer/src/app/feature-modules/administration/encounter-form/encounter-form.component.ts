@@ -43,25 +43,39 @@ export class EncounterFormComponent implements OnInit {
     this.encounterForm = this.createForm();
   }
 
-  ngOnInit(): void {
-    if (this.isEditMode && this.data.encounter) {
-      const e = this.data.encounter;
+ ngOnInit(): void {
+  if (this.isEditMode && this.data.encounter) {
+    const e = this.data.encounter;
 
-      this.encounterForm.patchValue({
-        name: e.name,
-        description: e.description,
-        xp: e.xp,
-        latitude: e.latitude,
-        longitude: e.longitude,
-        status: e.status,
-        type: e.type
-      });
+    this.encounterForm.patchValue({
+      name: e.name,
+      description: e.description,
+      xp: e.xp,
+      latitude: e.latitude,
+      longitude: e.longitude,
+      status: e.status,
+      type: e.type,
+      actionDescription: e.actionDescription || '' 
+    });
 
-      if (e.latitude != null && e.longitude != null) {
-        this.mapPoints = [{ lat: e.latitude, lng: e.longitude }];
-      }
+    if (e.latitude != null && e.longitude != null) {
+      this.mapPoints = [{ lat: e.latitude, lng: e.longitude }];
     }
   }
+
+  // Dinamička validacija za actionDescription
+  this.encounterForm.get('type')?.valueChanges.subscribe(type => {
+    const actionControl = this.encounterForm.get('actionDescription');
+    if (type === EncounterType.Misc) {
+      actionControl?.setValidators([Validators.required, Validators.minLength(5)]);
+    } else {
+      actionControl?.clearValidators();
+      actionControl?.setValue('');
+    }
+    actionControl?.updateValueAndValidity();
+  });
+}
+
 
   private createForm(): FormGroup {
     const form = this.fb.group({
@@ -71,7 +85,8 @@ export class EncounterFormComponent implements OnInit {
       latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
       longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       status: [''],
-      type: ['', Validators.required]
+      type: ['', Validators.required],
+      activationDescription: ['']
     });
 
     if (this.data.actor === 'admin') {
@@ -109,7 +124,8 @@ export class EncounterFormComponent implements OnInit {
         longitude: formValue.longitude,
         xp: formValue.xp,
         status: this.data.actor === 'tourist'? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
-        type: formValue.type as EncounterType
+        type: formValue.type as EncounterType,
+        ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
       };
 
       this.encounterService.update(this.data.actor, encounter.id!, encounter).subscribe({
@@ -128,8 +144,9 @@ export class EncounterFormComponent implements OnInit {
         longitude: formValue.longitude,
         xp: formValue.xp,
         status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
-        type: formValue.type as EncounterType
-      };
+        type: formValue.type as EncounterType,
+      ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
+    };
 
       this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
