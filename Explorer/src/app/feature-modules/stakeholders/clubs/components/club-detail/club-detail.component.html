@@ -49,11 +49,8 @@
     <div class="invite-box" *ngIf="c.status === 'Active'; else closedRestriction">
       <mat-form-field appearance="fill" class="tourist-select">
         <mat-label>Search Tourist</mat-label>
-        <input type="text" 
-               matInput 
-               [formControl]="touristControl"
-               [matAutocomplete]="auto"
-               placeholder="Type name or surname...">
+        <input type="text" matInput [formControl]="touristControl" [matAutocomplete]="auto"
+          placeholder="Type name or surname...">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTourist">
           <mat-option *ngFor="let tourist of filteredTourists | async" [value]="tourist">
             {{ tourist.name }} {{ tourist.surname }}
@@ -66,8 +63,10 @@
     </div>
 
     <div class="members-list-wrapper">
-      <p class="text-muted">Current Members: <strong>{{ c.memberIds?.length || 0 }}</strong></p>
-      
+      <p class="text-muted">
+        Current Members: <strong>{{ c.memberIds.length }}</strong>
+      </p>
+
       <mat-list *ngIf="c.memberIds && c.memberIds.length > 0">
         <mat-list-item *ngFor="let mId of c.memberIds" class="member-item">
           <div class="member-content">
@@ -75,7 +74,8 @@
               <mat-icon color="primary">person</mat-icon>
               <span>{{ getMemberName(mId) }}</span>
             </div>
-            <button mat-icon-button color="warn" (click)="kickMember(mId)" *ngIf="c.status === 'Active'" matTooltip="Kick Member">
+            <button mat-icon-button color="warn" (click)="kickMember(mId)" *ngIf="c.status === 'Active'"
+              matTooltip="Kick Member">
               <mat-icon>person_remove</mat-icon>
             </button>
           </div>

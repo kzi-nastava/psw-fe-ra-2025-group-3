@@ -11,7 +11,12 @@ import { NotificationBadgeComponent } from './notification-badge/notification-ba
 import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { FormsModule } from '@angular/forms';
+import { FeaturedToursComponent } from './featured-tours/featured-tours.component';
+import { TourPreviewComponent } from './tour-preview/tour-preview.component';
+
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -20,7 +25,9 @@ import { FormsModule } from '@angular/forms';
     TouristMapComponent,
     NotificationBadgeComponent,
     NotificationDropdownComponent,
-    NotificationItemComponent
+    NotificationItemComponent,
+    FeaturedToursComponent,
+    TourPreviewComponent
   ],
   imports: [
     CommonModule,

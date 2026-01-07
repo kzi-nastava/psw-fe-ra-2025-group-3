@@ -50,6 +50,11 @@
   </section>
 
   <!-- ============================================================
+       FEATURED TOURS - For Unauthenticated Users
+       ============================================================ -->
+  <app-featured-tours *ngIf="!isLoggedIn"></app-featured-tours>
+
+  <!-- ============================================================
        VALUE PROPOSITION - For Tourists
        ============================================================ -->
   <section class="value-section">
