@@ -112,7 +112,7 @@ export class EncounterFormComponent implements OnInit {
         type: formValue.type as EncounterType
       };
 
-      this.encounterService.update(encounter.id!, encounter).subscribe({
+      this.encounterService.update(this.data.actor, encounter.id!, encounter).subscribe({
         next: () => {
           this.showSuccess('Encounter successfully updated');
           this.dialogRef.close(true);
@@ -131,7 +131,7 @@ export class EncounterFormComponent implements OnInit {
         type: formValue.type as EncounterType
       };
 
-      this.encounterService.create(encounter).subscribe({
+      this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
           this.showSuccess('Encounter successfully created');
           this.dialogRef.close(true);

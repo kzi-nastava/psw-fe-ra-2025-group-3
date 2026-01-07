@@ -27,7 +27,7 @@ export class EncounterListComponent implements OnInit {
 
   loadEncounters(): void {
     this.isLoading = true;
-    this.encounterService.getAll().subscribe({
+    this.encounterService.getAll('admin').subscribe({
       next: (data) => {
         this.encounters = data;
         this.isLoading = false;
@@ -41,7 +41,7 @@ export class EncounterListComponent implements OnInit {
   deleteEncounter(id: number): void {
     if (!confirm('Are you sure you want to delete this encounter?')) return;
 
-    this.encounterService.delete(id).subscribe(() => {
+    this.encounterService.delete('admin', id).subscribe(() => {
       this.loadEncounters();
     });
   }

@@ -4,32 +4,39 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Encounter } from './model/encounter.model';
 
+export type Actor = 'admin' | 'tourist';
+
 @Injectable({
   providedIn: 'root'
 })
 export class EncounterService {
 
-  private apiUrl = environment.apiHost + 'administrator/encounters';
+  private adminUrl = environment.apiHost + 'administrator/encounters';
+  private touristUrl = environment.apiHost + 'tourist/encounters';
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Encounter[]> {
-    return this.http.get<Encounter[]>(this.apiUrl);
+  private baseUrl(actor: Actor): string {
+    return actor === 'admin' ? this.adminUrl : this.touristUrl;
   }
 
-  getById(id: number): Observable<Encounter> {
-    return this.http.get<Encounter>(`${this.apiUrl}/${id}`);
+  getAll(actor: Actor): Observable<Encounter[]> {
+    return this.http.get<Encounter[]>(this.baseUrl(actor));
   }
 
-  create(encounter: Encounter): Observable<Encounter> {
-    return this.http.post<Encounter>(this.apiUrl, encounter);
+  getById(actor: Actor, id: number): Observable<Encounter> {
+    return this.http.get<Encounter>(`${this.baseUrl(actor)}/${id}`);
   }
 
-  update(id: number, encounter: Encounter): Observable<Encounter> {
-    return this.http.put<Encounter>(`${this.apiUrl}/${id}`, encounter);
+  create(actor: Actor, encounter: Encounter): Observable<Encounter> {
+    return this.http.post<Encounter>(this.baseUrl(actor), encounter);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  update(actor: Actor, id: number, encounter: Encounter): Observable<Encounter> {
+    return this.http.put<Encounter>(`${this.baseUrl(actor)}/${id}`, encounter);
+  }
+
+  delete(actor: Actor, id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl(actor)}/${id}`);
   }
 }
