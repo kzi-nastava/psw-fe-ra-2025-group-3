@@ -86,7 +86,7 @@ export class EncounterFormComponent implements OnInit {
       longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       status: [''],
       type: ['', Validators.required],
-      activationDescription: ['']
+      actionDescription: ['']
     });
 
     if (this.data.actor === 'admin') {
