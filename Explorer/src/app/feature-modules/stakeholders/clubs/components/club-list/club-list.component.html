@@ -1,37 +1,44 @@
 <div class="club-list-container">
+
   <div class="header">
     <h1>Clubs</h1>
-    <button mat-raised-button class="create-club-btn" color="primary" (click)="openCreateDialog()">
-      <mat-icon>add</mat-icon>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
       Create Club
     </button>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
+    <p>Loading clubs...</p>
   </div>
 
   <div *ngIf="!isLoading && clubs.length === 0" class="empty-state">
-    <mat-icon>groups</mat-icon>
-    <h2>No clubs yet</h2>
+    <h2>No clubs available</h2>
     <p>Create the first club to gather people with similar interests.</p>
-    <button mat-mdc-raised-button class="create-club-btn" color="primary" (click)="openCreateDialog()">
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
       Create Club
     </button>
   </div>
 
   <div *ngIf="!isLoading && clubs.length > 0" class="clubs-grid">
-    <mat-card *ngFor="let club of clubs" class="club-card" [routerLink]="['/clubs', club.id]">
-      <mat-card-header>
-        <div mat-card-avatar class="club-avatar" *ngIf="getClubImageUrl(club)">
+    <div
+      *ngFor="let club of clubs"
+      class="club-card"
+      [routerLink]="['/clubs', club.id]">
+
+      <div class="club-header">
+        <div class="club-avatar" *ngIf="getClubImageUrl(club)">
           <img [src]="getClubImageUrl(club)" alt="Club image" />
         </div>
-        <mat-card-title>{{ club.name }}</mat-card-title>
-        <mat-card-subtitle>
-          {{ club.description | slice:0:80 }}{{ club.description.length > 80 ? '...' : '' }}
-        </mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
+        <h3>{{ club.name }}</h3>
+      </div>
+
+      <div class="club-content">
+        <p>
+          {{ club.description | slice:0:120 }}{{ club.description.length > 120 ? '...' : '' }}
+        </p>
+      </div>
+
+    </div>
   </div>
 
   <mat-paginator
@@ -42,4 +49,5 @@
     [pageSizeOptions]="[6, 12, 24]"
     (page)="onPageChange($event)">
   </mat-paginator>
+
 </div>
