@@ -12,7 +12,6 @@ import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/
 
 import { EquipmentComponent } from 'src/app/feature-modules/administration/equipment/equipment.component';
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component';
-
 import { AwardEventsComponent } from 'src/app/feature-modules/administration/award-events/award-events.component';
 import { MonumentListComponent } from 'src/app/feature-modules/administration/monuments/monument-list/monument-list.component';
 
@@ -66,7 +65,7 @@ import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-re
 
 const routes: Routes = [
 
-  // Public
+
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
@@ -74,16 +73,17 @@ const routes: Routes = [
 
   { path: 'map-test', component: MapTestComponent },
 
-  // Admin
+
   { path: 'equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'administration/accounts', component: AccountListComponent, canActivate: [AuthGuard] },
   { path: 'administration/award-events', component: AwardEventsComponent, canActivate: [AuthGuard] },
   { path: 'administration/monuments', component: MonumentListComponent, canActivate: [AuthGuard] },
 
-  // Facilities
+  
   { path: 'administration/facilities', component: FacilityListComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/new', component: FacilityEditComponent, canActivate: [AuthGuard] },
   { path: 'administration/facilities/edit/:id', component: FacilityEditComponent, canActivate: [AuthGuard] },
+
 
   // Encounters
   { path: 'administration/encounters', component: EncounterListComponent, canActivate: [AuthGuard] },
@@ -99,20 +99,28 @@ const routes: Routes = [
   { path: 'author/tour-problems', component: AuthorProblemListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems/:id', component: AuthorProblemDetailsComponent, canActivate: [AuthGuard] },
 
-  // Ratings
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
   { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'tourist/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
-  // Profile
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'administration/profiles', component: ProfileListComponent, canActivate: [AuthGuard] },
   { path: 'administration/profile-form', component: ProfileFormComponent, canActivate: [AuthGuard] },
 
-  // Tourist-only features
+
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
+
+
+ 
+  { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
+
+
+  { path: 'meetups', component: MeetupListComponent, canActivate: [AuthGuard] },
+  { path: 'meetups/:id', component: MeetupDetailsComponent, canActivate: [AuthGuard] },
+
+
   { path: 'tourist/tours', component: TouristToursComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/encounters', component: TouristEncountersComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/cart', component: ShoppingCartComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
@@ -136,6 +144,7 @@ const routes: Routes = [
   { path: 'blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard] },
 
   // Author – My Blogs
+
   { path: 'author/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'author' } },
   { path: 'author/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'author' } },
 
