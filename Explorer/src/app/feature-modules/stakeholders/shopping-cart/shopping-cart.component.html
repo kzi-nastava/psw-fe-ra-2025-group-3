@@ -13,7 +13,7 @@
   <div class="cart-header">
     <h1>My Cart</h1>
     <p class="cart-subtitle">
-      Review your selected tours before booking your next adventure.
+      Review your selected tours and bundles before booking your next adventure.
     </p>
     <div class="cart-total-pill" *ngIf="cart">
       Total:
@@ -26,11 +26,11 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <!-- EMPTY CART -->
-  <div *ngIf="!loading && (!cart || cart.items.length === 0)" class="cart-empty card animate-fade-in-up">
+  <!-- EMPTY CART - IZMENJENO -->
+  <div *ngIf="!loading && cart && cart.items.length === 0 && cart.bundleItems.length === 0" class="cart-empty card animate-fade-in-up">
     <mat-icon>shopping_cart</mat-icon>
     <h2>Your cart is empty</h2>
-    <p>Start exploring tours and add the ones you like to your cart.</p>
+    <p>Start exploring tours and bundles and add the ones you like to your cart.</p>
     <button
       mat-raised-button
       color="primary"
@@ -41,11 +41,13 @@
     </button>
   </div>
 
-  <!-- CART WITH ITEMS -->
-  <div *ngIf="!loading && cart && cart.items.length > 0" class="cart-grid">
+  <!-- CART WITH ITEMS - IZMENJENO -->
+  <div *ngIf="!loading && cart && (cart.items.length > 0 || cart.bundleItems.length > 0)" class="cart-grid">
     <!-- LEFT: CART ITEMS -->
     <div class="cart-items card">
-      <h2>Selected Tours</h2>
+      <h2>Selected Items</h2>
+      
+      <!-- TOUR ITEMS -->
       <div class="cart-item" *ngFor="let item of cart.items">
         <div class="cart-item-left">
           <span class="tour-pill">TOUR</span>
@@ -66,16 +68,41 @@
           </button>
         </div>
       </div>
+
+      <!-- BUNDLE ITEMS - DODATO -->
+      <div class="cart-item bundle-item" *ngFor="let bundleItem of cart.bundleItems">
+        <div class="cart-item-left">
+          <span class="bundle-pill">BUNDLE</span>
+          <div class="cart-item-text">
+            <div class="cart-item-title">{{ bundleItem.bundleName }}</div>
+            <div class="bundle-tours-count">{{ bundleItem.tourCount }} tours included</div>
+          </div>
+        </div>
+        <div class="cart-item-right">
+          <div class="cart-item-price">
+            {{ bundleItem.price }} AC
+          </div>
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="onRemoveBundle(bundleItem.bundleId)">
+            <mat-icon>delete</mat-icon>
+            Remove
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- RIGHT: SUMMARY -->
     <div class="cart-summary card">
       <h2>Order Summary</h2>
       
-      <div class="summary-row">
-        <span>Items</span>
-        <span>{{ cart.items.length }}</span>
-      </div>
+  
+     <!-- ITEMS COUNT -->
+<div class="summary-row">
+  <span>Items</span>
+  <span>{{ getTotalItemsCount() }}</span>
+</div>
 
       <div class="summary-row">
         <span>Your Balance</span>
