@@ -266,3 +266,23 @@
     align-self: flex-start;
   }
 }
+.bundle-pill {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00897B, #00796B);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bundle-tours-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-700);
+  margin-top: var(--spacing-1);
+  font-style: italic;
+}
+
+.cart-item.bundle-item {
+  border-left: 4px solid #00897B;
+}

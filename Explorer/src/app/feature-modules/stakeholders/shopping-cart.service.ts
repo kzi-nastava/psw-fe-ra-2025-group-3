@@ -38,4 +38,10 @@ export class ShoppingCartService {
       {}
     );
   }
+  addBundleToCart(bundleId: number): Observable<ShoppingCart> {
+  return this.http.post<ShoppingCart>(`${this.baseUrl}/add-bundle/${bundleId}`, {});
+}
+removeBundleFromCart(bundleId: number): Observable<ShoppingCart> {
+  return this.http.delete<ShoppingCart>(`${this.baseUrl}/bundles/${bundleId}`);
+}
 }
