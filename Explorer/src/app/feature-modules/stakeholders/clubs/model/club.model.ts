@@ -31,3 +31,19 @@ export interface ClubUpdateDto {
   newGalleryImageUrls?: string[] | null;
   removedGalleryImageIds?: number[] | null;
 }
+
+export interface ClubJoinRequestDto {
+  id: number;
+  touristId: number;
+  clubId: number;
+  requestedAt: string;
+}
+
+export interface ClubJoinRequestByTouristDto {
+    id: number;
+    clubId: number;
+    touristId: number;
+    username: string;
+    email: string;
+    requestedAt: string;
+}
