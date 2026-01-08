@@ -8,6 +8,9 @@ import {
   EncounterActivationDto, 
   EncounterActivationStatus 
 } from '../model/encounter-activation.model';
+import { MatDialog } from '@angular/material/dialog';
+import { EncounterFormComponent } from '../../administration/encounter-form/encounter-form.component';
+
 
 @Component({
   selector: 'xp-tourist-encounters',
@@ -15,6 +18,9 @@ import {
   styleUrls: ['./tourist-encounters.component.css']
 })
 export class TouristEncountersComponent implements OnInit {
+
+  canAddEncounter: boolean = true;
+
   encounters: NearbyEncounterDto[] = [];
   activeEncounterIds: Set<number> = new Set();
   mapPoints: { lat: number; lng: number; name?: string; color?: string }[] = [];
@@ -28,10 +34,17 @@ export class TouristEncountersComponent implements OnInit {
   constructor(
     private encounterService: TouristEncounterService,
     private activationService: EncounterActivationService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
+    // turist: pitaj backend
+    this.encounterService.canTouristCreate().subscribe({
+      next: ok => this.canAddEncounter = ok,
+      error: () => this.canAddEncounter = false
+    });
+
     this.loadMyPosition();
     this.loadActiveEncounterActivations();
     // Load nearby encounters if position exists, otherwise load all active encounters
@@ -405,5 +418,26 @@ export class TouristEncountersComponent implements OnInit {
 
   private showSuccess(msg: string): void {
     this.snackBar.open(msg, 'Close', { duration: 3000, panelClass: ['success-snackbar'] });
+  }
+
+  onAddClicked(): void {
+    this.openForm('create', undefined, 'tourist');
+  }
+    
+  openForm(mode: 'create' | 'edit', encounter?: Encounter, actor: 'admin' | 'tourist' = 'admin'): void {
+    const dialogRef = this.dialog.open(EncounterFormComponent, {
+      width: '800px',
+      data: {
+        mode,
+        encounter: encounter ?? null,
+        actor
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadEncounters();
+      }
+    });
   }
 }

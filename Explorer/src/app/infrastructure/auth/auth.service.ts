@@ -85,7 +85,16 @@ export class AuthService {
       isActive: decoded.isActive ?? true
     };
 
-    this.user$.next(user);
+
+  this.user$.next(user);
+}
+  
+  isTourist(): boolean {
+    return this.user$.value.role === 'tourist';
+  }
+
+  isAdministrator(): boolean {
+    return this.user$.value.role === 'administrator';
   }
 
 }
