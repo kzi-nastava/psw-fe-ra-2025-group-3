@@ -3,9 +3,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { BlogService } from '../blog.service';
-import { Blog, BlogStatus } from '../model/blog.model';
-import { BlogVoteStateDto } from '../model/blog.model';
+import { Blog, BlogStatus, BlogVoteStateDto } from '../model/blog.model';
+import { ActivityService } from '../../activity/activity.service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -27,28 +28,35 @@ export class BlogDetailComponent implements OnInit {
   isDraft = false;
   isReadOnly = false;
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private blogService: BlogService,
-    private snackBar: MatSnackBar
-  ) { }
+    private snackBar: MatSnackBar,
+    private activityService: ActivityService
+  ) {}
 
   ngOnInit(): void {
-    const blogId = this.route.snapshot.paramMap.get('id');
-    if (blogId) {
-      const id = Number(blogId);
-      this.loadBlog(id);
-      this.loadVoteState(id);
-    } else {
+    const blogIdParam = this.route.snapshot.paramMap.get('id');
+
+    if (!blogIdParam) {
       this.showError('Invalid blog ID');
       this.goBack();
+      return;
     }
+
+    const blogId = Number(blogIdParam);
+
+    this.loadBlog(blogId);
+    this.loadVoteState(blogId);
+
+    // ✅ ACTIVITY TRACKING – fire & forget
+    this.activityService.trackBlogView(blogId).subscribe();
   }
 
   loadBlog(id: number): void {
     this.isLoading = true;
+
     this.blogService.getBlogById(id).subscribe({
       next: (blog) => {
         this.blog = blog;
@@ -65,21 +73,22 @@ export class BlogDetailComponent implements OnInit {
   }
 
   private checkStatus(): void {
-    this.isActive = this.blog?.status == BlogStatus.Active;
-    this.isFamous = this.blog?.status == BlogStatus.Famous;
-    this.isPublished = this.blog?.status == BlogStatus.Published;
-    this.isDraft = this.blog?.status == BlogStatus.Draft;
-    this.isReadOnly = this.blog?.status == BlogStatus.ReadOnly;
+    if (!this.blog) return;
+
+    this.isActive = this.blog.status === BlogStatus.Active;
+    this.isFamous = this.blog.status === BlogStatus.Famous;
+    this.isPublished = this.blog.status === BlogStatus.Published;
+    this.isDraft = this.blog.status === BlogStatus.Draft;
+    this.isReadOnly = this.blog.status === BlogStatus.ReadOnly;
   }
 
   private loadVoteState(id: number): void {
-    if (!this.isAuthenticated) {
-      return;
-    }
+    if (!this.isAuthenticated) return;
 
     this.blogService.getVoteState(id).subscribe({
       next: (state) => {
         this.voteState = state;
+
         if (this.blog) {
           this.blog.status = state.blogStatus as BlogStatus;
           this.checkStatus();
@@ -87,7 +96,7 @@ export class BlogDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading vote state:', err);
-      },
+      }
     });
   }
 
@@ -106,33 +115,36 @@ export class BlogDetailComponent implements OnInit {
   }
 
   goBack(): void {
-  const fromAllBlogs = this.route.snapshot.url[0]?.path === 'blogs';
+    const fromAllBlogs = this.route.snapshot.url[0]?.path === 'blogs';
 
     if (fromAllBlogs) {
       this.router.navigate(['/blogs']);
     } else {
       this.router.navigate(['/author/blogs']);
-   }
+    }
   }
 
   nextImage(): void {
-    if (this.blog && this.blog.images.length > 0) {
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.blog.images.length;
-    }
+    if (!this.blog || this.blog.images.length === 0) return;
+
+    this.currentImageIndex =
+      (this.currentImageIndex + 1) % this.blog.images.length;
   }
 
   previousImage(): void {
-    if (this.blog && this.blog.images.length > 0) {
-      this.currentImageIndex = this.currentImageIndex === 0 
-        ? this.blog.images.length - 1 
+    if (!this.blog || this.blog.images.length === 0) return;
+
+    this.currentImageIndex =
+      this.currentImageIndex === 0
+        ? this.blog.images.length - 1
         : this.currentImageIndex - 1;
-    }
   }
 
   getCurrentImage(): string {
     if (this.blog && this.blog.images.length > 0) {
       return this.blog.images[this.currentImageIndex].imageUrl;
     }
+
     return 'https://via.placeholder.com/1200x600?text=No+Image';
   }
 
@@ -145,10 +157,11 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.vote(this.blog.id, true).subscribe({
       next: (state) => {
         this.voteState = state;
+
         if (this.blog) {
           this.blog.status = state.blogStatus as BlogStatus;
           this.checkStatus();
-        }        
+        }
       },
       error: (err) => {
         if (err.status === 401) {
@@ -157,7 +170,7 @@ export class BlogDetailComponent implements OnInit {
           console.error('Failed to upvote', err);
           this.showError('Voting error.');
         }
-      },
+      }
     });
   }
 
@@ -170,10 +183,11 @@ export class BlogDetailComponent implements OnInit {
     this.blogService.vote(this.blog.id, false).subscribe({
       next: (state) => {
         this.voteState = state;
+
         if (this.blog) {
           this.blog.status = state.blogStatus as BlogStatus;
+          this.checkStatus();
         }
-        this.checkStatus();
       },
       error: (err) => {
         if (err.status === 401) {
@@ -182,7 +196,7 @@ export class BlogDetailComponent implements OnInit {
           console.error('Failed to downvote', err);
           this.showError('Voting error.');
         }
-      },
+      }
     });
   }
 
