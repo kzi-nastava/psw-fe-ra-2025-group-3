@@ -1,11 +1,14 @@
 <div class="container">
   <div class="tour-list-container">
     <div class="header">
-      <h1>My Purchased Tours</h1>
-      <p class="cart-subtitle">
-        Tours you've purchased. You can start them even if they're archived.
-      </p>
+      <div class="header-text">
+        <h1>My Purchased Tours</h1>
+        <p class="cart-subtitle">
+          Tours you've purchased. You can start them even if they're archived.
+        </p>
+      </div>
     </div>
+
 
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner></mat-spinner>

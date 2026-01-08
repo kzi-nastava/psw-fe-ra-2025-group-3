@@ -94,6 +94,21 @@
   gap: 12px;
 }
 
+.btn-login .btn-icon-img {
+  width: 17px;   /* manja širina */
+  height: 17px;  /* manja visina */
+}
+
+.btn-logout .btn-icon-img {
+  width: 17px;   /* manja širina */
+  height: 17px;  /* manja visina */
+}
+
+.btn-home .btn-icon-img {
+  width: 17px;   /* manja širina */
+  height: 17px;  /* manja visina */
+}
+
 .nav-menu-button {
   display: flex !important;
   align-items: center !important;

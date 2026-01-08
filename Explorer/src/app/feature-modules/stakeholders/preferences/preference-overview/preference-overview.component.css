@@ -1,3 +1,33 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: var(--spacing-6);
+  background: var(--color-neutral-0);
+  padding: var(--spacing-4) var(--spacing-6);
+
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+
+  border-left: 4px solid var(--color-primary-500);
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--color-secondary-800);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  font-family: var(--font-family-display);
+}
+
+.cart-subtitle {
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  max-width: 36rem;
+}
+
 /* Transport items sa hover efektom */
 .transport-item {
   padding: var(--spacing-4);

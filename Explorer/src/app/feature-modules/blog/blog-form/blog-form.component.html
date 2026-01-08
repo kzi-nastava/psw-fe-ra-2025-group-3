@@ -6,12 +6,6 @@
   </span>
 </h2>
 
-<!-- Informativna poruka ako je Published ili Archived -->
-<div *ngIf="isEditMode && !canEditTitle" class="info-message">
-  <mat-icon>info</mat-icon>
-  <span *ngIf="blogStatus === 1">Published blogs can only have their description edited.</span>
-  <span *ngIf="blogStatus === 2">Archived blogs cannot be edited. Change status to Draft or Published first.</span>
-</div>
 
 <mat-dialog-content>
   <form [formGroup]="blogForm" class="blog-form">
