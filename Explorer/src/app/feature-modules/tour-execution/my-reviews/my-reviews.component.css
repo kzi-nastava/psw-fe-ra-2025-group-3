@@ -26,8 +26,8 @@
 
 .header h1 {
   margin: 0;
-  color: var(--color-secondary-800); 
-  font-size: var(--font-size-2xl);   
+  color: var(--color-secondary-800);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   font-family: var(--font-family-display);
 }
@@ -36,6 +36,7 @@
   margin-top: 4px;
   font-size: var(--font-size-sm);
   color: var(--color-neutral-700);
+  max-width: 36rem;
 }
 
 /* ============================================================================
