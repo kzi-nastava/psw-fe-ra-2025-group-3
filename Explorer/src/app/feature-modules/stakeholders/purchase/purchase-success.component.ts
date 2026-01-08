@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { TourPurchaseToken } from '../model/tour-purchase-token.model';
 
 @Component({
   selector: 'xp-purchase-success',
@@ -8,14 +7,18 @@ import { TourPurchaseToken } from '../model/tour-purchase-token.model';
   styleUrls: ['./purchase-success.component.css']
 })
 export class PurchaseSuccessComponent {
-  tokens: TourPurchaseToken[] = [];
+  tokens: any[] = [];
+  purchaseRecords: any[] = [];
 
   constructor(private router: Router) {
     const nav = this.router.getCurrentNavigation();
-    this.tokens = nav?.extras.state?.['tokens'] || [];
+    const state = nav?.extras.state;
+    
+    this.tokens = state?.['tokens'] || [];
+    this.purchaseRecords = state?.['purchaseRecords'] || [];
   }
-  goExplore(): void {
-  this.router.navigate(['/tourist/tours']);
-}
 
+  goExplore(): void {
+    this.router.navigate(['/tourist/my-purchased-tours']);
+  }
 }

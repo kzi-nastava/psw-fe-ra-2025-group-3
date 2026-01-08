@@ -27,7 +27,7 @@ export class EncounterListComponent implements OnInit {
 
   loadEncounters(): void {
     this.isLoading = true;
-    this.encounterService.getAll().subscribe({
+    this.encounterService.getAll('admin').subscribe({
       next: (data) => {
         this.encounters = data;
         this.isLoading = false;
@@ -41,17 +41,18 @@ export class EncounterListComponent implements OnInit {
   deleteEncounter(id: number): void {
     if (!confirm('Are you sure you want to delete this encounter?')) return;
 
-    this.encounterService.delete(id).subscribe(() => {
+    this.encounterService.delete('admin', id).subscribe(() => {
       this.loadEncounters();
     });
   }
 
-  openForm(mode: 'create' | 'edit', encounter?: Encounter): void {
+  openForm(mode: 'create' | 'edit', encounter?: Encounter, actor: 'admin' | 'tourist' = 'admin'): void {
     const dialogRef = this.dialog.open(EncounterFormComponent, {
       width: '800px',
       data: {
         mode,
-        encounter: encounter ?? null
+        encounter: encounter ?? null,
+        actor
       }
     });
 
@@ -95,5 +96,28 @@ export class EncounterListComponent implements OnInit {
       case 'Misc': return 'extension';
       default: return 'help';
     }
+  }
+  approveEncounter(encounter: Encounter): void {
+    if (!encounter.id) return;
+
+    if (encounter.status !== 'PendingApproval') return;
+
+    this.encounterService.approve(encounter.id).subscribe({
+      next: () => this.loadEncounters(),
+      error: () => alert('Error approving encounter')
+    });
+  }
+
+  rejectEncounter(encounter: Encounter): void {
+    if (!encounter.id) return;
+
+    if (encounter.status !== 'PendingApproval') return;
+
+    if (!confirm('Are you sure you want to reject this encounter?')) return;
+
+    this.encounterService.reject(encounter.id).subscribe({
+      next: () => this.loadEncounters(),
+      error: () => alert('Error rejecting encounter')
+    });
   }
 }

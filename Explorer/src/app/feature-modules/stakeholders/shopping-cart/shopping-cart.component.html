@@ -1,19 +1,36 @@
 <div class="cart-page container">
-  <div class="cart-header">
-    <h1>My Cart</h1>
-    <p class="cart-subtitle">
-      Review your selected tours before booking your next adventure.
-    </p>
-
-    <div class="cart-total-pill" *ngIf="cart">
-      Total:
-      <span>{{ cart.totalPrice | number:'1.2-2' }} €</span>
+  <!-- WALLET DISPLAY -->
+  <div class="wallet-banner card" *ngIf="wallet">
+    <div class="wallet-content">
+      <mat-icon class="wallet-icon">account_balance_wallet</mat-icon>
+      <div class="wallet-info">
+        <span class="wallet-label">Available Adventure Coins</span>
+        <span class="wallet-balance">{{ wallet.balanceAc }} AC</span>
+      </div>
     </div>
   </div>
 
-  <div *ngIf="!cart || cart.items.length === 0" class="cart-empty card animate-fade-in-up">
+  <div class="cart-header">
+    <h1>My Cart</h1>
+    <p class="cart-subtitle">
+      Review your selected tours and bundles before booking your next adventure.
+    </p>
+    <div class="cart-total-pill" *ngIf="cart">
+      Total:
+      <span>{{ cart.totalPrice }} AC</span>
+    </div>
+  </div>
+
+  <!-- LOADING SPINNER -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- EMPTY CART - IZMENJENO -->
+  <div *ngIf="!loading && cart && cart.items.length === 0 && cart.bundleItems.length === 0" class="cart-empty card animate-fade-in-up">
+    <mat-icon>shopping_cart</mat-icon>
     <h2>Your cart is empty</h2>
-    <p>Start exploring tours and add the ones you like to your cart.</p>
+    <p>Start exploring tours and bundles and add the ones you like to your cart.</p>
     <button
       mat-raised-button
       color="primary"
@@ -24,26 +41,23 @@
     </button>
   </div>
 
-  <div *ngIf="cart && cart.items.length > 0" class="cart-grid">
-
+  <!-- CART WITH ITEMS - IZMENJENO -->
+  <div *ngIf="!loading && cart && (cart.items.length > 0 || cart.bundleItems.length > 0)" class="cart-grid">
+    <!-- LEFT: CART ITEMS -->
     <div class="cart-items card">
-      <h2>Selected Tours</h2>
-
-      <div
-        class="cart-item"
-        *ngFor="let item of cart.items">
-
+      <h2>Selected Items</h2>
+      
+      <!-- TOUR ITEMS -->
+      <div class="cart-item" *ngFor="let item of cart.items">
         <div class="cart-item-left">
           <span class="tour-pill">TOUR</span>
-
           <div class="cart-item-text">
             <div class="cart-item-title">{{ item.tourName }}</div>
           </div>
         </div>
-
         <div class="cart-item-right">
           <div class="cart-item-price">
-            {{ item.price | number:'1.2-2' }} €
+            {{ item.price }} AC
           </div>
           <button
             mat-stroked-button
@@ -53,36 +67,88 @@
             Remove
           </button>
         </div>
+      </div>
 
+      <!-- BUNDLE ITEMS - DODATO -->
+      <div class="cart-item bundle-item" *ngFor="let bundleItem of cart.bundleItems">
+        <div class="cart-item-left">
+          <span class="bundle-pill">BUNDLE</span>
+          <div class="cart-item-text">
+            <div class="cart-item-title">{{ bundleItem.bundleName }}</div>
+            <div class="bundle-tours-count">{{ bundleItem.tourCount }} tours included</div>
+          </div>
+        </div>
+        <div class="cart-item-right">
+          <div class="cart-item-price">
+            {{ bundleItem.price }} AC
+          </div>
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="onRemoveBundle(bundleItem.bundleId)">
+            <mat-icon>delete</mat-icon>
+            Remove
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- RIGHT: SUMMARY -->
     <div class="cart-summary card">
       <h2>Order Summary</h2>
+      
+  
+     <!-- ITEMS COUNT -->
+<div class="summary-row">
+  <span>Items</span>
+  <span>{{ getTotalItemsCount() }}</span>
+</div>
 
       <div class="summary-row">
-        <span>Items</span>
-        <span>{{ cart.items.length }}</span>
+        <span>Your Balance</span>
+        <span class="balance-amount">{{ wallet?.balanceAc ?? 0 }} AC</span>
       </div>
 
       <hr />
 
       <div class="summary-row total-row">
-        <span>Total</span>
-        <span>{{ cart.totalPrice | number:'1.2-2' }} €</span>
+        <span>Total Cost</span>
+        <span>{{ cart.totalPrice }} AC</span>
       </div>
 
+      <!-- INSUFFICIENT FUNDS WARNING -->
+      <div class="insufficient-warning" *ngIf="!canAffordCheckout()">
+        <mat-icon>warning</mat-icon>
+        <div class="warning-text">
+          <strong>Insufficient Adventure Coins</strong>
+          <p>You need {{ getShortfall() }} more AC to complete this purchase.</p>
+        </div>
+      </div>
+
+      <!-- BALANCE AFTER PURCHASE -->
+      <div class="balance-after" *ngIf="canAffordCheckout()">
+        <span>Balance after purchase:</span>
+        <span class="remaining-balance">{{ (wallet!.balanceAc - cart.totalPrice) }} AC</span>
+      </div>
+
+      <!-- CHECKOUT BUTTON -->
       <button
         mat-raised-button
         color="primary"
         class="checkout-button cart-btn"
-        (click)="onCheckout()">
-        <mat-icon>shopping_bag</mat-icon>
-        Proceed to checkout
+        (click)="onCheckout()"
+        [disabled]="!canAffordCheckout() || checkoutLoading">
+        <mat-spinner *ngIf="checkoutLoading" diameter="20"></mat-spinner>
+        <mat-icon *ngIf="!checkoutLoading && canAffordCheckout()">shopping_bag</mat-icon>
+        <mat-icon *ngIf="!checkoutLoading && !canAffordCheckout()">block</mat-icon>
+        <span *ngIf="!checkoutLoading">
+          {{ canAffordCheckout() ? 'Proceed to checkout' : 'Insufficient Funds' }}
+        </span>
+        <span *ngIf="checkoutLoading">Processing...</span>
       </button>
 
       <p class="summary-note">
-        You will be able to review details of each tour before final confirmation.
+        Adventure Coins will be deducted from your wallet upon checkout.
       </p>
     </div>
   </div>

@@ -54,37 +54,70 @@
         </div>
       </mat-card-header>
 
-      <mat-card-content>
-        <div class="encounter-details">
+  <mat-card-content>
+  <div class="encounter-details">
 
-          <div class="detail-item">
-            <mat-icon>description</mat-icon>
-            <span>{{ encounter.description }}</span>
-          </div>
+    <div class="detail-item">
+      <mat-icon>description</mat-icon>
+      <span>{{ encounter.description }}</span>
+    </div>
 
-          <div class="detail-item">
-            <mat-icon>location_on</mat-icon>
-            <span>{{ encounter.latitude }}, {{ encounter.longitude }}</span>
-          </div>
+    <!-- ACTION DESCRIPTION samo za Misc -->
+    <div class="detail-item" *ngIf="encounter.type === 'Misc' && encounter.actionDescription">
+      <mat-icon>build</mat-icon>
+      <span>{{ encounter.actionDescription }}</span>
+    </div>
 
-          <div class="detail-item">
-            <mat-icon>star</mat-icon>
-            <span>{{ encounter.xp }} XP</span>
-          </div>
+    <div class="detail-item">
+      <mat-icon>location_on</mat-icon>
+      <span>{{ encounter.latitude }}, {{ encounter.longitude }}</span>
+    </div>
 
-        </div>
-      </mat-card-content>
+    <div class="detail-item">
+      <mat-icon>star</mat-icon>
+      <span>{{ encounter.xp }} XP</span>
+    </div>
+
+  </div>
+</mat-card-content>
+
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="onEditClicked(encounter)">
-          <mat-icon>edit</mat-icon>
-          Edit
-        </button>
 
-        <button mat-button color="warn" (click)="deleteEncounter(encounter.id || 0)">
-          <mat-icon>delete</mat-icon>
-          Delete
-        </button>
+        <!-- ADMIN ACTIONS ZA PENDING -->
+        <ng-container *ngIf="encounter.status === 'PendingApproval'; else normalActions">
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="approveEncounter(encounter)">
+            <mat-icon>check_circle</mat-icon>
+            Approve
+          </button>
+
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="rejectEncounter(encounter)">
+            <mat-icon>cancel</mat-icon>
+            Reject
+          </button>
+
+        </ng-container>
+
+        <!-- STANDARD ACTIONS -->
+        <ng-template #normalActions>
+          <button mat-button color="primary" (click)="onEditClicked(encounter)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+
+          <button mat-button color="warn" (click)="deleteEncounter(encounter.id || 0)">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </ng-template>
+
       </mat-card-actions>
 
     </mat-card>

@@ -7,12 +7,15 @@ export interface Encounter {
   xp: number;
   status: EncounterStatus;
   type: EncounterType;
+  actionDescription?: string;
 }
 
 export enum EncounterStatus {
   Draft = 'Draft',
   Active = 'Active',
-  Archived = 'Archived'
+  Archived = 'Archived',
+  PendingApproval = 'PendingApproval',
+  Rejected = 'Rejected'
 }
 
 export enum EncounterType {

@@ -191,9 +191,10 @@
               <mat-icon>terrain</mat-icon>
               <span>{{ getDifficultyLabel(tour.difficulty) }}</span>
             </div>
-            <div class="detail-item">
-              <mat-icon>attach_money</mat-icon>
-              <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+                      <!-- CENA U AC -->
+            <div class="detail-item price-highlight">
+              <mat-icon>monetization_on</mat-icon>
+              <span class="price-value">{{ tour.price }} AC</span>
             </div>
             
             <div class="detail-item rating-display" *ngIf="tour.averageRating">

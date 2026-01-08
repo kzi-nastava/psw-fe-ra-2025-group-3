@@ -46,7 +46,7 @@
     </mat-form-field>
 
     <!-- Status -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field appearance="outline" class="full-width" *ngIf="data.actor === 'admin'">
       <mat-label>Status</mat-label>
       <mat-select formControlName="status">
         <mat-option *ngFor="let status of encounterStatuses" [value]="status.value">
@@ -72,6 +72,24 @@
         {{ getErrorMessage('type') }}
       </mat-error>
     </mat-form-field>
+    <!-- Action Description (samo za Misc) -->
+<mat-form-field *ngIf="encounterForm.get('type')?.value === EncounterType.Misc" appearance="outline" class="full-width">
+  <mat-label>Action Description</mat-label>
+  <textarea
+    matInput
+    formControlName="actionDescription"
+    cdkTextareaAutosize
+    cdkAutosizeMinRows="2"
+    cdkAutosizeMaxRows="4"
+    placeholder="Describe the action for Misc encounter"
+    maxlength="300">
+  </textarea>
+  <mat-icon matPrefix>build</mat-icon>
+  <mat-hint align="end">{{encounterForm.get('actionDescription')?.value?.length || 0}}/300</mat-hint>
+  <mat-error *ngIf="encounterForm.get('actionDescription')?.invalid">
+    {{ getErrorMessage('actionDescription') }}
+  </mat-error>
+</mat-form-field>
 
     <!-- Location Map -->
     <div class="full-width">

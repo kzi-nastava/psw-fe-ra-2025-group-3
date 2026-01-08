@@ -159,3 +159,51 @@ mat-paginator {
     gap: var(--spacing-3);
   }
 }
+
+.club-actions {
+  padding: var(--spacing-4) !important;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-2);
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+
+::ng-deep .club-list-container .club-card .mat-mdc-outlined-button.mat-primary {
+  border-color: var(--color-primary-500) !important;
+  color: var(--color-primary-600) !important;
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  border-width: 2px;
+}
+
+::ng-deep .club-list-container .club-card .mat-mdc-outlined-button.mat-primary:hover {
+  background-color: #E0F7FA !important; 
+}
+
+.member-badge, .owner-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 9999px; 
+  box-shadow: var(--shadow-sm);
+}
+
+.member-badge {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  border: 1px solid #E0E0E0;
+}
+
+.owner-badge {
+  background-color: var(--color-warning); 
+  color: #3E2723; 
+  border: 1px solid #FFB300;
+}

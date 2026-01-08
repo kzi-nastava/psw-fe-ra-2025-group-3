@@ -6,11 +6,12 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ClubService } from '../../club.service';
-import { ClubDto } from '../../model/club.model';
+import { ClubDto, ClubJoinRequestByTouristDto } from '../../model/club.model'; 
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.component';
 import { Person } from '../../../model/person.model';
 import { StakeholderService } from '../../../stakeholder.service';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'xp-club-detail',
@@ -20,7 +21,10 @@ import { StakeholderService } from '../../../stakeholder.service';
 export class ClubDetailComponent implements OnInit {
   club: ClubDto | null = null;
   isLoading = false;
+  user: User | undefined; 
   
+  requests: ClubJoinRequestByTouristDto[] = []; 
+
   touristControl = new FormControl<string | Person>('');
   allTourists: Person[] = [];
   filteredTourists!: Observable<Person[]>;
@@ -37,6 +41,10 @@ export class ClubDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadClub(id);
@@ -85,12 +93,40 @@ export class ClubDetailComponent implements OnInit {
         this.club = club;
         this.isLoading = false;
         this.loadMemberDetails();
+
+        if (this.user && this.club.ownerId === this.user.id) {
+            this.getRequests(this.club.id);
+        }
       },
       error: () => {
         this.isLoading = false;
         this.showError('Error loading club');
         this.router.navigate(['/clubs']);
       }
+    });
+  }
+
+  getRequests(clubId: number): void {
+    this.clubService.getClubJoinRequests(clubId).subscribe({
+        next: (result) => { 
+            this.requests = result; 
+        },
+        error: (err) => console.error('Failed to load requests', err)
+    });
+  }
+
+  onRespond(requestId: number, accepted: boolean): void {
+    this.clubService.respondToClubJoinRequest(requestId, accepted).subscribe({
+        next: () => {
+            this.showSuccess(accepted ? 'Request accepted' : 'Request rejected');
+            if(this.club) {
+                this.getRequests(this.club.id);
+                if(accepted) {
+                    this.loadClub(this.club.id);
+                }
+            }
+        },
+        error: (err) => this.showError('Error responding to request')
     });
   }
 
@@ -130,8 +166,7 @@ export class ClubDetailComponent implements OnInit {
   }
 
   isOwner(): boolean {
-    const user = this.authService.user$.value;
-    return !!this.club && !!user && this.club.ownerId === user.id;
+    return !!this.club && !!this.user && this.club.ownerId === this.user.id;
   }
 
   toggleStatus(): void {
