@@ -26,6 +26,7 @@ import { EncounterFormComponent } from 'src/app/feature-modules/administration/e
 import { AdminTouristsComponent } from 'src/app/feature-modules/administration/admin-tourists/admin-tourists.component';
 
 import { TourListComponent } from 'src/app/feature-modules/tour-authoring/tour-list/tour-list.component';
+import { BundleListComponent } from 'src/app/feature-modules/tour-authoring/bundle-list/bundle-list.component';
 
 import { AppRatingListComponent } from 'src/app/feature-modules/stakeholders/app-rating-list/app-rating-list.component';
 import { MyAppRatingComponent } from 'src/app/feature-modules/stakeholders/my-app-rating/my-app-rating.component';
@@ -62,7 +63,7 @@ import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary
 
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
-
+import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
 const routes: Routes = [
 
 
@@ -98,6 +99,7 @@ const routes: Routes = [
   { path: 'author/tours', component: TourListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems', component: AuthorProblemListComponent, canActivate: [AuthGuard] },
   { path: 'author/tour-problems/:id', component: AuthorProblemDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'author/bundles', component: BundleListComponent, canActivate: [AuthGuard] },
 
   { path: 'app-ratings', component: AppRatingListComponent, canActivate: [AuthGuard] },
   { path: 'author/app-rating', component: MyAppRatingComponent, canActivate: [AuthGuard], data: { role: 'author' } },
@@ -112,7 +114,8 @@ const routes: Routes = [
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
 
-
+{
+  path: 'tourist/bundles',component: TouristBundlesComponent,canActivate: [AuthGuard]},
  
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
 

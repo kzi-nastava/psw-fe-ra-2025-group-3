@@ -1,0 +1,115 @@
+<div class="bundle-form-container">
+  <h2 mat-dialog-title>
+    <mat-icon>{{ mode === 'create' ? 'add_box' : 'edit' }}</mat-icon>
+    {{ mode === 'create' ? 'Create New Bundle' : 'Edit Bundle' }}
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="bundleForm" class="bundle-form">
+      
+      <!-- Bundle Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bundle Name</mat-label>
+        <input matInput formControlName="name" placeholder="e.g., Summer Adventure Package">
+        <mat-icon matPrefix>inventory</mat-icon>
+        <mat-error *ngIf="bundleForm.get('name')?.hasError('required')">
+          Bundle name is required
+        </mat-error>
+        <mat-error *ngIf="bundleForm.get('name')?.hasError('minlength')">
+          Name must be at least 3 characters
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Select Tours -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Select Tours</mat-label>
+        <mat-select 
+          formControlName="selectedTourIds" 
+          multiple
+          (selectionChange)="onTourSelectionChange($event)">
+          <mat-option *ngFor="let tour of availableTours" [value]="tour.id">
+            {{ tour.name }} ({{ tour.price }} AC) 
+            <span class="tour-status-indicator" [class.published]="tour.status === 1">
+              {{ tour.status === 1 ? '✓' : '✗' }}
+            </span>
+          </mat-option>
+        </mat-select>
+        <mat-icon matPrefix>map</mat-icon>
+        <mat-hint>Select at least 2 published tours to be able to publish the bundle</mat-hint>
+        <mat-error *ngIf="bundleForm.get('selectedTourIds')?.hasError('required')">
+          Please select at least one tour
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Price Info Card -->
+      <div class="price-info-card">
+        <div class="price-row">
+          <span class="label">Total Tours Price:</span>
+          <span class="value">{{ getTotalToursPrice() | number:'1.2-2' }} AC</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="price-row">
+          <span class="label">Published Tours:</span>
+          <span class="value published-count" [class.valid]="canPublish()">
+            {{ getPublishedToursCount() }} / 2 minimum
+          </span>
+        </div>
+      </div>
+
+      <!-- Bundle Price -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bundle Price (AC)</mat-label>
+        <input matInput type="number" formControlName="price" placeholder="0">
+        <mat-icon matPrefix>attach_money</mat-icon>
+        <mat-hint>Set a discounted price for the bundle</mat-hint>
+        <mat-error *ngIf="bundleForm.get('price')?.hasError('required')">
+          Price is required
+        </mat-error>
+        <mat-error *ngIf="bundleForm.get('price')?.hasError('min')">
+          Price cannot be negative
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Selected Tours Preview -->
+      <div class="selected-tours-preview" *ngIf="selectedTours.length > 0">
+        <h3>
+          <mat-icon>checklist</mat-icon>
+          Selected Tours ({{ selectedTours.length }})
+        </h3>
+        <div class="tours-list">
+          <div *ngFor="let tour of selectedTours" class="tour-item">
+            <mat-icon [class.published]="tour.status === 1">
+              {{ tour.status === 1 ? 'check_circle' : 'circle' }}
+            </mat-icon>
+            <span class="tour-name">{{ tour.name }}</span>
+            <span class="tour-price">{{ tour.price }} AC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publish Warning -->
+      <mat-card class="warning-card" *ngIf="selectedTours.length > 0 && !canPublish()">
+        <mat-card-content>
+          <mat-icon>warning</mat-icon>
+          <p>You need at least 2 published tours to publish this bundle. Currently you have {{ getPublishedToursCount() }} published tour(s).</p>
+        </mat-card-content>
+      </mat-card>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">
+      <mat-icon>cancel</mat-icon>
+      Cancel
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onSubmit()"
+      [disabled]="bundleForm.invalid || isLoading">
+      <mat-icon>{{ mode === 'create' ? 'add' : 'save' }}</mat-icon>
+      {{ mode === 'create' ? 'Create Bundle' : 'Save Changes' }}
+    </button>
+  </mat-dialog-actions>
+</div>

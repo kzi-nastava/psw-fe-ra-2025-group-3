@@ -13,6 +13,8 @@ import { KeyPointPageComponent } from './key-points/key-point-page/key-point-pag
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
 import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problems-dialog.component';
+import { BundleListComponent } from './bundle-list/bundle-list.component';
+import { BundleFormComponent } from './bundle-form/bundle-form.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problem
     AuthorProblemListComponent,
     AuthorProblemDetailsComponent,
     TourWizardComponent,
-    TourProblemsDialogComponent
+    TourProblemsDialogComponent,
+    BundleListComponent,
+    BundleFormComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +39,8 @@ import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problem
   ],
   exports: [
     TourListComponent,
-    TourFormComponent
+    TourFormComponent,
+    BundleListComponent
   ]
 })
 export class TourAuthoringModule { }

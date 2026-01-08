@@ -31,6 +31,16 @@
           {{ club.description | slice:0:80 }}{{ club.description.length > 80 ? '...' : '' }}
         </mat-card-subtitle>
       </mat-card-header>
+      
+      <mat-card-actions align="end" class="club-actions">
+        <button mat-stroked-button color="primary" 
+                *ngIf="user && !isMember(club) && !isOwner(club)" 
+                (click)="onJoinClub(club.id); $event.stopPropagation()">
+          Join Club
+        </button>
+        <span *ngIf="isMember(club)" class="member-badge">Member</span>
+        <span *ngIf="isOwner(club)" class="owner-badge">Owner</span>
+      </mat-card-actions>
     </mat-card>
   </div>
 

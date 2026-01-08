@@ -69,21 +69,26 @@ export class AuthService {
   }
 
   private setUser(): void {
-  const jwtHelperService = new JwtHelperService();
-  const accessToken = this.tokenStorage.getAccessToken() || "";
-  const decoded = jwtHelperService.decodeToken(accessToken);
+    const jwtHelperService = new JwtHelperService();
+    const accessToken = this.tokenStorage.getAccessToken() || "";
+    const decoded = jwtHelperService.decodeToken(accessToken);
 
-  const user: User = {
-    id: +decoded.id,
-    username: decoded.username,
-    role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
-    email: decoded.email || "",           // ako postoji u tokenu
-    password: "",                          // lozinku nikad ne čuvaj u frontendu
-    isActive: decoded.isActive ?? true     // koristi vrednost iz tokena ako postoji
-  };
+    const user: User = {
+      id: +decoded.id || 
+          +decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || 
+          +decoded['sub'] || 
+          0,
+      username: decoded.username || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || "",
+      role: decoded.role || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || "",
+      email: decoded.email || "",
+      password: "",
+      isActive: decoded.isActive ?? true
+    };
+
 
   this.user$.next(user);
 }
+  
   isTourist(): boolean {
     return this.user$.value.role === 'tourist';
   }

@@ -41,7 +41,8 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatListModule } from '@angular/material/list'; 
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.component';
+import { TouristBundleService } from './tourist-bundle.service';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TourDetailsComponent,
     MyPurchasedToursComponent, // t execution
     TouristEncountersComponent,
-    RecommendedToursComponent // tour recommendations
+    RecommendedToursComponent, // tour recommendations
+    TouristBundlesComponent
     
   ],
   imports: [
@@ -99,7 +101,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ProfileListComponent,
     TouristEquipmentComponent,
     PurchaseSuccessComponent,
-    TourDetailsComponent
+    TourDetailsComponent,
+    TouristBundlesComponent
   ]
 })
 export class StakeholdersModule { }
