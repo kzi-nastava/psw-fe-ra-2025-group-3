@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Encounter, EncounterStatus, EncounterType } from '../../administration/model/encounter.model';
 import { TouristEncounterService } from './tourist-encounters.service';
@@ -17,7 +17,7 @@ import { EncounterFormComponent } from '../../administration/encounter-form/enco
   templateUrl: './tourist-encounters.component.html',
   styleUrls: ['./tourist-encounters.component.css']
 })
-export class TouristEncountersComponent implements OnInit {
+export class TouristEncountersComponent implements OnInit, OnDestroy {
 
   canAddEncounter: boolean = true;
 
@@ -30,6 +30,9 @@ export class TouristEncountersComponent implements OnInit {
   currentZoom: number = 15;
   selectedFilter: string | null = null; // null = show all
   highlightedEncounterId: number | null = null;
+
+  // Refresh interval for checking encounter status
+  refreshIntervalId: any = null;
 
   constructor(
     private encounterService: TouristEncounterService,
@@ -47,11 +50,28 @@ export class TouristEncountersComponent implements OnInit {
 
     this.loadMyPosition();
     this.loadActiveEncounterActivations();
-    // Load nearby encounters if position exists, otherwise load all active encounters
     this.loadEncounters();
+    
+    // Refresh encounter list every 30 seconds to check for auto-completed encounters
+    // Backend tracks position automatically through GetNearbyEncounters
+    // Only the list updates, not the entire page (Angular change detection)
+    this.refreshIntervalId = setInterval(() => {
+      if (this.activeEncounterIds.size > 0) {
+        // Just refresh encounter list to see if any were auto-completed by backend
+        this.loadEncounters();
+      }
+    }, 30000); // 30 seconds
+  }
+
+  ngOnDestroy(): void {
+    // Clean up refresh interval
+    if (this.refreshIntervalId) {
+      clearInterval(this.refreshIntervalId);
+    }
   }
 
   loadEncounters(): void {
+    console.log('🔄 loadEncounters called, active:', this.activeEncounterIds.size);
     // First check if position is already loaded
     if (this.myPosition) {
       this.loadNearbyEncounters();
@@ -79,6 +99,7 @@ export class TouristEncountersComponent implements OnInit {
     this.isLoading = true;
     this.encounterService.getActiveEncounters().subscribe({
       next: (activeEncounters) => {
+        console.log('🌍 Active encounters loaded (no distance):', activeEncounters);
         // Convert to NearbyEncounterDto format without distance info
         this.encounters = activeEncounters.map(e => ({
           id: e.id!,
@@ -92,6 +113,7 @@ export class TouristEncountersComponent implements OnInit {
           canActivate: false,
           isCompleted: false
         }));
+        console.log('📋 Mapped encounters:', this.encounters);
         this.updateMapPoints();
         this.isLoading = false;
       },
@@ -119,6 +141,17 @@ export class TouristEncountersComponent implements OnInit {
     this.isLoading = true;
     this.activationService.getNearbyEncounters(100).subscribe({
       next: (data) => {
+        // Only log when there are active encounters (reduce console spam)
+        if (this.activeEncounterIds.size > 0) {
+          console.table(data.map(e => ({ 
+            name: e.name, 
+            type: e.type,
+            canActivate: e.canActivate, 
+            distance: e.distanceInMeters + 'm',
+            isCompleted: e.isCompleted,
+            isActive: this.activeEncounterIds.has(e.id)
+          })));
+        }
         this.encounters = data;
         this.updateMapPoints();
         this.isLoading = false;
@@ -149,25 +182,38 @@ export class TouristEncountersComponent implements OnInit {
 
   updateMapPoints(): void {
     // Encounter markers with different colors based on status
-    this.mapPoints = this.encounters.map(e => {
-      let color = 'grey'; // Default: too far
-      
-      if (e.isCompleted) {
-        color = 'green'; // Completed
-      } else if (this.isEncounterActive(e.id)) {
-        color = 'yellow'; // In progress
-      } else if (e.canActivate) {
-        color = 'red'; // Can activate
-      }
+    // Hidden Location encounters are NOT shown on the map (tourists should not see their location)
+    this.mapPoints = this.encounters
+      .filter(e => {
+        // Exclude Hidden Location encounters completely from map
+        if (e.type === 'HiddenLocation') {
+          return false;
+        }
+        // Also exclude if coordinates are 0,0 (might be Hidden Location)
+        if (e.latitude === 0 && e.longitude === 0) {
+          return false;
+        }
+        return true;
+      })
+      .map(e => {
+        let color = 'grey'; // Default: too far
+        
+        if (e.isCompleted) {
+          color = 'green'; // Completed
+        } else if (this.isEncounterActive(e.id)) {
+          color = 'yellow'; // In progress
+        } else if (e.canActivate) {
+          color = 'red'; // Can activate
+        }
 
-      return {
-        lat: e.latitude,
-        lng: e.longitude,
-        name: `${e.name} - ${e.xp} XP`,
-        color: color,
-        id: e.id // Add ID for marker click identification
-      };
-    });
+        return {
+          lat: e.latitude,
+          lng: e.longitude,
+          name: `${e.name} - ${e.xp} XP`,
+          color: color,
+          id: e.id // Add ID for marker click identification
+        };
+      });
 
     // Don't add position/selected markers through points
     // They are handled by initialPoint binding which creates the draggable marker
@@ -278,7 +324,7 @@ export class TouristEncountersComponent implements OnInit {
   activateEncounter(encounterId: number): void {
     this.activationService.activateEncounter(encounterId).subscribe({
       next: () => {
-        this.showSuccess('Encounter activated! Good luck!');
+        this.showSuccess('Encounter activated! Backend will track it automatically.');
         this.activeEncounterIds.add(encounterId);
         this.updateMapPoints();
       },
@@ -388,12 +434,12 @@ export class TouristEncountersComponent implements OnInit {
 
   getTypeIcon(type: string): string {
     switch (type) {
-      case 'Social':
-        return 'people';
-      case 'Location':
-        return 'place';
       case 'Misc':
         return 'help_outline';
+      case 'Social':
+        return 'people';
+      case 'HiddenLocation':
+        return 'explore';
       default:
         return 'star';
     }
@@ -401,12 +447,12 @@ export class TouristEncountersComponent implements OnInit {
 
   getTypeClass(type: string): string {
     switch (type) {
-      case 'Social':
-        return 'type-social';
-      case 'Location':
-        return 'type-location';
       case 'Misc':
         return 'type-misc';
+      case 'Social':
+        return 'type-social';
+      case 'HiddenLocation':
+        return 'type-hidden';
       default:
         return '';
     }
