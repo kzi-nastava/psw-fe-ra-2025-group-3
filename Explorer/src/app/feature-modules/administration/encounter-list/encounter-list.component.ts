@@ -82,18 +82,18 @@ export class EncounterListComponent implements OnInit {
 
   getTypeClass(type: string): string {
     switch (type) {
-      case 'Social': return 'type-social';
-      case 'Location': return 'type-location';
       case 'Misc': return 'type-misc';
+      case 'Social': return 'type-social';
+      case 'HiddenLocation': return 'type-hidden';
       default: return '';
     }
   }
 
   getTypeIcon(type: string): string {
     switch (type) {
-      case 'Social': return 'people';
-      case 'Location': return 'place';
       case 'Misc': return 'extension';
+      case 'Social': return 'people';
+      case 'HiddenLocation': return 'explore';
       default: return 'help';
     }
   }

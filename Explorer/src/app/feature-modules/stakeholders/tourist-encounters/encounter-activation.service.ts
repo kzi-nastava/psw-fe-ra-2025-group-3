@@ -5,7 +5,7 @@ import { environment } from 'src/env/environment';
 import { 
   NearbyEncounterDto, 
   EncounterActivationDto, 
-  PositionDto 
+  PositionDto
 } from '../model/encounter-activation.model';
 
 @Injectable({

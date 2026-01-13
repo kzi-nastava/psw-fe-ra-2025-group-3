@@ -185,7 +185,8 @@
                 <span>{{ encounter.description }}</span>
               </div>
 
-              <div class="detail-item">
+              <!-- GPS Coordinates (NOT shown for Hidden Location) -->
+              <div class="detail-item" *ngIf="encounter.type !== 'HiddenLocation'">
                 <mat-icon>location_on</mat-icon>
                 <span>{{ encounter.latitude | number:'1.4-4' }}, {{ encounter.longitude | number:'1.4-4' }}</span>
               </div>
@@ -199,6 +200,42 @@
               <div class="detail-item" *ngIf="myPosition">
                 <mat-icon>social_distance</mat-icon>
                 <span>{{ getDistanceText(encounter.distanceInMeters) }}</span>
+              </div>
+
+              <!-- Type-specific information -->
+              <div *ngIf="encounter.type === 'Social' && encounter.requiredPeopleCount" class="detail-item social-info">
+                <mat-icon>group</mat-icon>
+                <span>
+                  <strong>{{ encounter.currentPeopleNearby || 0 }}/{{ encounter.requiredPeopleCount }}</strong> people nearby
+                  (within {{ encounter.rangeInMeters }}m)
+                </span>
+              </div>
+
+              <div *ngIf="encounter.type === 'HiddenLocation' && encounter.imageUrl" class="detail-item hidden-hint">
+                <mat-icon>image</mat-icon>
+                <span>Use the image hint to find the location</span>
+              </div>
+
+              <!-- Hidden Location Image Hint -->
+              <div *ngIf="encounter.type === 'HiddenLocation' && encounter.imageUrl" class="hidden-location-hint">
+                <img 
+                  [src]="encounter.imageUrl" 
+                  [alt]="encounter.name + ' hint'"
+                  (error)="onImageError($event)" />
+                <p class="hint-text">🗺️ Find this location!</p>
+              </div>
+
+              <!-- Info for active encounters (backend tracks automatically) -->
+              <div *ngIf="isEncounterActive(encounter.id) && encounter.type === 'HiddenLocation'" 
+                   class="auto-tracking-info">
+                <mat-icon>explore</mat-icon>
+                <span>Backend is tracking your location. Get within 5m and stay for 30 seconds.</span>
+              </div>
+
+              <div *ngIf="isEncounterActive(encounter.id) && encounter.type === 'Social'" 
+                   class="auto-tracking-info">
+                <mat-icon>people</mat-icon>
+                <span>Backend is tracking nearby tourists. Required: {{ encounter.requiredPeopleCount }} people.</span>
               </div>
 
               <!-- Status Badge -->
@@ -228,13 +265,27 @@
 
             <!-- Complete and Abandon Buttons -->
             <ng-container *ngIf="canShowActionButtons(encounter)">
+              <!-- Complete button ONLY for Misc encounters (manual completion) -->
               <button 
+                *ngIf="encounter.type === 'Misc'"
                 mat-raised-button 
                 class="complete-button"
                 (click)="completeEncounter(encounter.id)">
                 <mat-icon>check</mat-icon>
                 Complete
               </button>
+              
+              <!-- Info for auto-completing encounters -->
+              <div *ngIf="encounter.type === 'HiddenLocation'" class="auto-complete-info">
+                <mat-icon class="info-icon">info</mat-icon>
+                <span>Will auto-complete after 30s at location</span>
+              </div>
+              
+              <div *ngIf="encounter.type === 'Social'" class="auto-complete-info">
+                <mat-icon class="info-icon">info</mat-icon>
+                <span>Will auto-complete when enough people gather</span>
+              </div>
+              
               <button 
                 mat-raised-button 
                 color="warn"

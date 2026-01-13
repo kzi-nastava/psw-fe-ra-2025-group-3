@@ -28,6 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PreferenceOverviewComponent } from './preferences/preference-overview/preference-overview.component';
 import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
 import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
@@ -93,7 +94,8 @@ import { TouristBundleService } from './tourist-bundle.service';
     SharedModule,
     SharedModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule
   ],
   exports: [
     ProfileComponent,
