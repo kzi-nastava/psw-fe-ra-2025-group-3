@@ -5,6 +5,9 @@ import { WalletService } from '../wallet.service';
 import { WalletDto } from '../model/wallet.model';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CouponService } from 'src/app/feature-modules/tour-authoring/coupon.service';
+import { CouponValidationResultDto } from 'src/app/feature-modules/tour-authoring/model/coupon.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'xp-shopping-cart',
@@ -17,13 +20,24 @@ export class ShoppingCartComponent implements OnInit {
   loading = false;
   checkoutLoading = false;
   error = '';
+  couponForm: FormGroup;
+  couponCode: string = '';
+  couponValidation: CouponValidationResultDto | null = null;
+  validatingCoupon = false;
+  appliedCouponCode: string | null = null;
 
   constructor(
     private shoppingCartService: ShoppingCartService,
     private walletService: WalletService,
     private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private couponService: CouponService,
+    private fb: FormBuilder
+  ) {
+    this.couponForm = this.fb.group({
+      couponCode: ['']
+    });
+  }
 
   ngOnInit(): void {
     this.loadCart();
@@ -56,14 +70,39 @@ export class ShoppingCartComponent implements OnInit {
     });
   }
 
+  getTotalWithDiscount(): number {
+    if (!this.cart) return 0;
+    if (this.couponValidation && this.couponValidation.isValid && this.couponValidation.appliedToTourId) {
+      // Pronađi turu na koju se primenjuje popust
+      const appliedTour = this.cart.items.find(item => item.tourId === this.couponValidation!.appliedToTourId);
+      if (appliedTour) {
+        // Popust se primenjuje samo na tu turu
+        const discountAmount = this.couponValidation.discountAmount;
+        return this.cart.totalPrice - discountAmount;
+      }
+    }
+    return this.cart.totalPrice;
+  }
+
+  getDiscountAmount(): number {
+    if (!this.cart) return 0;
+    if (this.couponValidation && this.couponValidation.isValid && this.couponValidation.appliedToTourId) {
+      // Popust se primenjuje samo na određenu turu
+      return this.couponValidation.discountAmount;
+    }
+    return 0;
+  }
+
   canAffordCheckout(): boolean {
     if (!this.cart || !this.wallet) return false;
-    return this.wallet.balanceAc >= this.cart.totalPrice;
+    const totalWithDiscount = this.getTotalWithDiscount();
+    return this.wallet.balanceAc >= totalWithDiscount;
   }
 
   getShortfall(): number {
     if (!this.cart || !this.wallet) return 0;
-    return Math.max(0, this.cart.totalPrice - this.wallet.balanceAc);
+    const totalWithDiscount = this.getTotalWithDiscount();
+    return Math.max(0, totalWithDiscount - this.wallet.balanceAc);
   }
 
   onRemove(tourId: number): void {
@@ -183,5 +222,61 @@ getTotalItemsCount(): number {
   const itemsCount = this.cart.items?.length || 0;
   const bundleItemsCount = this.cart.bundleItems?.length || 0;
   return itemsCount + bundleItemsCount;
+}
+
+validateCoupon(): void {
+  if (!this.couponCode || !this.couponCode.trim()) {
+    this.showError('Please enter a coupon code');
+    return;
+  }
+
+  if (!this.cart || (this.cart.items.length === 0 && this.cart.bundleItems.length === 0)) {
+    this.showError('Your cart is empty');
+    return;
+  }
+
+  // Kupon se može primeniti samo na individualne ture, ne na bundle-ove
+  if (this.cart.items.length === 0) {
+    this.showError('Coupon can only be applied to individual tours, not bundles');
+    return;
+  }
+
+  // Prikupi sve tour ID-jeve iz korpe
+  const tourIds = this.cart.items.map(item => item.tourId);
+
+  this.validatingCoupon = true;
+  this.couponService.validateCoupon({
+    code: this.couponCode.trim().toUpperCase(),
+    tourId: tourIds[0], // Za backward compatibility
+    tourIds: tourIds // Lista svih tour ID-jeva za validaciju cele korpe
+  }).subscribe({
+    next: (result) => {
+      this.validatingCoupon = false;
+      this.couponValidation = result;
+      
+      if (result.isValid) {
+        this.appliedCouponCode = this.couponCode.trim().toUpperCase();
+        this.showSuccess(`Coupon applied! ${result.discountPercentage}% discount`);
+      } else {
+        this.showError(result.message);
+        this.couponValidation = null;
+        this.appliedCouponCode = null;
+      }
+    },
+    error: (err) => {
+      this.validatingCoupon = false;
+      const errorMsg = err.error?.message || 'Error validating coupon';
+      this.showError(errorMsg);
+      this.couponValidation = null;
+      this.appliedCouponCode = null;
+    }
+  });
+}
+
+removeCoupon(): void {
+  this.couponCode = '';
+  this.couponValidation = null;
+  this.appliedCouponCode = null;
+  this.couponForm.patchValue({ couponCode: '' });
 }
 }
