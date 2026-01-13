@@ -1,0 +1,84 @@
+<div class="sale-list-container">
+  <div class="header">
+    <h1>My Sales</h1>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create New Sale
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && sales.length === 0" class="empty-state">
+    <mat-icon>local_offer</mat-icon>
+    <h2>No sales created yet</h2>
+    <p>Create a sale by selecting tours and setting discount percentage with valid dates.</p>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      Create First Sale
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && sales.length > 0" class="sales-grid">
+    <mat-card *ngFor="let sale of displayedSales" class="sale-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>local_offer</mat-icon>
+          {{ sale.discountPercentage }}% Discount
+        </mat-card-title>
+        <mat-card-subtitle>
+          <span class="status-badge" [ngClass]="getStatusClass(sale)">
+            {{ getStatusLabel(sale) }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="sale-details">
+          <div class="detail-item">
+            <mat-icon>map</mat-icon>
+            <span>{{ sale.tourIds.length }} Tour(s)</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>percent</mat-icon>
+            <span>{{ sale.discountPercentage }}% Off</span>
+          </div>
+        </div>
+
+        <div class="sale-info">
+          <p class="date-range">
+            <mat-icon>calendar_today</mat-icon>
+            <span class="date-label">From:</span> {{ sale.startDate | date:'shortDate' }}
+          </p>
+          <p class="date-range">
+            <mat-icon>event</mat-icon>
+            <span class="date-label">To:</span> {{ sale.endDate | date:'shortDate' }}
+          </p>
+          <p class="created-date">
+            <mat-icon>schedule</mat-icon>
+            Created: {{ sale.createdAt | date:'short' }}
+          </p>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="openEditDialog(sale)">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+
+        <button mat-button color="warn" (click)="deleteSale(sale)">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="hasMoreSales()" class="show-more-container">
+    <button mat-raised-button (click)="showMore()">
+      Show More
+    </button>
+  </div>
+</div>
