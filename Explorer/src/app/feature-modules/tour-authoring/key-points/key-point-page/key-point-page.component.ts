@@ -152,8 +152,7 @@ ngOnChanges(changes: SimpleChanges): void {
       return;
     }
 
-    // Shared data from form + location
-    const baseKeyPoint: Omit<KeyPoint, 'id'> = {
+    const baseKeyPoint = {
       tourId: this.currentTourId,
       name: formData.name,
       description: formData.description,
@@ -162,6 +161,7 @@ ngOnChanges(changes: SimpleChanges): void {
       latitude: this.selectedPoint.lat,
       longitude: this.selectedPoint.lng
     };
+    
 
     // EDIT mode – UPDATE existing key point
     if (this.selectedKeyPoint && this.selectedKeyPoint.id != null) {
@@ -186,9 +186,13 @@ ngOnChanges(changes: SimpleChanges): void {
 
       return;
     }
+    const createRequest = {
+      keyPoint: baseKeyPoint,
+      encounter: formData.encounter ?? null
+    };
 
     // CREATE mode – new key point
-    this.keyPointService.create(baseKeyPoint).subscribe({
+    this.keyPointService.create(createRequest as any).subscribe({
       next: (saved: KeyPoint) => {
         console.log('Key point saved:', saved);
         this.loadKeyPoints();

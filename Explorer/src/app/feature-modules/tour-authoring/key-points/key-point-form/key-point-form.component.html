@@ -99,6 +99,128 @@
       </mat-error>
     </mat-form-field>
 
+    <!-- Has Encounter -->
+    <mat-slide-toggle formControlName="hasEncounter" class="kp-field full-width">
+      Add encounter to this key point
+    </mat-slide-toggle>
+
+    <!-- Embedded Encounter -->
+    <div *ngIf="hasEncounter?.value" formGroupName="encounter" class="encounter-embedded">
+
+      <h3 class="encounter-title">Encounter</h3>
+
+      <!-- Name -->
+      <mat-form-field appearance="outline" class="kp-field full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter encounter name" maxlength="100">
+        <mat-icon matPrefix>title</mat-icon>
+        <mat-hint align="end">{{ eName?.value?.length || 0 }}/100</mat-hint>
+        <mat-error *ngIf="eName?.invalid && eName?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Description -->
+      <mat-form-field appearance="outline" class="kp-field full-width">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="3"
+          placeholder="What should the tourist do?"
+          maxlength="500">
+        </textarea>
+        <mat-icon matPrefix>description</mat-icon>
+        <mat-hint align="end">{{ eDescription?.value?.length || 0 }}/500</mat-hint>
+        <mat-error *ngIf="eDescription?.invalid && eDescription?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- XP -->
+      <mat-form-field appearance="outline" class="kp-field full-width">
+        <mat-label>XP (Experience Points)</mat-label>
+        <input matInput type="number" formControlName="xp" placeholder="Enter XP reward">
+        <mat-icon matPrefix>star</mat-icon>
+        <mat-error *ngIf="eXp?.invalid && eXp?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Type -->
+      <mat-form-field appearance="outline" class="kp-field full-width">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of encounterTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matPrefix>category</mat-icon>
+        <mat-error *ngIf="eType?.invalid && eType?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Action Description (Misc) -->
+      <mat-form-field *ngIf="eType?.value === EncounterType.Misc" appearance="outline" class="kp-field full-width">
+        <mat-label>Action Description</mat-label>
+        <textarea
+          matInput
+          formControlName="actionDescription"
+          rows="2"
+          placeholder="Describe the action tourists need to do"
+          maxlength="300">
+        </textarea>
+        <mat-icon matPrefix>build</mat-icon>
+        <mat-hint align="end">{{ eActionDescription?.value?.length || 0 }}/300</mat-hint>
+        <mat-error *ngIf="eActionDescription?.invalid && eActionDescription?.touched">
+          This field is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Social fields -->
+      <div *ngIf="eType?.value === EncounterType.Social" class="social-fields">
+        <mat-form-field appearance="outline" class="kp-field full-width">
+          <mat-label>Required People Count</mat-label>
+          <input matInput type="number" formControlName="requiredPeopleCount" placeholder="e.g., 5">
+          <mat-icon matPrefix>group</mat-icon>
+          <mat-error *ngIf="eRequiredPeopleCount?.invalid && eRequiredPeopleCount?.touched">
+            This field is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="kp-field full-width">
+          <mat-label>Range (meters)</mat-label>
+          <input matInput type="number" formControlName="rangeInMeters" placeholder="e.g., 30">
+          <mat-icon matPrefix>radio_button_checked</mat-icon>
+          <mat-error *ngIf="eRangeInMeters?.invalid && eRangeInMeters?.touched">
+            This field is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- HiddenLocation fields -->
+      <div *ngIf="eType?.value === EncounterType.HiddenLocation" class="hidden-location-fields">
+        <mat-form-field appearance="outline" class="kp-field full-width">
+          <mat-label>Image URL (Hint)</mat-label>
+          <input matInput formControlName="imageUrl" placeholder="https://example.com/hint-image.jpg">
+          <mat-icon matPrefix>image</mat-icon>
+          <mat-error *ngIf="eImageUrl?.invalid && eImageUrl?.touched">
+            This field is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-card class="info-card">
+          <mat-card-content>
+            <mat-icon>info</mat-icon>
+            <p><strong>Note:</strong> Location is determined by backend for the encounter.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+
+
   </div>
 
   <!-- Buttons -->

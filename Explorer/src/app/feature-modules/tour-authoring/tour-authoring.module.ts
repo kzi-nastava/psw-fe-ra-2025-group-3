@@ -15,6 +15,7 @@ import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
 import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problems-dialog.component';
 import { BundleListComponent } from './bundle-list/bundle-list.component';
 import { BundleFormComponent } from './bundle-form/bundle-form.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { BundleFormComponent } from './bundle-form/bundle-form.component';
     ReactiveFormsModule,
     MaterialModule,
     SharedModule,
-    TourExecutionModule
+    TourExecutionModule,
+    MatSlideToggleModule
   ],
   exports: [
     TourListComponent,
