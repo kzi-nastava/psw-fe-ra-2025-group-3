@@ -141,23 +141,12 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.activationService.getNearbyEncounters(100).subscribe({
       next: (data) => {
-        // Only log when there are active encounters (reduce console spam)
-        if (this.activeEncounterIds.size > 0) {
-          console.table(data.map(e => ({ 
-            name: e.name, 
-            type: e.type,
-            canActivate: e.canActivate, 
-            distance: e.distanceInMeters + 'm',
-            isCompleted: e.isCompleted,
-            isActive: this.activeEncounterIds.has(e.id)
-          })));
-        }
         this.encounters = data;
         this.updateMapPoints();
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error loading nearby encounters', err);
+        console.error('Error loading nearby encounters:', err);
         // If error is because position is not set, load without distance
         if (err.status === 400 || err.status === 404) {
           this.loadActiveEncountersWithoutDistance();
@@ -315,7 +304,7 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
         this.loadNearbyEncounters(); // Reload to get updated distances
       },
       error: (err) => {
-        console.error('Error updating position', err);
+        console.error('Error updating position:', err);
         this.showError('Failed to update position');
       }
     });
@@ -485,5 +474,11 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
         this.loadEncounters();
       }
     });
+  }
+
+  onImageError(event: any): void {
+    // Hide broken images - set to placeholder or hide element
+    event.target.style.display = 'none';
+    console.warn('Failed to load encounter image');
   }
 }

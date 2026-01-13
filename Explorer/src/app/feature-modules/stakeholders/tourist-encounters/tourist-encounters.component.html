@@ -218,7 +218,10 @@
 
               <!-- Hidden Location Image Hint -->
               <div *ngIf="encounter.type === 'HiddenLocation' && encounter.imageUrl" class="hidden-location-hint">
-                <img [src]="encounter.imageUrl" [alt]="encounter.name + ' hint'" />
+                <img 
+                  [src]="encounter.imageUrl" 
+                  [alt]="encounter.name + ' hint'"
+                  (error)="onImageError($event)" />
                 <p class="hint-text">🗺️ Find this location!</p>
               </div>
 
