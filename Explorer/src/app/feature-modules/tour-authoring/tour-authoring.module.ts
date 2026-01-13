@@ -17,6 +17,8 @@ import { BundleListComponent } from './bundle-list/bundle-list.component';
 import { BundleFormComponent } from './bundle-form/bundle-form.component';
 import { CouponListComponent } from './coupon-list/coupon-list.component';
 import { CouponFormComponent } from './coupon-form/coupon-form.component';
+import { SaleListComponent } from './sale-list/sale-list.component';
+import { SaleFormComponent } from './sale-form/sale-form.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { CouponFormComponent } from './coupon-form/coupon-form.component';
     BundleListComponent,
     BundleFormComponent,
     CouponListComponent,
-    CouponFormComponent
+    CouponFormComponent,
+    SaleListComponent,
+    SaleFormComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +48,8 @@ import { CouponFormComponent } from './coupon-form/coupon-form.component';
   exports: [
     TourListComponent,
     TourFormComponent,
-    BundleListComponent
+    BundleListComponent,
+    SaleListComponent
   ]
 })
 export class TourAuthoringModule { }
