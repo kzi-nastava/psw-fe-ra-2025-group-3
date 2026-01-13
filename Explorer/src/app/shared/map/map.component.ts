@@ -327,8 +327,16 @@ registerOnClick(): void {
         setTimeout(() => {
             this.initMap();
             if (this.map) {
-                setTimeout(() => this.map.invalidateSize(), 0);
-                setTimeout(() => this.map.invalidateSize(), 150);
+                setTimeout(() => {
+                    if (this.map) {
+                        this.map.invalidateSize();
+                    }
+                }, 0);
+                setTimeout(() => {
+                    if (this.map) {
+                        this.map.invalidateSize();
+                    }
+                }, 150);
             }
         }, 0);
     }

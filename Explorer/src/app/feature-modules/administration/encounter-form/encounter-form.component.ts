@@ -26,9 +26,9 @@ export class EncounterFormComponent implements OnInit {
   ];
 
   encounterTypes = [
+    { value: EncounterType.Misc, label: 'Misc' },
     { value: EncounterType.Social, label: 'Social' },
-    { value: EncounterType.Location, label: 'Location' },
-    { value: EncounterType.Misc, label: 'Misc' }
+    { value: EncounterType.HiddenLocation, label: 'Hidden Location' }
   ];
 
   constructor(
@@ -55,7 +55,10 @@ export class EncounterFormComponent implements OnInit {
       longitude: e.longitude,
       status: e.status,
       type: e.type,
-      actionDescription: e.actionDescription || '' 
+      actionDescription: e.actionDescription || '',
+      requiredPeopleCount: e.requiredPeopleCount || null,
+      rangeInMeters: e.rangeInMeters || null,
+      imageUrl: e.imageUrl || ''
     });
 
     if (e.latitude != null && e.longitude != null) {
@@ -63,17 +66,46 @@ export class EncounterFormComponent implements OnInit {
     }
   }
 
-  // Dinamička validacija za actionDescription
+  // Dynamic validation based on encounter type
   this.encounterForm.get('type')?.valueChanges.subscribe(type => {
-    const actionControl = this.encounterForm.get('actionDescription');
-    if (type === EncounterType.Misc) {
-      actionControl?.setValidators([Validators.required, Validators.minLength(5)]);
-    } else {
-      actionControl?.clearValidators();
-      actionControl?.setValue('');
-    }
-    actionControl?.updateValueAndValidity();
+    this.updateValidatorsForType(type);
   });
+}
+
+private updateValidatorsForType(type: EncounterType): void {
+  const actionControl = this.encounterForm.get('actionDescription');
+  const requiredPeopleControl = this.encounterForm.get('requiredPeopleCount');
+  const rangeControl = this.encounterForm.get('rangeInMeters');
+  const imageUrlControl = this.encounterForm.get('imageUrl');
+
+  // Clear all validators first
+  actionControl?.clearValidators();
+  requiredPeopleControl?.clearValidators();
+  rangeControl?.clearValidators();
+  imageUrlControl?.clearValidators();
+
+  // Reset values
+  actionControl?.setValue('');
+  requiredPeopleControl?.setValue(null);
+  rangeControl?.setValue(null);
+  imageUrlControl?.setValue('');
+
+  // Set validators based on type
+  if (type === EncounterType.Misc) {
+    actionControl?.setValidators([Validators.required, Validators.minLength(5)]);
+  } else if (type === EncounterType.Social) {
+    requiredPeopleControl?.setValidators([Validators.required, Validators.min(2), Validators.max(100)]);
+    rangeControl?.setValidators([Validators.required, Validators.min(5), Validators.max(100)]);
+    rangeControl?.setValue(30); // Default 30m
+  } else if (type === EncounterType.HiddenLocation) {
+    imageUrlControl?.setValidators([Validators.required]);
+  }
+
+  // Update validity
+  actionControl?.updateValueAndValidity();
+  requiredPeopleControl?.updateValueAndValidity();
+  rangeControl?.updateValueAndValidity();
+  imageUrlControl?.updateValueAndValidity();
 }
 
 
@@ -86,7 +118,12 @@ export class EncounterFormComponent implements OnInit {
       longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       status: [''],
       type: ['', Validators.required],
-      actionDescription: ['']
+      actionDescription: [''],
+      // Social fields
+      requiredPeopleCount: [null],
+      rangeInMeters: [null],
+      // HiddenLocation fields
+      imageUrl: ['']
     });
 
     if (this.data.actor === 'admin') {
@@ -114,18 +151,34 @@ export class EncounterFormComponent implements OnInit {
     }
 
     const formValue = this.encounterForm.getRawValue();
+    const encounterType = formValue.type as EncounterType;
+
+    // Build base encounter
+    const encounterData: any = {
+      name: formValue.name,
+      description: formValue.description,
+      latitude: formValue.latitude,
+      longitude: formValue.longitude,
+      xp: formValue.xp,
+      status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
+      type: encounterType
+    };
+
+    // Add type-specific fields
+    if (encounterType === EncounterType.Misc) {
+      encounterData.actionDescription = formValue.actionDescription;
+    } else if (encounterType === EncounterType.Social) {
+      encounterData.requiredPeopleCount = formValue.requiredPeopleCount;
+      encounterData.rangeInMeters = formValue.rangeInMeters;
+    } else if (encounterType === EncounterType.HiddenLocation) {
+      encounterData.imageUrl = formValue.imageUrl;
+      // latitude/longitude are already in encounterData as REAL coordinates
+    }
 
     if (this.isEditMode && this.data.encounter) {
       const encounter: Encounter = {
         id: this.data.encounter.id,
-        name: formValue.name,
-        description: formValue.description,
-        latitude: formValue.latitude,
-        longitude: formValue.longitude,
-        xp: formValue.xp,
-        status: this.data.actor === 'tourist'? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
-        type: formValue.type as EncounterType,
-        ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
+        ...encounterData
       };
 
       this.encounterService.update(this.data.actor, encounter.id!, encounter).subscribe({
@@ -137,16 +190,7 @@ export class EncounterFormComponent implements OnInit {
       });
 
     } else {
-      const encounter: Encounter = {
-        name: formValue.name,
-        description: formValue.description,
-        latitude: formValue.latitude,
-        longitude: formValue.longitude,
-        xp: formValue.xp,
-        status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
-        type: formValue.type as EncounterType,
-      ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
-    };
+      const encounter: Encounter = encounterData;
 
       this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
