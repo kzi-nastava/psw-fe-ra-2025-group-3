@@ -2,23 +2,43 @@
   padding: var(--spacing-8) 0;
 }
 
+/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--spacing-4);
+  align-items: center;
   margin-bottom: var(--spacing-6);
+  background: var(--color-neutral-0);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--color-primary-500);
+}
+
+/* HEADER TEXT */
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
 }
 
 .header h1 {
-  margin-bottom: var(--spacing-2);
+  margin: 0;
+  color: var(--color-secondary-800);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  font-family: var(--font-family-display);
 }
 
+/* SUBTITLE */
 .cart-subtitle {
+  margin: 0;
   font-size: var(--font-size-sm);
-  color: var(--color-neutral-800);
-  max-width: 32rem;
+  color: var(--color-neutral-700);
+  max-width: 36rem;
+  line-height: 1.5;
 }
+
 
 .loading-container {
   display: flex;
@@ -252,7 +272,8 @@ mat-card-actions button[disabled]:hover {
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: var(--spacing-3);
   }
 
   .tour-card {

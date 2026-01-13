@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
-import { ClubCreateDto, ClubDto, ClubUpdateDto } from './model/club.model';
+import { ClubCreateDto, ClubDto, ClubUpdateDto, ClubJoinRequestDto, ClubJoinRequestByTouristDto } from './model/club.model'; 
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,9 @@ import { ClubCreateDto, ClubDto, ClubUpdateDto } from './model/club.model';
 export class ClubService {
   private readonly baseUrl = environment.apiHost + 'clubs';
   private readonly imagesUrl = environment.apiHost.replace(/\/api\/?$/, '') + '/api/images';
+  
+  private readonly touristRequestUrl = environment.apiHost + 'tourist/club-join-request';
+  private readonly ownerRequestUrl = environment.apiHost + 'club-owner/club-join-request';
 
   constructor(private http: HttpClient) {}
 
@@ -68,5 +72,21 @@ export class ClubService {
     const apiRoot = environment.apiHost.replace(/\/api\/?$/, '');
     if (relativeUrl.startsWith('http')) return relativeUrl;
     return apiRoot + relativeUrl;
+  }
+
+  sendClubJoinRequest(clubId: number): Observable<ClubJoinRequestDto> {
+    return this.http.post<ClubJoinRequestDto>(this.touristRequestUrl, { clubId: clubId });
+  }
+
+  withdrawClubJoinRequest(requestId: number): Observable<void> {
+    return this.http.delete<void>(`${this.touristRequestUrl}/${requestId}`);
+  }
+
+  respondToClubJoinRequest(requestId: number, accepted: boolean): Observable<void> {
+    return this.http.post<void>(`${this.ownerRequestUrl}/${requestId}/respond?accepted=${accepted}`, {});
+  }
+
+  getClubJoinRequests(clubId: number): Observable<ClubJoinRequestByTouristDto[]> {
+    return this.http.get<ClubJoinRequestByTouristDto[]>(`${this.ownerRequestUrl}/${clubId}`);
   }
 }

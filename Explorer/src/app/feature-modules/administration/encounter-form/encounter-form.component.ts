@@ -37,7 +37,7 @@ export class EncounterFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<EncounterFormComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { mode: 'create' | 'edit'; encounter: Encounter | null }
+    public data: { mode: 'create' | 'edit'; encounter: Encounter | null; actor: 'admin' | 'tourist'; }
   ) {
     this.isEditMode = data.mode === 'edit';
     this.encounterForm = this.createForm();
@@ -78,36 +78,25 @@ export class EncounterFormComponent implements OnInit {
 
 
   private createForm(): FormGroup {
-    return this.fb.group({
-      name: ['', [
-        Validators.required, 
-        Validators.minLength(3),
-        Validators.maxLength(100)
-      ]],
-      description: ['', [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(500)
-      ]],
-      xp: [null, [
-        Validators.required, 
-        Validators.min(1),
-        Validators.max(10000)
-      ]],
-      latitude: [null, [
-        Validators.required, 
-        Validators.min(-90), 
-        Validators.max(90)
-      ]],
-      longitude: [null, [
-        Validators.required, 
-        Validators.min(-180), 
-        Validators.max(180)
-      ]],
-      status: ['', Validators.required],
+    const form = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      xp: [null, [Validators.required, Validators.min(1), Validators.max(10000)]],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      status: [''],
       type: ['', Validators.required],
       actionDescription: ['']
     });
+
+    if (this.data.actor === 'admin') {
+      form.get('status')!.setValidators([Validators.required]);
+    } else {
+      form.get('status')!.clearValidators();
+    }
+    form.get('status')?.updateValueAndValidity();
+
+    return form;
   }
 
   onPointSelected(point: { lat: number; lng: number }): void {
@@ -134,12 +123,12 @@ export class EncounterFormComponent implements OnInit {
         latitude: formValue.latitude,
         longitude: formValue.longitude,
         xp: formValue.xp,
-        status: formValue.status as EncounterStatus,
+        status: this.data.actor === 'tourist'? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
         type: formValue.type as EncounterType,
         ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
       };
 
-      this.encounterService.update(encounter.id!, encounter).subscribe({
+      this.encounterService.update(this.data.actor, encounter.id!, encounter).subscribe({
         next: () => {
           this.showSuccess('Encounter successfully updated');
           this.dialogRef.close(true);
@@ -149,19 +138,24 @@ export class EncounterFormComponent implements OnInit {
 
     } else {
       const encounter: Encounter = {
-      name: formValue.name,
-      description: formValue.description,
-      latitude: formValue.latitude,
-      longitude: formValue.longitude,
-      xp: formValue.xp,
-      status: formValue.status as EncounterStatus,
-      type: formValue.type as EncounterType,
+        name: formValue.name,
+        description: formValue.description,
+        latitude: formValue.latitude,
+        longitude: formValue.longitude,
+        xp: formValue.xp,
+        status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
+        type: formValue.type as EncounterType,
       ...(formValue.type === EncounterType.Misc && { actionDescription: formValue.actionDescription }) 
     };
 
-      this.encounterService.create(encounter).subscribe({
+      this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
-          this.showSuccess('Encounter successfully created');
+          if(this.data.actor === 'tourist') {
+            this.showSuccess('Encounter submitted for approval');
+          }
+          else {
+            this.showSuccess('Encounter successfully created');
+          }
           this.dialogRef.close(true);
         },
         error: () => this.showError('Error creating encounter')

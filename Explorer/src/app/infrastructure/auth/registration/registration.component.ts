@@ -11,6 +11,13 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent {
 
+  // enum direktno ovdje, nema novog fajla
+  UserRole = {
+    Administrator: 'Administrator',
+    Author: 'Author',
+    Tourist: 'Tourist'
+  } as const; // readonly
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -22,23 +29,25 @@ export class RegistrationComponent {
     email: new FormControl('', [Validators.required]),
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    role: new FormControl('Tourist', [Validators.required]) // default Tourist
   });
 
   register(): void {
+    if (!this.registrationForm.valid) return;
+
     const registration: Registration = {
       name: this.registrationForm.value.name || "",
       surname: this.registrationForm.value.surname || "",
       email: this.registrationForm.value.email || "",
       username: this.registrationForm.value.username || "",
       password: this.registrationForm.value.password || "",
+      role: this.registrationForm.value.role!
     };
 
-    if (this.registrationForm.valid) {
-      this.authService.register(registration).subscribe({
-        next: () => {
-          this.router.navigate(['home']);
-        },
-      });
-    }
+    this.authService.register(registration).subscribe({
+      next: () => {
+        this.router.navigate(['home']);
+      },
+    });
   }
 }

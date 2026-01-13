@@ -63,7 +63,7 @@ import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary
 
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
-
+import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
 const routes: Routes = [
 
 
@@ -114,7 +114,8 @@ const routes: Routes = [
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
 
-
+{
+  path: 'tourist/bundles',component: TouristBundlesComponent,canActivate: [AuthGuard]},
  
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
 

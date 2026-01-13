@@ -53,7 +53,7 @@
         <div class="reviews-preview" *ngIf="tour.status !== 2">
           <button 
             mat-stroked-button 
-            color="primary" 
+            color="primary"
             (click)="expandReviews(tour)"
             class="view-reviews-btn"
             *ngIf="tour.status === 1">
@@ -62,7 +62,7 @@
           </button>
           <button 
             mat-stroked-button 
-            color="primary" 
+            color="primary"
             (click)="openProblemsDialog(tour)"
             class="view-problems-btn">
             <mat-icon>error_outline</mat-icon>
@@ -77,7 +77,7 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="openEditDialog(tour)" [disabled]="!canEdit(tour)">
+        <button class="edit-button" mat-button color="primary" (click)="openEditDialog(tour)" [disabled]="!canEdit(tour)">
           <mat-icon>edit</mat-icon>
           Edit
         </button>

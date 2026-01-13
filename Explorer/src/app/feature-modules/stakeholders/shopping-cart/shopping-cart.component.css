@@ -53,15 +53,32 @@
 
 .cart-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
+  align-items: center;
+
+  margin-bottom: var(--spacing-6);
+  background: var(--color-neutral-0);
+  padding: var(--spacing-4) var(--spacing-6);
+
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+
+  border-left: 4px solid var(--color-primary-500);
+}
+
+.cart-header h1 {
+  margin: 0;
+  color: var(--color-secondary-800);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  font-family: var(--font-family-display);
 }
 
 .cart-subtitle {
-  color: var(--color-neutral-800);
-  margin-top: var(--spacing-2);
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  max-width: 36rem;
 }
 
 .cart-btn {
@@ -265,4 +282,24 @@
   .cart-total-pill {
     align-self: flex-start;
   }
+}
+.bundle-pill {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00897B, #00796B);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bundle-tours-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-700);
+  margin-top: var(--spacing-1);
+  font-style: italic;
+}
+
+.cart-item.bundle-item {
+  border-left: 4px solid #00897B;
 }

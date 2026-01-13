@@ -92,7 +92,7 @@ export class ShoppingCartComponent implements OnInit {
 
  //dodato
 onCheckout(): void {
-  if (!this.cart || this.cart.items.length === 0) {
+  if (!this.cart || (this.cart.items.length === 0 && this.cart.bundleItems.length === 0)) {
     return;
   }
 
@@ -159,4 +159,29 @@ onCheckout(): void {
       panelClass: ['error-snackbar']
     });
   }
+  onRemoveBundle(bundleId: number): void {
+  const confirmed = confirm('Are you sure you want to remove this bundle from your cart?');
+  if (!confirmed) return;
+  if (!this.cart) return;
+
+  this.loading = true;
+  this.shoppingCartService.removeBundleFromCart(bundleId).subscribe({
+    next: cart => {
+      this.cart = cart;
+      this.loading = false;
+      this.showSuccess('Bundle removed from cart.');
+      this.loadWallet();
+    },
+    error: () => {
+      this.loading = false;
+      this.showError('Error removing bundle.');
+    }
+  });
+}
+getTotalItemsCount(): number {
+  if (!this.cart) return 0;
+  const itemsCount = this.cart.items?.length || 0;
+  const bundleItemsCount = this.cart.bundleItems?.length || 0;
+  return itemsCount + bundleItemsCount;
+}
 }

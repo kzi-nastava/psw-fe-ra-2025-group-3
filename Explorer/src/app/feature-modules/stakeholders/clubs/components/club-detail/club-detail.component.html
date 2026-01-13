@@ -95,6 +95,32 @@
       </div>
     </ng-template>
   </div>
+
+  <div class="requests-section" *ngIf="club && user && club.ownerId === user.id">
+    <h3>Membership Requests</h3>
+    
+    <div *ngIf="requests.length === 0" class="no-requests">
+        <p>No pending requests.</p>
+    </div>
+
+    <div class="request-list" *ngIf="requests.length > 0">
+        <div class="request-item" *ngFor="let req of requests">
+            <div class="request-info">
+                <span class="req-name">{{ req.username }}</span>
+                <span class="req-email">({{ req.email }})</span>
+            </div>
+            <div class="request-actions">
+                <button mat-icon-button color="primary" (click)="onRespond(req.id, true)" matTooltip="Accept">
+                    <mat-icon>check_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="onRespond(req.id, false)" matTooltip="Reject">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 
 <ng-template #loadingTpl>

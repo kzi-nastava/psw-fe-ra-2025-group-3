@@ -46,7 +46,7 @@
     </mat-form-field>
 
     <!-- Status -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field appearance="outline" class="full-width" *ngIf="data.actor === 'admin'">
       <mat-label>Status</mat-label>
       <mat-select formControlName="status">
         <mat-option *ngFor="let status of encounterStatuses" [value]="status.value">

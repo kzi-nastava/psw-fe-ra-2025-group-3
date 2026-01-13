@@ -433,6 +433,50 @@ a:hover {
 }
 
 /* ============================================================================
+   TOUR LIST - CUSTOM BUTTON COLORS
+   ============================================================================ */
+
+/* View Reviews Button */
+.view-reviews-btn.mat-mdc-button,
+.view-reviews-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
+/* View Problems Button */
+.view-problems-btn.mat-mdc-button,
+.view-problems-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
+/* ============================================================================
    RESPONZIVNOST
    ============================================================================ */
 
@@ -444,6 +488,50 @@ a:hover {
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ============================================================================
+   TOUR LIST - CUSTOM BUTTON COLORS
+   ============================================================================ */
+
+/* View Reviews Button */
+.view-reviews-btn.mat-mdc-button,
+.view-reviews-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
+/* View Problems Button */
+.view-problems-btn.mat-mdc-button,
+.view-problems-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
 }
 
 @media (max-width: 768px) {
@@ -468,4 +556,49 @@ a:hover {
   h2 {
     font-size: var(--font-size-2xl);
   }
+
+  /* ============================================================================
+   TOUR LIST - CUSTOM BUTTON COLORS
+   ============================================================================ */
+
+/* View Reviews Button */
+.view-reviews-btn.mat-mdc-button,
+.view-reviews-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-reviews-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
+/* View Problems Button */
+.view-problems-btn.mat-mdc-button,
+.view-problems-btn.mat-mdc-stroked-button {
+  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
+  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
+  border-color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn .mdc-button__label {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn mat-icon {
+  color: rgb(0, 188, 212) !important;
+}
+
+.view-problems-btn:hover {
+  background-color: rgba(2, 119, 189, 0.08) !important;
+}
+
 }
