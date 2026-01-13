@@ -148,7 +148,12 @@
                        'message-author': message.authorType === AuthorType.Author,
                        'message-admin': message.authorType === AuthorType.Admin}">
         <div class="message-header">
-          <span class="message-author-label">{{getAuthorTypeName(message.authorType)}}</span>
+          <span class="message-author-label">
+            <ng-container *ngIf="message.authorType === AuthorType.Admin && !(message.senderName || message.senderSurname); else showName">
+              Administrator
+            </ng-container>
+            <ng-template #showName>{{message.senderName}} {{message.senderSurname}}</ng-template>
+          </span>
           <span class="message-time">{{message.timestamp | date: 'dd/MM/yyyy HH:mm'}}</span>
         </div>
         <div class="message-content">
