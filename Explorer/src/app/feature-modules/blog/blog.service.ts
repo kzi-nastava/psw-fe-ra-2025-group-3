@@ -100,4 +100,12 @@ export class BlogService {
   canEditImages(status: BlogStatus): boolean {
     return status === BlogStatus.Draft;
   }
+
+
+  getBlogsByIds(ids: number[]) {
+  return this.http.post<Blog[]>(
+    `${this.baseUrl}/recommended`,
+    { blogIds: ids }
+  );
+}
 }

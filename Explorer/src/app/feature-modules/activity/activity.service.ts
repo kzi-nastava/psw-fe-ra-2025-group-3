@@ -1,4 +1,4 @@
-
+// src/app/feature-modules/activity/activity.service.ts
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -15,12 +15,30 @@ export class ActivityService {
 
   constructor(private http: HttpClient) {}
 
+  // =============================
+  // TRACK BLOG VIEW (POSTOJEĆE)
+  // =============================
   trackBlogView(blogId: number): Observable<void> {
     return this.http
       .post<void>(`${this.baseUrl}/blogs/${blogId}/view`, {})
       .pipe(
-        
+        // fire & forget – ne ruši UI ako backend padne
         catchError(() => of(void 0))
+      );
+  }
+
+  // =============================
+  // ⭐ RECOMMENDED BLOG IDS (NOVO)
+  // =============================
+  getRecommendedBlogIds(take: number = 6): Observable<number[]> {
+    return this.http
+      .get<number[]>(
+        `${this.baseUrl}/blogs/recommended-ids`,
+        { params: { take } }
+      )
+      .pipe(
+        // ako nešto pođe po zlu, samo vrati praznu listu
+        catchError(() => of([]))
       );
   }
 }

@@ -1,10 +1,12 @@
 // src/app/feature-modules/blog/all-blogs/all-blogs.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BlogService } from '../blog.service';
 import { Blog, BlogStatus } from '../model/blog.model';
+import { ActivityService } from '../../activity/activity.service';
+import { switchMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-all-blogs',
@@ -12,24 +14,71 @@ import { Blog, BlogStatus } from '../model/blog.model';
   styleUrls: ['./all-blogs.component.css']
 })
 export class AllBlogsComponent implements OnInit {
+
   blogs: Blog[] = [];
   isLoading: boolean = false;
 
+  // ⭐ NOVO – recommended
+  recommendedBlogs: Blog[] = [];
+  recommendedIds: number[] = [];
+
+  @ViewChild('recommendedRow') recommendedRow!: ElementRef;
+
   constructor(
     private blogService: BlogService,
+    private activityService: ActivityService,
     private snackBar: MatSnackBar,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.loadRecommendedBlogs();   // 👈 NOVO
     this.loadAllBlogs();
   }
 
+  // =========================
+  // ⭐ RECOMMENDED BLOGS
+  // =========================
+  loadRecommendedBlogs(): void {
+    this.activityService.getRecommendedBlogIds(6).pipe(
+      switchMap(ids => {
+        if (!ids || ids.length === 0) {
+          this.recommendedIds = [];
+          return of([]);
+        }
+
+        this.recommendedIds = ids;
+        return this.blogService.getBlogsByIds(ids);
+      })
+    ).subscribe({
+      next: blogs => this.recommendedBlogs = blogs,
+      error: () => this.recommendedBlogs = []
+    });
+  }
+
+  scrollLeft(): void {
+    this.recommendedRow?.nativeElement.scrollBy({
+      left: -400,
+      behavior: 'smooth'
+    });
+  }
+
+  scrollRight(): void {
+    this.recommendedRow?.nativeElement.scrollBy({
+      left: 400,
+      behavior: 'smooth'
+    });
+  }
+
+  // =========================
+  // ALL BLOGS (postojeće)
+  // =========================
   loadAllBlogs(): void {
     this.isLoading = true;
     this.blogService.getAllBlogs().subscribe({
       next: (blogs) => {
-        this.blogs = blogs;
+        // ⛔ izbaci preporučene iz glavne liste
+        this.blogs = blogs.filter(b => !this.recommendedIds.includes(b.id));
         this.isLoading = false;
       },
       error: (error) => {

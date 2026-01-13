@@ -376,4 +376,33 @@
   .blog-card mat-card-actions {
     padding-left: var(--spacing-4) !important;
   }
+
+}
+/* =========================
+   RECOMMENDED BLOGS SLIDER
+   ========================= */
+
+.recommended-section {
+  margin-bottom: var(--spacing-12);
+}
+
+.recommended-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.recommended-row {
+  display: flex;
+  gap: var(--spacing-4);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: var(--spacing-2);
+}
+
+.recommended-card {
+  min-width: 320px;
+  max-width: 320px;
+  flex-shrink: 0;
 }
