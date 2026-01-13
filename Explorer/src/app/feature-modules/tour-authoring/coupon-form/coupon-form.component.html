@@ -1,0 +1,63 @@
+<div class="coupon-form-container">
+  <h2 mat-dialog-title>
+    {{ mode === 'create' ? 'Create New Coupon' : 'Edit Coupon' }}
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="couponForm" class="coupon-form">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Discount Percentage</mat-label>
+        <input matInput type="number" formControlName="discountPercentage" 
+               min="1" max="100" placeholder="Enter discount percentage (1-100)">
+        <mat-icon matPrefix>percent</mat-icon>
+        <mat-error *ngIf="couponForm.get('discountPercentage')?.hasError('required')">
+          Discount percentage is required
+        </mat-error>
+        <mat-error *ngIf="couponForm.get('discountPercentage')?.hasError('min')">
+          Discount must be at least 1%
+        </mat-error>
+        <mat-error *ngIf="couponForm.get('discountPercentage')?.hasError('max')">
+          Discount cannot exceed 100%
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Expiry Date (Optional)</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="expiryDate" 
+               [min]="minDate"
+               placeholder="Select expiry date (optional)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
+        <mat-hint>Leave empty for no expiration</mat-hint>
+        <mat-error *ngIf="couponForm.get('expiryDate')?.hasError('pastDate')">
+          Expiry date cannot be in the past
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Apply to Tour (Optional)</mat-label>
+        <mat-select formControlName="tourId">
+          <mat-option [value]="null">All My Tours</mat-option>
+          <mat-option *ngFor="let tour of availableTours" [value]="tour.id">
+            {{ tour.name }} ({{ tour.price | number:'1.2-2' }} AC)
+          </mat-option>
+        </mat-select>
+        <mat-icon matPrefix>tour</mat-icon>
+        <mat-hint>Select a specific tour or leave as "All My Tours"</mat-hint>
+      </mat-form-field>
+
+      <div class="info-box" *ngIf="mode === 'create'">
+        <mat-icon>info</mat-icon>
+        <p>A unique 8-character code will be automatically generated for this coupon.</p>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" 
+            [disabled]="couponForm.invalid || isLoading">
+      {{ mode === 'create' ? 'Create' : 'Update' }}
+    </button>
+  </mat-dialog-actions>
+</div>

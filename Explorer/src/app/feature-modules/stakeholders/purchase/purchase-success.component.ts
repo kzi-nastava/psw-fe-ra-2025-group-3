@@ -19,6 +19,6 @@ export class PurchaseSuccessComponent {
   }
 
   goExplore(): void {
-    this.router.navigate(['/tourist/my-purchased-tours']);
+    this.router.navigate(['/tourist/my-tours']);
   }
 }

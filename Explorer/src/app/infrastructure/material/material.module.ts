@@ -18,6 +18,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [],
@@ -38,7 +40,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatPaginatorModule,
     MatMenuModule,
     MatTooltipModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     MatToolbar,
@@ -66,7 +70,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCheckboxModule,
     MatPaginatorModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class MaterialModule { }

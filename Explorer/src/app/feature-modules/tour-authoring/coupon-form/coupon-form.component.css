@@ -1,0 +1,47 @@
+.coupon-form-container {
+  min-width: 500px;
+}
+
+.coupon-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  background-color: #E3F2FD;
+  border-radius: var(--border-radius-md);
+  border-left: 4px solid var(--color-primary-500);
+  margin-top: var(--spacing-4);
+}
+
+.info-box mat-icon {
+  color: var(--color-primary-500);
+  margin-top: 2px;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+}
+
+mat-dialog-actions {
+  padding: var(--spacing-4);
+  margin-top: var(--spacing-4);
+}
+
+@media (max-width: 600px) {
+  .coupon-form-container {
+    min-width: auto;
+    width: 100%;
+  }
+}

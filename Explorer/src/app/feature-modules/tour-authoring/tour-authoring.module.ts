@@ -15,6 +15,8 @@ import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
 import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problems-dialog.component';
 import { BundleListComponent } from './bundle-list/bundle-list.component';
 import { BundleFormComponent } from './bundle-form/bundle-form.component';
+import { CouponListComponent } from './coupon-list/coupon-list.component';
+import { CouponFormComponent } from './coupon-form/coupon-form.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { BundleFormComponent } from './bundle-form/bundle-form.component';
     TourWizardComponent,
     TourProblemsDialogComponent,
     BundleListComponent,
-    BundleFormComponent
+    BundleFormComponent,
+    CouponListComponent,
+    CouponFormComponent
   ],
   imports: [
     CommonModule,
