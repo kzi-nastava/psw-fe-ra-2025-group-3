@@ -1,22 +1,13 @@
 <div class="container">
-  <div class="bundles-container">
-    <!-- WALLET BANNER -->
-    <div class="wallet-banner card" *ngIf="wallet">
-      <div class="wallet-content">
-        <mat-icon class="wallet-icon">account_balance_wallet</mat-icon>
-        <div class="wallet-info">
-          <span class="wallet-label">Available Adventure Coins</span>
-          <span class="wallet-balance">{{ wallet.balanceAc }} AC</span>
-        </div>
-      </div>
-    </div>
-
+  <div class="tour-list-container">
     <!-- HEADER -->
     <div class="header">
-      <h1>Tour Bundles</h1>
-      <p class="subtitle">
-        Get multiple tours at a discounted price! Add bundles to your cart.
-      </p>
+      <div>
+        <h1>Tour Bundles</h1>
+        <p class="cart-subtitle">
+          Get multiple tours at a discounted price! Add bundles to your cart.
+        </p>
+      </div>
     </div>
 
     <!-- LOADING -->
@@ -25,42 +16,53 @@
     </div>
 
     <!-- EMPTY STATE -->
-    <div *ngIf="!isLoading && bundles.length === 0" class="empty-state card">
+    <div *ngIf="!isLoading && bundles.length === 0" class="empty-state">
       <mat-icon>inventory_2</mat-icon>
       <h2>No bundles available</h2>
       <p>There are currently no published tour bundles. Check back soon!</p>
     </div>
 
     <!-- BUNDLES GRID -->
-    <div *ngIf="!isLoading && bundles.length > 0" class="bundles-grid">
-      <mat-card *ngFor="let bundle of bundles" class="bundle-card card">
+    <div *ngIf="!isLoading && bundles.length > 0" class="tours-grid">
+      <mat-card *ngFor="let bundle of bundles" class="tour-card card animate-fade-in-up">
         
         <mat-card-header>
           <mat-card-title>{{ bundle.name }}</mat-card-title>
           <mat-card-subtitle>
-            <span class="status-badge status-published">
+            <span
+              class="status-badge"
+              [ngClass]="{
+                'status-published': bundle.status === BundleStatus.Published,
+                'status-archived': bundle.status === BundleStatus.Archived
+              }">
               {{ getStatusLabel(bundle.status) }}
             </span>
           </mat-card-subtitle>
         </mat-card-header>
 
+        <div class="tour-badge preview" *ngIf="!isPurchased(bundle.id) && bundle.status !== BundleStatus.Archived">
+          PREVIEW ONLY
+        </div>
+
+        <div class="tour-badge purchased" *ngIf="isPurchased(bundle.id)">
+          PURCHASED
+        </div>
+
+        <div class="tour-badge archived" *ngIf="bundle.status === BundleStatus.Archived">
+          ARCHIVED
+        </div>
+
         <mat-card-content>
-          <div class="bundle-details">
+          <div class="tour-details">
             <div class="detail-item">
               <mat-icon>inventory</mat-icon>
               <span>{{ bundle.tourIds.length }} Tours</span>
             </div>
-            <div class="detail-item">
-              <mat-icon>attach_money</mat-icon>
-              <span>{{ bundle.price }} AC</span>
+            
+            <div class="detail-item price-highlight">
+              <mat-icon>monetization_on</mat-icon>
+              <span class="price-value">{{ bundle.price }} AC</span>
             </div>
-          </div>
-
-          <div class="bundle-info">
-            <p class="created-date">
-              <mat-icon>calendar_today</mat-icon>
-              Available since: {{ bundle.createdAt | date:'mediumDate' }}
-            </p>
           </div>
 
           <!-- INSUFFICIENT FUNDS WARNING -->
@@ -73,32 +75,34 @@
           </div>
         </mat-card-content>
 
-<mat-card-actions>
-  <!-- PURCHASED BADGE -->
-  <div *ngIf="isPurchased(bundle.id)" class="badge-owned">
-    <mat-icon>check_circle</mat-icon>
-    Already Purchased
-  </div>
+        <mat-card-actions>
+          <!-- PURCHASED BADGE -->
+          <div *ngIf="isPurchased(bundle.id)" class="badge-action">
+            <mat-icon>check_circle</mat-icon>
+            Already Purchased
+          </div>
 
-  <!-- IN CART BADGE -->
-  <div *ngIf="!isPurchased(bundle.id) && isInCart(bundle.id)" class="badge-in-cart">
-    <mat-icon>shopping_cart</mat-icon>
-    In Cart
-  </div>
+          <!-- IN CART BADGE -->
+          <div *ngIf="!isPurchased(bundle.id) && isInCart(bundle.id)" class="badge-action">
+            <mat-icon>shopping_cart</mat-icon>
+            In Cart
+          </div>
 
-  <!-- ADD TO CART BUTTON -->
-  <button
-    *ngIf="!isPurchased(bundle.id) && !isInCart(bundle.id)"
-    mat-raised-button
-    class="add-to-cart-btn"
-    (click)="addToCart(bundle)"
-    [disabled]="!canAfford(bundle)">
-    <mat-icon>add_shopping_cart</mat-icon>
-    <span *ngIf="canAfford(bundle)">Add to Cart</span>
-    <span *ngIf="!canAfford(bundle)">Insufficient Funds</span>
-  </button>
-</mat-card-actions>
+          <!-- ADD TO CART BUTTON -->
+          <button
+            *ngIf="!isPurchased(bundle.id) && !isInCart(bundle.id)"
+            mat-stroked-button
+            color="primary"
+            (click)="addToCart(bundle)"
+            [disabled]="!canAfford(bundle) || bundle.status === BundleStatus.Archived">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add to Cart
+          </button>
 
+          <span class="locked-msg" *ngIf="bundle.status === BundleStatus.Archived">
+            This bundle is archived and cannot be purchased.
+          </span>
+        </mat-card-actions>
       </mat-card>
     </div>
   </div>

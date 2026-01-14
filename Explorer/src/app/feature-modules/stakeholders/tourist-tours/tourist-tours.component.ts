@@ -55,6 +55,8 @@ export class TouristToursComponent implements OnInit {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   selectedMinRating: number | null = null;
+  filterOnSale: boolean | null = null;
+  sortByDiscount: boolean = false;
   
   availableTags: string[] = [];
   ratingOptions = [1, 2, 3, 4, 5];
@@ -127,7 +129,9 @@ export class TouristToursComponent implements OnInit {
       difficulties: this.selectedDifficulties.length > 0 ? this.selectedDifficulties : undefined,
       minPrice: this.minPrice ?? undefined,
       maxPrice: this.maxPrice ?? undefined,
-      minRating: this.selectedMinRating ?? undefined
+      minRating: this.selectedMinRating ?? undefined,
+      onSale: this.filterOnSale ?? undefined,
+      sortByDiscount: this.sortByDiscount || undefined
     };
 
     this.tourService.searchTours(searchParams).subscribe({
@@ -319,6 +323,16 @@ export class TouristToursComponent implements OnInit {
     this.minPrice = null;
     this.maxPrice = null;
     this.selectedMinRating = null;
+    this.filterOnSale = null;
+    this.sortByDiscount = false;
+    this.searchTours();
+  }
+
+  onSaleFilterChange(): void {
+    this.searchTours();
+  }
+
+  onSortByDiscountChange(): void {
     this.searchTours();
   }
 
@@ -333,6 +347,8 @@ export class TouristToursComponent implements OnInit {
     if (this.selectedDifficulties.length > 0) count++;
     if (this.minPrice !== null || this.maxPrice !== null) count++;
     if (this.selectedMinRating !== null) count++;
+    if (this.filterOnSale !== null) count++;
+    if (this.sortByDiscount) count++;
     return count;
   }
 

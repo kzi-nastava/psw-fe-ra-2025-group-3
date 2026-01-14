@@ -160,7 +160,8 @@ onCheckout(): void {
           this.router.navigate(['/tourist/purchase-success'], {
             state: { 
               tokens: result.tokens,
-              purchaseRecords: result.purchaseRecords 
+              purchaseRecords: result.purchaseRecords,
+              bundlePurchaseRecords: result.bundlePurchaseRecords || []
             }
           });
         }, 1500);

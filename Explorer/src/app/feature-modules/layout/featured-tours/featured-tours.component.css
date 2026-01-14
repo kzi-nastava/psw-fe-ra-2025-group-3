@@ -221,6 +221,18 @@
   flex-direction: column;
 }
 
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
 .price-amount {
   font-family: var(--font-family-display);
   font-size: var(--font-size-3xl);
@@ -228,10 +240,34 @@
   color: var(--color-primary-500);
 }
 
+.price-amount.original-price {
+  text-decoration: line-through;
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+}
+
+.price-amount.discounted-price {
+  color: var(--color-error);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+}
+
 .price-label {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-sm);
   color: var(--color-neutral-800);
+}
+
+.discount-badge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-2);
+  background: var(--color-error);
+  color: white;
+  border-radius: 4px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  align-self: flex-start;
 }
 
 /* Custom Button Styles */
