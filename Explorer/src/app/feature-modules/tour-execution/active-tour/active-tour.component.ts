@@ -6,11 +6,13 @@ import { KeyPointService } from '../../tour-authoring/key-points/key-point.servi
 import { TourExecution, LocationCheckDto, KeyPointWithStatus } from '../model/tour-execution.model';
 import { Tour } from '../../tour-authoring/model/tour.model';
 import { KeyPoint } from '../../tour-authoring/key-points/model/key-point.model';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PositionSimulatorService } from 'src/app/shared/position-simulator/position-simulator.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TouristMapService, TouristPositionDto } from '../../layout/tourist-map/tourist-map.service';
+import { FacilityService } from '../../administration/facility.service';
+import { Facility } from '../../administration/model/facility.model';
 
 @Component({
   selector: 'xp-active-tour',
@@ -29,7 +31,11 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
 
   // Map data
   routeWaypoints: { lat: number; lng: number }[] = [];
-  routePoints: { lat: number; lng: number; name?: string }[] = [];
+  routePoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+
+  // Restaurants
+  nearbyRestaurants: Facility[] = [];
+  restaurantPoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
 
   private locationCheckSubscription: Subscription | null = null;
   lastCheckTime: Date | null = null;
@@ -46,7 +52,8 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
     private router: Router,
     private positionSimulator: PositionSimulatorService,
     private snackBar: MatSnackBar,
-    private touristMapService: TouristMapService 
+    private touristMapService: TouristMapService,
+    private facilityService: FacilityService
   ) {}
 
   ngOnInit(): void {
@@ -142,6 +149,9 @@ loadKeyPoints(tourId: number): void {
 
       this.updateKeyPointsWithStatus();
 
+      // Ucitaj restorane u blizini svih keypointova
+      this.loadNearbyRestaurants();
+
       this.positionSimulator.getCurrentPosition().subscribe({
         next: (currentPosition) => {
           const touristLat = currentPosition.latitude || this.execution!.startLatitude;
@@ -225,6 +235,45 @@ private updateKeyPointsWithStatus(): void {
   console.log('[Active Tour] 🔓 KeyPoints with status:', this.keyPointsWithStatus);
 }
 
+// Ucitava restorane u blizini svih keypoint‑ova aktivne ture
+private loadNearbyRestaurants(): void {
+  if (!this.keyPoints.length) return;
+
+  const requests = this.keyPoints.map(kp =>
+    this.facilityService.getNearbyRestaurants(kp.latitude, kp.longitude)
+  );
+
+  forkJoin(requests).subscribe({
+    next: (results) => {
+      // results je niz nizova restaurana (po keypoint‑u)
+      const all = results.flat();
+
+      // Ukloni duplikate po id‑ju (restoran moze biti blizu vise keypoint‑ova)
+      const byId = new Map<number, Facility>();
+      all.forEach(r => {
+        if (!byId.has(r.id)) {
+          byId.set(r.id, r);
+        }
+      });
+
+      this.nearbyRestaurants = Array.from(byId.values());
+
+      this.restaurantPoints = this.nearbyRestaurants.map(r => ({
+        lat: r.latitude,
+        lng: r.longitude,
+        name: `${r.name}`,
+        color: 'green',
+        id: r.id
+      }));
+
+      // Osvezi markere na mapi (ruta ostaje ista)
+      this.setupMapRoute();
+    },
+    error: (err) => {
+    }
+  });
+}
+
 private setupMapRoute(): void {
   if (!this.execution) {
     console.error('[Active Tour] ❌ Cannot setup route - missing execution');
@@ -256,7 +305,9 @@ private setupMapRoute(): void {
 
   // ✅ KLJUČNO: routePoints sadrži SAMO KeyPoints (BEZ trenutne pozicije!)
   // ✅ NE PROVERAVAJ da li je KeyPoint === currentTouristPosition!
-  this.routePoints = this.keyPoints.map(kp => {
+  //this.routePoints
+  // Markeri za keypoint‑ove
+  const keyPointMarkers = this.keyPoints.map(kp => {
   const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
   const isNext = this.nextKeyPoint?.id === kp.id;
 
@@ -270,6 +321,11 @@ private setupMapRoute(): void {
     name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback ako nema name
   };
 });
+
+  // Restorani kao dodatni markeri (narandzasta boja)
+  const restaurantMarkers = this.restaurantPoints || [];
+
+  this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
 
   console.log('[Active Tour] 📍 Created routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Map route setup complete');
@@ -294,20 +350,26 @@ private setupMapRouteFallback(): void {
   }
 
   // ✅ ISTO: routePoints sadrži SAMO KeyPoints (BEZ trenutne pozicije!)
-  this.routePoints = this.keyPoints.map(kp => {
-  const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
-  const isNext = this.nextKeyPoint?.id === kp.id;
+  //this.routePoints
+  // Markeri za keypoint‑ove
+  const keyPointMarkers = this.keyPoints.map(kp => {
+        const isCompleted = this.execution!.completedKeyPoints?.some(c => c.keyPointId === kp.id);
+        const isNext = this.nextKeyPoint?.id === kp.id;
 
-  let icon = '⚪';
-  if (isCompleted) icon = '✅';
-  else if (isNext) icon = '🎯';
+        let icon = '⚪';
+        if (isCompleted) icon = '✅';
+        else if (isNext) icon = '🎯';
 
-  return {
-    lat: kp.latitude,
-    lng: kp.longitude,
-    name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback
-  };
-});
+        return {
+            lat: kp.latitude,
+            lng: kp.longitude,
+            name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback
+        };
+    });
+
+      const restaurantMarkers = this.restaurantPoints || [];
+
+      this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
 
   console.log('[Active Tour] 📍 Created fallback routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Fallback route setup complete');
