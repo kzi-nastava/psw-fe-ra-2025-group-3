@@ -1,0 +1,277 @@
+.tour-list-container {
+  padding: var(--spacing-6);
+  max-width: 1600px;
+  margin: 0 auto;
+  background: var(--color-neutral-50);
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  background: var(--color-neutral-0);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--color-primary-500);
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--color-secondary-800);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  font-family: var(--font-family-display);
+}
+
+.cart-subtitle {
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  max-width: 36rem;
+}
+
+/* LOADING & EMPTY STATE */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-8) 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-8) var(--spacing-4);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  color: var(--color-primary-500);
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state h2 {
+  margin-bottom: var(--spacing-2);
+}
+
+.empty-state p {
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.tour-card {
+  padding: var(--spacing-6);
+  border-top: 4px solid var(--color-primary-500);
+}
+
+.tour-card mat-card-header {
+  margin-bottom: var(--spacing-4);
+}
+
+.tour-card mat-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.tour-card mat-card-subtitle {
+  margin-top: var(--spacing-2);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-published {
+  background: rgba(0, 188, 212, 0.12);
+  color: var(--color-primary-800);
+}
+
+.status-archived {
+  background: rgba(244, 67, 54, 0.12);
+  color: #c62828;
+}
+
+.tour-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.detail-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+}
+
+.detail-item mat-icon {
+  font-size: 20px;
+}
+
+.detail-item.price-highlight {
+  background: rgba(0, 188, 212, 0.1);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+}
+
+.price-value {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-700);
+}
+
+.tour-badge {
+  padding: 4px 10px;
+  display: inline-block;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 8px 0;
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+.tour-badge.preview {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tour-badge.purchased {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.tour-badge.archived {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* INSUFFICIENT FUNDS WARNING */
+.insufficient-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: var(--border-radius-lg);
+  margin-top: var(--spacing-4);
+}
+
+.insufficient-warning mat-icon {
+  color: #d32f2f;
+  font-size: 20px;
+}
+
+.warning-text strong {
+  display: block;
+  color: #d32f2f;
+  margin-bottom: var(--spacing-1);
+  font-size: var(--font-size-sm);
+}
+
+.warning-text p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-800);
+}
+
+mat-card-actions {
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+mat-card-actions button {
+  display: block;
+  margin-top: var(--spacing-4);
+}
+
+mat-card-actions button[mat-stroked-button] {
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  padding-inline: var(--spacing-4);
+}
+
+mat-card-actions button[mat-stroked-button] mat-icon {
+  margin-right: var(--spacing-2);
+}
+
+.badge-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  background: rgba(33, 150, 243, 0.1);
+  color: #1976d2;
+  margin-bottom: var(--spacing-4);
+}
+
+.badge-action mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.locked-msg {
+  font-size: 12px;
+  color: #c62828;
+  margin-top: 4px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tour-card {
+    padding: var(--spacing-4);
+  }
+
+  .tour-details {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  mat-card-actions {
+    margin-top: var(--spacing-4);
+  }
+
+  mat-card-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .tours-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tour-card {
+    padding: var(--spacing-4);
+  }
+}

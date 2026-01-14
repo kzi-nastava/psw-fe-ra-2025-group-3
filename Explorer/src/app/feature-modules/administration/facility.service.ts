@@ -9,8 +9,10 @@ import { FacilityCreate } from './model/facility-create.model';
 })
 export class FacilityService {
 
+  // Backend endpoint prema Swaggeru:
+  // POST/GET/PUT/DELETE  /api/administration/facilities
   private apiUrl = 'https://localhost:44333/api/administration/facilities';
-
+  private restaurantsUrl = 'https://localhost:44333/api/facilities/restaurants';
 
   constructor(private http: HttpClient) {}
 
@@ -18,10 +20,9 @@ export class FacilityService {
     return this.http.get<Facility[]>(this.apiUrl);
   }
 
- 
   create(facility: FacilityCreate): Observable<Facility> {
-  return this.http.post<Facility>(this.apiUrl, facility);
-}
+    return this.http.post<Facility>(this.apiUrl, facility);
+  }
 
   update(facility: Facility): Observable<Facility> {
     return this.http.put<Facility>(`${this.apiUrl}/${facility.id}`, facility);
@@ -29,5 +30,15 @@ export class FacilityService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Vraca restorane u krugu 1.2km od zadate lokacije (centar = key point)
+  getNearbyRestaurants(centerLatitude: number, centerLongitude: number): Observable<Facility[]> {
+    const params = {
+      centerLongitude: centerLongitude.toString(),
+      centerLatitude: centerLatitude.toString()
+    };
+
+    return this.http.get<Facility[]>(this.restaurantsUrl, { params });
   }
 }

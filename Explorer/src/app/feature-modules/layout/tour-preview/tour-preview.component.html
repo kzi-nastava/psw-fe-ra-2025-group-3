@@ -1,0 +1,102 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <!-- Close Button -->
+    <button class="close-btn" (click)="closeModal()">×</button>
+
+    <!-- Tour Header -->
+    <div class="tour-header">
+      <div class="tour-image-large">
+        <img [src]="tour.firstKeyPoint?.imageUrl || 'assets/images/pozadina.jpg'" 
+             [alt]="tour.name"
+             onerror="this.src='assets/images/pozadina.jpg'">
+      </div>
+      <div class="tour-header-info">
+        <h2 class="tour-name">{{ tour.name }}</h2>
+        <div class="tour-rating-large">
+          <div class="stars">
+            <span *ngFor="let star of getStars(tour.averageRating)" 
+                  class="star" 
+                  [class.filled]="star === 1">★</span>
+          </div>
+          <span class="rating-value">{{ tour.averageRating | number:'1.1-1' }}</span>
+          <span class="review-count">({{ tour.reviewCount }} reviews)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Details Grid -->
+    <div class="tour-details-grid">
+      <div class="detail-card">
+        <span class="detail-icon">💰</span>
+        <div class="detail-info">
+          <span class="detail-label">Price</span>
+          <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
+            <span class="detail-value original-price">€{{ tour.originalPrice | number:'1.2-2' }}</span>
+            <span class="detail-value discounted-price">€{{ tour.discountedPrice | number:'1.2-2' }}</span>
+            <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
+          </div>
+          <span class="detail-value" *ngIf="!tour.onSale">€{{ tour.price | number:'1.2-2' }}</span>
+        </div>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">📏</span>
+        <div class="detail-info">
+          <span class="detail-label">Distance</span>
+          <span class="detail-value">{{ tour.length }} km</span>
+        </div>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">⏱️</span>
+        <div class="detail-info">
+          <span class="detail-label">Duration</span>
+          <span class="detail-value">{{ formatDuration(tour.averageDuration) }}</span>
+        </div>
+      </div>
+      <div class="detail-card">
+        <span class="detail-icon">🎯</span>
+        <div class="detail-info">
+          <span class="detail-label">Difficulty</span>
+          <span class="detail-value" [ngClass]="getDifficultyClass(tour.difficulty)">
+            {{ getDifficultyLabel(tour.difficulty) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Starting Point -->
+    <div class="info-section">
+      <h3 class="section-title">📍 Starting Point</h3>
+      <p class="starting-point">{{ tour.startPoint || tour.firstKeyPoint?.name }}</p>
+    </div>
+
+    <!-- Description -->
+    <div class="info-section">
+      <h3 class="section-title">📖 Description</h3>
+      <p class="description">{{ tour.description }}</p>
+    </div>
+
+    <!-- Tags -->
+    <div class="info-section" *ngIf="tour.tags && tour.tags.length > 0">
+      <h3 class="section-title">🏷️ Tags</h3>
+      <div class="tags-container">
+        <span *ngFor="let tag of tour.tags" class="tag">{{ tag }}</span>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-container">
+      <div class="cta-message">
+        <p class="lock-icon">🔒</p>
+        <p class="lock-text">Sign up or login to see full tour details and purchase</p>
+      </div>
+      <div class="cta-buttons">
+        <button mat-flat-button style="background: white; color: var(--color-primary-700); font-weight: 600;" routerLink="/register" (click)="closeModal()">
+          Sign up to explore
+        </button>
+        <button mat-stroked-button style="color: white; border-color: white;" routerLink="/login" (click)="closeModal()">
+          Login to purchase
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

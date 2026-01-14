@@ -1,3 +1,5 @@
+import { Encounter } from "src/app/feature-modules/administration/model/encounter.model";
+
 export class KeyPoint {
   id!: number;
   tourId!: number;
@@ -7,4 +9,6 @@ export class KeyPoint {
   secret!: string;
   latitude!: number;
   longitude!: number;
+  encounterId?: number | null
+  encounter?: Encounter | null = null;
 }

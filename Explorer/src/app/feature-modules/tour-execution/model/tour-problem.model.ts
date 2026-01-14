@@ -26,6 +26,8 @@ export interface Message {
   content: string;
   timestamp: string;
   authorType: AuthorType;
+  senderName: string;
+  senderSurname: string;
 }
 
 export enum ProblemCategory {

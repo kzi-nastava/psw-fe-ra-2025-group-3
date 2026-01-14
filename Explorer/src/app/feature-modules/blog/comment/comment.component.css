@@ -1,0 +1,70 @@
+.comments-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-8);
+}
+
+.comment-card {
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.comment-header {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-2);
+}
+
+.comment-text {
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-3);
+}
+
+.comment-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-3);
+}
+
+.comment-form button {
+  width: auto;                 
+  padding: 6px 16px;           
+  font-size: var(--font-size-sm);
+}
+
+.comment-form textarea,
+.edit-area textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-neutral-100);
+  font-family: var(--font-family-primary);
+}
+
+.edit-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.delete-btn {
+  border-color: var(--color-error) !important;
+  color: var(--color-error) !important;
+}

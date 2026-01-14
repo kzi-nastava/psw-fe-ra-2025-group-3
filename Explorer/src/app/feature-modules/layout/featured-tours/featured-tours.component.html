@@ -1,0 +1,94 @@
+<div class="featured-tours-section">
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header">
+      <h2 class="section-title">Highlighted Tours</h2>
+      <p class="section-subtitle">Explore our best-rated experiences</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading tours...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && highlightedTours.length === 0" class="empty-state">
+      <div class="empty-icon">🗺️</div>
+      <h3>No highlighted tours available yet</h3>
+      <p>Check back soon!</p>
+    </div>
+
+    <!-- Tours Grid -->
+    <div *ngIf="!isLoading && highlightedTours.length > 0" class="tours-grid">
+      <div *ngFor="let tour of highlightedTours" class="tour-card" (click)="openTourPreview(tour)">
+        <!-- Tour Image -->
+        <div class="tour-image">
+          <img [src]="tour.firstKeyPoint?.imageUrl || 'assets/images/pozadina.jpg'" 
+               [alt]="tour.name"
+               onerror="this.src='assets/images/pozadina.jpg'">
+          <div class="tour-difficulty" [ngClass]="getDifficultyClass(tour.difficulty)">
+            {{ getDifficultyLabel(tour.difficulty) }}
+          </div>
+        </div>
+
+        <!-- Tour Content -->
+        <div class="tour-content">
+          <h3 class="tour-title">{{ tour.name }}</h3>
+          
+          <!-- Rating -->
+          <div class="tour-rating">
+            <div class="stars">
+              <span *ngFor="let star of getStars(tour.averageRating)" 
+                    class="star" 
+                    [class.filled]="star === 1">★</span>
+            </div>
+            <span class="rating-value">{{ tour.averageRating | number:'1.1-1' }}</span>
+            <span class="review-count">({{ tour.reviewCount }} reviews)</span>
+          </div>
+
+          <!-- Tour Details -->
+          <div class="tour-details">
+            <div class="detail-item">
+              <span class="icon">📍</span>
+              <span class="label">{{ tour.startPoint || tour.firstKeyPoint?.name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="icon">📏</span>
+              <span class="label">{{ tour.length }} km</span>
+            </div>
+            <div class="detail-item">
+              <span class="icon">⏱️</span>
+              <span class="label">{{ formatDuration(tour.averageDuration) }}</span>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="tour-footer">
+            <div class="tour-price">
+              <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
+                <div class="price-row">
+                  <span class="price-amount original-price">€{{ tour.originalPrice | number:'1.2-2' }}</span>
+                  <span class="price-amount discounted-price">€{{ tour.discountedPrice | number:'1.2-2' }}</span>
+                </div>
+                <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
+              </div>
+              <ng-container *ngIf="!tour.onSale">
+                <span class="price-amount">€{{ tour.price | number:'1.2-2' }}</span>
+                <span class="price-label">per person</span>
+              </ng-container>
+            </div>
+            <button class="btn btn-primary">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tour Preview Modal -->
+<app-tour-preview 
+  *ngIf="showPreview && selectedTour"
+  [tour]="selectedTour"
+  (close)="closePreview()">
+</app-tour-preview>

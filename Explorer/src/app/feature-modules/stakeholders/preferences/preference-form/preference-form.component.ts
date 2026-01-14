@@ -18,9 +18,9 @@ export class PreferenceFormComponent implements OnInit {
   selectedTags: string[] = [];
   
   difficulties = [
-    { value: TourDifficulty.Easy, label: 'Lako', icon: 'sentiment_satisfied' },
-    { value: TourDifficulty.Medium, label: 'Srednje', icon: 'sentiment_neutral' },
-    { value: TourDifficulty.Hard, label: 'Teško', icon: 'fitness_center' }
+    { value: TourDifficulty.Easy, label: 'Easy', icon: 'sentiment_satisfied' },
+    { value: TourDifficulty.Medium, label: 'Medium', icon: 'sentiment_neutral' },
+    { value: TourDifficulty.Hard, label: 'Hard', icon: 'fitness_center' }
   ];
 
   constructor(private service: PreferenceService) {
@@ -65,7 +65,7 @@ export class PreferenceFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.preferenceForm.invalid || this.selectedTags.length === 0) {
-      alert('Molimo popunite sva polja i odaberite najmanje jedan tag.');
+      alert('Please fill all fields and choose at least one tag.');
       return;
     }
 
@@ -87,7 +87,7 @@ export class PreferenceFormComponent implements OnInit {
           this.preferenceUpdated.emit();
         },
         error: (err: any) => {
-          alert('Greška pri izmeni preferenci: ' + err.message);
+          alert('Error editing preferences: ' + err.message);
         }
       });
     } else {
@@ -105,7 +105,7 @@ export class PreferenceFormComponent implements OnInit {
           this.preferenceUpdated.emit();
         },
         error: (err: any) => {
-          alert('Greška pri kreiranju preferenci: ' + err.message);
+          alert('Error creating preferences: ' + err.message);
         }
       });
     }

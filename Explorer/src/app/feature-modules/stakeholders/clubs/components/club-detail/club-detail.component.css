@@ -1,54 +1,181 @@
 .club-detail-container {
-  padding: 24px;
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1100px;
+  margin: var(--spacing-12) auto;
+  padding: var(--spacing-8);
+  /* Koristimo senke iz styles.css */
+  box-shadow: var(--shadow-xl);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-8);
+  border-bottom: 1px solid var(--color-neutral-100);
+  padding-bottom: var(--spacing-6);
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.title-section h1 {
+  margin: 0;
+  color: var(--color-secondary-800);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.status-badge.active {
+  background-color: #0d9488;
+  color: white;
+}
+
+.status-badge.closed {
+  background-color: #64748b;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
 }
 
 .featured-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  margin-bottom: var(--spacing-8);
+  overflow: hidden;
+  border-radius: var(--border-radius-2xl);
+  box-shadow: var(--shadow-md);
+  max-height: 450px;
 }
 
 .featured-image img {
-  width: 50%;
-  max-height: 200px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 16px;
+  transition: transform var(--transition-normal);
 }
 
-.description {
-  margin-bottom: 24px;
+.content-section {
+  margin-bottom: var(--spacing-8);
 }
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-4);
 }
 
-.gallery-grid img {
+.gallery-item img {
   width: 100%;
-  height: 120px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-.loading-container {
+.members-section {
+  background-color: var(--color-neutral-100);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-6);
+  margin-top: var(--spacing-8);
+}
+
+.invite-box {
   display: flex;
-  justify-content: center;
-  margin-top: 32px;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin: var(--spacing-4) 0 var(--spacing-8) 0;
+  background: white;
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
 }
 
-.actions button {
-    margin-left: 10px;
+.tourist-select {
+  flex: 1;
+  min-width: 250px;
+}
+
+.restriction-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background-color: #FFF3E0; /* Light warning orange */
+  color: #E65100;
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-4);
+  font-weight: 500;
+}
+
+.member-item {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-2) 0;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.member-info span {
+  font-size: 1rem;
+  color: var(--color-neutral-700);
+}
+
+.no-members {
+  padding: var(--spacing-8);
+}
+
+.requests-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.req-name {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.req-email {
+    color: #666;
+    font-size: 0.9em;
 }

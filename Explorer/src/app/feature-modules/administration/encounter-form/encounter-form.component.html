@@ -1,0 +1,173 @@
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Encounter' : 'Create New Encounter' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="encounterForm" class="encounter-form">
+
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter encounter name" maxlength="100">
+      <mat-icon matPrefix>title</mat-icon>
+      <mat-hint align="end">{{encounterForm.get('name')?.value?.length || 0}}/100</mat-hint>
+      <mat-error *ngIf="encounterForm.get('name')?.invalid">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="3"
+        cdkAutosizeMaxRows="6"
+        placeholder="What should the tourist do?"
+        maxlength="500">
+      </textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-hint align="end">{{encounterForm.get('description')?.value?.length || 0}}/500</mat-hint>
+      <mat-error *ngIf="encounterForm.get('description')?.invalid">
+        {{ getErrorMessage('description') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- XP -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>XP (Experience Points)</mat-label>
+      <input matInput type="number" formControlName="xp" placeholder="Enter XP reward">
+      <mat-icon matPrefix>star</mat-icon>
+      <mat-error *ngIf="encounterForm.get('xp')?.invalid">
+        {{ getErrorMessage('xp') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field appearance="outline" class="full-width" *ngIf="data.actor === 'admin'">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of encounterStatuses" [value]="status.value">
+          {{ status.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>flag</mat-icon>
+      <mat-error *ngIf="encounterForm.get('status')?.invalid">
+        {{ getErrorMessage('status') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Type -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let type of encounterTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>category</mat-icon>
+      <mat-error *ngIf="encounterForm.get('type')?.invalid">
+        {{ getErrorMessage('type') }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Action Description (only for Misc) -->
+    <mat-form-field *ngIf="encounterForm.get('type')?.value === EncounterType.Misc" appearance="outline" class="full-width">
+      <mat-label>Action Description</mat-label>
+      <textarea
+        matInput
+        formControlName="actionDescription"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="4"
+        placeholder="Describe the action tourists need to do (e.g., Do 20 push-ups)"
+        maxlength="300">
+      </textarea>
+      <mat-icon matPrefix>build</mat-icon>
+      <mat-hint align="end">{{encounterForm.get('actionDescription')?.value?.length || 0}}/300</mat-hint>
+      <mat-error *ngIf="encounterForm.get('actionDescription')?.invalid">
+        {{ getErrorMessage('actionDescription') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Social Encounter Fields -->
+    <div *ngIf="encounterForm.get('type')?.value === EncounterType.Social" class="social-fields">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Required People Count</mat-label>
+        <input matInput type="number" formControlName="requiredPeopleCount" placeholder="e.g., 5">
+        <mat-icon matPrefix>group</mat-icon>
+        <mat-hint>How many people need to gather</mat-hint>
+        <mat-error *ngIf="encounterForm.get('requiredPeopleCount')?.invalid">
+          {{ getErrorMessage('requiredPeopleCount') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Range (meters)</mat-label>
+        <input matInput type="number" formControlName="rangeInMeters" placeholder="e.g., 30">
+        <mat-icon matPrefix>radio_button_checked</mat-icon>
+        <mat-hint>Radius FROM ENCOUNTER COORDINATES where people must gather</mat-hint>
+        <mat-error *ngIf="encounterForm.get('rangeInMeters')?.invalid">
+          {{ getErrorMessage('rangeInMeters') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Hidden Location Encounter Fields -->
+    <div *ngIf="encounterForm.get('type')?.value === EncounterType.HiddenLocation" class="hidden-location-fields">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Image URL (Hint)</mat-label>
+        <input matInput formControlName="imageUrl" placeholder="https://example.com/hint-image.jpg">
+        <mat-icon matPrefix>image</mat-icon>
+        <mat-hint>Image that tourists will use as a hint to find the location</mat-hint>
+        <mat-error *ngIf="encounterForm.get('imageUrl')?.invalid">
+          {{ getErrorMessage('imageUrl') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-card class="info-card">
+        <mat-card-content>
+          <mat-icon>info</mat-icon>
+          <p><strong>Note:</strong> For Hidden Location, the GPS coordinates below are the <strong>REAL location</strong>. 
+          Tourists will NOT see these coordinates - they will only see the image hint and must find the location themselves.
+          Tourists must stay within <strong>5 meters</strong> for <strong>30 seconds</strong> to complete.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Location Map -->
+    <div class="full-width">
+      <mat-label>Encounter Location</mat-label>
+      <mat-hint *ngIf="encounterForm.get('type')?.value === EncounterType.HiddenLocation" style="color: #f39c12; margin-bottom: 8px; display: block;">
+        ⚠️ For Hidden Location, these are the REAL coordinates where tourists must arrive. Backend will hide them from tourists.
+      </mat-hint>
+      <mat-hint *ngIf="encounterForm.get('type')?.value === EncounterType.Social" style="color: #3498db; margin-bottom: 8px; display: block;">
+        📍 For Social encounters, people must gather within the specified radius FROM THESE COORDINATES.
+      </mat-hint>
+
+      <xp-map
+        [mode]="'edit-object'"
+        [points]="mapPoints"
+        (pointSelected)="onPointSelected($event)">
+      </xp-map>
+
+      <div class="coords-preview">
+        Selected: {{ encounterForm.value.latitude }},
+                  {{ encounterForm.value.longitude }}
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="encounterForm.invalid">
+    {{ isEditMode ? 'Save Changes' : 'Create Encounter' }}
+  </button>
+</mat-dialog-actions>

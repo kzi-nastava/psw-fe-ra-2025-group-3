@@ -1,12 +1,82 @@
+
 .success-container {
   padding: var(--spacing-8);
   margin-top: var(--spacing-10);
   text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.token-list {
-  margin-top: var(--spacing-6);
+.success-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  color: #4caf50;
+  margin-bottom: var(--spacing-4);
+}
+
+.success-message {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-800);
   margin-bottom: var(--spacing-6);
+}
+
+/* PURCHASE SUMMARY */
+.purchase-summary {
+  margin: var(--spacing-6) 0;
+  padding: var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--border-radius-lg);
+}
+
+.purchase-summary h2 {
+  margin-bottom: var(--spacing-4);
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.record-item {
+  background: white;
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2);
+}
+
+.tour-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--color-primary-500);
+  color: white;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.price-badge {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-700);
+}
+
+.record-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+}
+
+/* TOKEN LIST */
+.token-list {
+  margin: var(--spacing-6) 0;
 }
 
 .token-item {
@@ -17,6 +87,14 @@
   display: flex;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+
+code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: 4px;
+  font-family: monospace;
 }
 
 .date {
@@ -24,7 +102,7 @@
   color: var(--color-neutral-700);
 }
 
-/* Dugme u Travel Vista stilu */
+/* BUTTON */
 .explore-btn {
   padding: var(--spacing-4) var(--spacing-8);
   font-size: var(--font-size-base);
@@ -34,6 +112,10 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
+  margin-top: var(--spacing-6);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
 .explore-btn:hover {

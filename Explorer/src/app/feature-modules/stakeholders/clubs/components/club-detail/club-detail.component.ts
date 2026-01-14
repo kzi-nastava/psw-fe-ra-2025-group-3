@@ -2,10 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ClubService } from '../../club.service';
-import { ClubDto } from '../../model/club.model';
+import { ClubDto, ClubJoinRequestByTouristDto } from '../../model/club.model'; 
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.component';
+import { Person } from '../../../model/person.model';
+import { StakeholderService } from '../../../stakeholder.service';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'xp-club-detail',
@@ -15,6 +21,14 @@ import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.co
 export class ClubDetailComponent implements OnInit {
   club: ClubDto | null = null;
   isLoading = false;
+  user: User | undefined; 
+  
+  requests: ClubJoinRequestByTouristDto[] = []; 
+
+  touristControl = new FormControl<string | Person>('');
+  allTourists: Person[] = [];
+  filteredTourists!: Observable<Person[]>;
+  memberDetailsMap: Map<number, Person> = new Map();
 
   constructor(
     private route: ActivatedRoute,
@@ -22,14 +36,54 @@ export class ClubDetailComponent implements OnInit {
     private clubService: ClubService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private stakeholderService: StakeholderService
   ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadClub(id);
     }
+    this.loadTourists();
+  }
+
+  loadTourists(): void {
+    this.stakeholderService.getAllTourists().subscribe({
+      next: (tourists) => {
+        this.allTourists = tourists;
+        this.setupAutocomplete();
+      },
+      error: () => {
+        this.showError('Failed to load tourists');
+      }
+    });
+  }
+
+  setupAutocomplete(): void {
+    this.filteredTourists = this.touristControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const searchTerm = typeof value === 'string' ? value : '';
+        return searchTerm ? this._filterTourists(searchTerm) : this.allTourists.slice();
+      })
+    );
+  }
+
+  private _filterTourists(value: string): Person[] {
+    const filterValue = value.toLowerCase();
+    return this.allTourists.filter(tourist => 
+      tourist.name.toLowerCase().includes(filterValue) ||
+      tourist.surname.toLowerCase().includes(filterValue)
+    );
+  }
+
+  displayTourist(tourist: Person): string {
+    return tourist ? `${tourist.name} ${tourist.surname}` : '';
   }
 
   loadClub(id: number): void {
@@ -38,6 +92,11 @@ export class ClubDetailComponent implements OnInit {
       next: (club) => {
         this.club = club;
         this.isLoading = false;
+        this.loadMemberDetails();
+
+        if (this.user && this.club.ownerId === this.user.id) {
+            this.getRequests(this.club.id);
+        }
       },
       error: () => {
         this.isLoading = false;
@@ -45,6 +104,55 @@ export class ClubDetailComponent implements OnInit {
         this.router.navigate(['/clubs']);
       }
     });
+  }
+
+  getRequests(clubId: number): void {
+    this.clubService.getClubJoinRequests(clubId).subscribe({
+        next: (result) => { 
+            this.requests = result; 
+        },
+        error: (err) => console.error('Failed to load requests', err)
+    });
+  }
+
+  onRespond(requestId: number, accepted: boolean): void {
+    this.clubService.respondToClubJoinRequest(requestId, accepted).subscribe({
+        next: () => {
+            this.showSuccess(accepted ? 'Request accepted' : 'Request rejected');
+            if(this.club) {
+                this.getRequests(this.club.id);
+                if(accepted) {
+                    this.loadClub(this.club.id);
+                }
+            }
+        },
+        error: (err) => this.showError('Error responding to request')
+    });
+  }
+
+  loadMemberDetails(): void {
+    if (!this.club || !this.club.memberIds || this.club.memberIds.length === 0) {
+      return;
+    }
+
+    this.club.memberIds.forEach(userId => {
+      this.stakeholderService.getPersonByUserId(userId).subscribe({
+        next: (person) => {
+          this.memberDetailsMap.set(userId, person);
+        },
+        error: () => {
+          console.warn(`Failed to load details for user ${userId}`);
+        }
+      });
+    });
+  }
+
+  getMemberName(userId: number): string {
+    const member = this.memberDetailsMap.get(userId);
+    if (member) {
+      return `${member.name} ${member.surname}`;
+    }
+    return `User ID: ${userId}`;
   }
 
   get featuredImageUrl(): string | null {
@@ -58,8 +166,54 @@ export class ClubDetailComponent implements OnInit {
   }
 
   isOwner(): boolean {
-    const user = this.authService.user$.value;
-    return !!this.club && !!user && this.club.ownerId === user.id;
+    return !!this.club && !!this.user && this.club.ownerId === this.user.id;
+  }
+
+  toggleStatus(): void {
+    if (!this.club) return;
+    const newStatus = this.club.status === 'Active' ? 'Closed' : 'Active';
+    
+    this.clubService.changeStatus(this.club.id, newStatus).subscribe({
+      next: (updatedClub) => {
+        this.club = updatedClub;
+        this.showSuccess(`Club status changed to ${newStatus}`);
+      },
+      error: (err) => this.showError('Error changing status')
+    });
+  }
+
+  inviteMember(): void {
+    if (!this.club) return;
+    
+    const selectedTourist = this.touristControl.value;
+    if (!selectedTourist || typeof selectedTourist === 'string') {
+      this.showError('Please select a tourist from the list');
+      return;
+    }
+    
+    this.clubService.inviteMember(this.club.id, selectedTourist.userId).subscribe({
+      next: (updatedClub) => {
+        this.club = updatedClub;
+        this.touristControl.setValue('');
+        this.memberDetailsMap.set(selectedTourist.userId, selectedTourist);
+        this.showSuccess('Invitation sent successfully');
+      },
+      error: (err) => this.showError(err.error || 'Failed to invite member')
+    });
+  }
+
+  kickMember(memberId: number): void {
+    if (!this.club) return;
+    if (!confirm('Remove this member from the club?')) return;
+
+    this.clubService.kickMember(this.club.id, memberId).subscribe({
+      next: (updatedClub) => {
+        this.club = updatedClub;
+        this.memberDetailsMap.delete(memberId);
+        this.showSuccess('Member removed');
+      },
+      error: (err) => this.showError('Failed to remove member')
+    });
   }
 
   openEditDialog(): void {

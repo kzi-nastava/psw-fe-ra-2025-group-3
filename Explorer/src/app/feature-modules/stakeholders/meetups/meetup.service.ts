@@ -33,6 +33,11 @@ export class MeetupService {
     return this.http.get<Meetup>(`${url}/${id}`);
   }
 
+  getMeetupsByTourId(tourId: number): Observable<Meetup[]> {
+    const url = this.getUserBaseUrl();
+    return this.http.get<Meetup[]>(`${url}/by-tour/${tourId}`);
+  }
+
   createMeetup(dto: MeetupCreateDto): Observable<Meetup> {
     const url = this.getUserBaseUrl();
     return this.http.post<Meetup>(url, dto);

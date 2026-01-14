@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { MapService } from './map.service';
 import { environment } from 'src/env/environment';
+import { ElementRef } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 
 
 @Component({
@@ -22,21 +24,29 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() zoom = 15;
     @Input() initialPoint?: { lat: number; lng: number };
     @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number; name?: string }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
     @Output() routeDistanceChanged = new EventEmitter<number>();
+    @Output() zoomChanged = new EventEmitter<number>();
+    @Output() markerClicked = new EventEmitter<number>();
 
 
-    constructor(private mapService: MapService) {}
+    constructor(private mapService: MapService, private host: ElementRef) {}
 
     private initMap(): void {
-        const el = document.getElementById('map');
+        const el = this.host.nativeElement.querySelector('#map') as HTMLElement | null;
         if (!el) return;            // <--- ključno: nema container-a još
         this.map = L.map(el, {
             center: this.center,
             zoom: this.zoom,
             attributionControl: false,
+        });
+
+        // Listen to zoom changes
+        this.map.on('zoomend', () => {
+            const currentZoom = this.map.getZoom();
+            this.zoomChanged.emit(currentZoom);
         });
 
         const tiles = L.tileLayer(
@@ -48,9 +58,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
         );
         tiles.addTo(this.map);
 
-        if (this.mode === 'object-view' || this.isEditMode) {
-            this.loadAllPoints();
-        }
+        // if (this.mode === 'object-view' || this.isEditMode) {
+        //     this.loadAllPoints();
+        // }
+        this.loadAllPoints();
 
         if (this.isRouteMode && this.waypoints && this.waypoints.length > 0) {
             this.setRoute();
@@ -77,7 +88,21 @@ export class MapComponent implements AfterViewInit, OnChanges {
             this.map.removeLayer(this.clickMarker);
         }
 
-        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { draggable: true}).addTo(this.map);
+        // Use default icon with proper anchor
+        const defaultIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41], // Point of the icon which corresponds to marker's location
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { 
+            draggable: true,
+            icon: defaultIcon,
+            autoPan: false
+        }).addTo(this.map);
 
         this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
             const marker = event.target as L.Marker;
@@ -85,7 +110,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
             this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
         })
 
-        this.map.setView([this.initialPoint.lat, this.initialPoint.lng], this.zoom);
+        // Don't change zoom/view when marker is set - keep user's current view
     }
 
     private loadAllPoints(): void {
@@ -97,9 +122,28 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         if (!this.points) return;
 
-        this.points.forEach(p => {            
-            let marker = new L.Marker([p.lat, p.lng]).addTo(this.map);
+        this.points.forEach(p => {
+            let markerIcon = undefined;
+            if (p.color) {
+                markerIcon = L.icon({
+                    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${p.color}.png`,
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+            }
+            
+            let marker = new L.Marker([p.lat, p.lng], markerIcon ? { icon: markerIcon } : {}).addTo(this.map);
             this.pointMarkers.push(marker);   // ČUVAMO REFERENCU NA MARKER
+
+            // Add click event if marker has an id
+            if (p.id !== undefined) {
+                marker.on('click', () => {
+                    this.markerClicked.emit(p.id!);
+                });
+            }
 
             if (p.name) {
                 marker.bindPopup(p.name);
@@ -195,47 +239,83 @@ export class MapComponent implements AfterViewInit, OnChanges {
         });
     }
 
-    registerOnClick(): void {
-        this.map.on('click', (e: L.LeafletMouseEvent) => {
-            const coord = e.latlng;
-            const lat = coord.lat;
-            const lng = coord.lng;
+registerOnClick(): void {
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+        const coord = e.latlng;
+        const lat = coord.lat;
+        const lng = coord.lng;
 
+        // ✅ Route-view mod: SAMO pomeri marker
+        if (this.isRouteMode) {
+            if (this.clickMarker) {
+                this.clickMarker.setLatLng([lat, lng]);
+                this.pointSelected.emit({ lat, lng });
+            }
+            return;
+        }
+
+        // ✅ Object-view mod: SAMO pomeri marker
+        if (this.mode === 'object-view') {
+            if (this.clickMarker) {
+                this.clickMarker.setLatLng([lat, lng]);
+                this.pointSelected.emit({ lat, lng });
+            }
+            return;
+        }
+
+        // ✅ Edit mod: Standardna logika sa API pozivima
+        if (this.mode === 'edit-object') {
             this.mapService.reverseSearch(lat, lng).subscribe({
                 next: () => { },
                 error: () => { }
             });
 
-            if (this.isEditMode && this.clickMarker) {
+            if (this.clickMarker) {
                 this.map.removeLayer(this.clickMarker);
                 this.clickMarker = undefined;
             }
 
-            if (this.isEditMode) {
-                if (!this.clickMarker) {
-                    this.clickMarker = L.marker([lat, lng], { draggable: true })
-                        .addTo(this.map)
-                        .openPopup();
+            // Use default icon with proper anchor to ensure accurate positioning
+            const defaultIcon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41], // Point of the icon which corresponds to marker's location
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
 
-                    let address;
-                    this.mapService.reverseSearch(lat, lng).subscribe((res) => {
-                        address = res.address.road + ' ' + res.address.city;
-                        this.clickMarker?.bindPopup(address);
-                    });
+            this.clickMarker = L.marker([lat, lng], { 
+                draggable: true,
+                icon: defaultIcon
+            })
+                .addTo(this.map)
+                .openPopup();
 
-                    this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
-                        const marker = event.target as L.Marker;
-                        const pos = marker.getLatLng();
-                        this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
-                    });
-                } else {
-                    this.clickMarker.setLatLng([lat, lng]);
+            this.mapService.reverseSearch(lat, lng).subscribe({
+                next: (res) => {
+                    const address = res.address.road + ' ' + res.address.city;
+                    if (this.clickMarker) {
+                        this.clickMarker.bindPopup(address);
+                    }
+                },
+                error: () => {
+                    if (this.clickMarker) {
+                        this.clickMarker.bindPopup(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+                    }
                 }
+            });
 
-                this.pointSelected.emit({ lat, lng });
-            }
-        });
-    }
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
+
+            this.pointSelected.emit({ lat, lng });
+        }
+    });
+}
 
 
     ngAfterViewInit(): void {
@@ -248,8 +328,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
         setTimeout(() => {
             this.initMap();
             if (this.map) {
-                setTimeout(() => this.map.invalidateSize(), 0);
-                setTimeout(() => this.map.invalidateSize(), 150);
+                setTimeout(() => {
+                    if (this.map) {
+                        this.map.invalidateSize();
+                    }
+                }, 0);
+                setTimeout(() => {
+                    if (this.map) {
+                        this.map.invalidateSize();
+                    }
+                }, 150);
             }
         }, 0);
     }
@@ -269,4 +357,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
 
 }
-}
+    ngOnDestroy(): void {
+        this.map?.remove();
+        this.map = undefined;
+    }
+} 

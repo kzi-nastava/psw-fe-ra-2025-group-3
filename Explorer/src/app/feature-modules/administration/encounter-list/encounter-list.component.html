@@ -1,0 +1,127 @@
+<div class="encounter-list-container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Encounters</h1>
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-encounter-button"
+      (click)="onAddClicked()">
+      <mat-icon>add</mat-icon>
+      Add Encounter
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="!isLoading && encounters.length === 0" class="empty-state">
+    <mat-icon>star_border</mat-icon>
+    <h2>No encounters found</h2>
+    <p>The system currently has no encounters listed.</p>
+    <button mat-raised-button color="primary" (click)="onAddClicked()">
+      <mat-icon>add</mat-icon>
+      Create First Encounter
+    </button>
+  </div>
+
+  <!-- GRID SA KARTICAMA -->
+  <div *ngIf="!isLoading && encounters.length > 0" class="encounters-grid">
+
+    <mat-card *ngFor="let encounter of encounters" class="encounter-card">
+
+      <mat-card-header>
+        <div class="card-header-content">
+          <mat-icon class="header-icon">star</mat-icon>
+          <div class="header-text">
+            <mat-card-title>{{ encounter.name }}</mat-card-title>
+            <mat-card-subtitle>
+              <span class="status-badge"
+                    [ngClass]="getStatusClass(encounter.status)">
+                <mat-icon>{{ encounter.status === 'Active' ? 'check_circle' : encounter.status === 'Draft' ? 'edit' : 'archive' }}</mat-icon>
+                {{ encounter.status }}
+              </span>
+              <span class="type-badge" [ngClass]="getTypeClass(encounter.type)">
+                <mat-icon>{{ getTypeIcon(encounter.type) }}</mat-icon>
+                {{ encounter.type }}
+              </span>
+            </mat-card-subtitle>
+          </div>
+        </div>
+      </mat-card-header>
+
+  <mat-card-content>
+  <div class="encounter-details">
+
+    <div class="detail-item">
+      <mat-icon>description</mat-icon>
+      <span>{{ encounter.description }}</span>
+    </div>
+
+    <!-- ACTION DESCRIPTION samo za Misc -->
+    <div class="detail-item" *ngIf="encounter.type === 'Misc' && encounter.actionDescription">
+      <mat-icon>build</mat-icon>
+      <span>{{ encounter.actionDescription }}</span>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>location_on</mat-icon>
+      <span>{{ encounter.latitude }}, {{ encounter.longitude }}</span>
+    </div>
+
+    <div class="detail-item">
+      <mat-icon>star</mat-icon>
+      <span>{{ encounter.xp }} XP</span>
+    </div>
+
+  </div>
+</mat-card-content>
+
+
+      <mat-card-actions>
+
+        <!-- ADMIN ACTIONS ZA PENDING -->
+        <ng-container *ngIf="encounter.status === 'PendingApproval'; else normalActions">
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="approveEncounter(encounter)">
+            <mat-icon>check_circle</mat-icon>
+            Approve
+          </button>
+
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="rejectEncounter(encounter)">
+            <mat-icon>cancel</mat-icon>
+            Reject
+          </button>
+
+        </ng-container>
+
+        <!-- STANDARD ACTIONS -->
+        <ng-template #normalActions>
+          <button mat-button color="primary" (click)="onEditClicked(encounter)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+
+          <button mat-button color="warn" (click)="deleteEncounter(encounter.id || 0)">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </ng-template>
+
+      </mat-card-actions>
+
+    </mat-card>
+
+  </div>
+
+</div>

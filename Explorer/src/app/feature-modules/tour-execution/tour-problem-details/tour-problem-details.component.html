@@ -71,7 +71,7 @@
            class="message" 
            [ngClass]="{'message-tourist': message.authorType === AuthorType.Tourist, 'message-author': message.authorType === AuthorType.Author}">
         <div class="message-header">
-          <span class="message-author-label">{{getAuthorTypeName(message.authorType)}}</span>
+          <span class="message-author-label">{{message.senderName}} {{message.senderSurname}}</span>
           <span class="message-time">{{message.timestamp | date: 'dd/MM/yyyy HH:mm'}}</span>
         </div>
         <div class="message-content">

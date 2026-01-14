@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -20,6 +20,7 @@ import { ProfileListComponent } from './profile-list/profile-list.component';
 import { TouristToursComponent } from './tourist-tours/tourist-tours.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { MyPurchasedToursComponent } from './my-purchased-tours/my-purchased-tours.component';  //tour execution
+import { RecommendedToursComponent } from './preferences/recommended-tours/recommended-tours.component'; //tour recommendstions 
 // Angular Material moduli
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -27,6 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PreferenceOverviewComponent } from './preferences/preference-overview/preference-overview.component';
 import { PreferenceFormComponent } from './preferences/preference-form/preference-form.component';
 import { TouristEquipmentComponent } from './tourist-equipment/tourist-equipment.component';
@@ -35,8 +37,13 @@ import { PurchaseSuccessComponent } from './purchase/purchase-success.component'
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourDetails } from './model/tour-details.model';
 import { TourDetailsComponent } from './tour-details/tour-details.component';
+import { TouristEncountersComponent } from './tourist-encounters/tourist-encounters.component';
 import { RouterModule } from '@angular/router';
-
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MatListModule } from '@angular/material/list'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.component';
+import { TouristBundleService } from './tourist-bundle.service';
 
 
 @NgModule({
@@ -56,12 +63,16 @@ import { RouterModule } from '@angular/router';
     TouristEquipmentComponent,
     PurchaseSuccessComponent,
     TourDetailsComponent,
-    MyPurchasedToursComponent // t execution
+    MyPurchasedToursComponent, // t execution
+    TouristEncountersComponent,
+    RecommendedToursComponent, // tour recommendations
+    TouristBundlesComponent
     
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,   
@@ -76,9 +87,15 @@ import { RouterModule } from '@angular/router';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSnackBarModule,
+    SharedModule,
     MaterialModule,
     TourExecutionModule,
-    RouterModule
+    RouterModule,
+    SharedModule,
+    SharedModule,
+    MatListModule,
+    MatTooltipModule,
+    MatProgressBarModule
   ],
   exports: [
     ProfileComponent,
@@ -86,7 +103,8 @@ import { RouterModule } from '@angular/router';
     ProfileListComponent,
     TouristEquipmentComponent,
     PurchaseSuccessComponent,
-    TourDetailsComponent
+    TourDetailsComponent,
+    TouristBundlesComponent
   ]
 })
 export class StakeholdersModule { }

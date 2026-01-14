@@ -1,0 +1,86 @@
+<div class="comments-wrapper">
+
+  <h3>Comments</h3>
+
+  <div *ngIf="loading" class="text-center">
+    Loading comments...
+  </div>
+
+  <div *ngIf="!loading && comments.length === 0" class="text-muted">
+    No comments yet.
+  </div>
+
+  <div *ngIf="isReadOnly()" class="text-muted">
+    This blog is read-only. Comments are disabled.
+  </div>
+
+  <div *ngFor="let c of comments" class="comment-card">
+
+    <div class="comment-header">
+      User #{{ c.authorId }} · {{ c.createdAt | date:'short' }}{{ getEditedLabel(c) }}
+    </div>
+
+    <!-- VIEW MODE -->
+    <div *ngIf="editingCommentId !== c.id" class="comment-text">
+      {{ c.text }}
+    </div>
+
+    <!-- EDIT MODE -->
+    <div *ngIf="editingCommentId === c.id && !isReadOnly()" class="edit-area">
+      <textarea
+        [(ngModel)]="editText"
+        [ngModelOptions]="{ standalone: true }">
+      </textarea>
+
+      <div class="edit-actions">
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="saveEdit(c.id)"
+          [disabled]="isSavingEdit || !editText.trim()">
+          Save
+        </button>
+
+        <button
+          class="btn btn-secondary btn-sm"
+          (click)="cancelEdit()"
+          [disabled]="isSavingEdit">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div *ngIf="editingCommentId !== c.id && !isReadOnly()" class="comment-actions">
+      <button
+        class="btn btn-secondary btn-sm"
+        (click)="startEdit(c)">
+        Edit
+      </button>
+
+      <button
+        class="btn btn-outline-light btn-sm delete-btn"
+        (click)="deleteComment(c.id)">
+        Delete
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ADD NEW COMMENT -->
+  <div class="comment-form">
+    <textarea
+      [(ngModel)]="newComment"
+      [ngModelOptions]="{ standalone: true }"
+      placeholder="Write a comment..."
+      [disabled]="isReadOnly()">
+    </textarea>
+
+    <button
+      class="btn btn-primary"
+      (click)="addComment()"
+      [disabled]="isReadOnly() || !newComment.trim()">
+      Post Comment
+    </button>
+  </div>
+
+</div>

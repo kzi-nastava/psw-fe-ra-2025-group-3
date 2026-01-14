@@ -1,0 +1,87 @@
+<div class="bundle-list-container">
+  <div class="header">
+    <h1>My Tour Bundles</h1>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create New Bundle
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && bundles.length === 0" class="empty-state">
+    <mat-icon>inventory_2</mat-icon>
+    <h2>No bundles created yet</h2>
+    <p>Create a bundle by combining your published tours into a package deal.</p>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      Create First Bundle
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && bundles.length > 0" class="bundles-grid">
+    <mat-card *ngFor="let bundle of displayedBundles" class="bundle-card">
+      <mat-card-header>
+        <mat-card-title>{{ bundle.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <span class="status-badge" [ngClass]="getStatusClass(bundle.status)">
+            {{ getStatusLabel(bundle.status) }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="bundle-details">
+          <div class="detail-item">
+            <mat-icon>inventory</mat-icon>
+            <span>{{ bundle.tourIds.length }} Tours</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>attach_money</mat-icon>
+            <span>{{ bundle.price | number:'1.2-2' }} AC</span>
+          </div>
+        </div>
+
+        <div class="bundle-info">
+          <p class="created-date">
+            <mat-icon>calendar_today</mat-icon>
+            Created: {{ bundle.createdAt | date:'short' }}
+          </p>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="openEditDialog(bundle)" 
+                [disabled]="!canEdit(bundle)">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+
+        <button mat-button color="warn" (click)="deleteBundle(bundle)"
+                [disabled]="!canDelete(bundle)">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+
+        <button mat-button color="accent" (click)="publishBundle(bundle)"
+                *ngIf="canPublish(bundle)">
+          <mat-icon>publish</mat-icon>
+          Publish
+        </button>
+
+        <button mat-button color="warn" (click)="archiveBundle(bundle)"
+                *ngIf="canArchive(bundle)">
+          <mat-icon>archive</mat-icon>
+          Archive
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="hasMoreBundles()" class="show-more-container">
+    <button mat-raised-button (click)="showMore()">
+      Show More
+    </button>
+  </div>
+</div>

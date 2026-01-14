@@ -229,12 +229,130 @@ mat-form-field {
    IMAGES SECTION
    ============================================================================ */
 
+/* Drag and Drop Zone */
+.drag-drop-zone {
+  position: relative;
+  padding: var(--spacing-6);
+  margin-bottom: var(--spacing-4);
+  border: 3px dashed var(--color-primary-500);
+  border-radius: var(--border-radius-xl);
+  background: linear-gradient(135deg, 
+    rgba(0, 188, 212, 0.05) 0%, 
+    rgba(0, 188, 212, 0.05) 100%
+  );
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-drop-zone:hover:not(.disabled) {
+  background: linear-gradient(135deg, 
+    rgba(0, 188, 212, 0.1) 0%, 
+    rgba(0, 188, 212, 0.08) 100%
+  );
+  border-color: var(--color-primary-700);
+  box-shadow: var(--shadow-md);
+}
+
+.drag-drop-zone.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--color-neutral-400);
+}
+
+.drag-drop-zone.disabled:hover {
+  background: linear-gradient(135deg, 
+    rgba(0, 188, 212, 0.05) 0%, 
+    rgba(0, 188, 212, 0.05) 100%
+  );
+  box-shadow: none;
+}
+
+.drag-drop-zone.drag-over {
+  background: linear-gradient(135deg, 
+    rgba(0, 188, 212, 0.15) 0%, 
+    rgba(0, 188, 212, 0.1) 100%
+  );
+  border-color: var(--color-primary-800);
+  box-shadow: var(--shadow-lg), 0 0 0 4px rgba(0, 188, 212, 0.1);
+  transform: scale(1.02);
+}
+
+.drag-drop-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  pointer-events: none;
+}
+
+.drag-drop-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--color-primary-500);
+  animation: float 3s ease-in-out infinite;
+}
+
+.drag-drop-zone.drag-over .drag-drop-icon {
+  color: var(--color-primary-700);
+  font-size: 56px;
+  width: 56px;
+  height: 56px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.drag-drop-text {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-primary-700);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.drag-drop-counter {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-primary-500);
+  margin: 0;
+  line-height: 1.4;
+  background: rgba(0, 188, 212, 0.1);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  display: inline-block;
+}
+
+.drag-drop-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.drag-drop-zone.drag-over .drag-drop-text {
+  color: var(--color-primary-800);
+  font-weight: 700;
+}
+
 .images-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--spacing-3);
   margin-bottom: var(--spacing-4);
-  max-width: 500px;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -246,6 +364,7 @@ mat-form-field {
   overflow: hidden;
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
+  cursor: pointer;
 }
 
 .image-preview:hover {
@@ -410,6 +529,140 @@ mat-form-field {
 }
 
 /* ============================================================================
+   LIGHTBOX
+   ============================================================================ */
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.lightbox-container {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  height: 70%;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: var(--spacing-3);
+  background: white;
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-2xl);
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 188, 212, 0.2);
+  color: var(--color-primary-700);
+  border: none;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.lightbox-close-btn:hover {
+  background: rgba(0, 188, 212, 0.4);
+}
+
+.lightbox-close-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.lightbox-image-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.lightbox-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  justify-content: center;
+  width: 100%;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid rgba(0, 188, 212, 0.1);
+}
+
+.lightbox-nav-btn {
+  background: var(--color-primary-500);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-nav-btn:not([disabled]):hover {
+  background: var(--color-primary-700);
+}
+
+.lightbox-nav-btn[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: var(--color-neutral-400);
+}
+
+.lightbox-nav-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.lightbox-counter {
+  color: var(--color-primary-700);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  background: var(--color-primary-50);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-primary-200);
+}
+
+/* ============================================================================
    RESPONSIVE
    ============================================================================ */
 
@@ -441,6 +694,23 @@ mat-form-field {
     width: 100%;
   }
 
+  .drag-drop-zone {
+    padding: var(--spacing-4);
+    min-height: 150px;
+  }
+
+  .drag-drop-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .drag-drop-zone.drag-over .drag-drop-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
   .images-grid {
     grid-template-columns: repeat(3, 1fr);
     max-width: 100%;
@@ -465,6 +735,25 @@ mat-form-field {
 
   .form-card mat-card-content {
     padding: var(--spacing-4);
+  }
+
+  .drag-drop-zone {
+    padding: var(--spacing-3);
+    min-height: 140px;
+  }
+
+  .drag-drop-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .drag-drop-text {
+    font-size: var(--font-size-sm);
+  }
+
+  .drag-drop-hint {
+    font-size: var(--font-size-xs);
   }
 
   .images-grid {

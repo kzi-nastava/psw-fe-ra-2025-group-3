@@ -15,6 +15,7 @@
   </div>
 
   <div *ngIf="!loading && facilities.length === 0" class="empty-box card text-center">
+    <p>No facilities available.</p>
     <p>No facilities.</p>
   </div>
 
@@ -23,6 +24,7 @@
     <table class="styled-table">
       <thead>
         <tr>
+          <th>Name</th>
           <th>Title</th>
           <th>Category</th>
           <th>Latitude</th>

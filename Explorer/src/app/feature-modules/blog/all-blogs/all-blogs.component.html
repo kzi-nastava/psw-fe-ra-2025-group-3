@@ -24,14 +24,26 @@
   <!-- Blog Grid -->
   <div *ngIf="!isLoading && blogs.length > 0" class="blog-grid">
     <mat-card *ngFor="let blog of blogs" class="blog-card" (click)="viewBlog(blog.id)">
+
       <!-- Blog Image -->
       <div class="blog-image-container">
-        <img 
-          mat-card-image 
-          [src]="getImageUrl(blog)" 
+        <img
+          mat-card-image
+          [src]="getImageUrl(blog)"
           [alt]="blog.title"
           class="blog-image">
+
         <div class="image-overlay">
+          <span
+            *ngIf="getBlogStatus(blog.status)"
+            [ngClass]="{
+              'status-active': getBlogStatus(blog.status) == 'ACTIVE',
+              'status-famous': getBlogStatus(blog.status) == 'FAMOUS',
+              'status-readonly': getBlogStatus(blog.status) == 'READ-ONLY'
+            }">
+            {{ getBlogStatus(blog.status) }}
+          </span>
+
           <span class="blog-date">
             <mat-icon>calendar_today</mat-icon>
             {{ formatDate(blog.creationDate) }}
@@ -43,15 +55,29 @@
       <mat-card-content>
         <h2 class="blog-title">{{ blog.title }}</h2>
         <div class="blog-description" markdown>{{ truncateMarkdown(blog.description, 120) }}</div>
-        
-        <!-- Image Count Badge -->
+
+        <!-- Meta -->
         <div class="blog-meta">
           <span class="image-count">
             <mat-icon>photo_library</mat-icon>
             {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
           </span>
+
+          <!-- ✅ novo: min read -->
+          <span class="read-time">
+            <mat-icon>schedule</mat-icon>
+            {{ (blog.estimatedReadMinutes || 1) }} min read
+          </span>
+
+          <!-- (opciono) comment count, ako želiš i ovde:
+          <span class="comment-count">
+            <mat-icon>comment</mat-icon>
+            {{ blog.commentsCount }} {{ blog.commentsCount === 1 ? 'comment' : 'comments' }}
+          </span>
+          -->
         </div>
       </mat-card-content>
+
     </mat-card>
   </div>
 </div>

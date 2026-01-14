@@ -7,14 +7,176 @@
       </p>
     </div>
 
+    <!-- Search & Filter Panel -->
+    <div class="filter-panel card">
+      <div class="filter-header" (click)="toggleFilters()">
+        <h3 class="filter-title">
+          <mat-icon>filter_list</mat-icon>
+          Search & Filters
+          <span class="active-filters-badge" *ngIf="activeFiltersCount > 0">
+            {{ activeFiltersCount }}
+          </span>
+        </h3>
+        <button mat-icon-button class="toggle-btn">
+          <mat-icon>{{ isFiltersExpanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="filter-content" [@expandCollapse]="isFiltersExpanded ? 'expanded' : 'collapsed'">
+        
+        <!-- Search and Difficulty Row -->
+        <div class="filter-row">
+          <!-- Search by Name -->
+          <div class="filter-section">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Search tours</mat-label>
+              <input matInput [formControl]="searchControl" placeholder="Type to search...">
+              <mat-icon matPrefix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Difficulty Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">terrain</mat-icon>
+              Difficulty
+            </label>
+            <div class="difficulty-checkboxes">
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Easy)"
+                (change)="onDifficultyToggle(TourDifficulty.Easy)">
+                Easy
+              </mat-checkbox>
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Medium)"
+                (change)="onDifficultyToggle(TourDifficulty.Medium)">
+                Medium
+              </mat-checkbox>
+              <mat-checkbox 
+                [checked]="isDifficultySelected(TourDifficulty.Hard)"
+                (change)="onDifficultyToggle(TourDifficulty.Hard)">
+                Hard
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+
+        <!-- Price and Rating Row -->
+        <div class="filter-row compact">
+          <!-- Price Range Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">attach_money</mat-icon>
+              Price (RSD)
+            </label>
+            <div class="price-inputs">
+              <mat-form-field appearance="outline">
+                <mat-label>Min</mat-label>
+                <input matInput type="number" [(ngModel)]="minPrice" (ngModelChange)="onPriceChange()" min="0">
+              </mat-form-field>
+              <span class="price-separator">-</span>
+              <mat-form-field appearance="outline">
+                <mat-label>Max</mat-label>
+                <input matInput type="number" [(ngModel)]="maxPrice" (ngModelChange)="onPriceChange()" min="0">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Rating Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">star</mat-icon>
+              Min Rating
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Any rating</mat-label>
+              <mat-select [(ngModel)]="selectedMinRating" (ngModelChange)="onRatingChange()">
+                <mat-option [value]="null">Any</mat-option>
+                <mat-option *ngFor="let rating of ratingOptions" [value]="rating">
+                  {{ rating }}.0+
+                  <mat-icon class="star-icon-inline">star</mat-icon>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Sale Filter and Sort -->
+        <div class="filter-row">
+          <!-- Sale Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">local_offer</mat-icon>
+              On Sale
+            </label>
+            <mat-checkbox [(ngModel)]="filterOnSale" (ngModelChange)="onSaleFilterChange()">
+              Show only tours on sale
+            </mat-checkbox>
+          </div>
+
+          <!-- Sort by Discount -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">sort</mat-icon>
+              Sort by Discount
+            </label>
+            <mat-checkbox [(ngModel)]="sortByDiscount" (ngModelChange)="onSortByDiscountChange()">
+              Sort by discount percentage (descending)
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Tags Filter - Full Width -->
+        <div class="filter-row single-column" *ngIf="availableTags.length > 0">
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">label</mat-icon>
+              Tags
+              <span class="selected-count" *ngIf="selectedTags.length > 0">
+                ({{ selectedTags.length }} selected)
+              </span>
+            </label>
+            <div class="tags-filter">
+              <mat-chip-set>
+                <mat-chip 
+                  *ngFor="let tag of availableTags"
+                  [class.selected]="isTagSelected(tag)"
+                  (click)="onTagToggle(tag)">
+                  {{ tag }}
+                  <mat-icon *ngIf="isTagSelected(tag)" class="chip-check">check</mat-icon>
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Count & Reset -->
+        <div class="filter-actions">
+          <div class="results-count">
+            <mat-icon>info</mat-icon>
+            <span>{{ totalResults }} {{ totalResults === 1 ? 'tour' : 'tours' }} found</span>
+          </div>
+          <button mat-stroked-button color="primary" (click)="resetFilters()">
+            <mat-icon>refresh</mat-icon>
+          Reset Filters
+        </button>
+      </div>
+      </div> <!-- Close filter-content -->
+    </div>
+
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner></mat-spinner>
     </div>
 
     <div *ngIf="!isLoading && tours.length === 0" class="empty-state">
       <mat-icon>explore_off</mat-icon>
-      <h2>No tours available</h2>
-      <p>There are currently no published tours. Please check back later.</p>
+      <h2>No tours found</h2>
+      <p *ngIf="searchControl.value || selectedTags.length > 0 || selectedDifficulties.length > 0 || minPrice || maxPrice || selectedMinRating || filterOnSale !== null || sortByDiscount">
+        There are no tours matching the selected filters. Try adjusting your search criteria.
+      </p>
+      <p *ngIf="!searchControl.value && selectedTags.length === 0 && selectedDifficulties.length === 0 && !minPrice && !maxPrice && !selectedMinRating && filterOnSale === null && !sortByDiscount">
+        There are currently no published tours. Please check back later.
+      </p>
     </div>
 
     <div *ngIf="!isLoading && tours.length > 0" class="tours-grid">
@@ -50,13 +212,21 @@
           <p class="description">{{ tour.description }}</p>
 
           <div class="tour-details">
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="tour.difficulty !== undefined && tour.difficulty !== null">
               <mat-icon>terrain</mat-icon>
-              <span>{{ tour.difficulty }}</span>
+              <span>{{ getDifficultyLabel(tour.difficulty) }}</span>
             </div>
-            <div class="detail-item">
-              <mat-icon>attach_money</mat-icon>
-              <span>{{ tour.price | number:'1.2-2' }} RSD</span>
+                      <!-- CENA U AC -->
+            <div class="detail-item price-highlight">
+              <mat-icon>monetization_on</mat-icon>
+              <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
+                <div class="price-row">
+                  <span class="price-value original-price">{{ tour.originalPrice }} AC</span>
+                  <span class="price-value discounted-price">{{ tour.discountedPrice }} AC</span>
+                  <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
+                </div>
+              </div>
+              <span class="price-value" *ngIf="!tour.onSale">{{ tour.price }} AC</span>
             </div>
             
             <div class="detail-item rating-display" *ngIf="tour.averageRating">

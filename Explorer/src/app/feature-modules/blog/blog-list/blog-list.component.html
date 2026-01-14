@@ -3,10 +3,7 @@
 <div class="blog-container">
   <!-- Header -->
   <div class="header">
-    <h1>
-      <mat-icon>article</mat-icon>
-      My Blogs
-    </h1>
+    <h1>My Blogs</h1>
     <button mat-raised-button color="primary" (click)="openCreateDialog()">
       <mat-icon>add</mat-icon>
       Create New Blog
@@ -32,7 +29,7 @@
   <!-- Blog Grid -->
   <div *ngIf="!isLoading && blogs.length > 0" class="blog-grid">
     <mat-card *ngFor="let blog of blogs" class="blog-card">
-      
+
       <!-- ✅ Status Badge -->
       <div class="status-badge-container">
         <span class="status-badge status-{{ blog.status }}">
@@ -43,11 +40,7 @@
 
       <!-- Blog Image -->
       <div class="blog-image-container" (click)="viewBlog(blog.id)">
-        <img 
-          mat-card-image 
-          [src]="getImageUrl(blog)" 
-          [alt]="blog.title"
-          class="blog-image">
+        <img mat-card-image [src]="getImageUrl(blog)" [alt]="blog.title" class="blog-image">
         <div class="image-overlay">
           <span class="blog-date">
             <mat-icon>calendar_today</mat-icon>
@@ -60,13 +53,22 @@
       <mat-card-content (click)="viewBlog(blog.id)">
         <h2 class="blog-title">{{ blog.title }}</h2>
         <div class="blog-description" markdown>{{ truncateMarkdown(blog.description, 120) }}</div>
-        
+
         <!-- Meta Info -->
         <div class="blog-meta">
           <span class="image-count">
             <mat-icon>photo_library</mat-icon>
             {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
           </span>
+          <span class="comment-count">
+            <mat-icon>comment</mat-icon>
+            {{ blog.commentsCount }} {{ blog.commentsCount === 1 ? 'comment' : 'comments' }}
+          </span>
+          <span class="read-time">
+            <mat-icon>schedule</mat-icon>
+            {{ (blog.estimatedReadMinutes || 1) }} min read
+          </span>
+
           <span *ngIf="blog.lastModifiedDate" class="last-modified">
             <mat-icon>update</mat-icon>
             Updated {{ formatDate(blog.lastModifiedDate) }}
@@ -79,9 +81,7 @@
         <!-- ✅ Status Dropdown -->
         <mat-form-field appearance="outline" class="status-selector">
           <mat-label>Status</mat-label>
-          <mat-select 
-            [value]="blog.status" 
-            (selectionChange)="changeStatus(blog, $event.value)"
+          <mat-select [value]="blog.status" (selectionChange)="changeStatus(blog, $event.value)"
             [disabled]="isChangingStatus[blog.id]">
             <mat-option [value]="0">
               <mat-icon>edit_note</mat-icon>
@@ -99,10 +99,7 @@
         </mat-form-field>
 
         <!-- Edit Button -->
-        <button 
-          mat-button 
-          color="primary" 
-          (click)="openEditDialog(blog); $event.stopPropagation()"
+        <button mat-button color="primary" (click)="openEditDialog(blog); $event.stopPropagation()"
           [disabled]="blog.status === 2">
           <mat-icon>edit</mat-icon>
           Edit

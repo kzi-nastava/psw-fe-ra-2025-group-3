@@ -1,0 +1,56 @@
+<div class="diary-list-container">
+
+  <div class="header">
+    <h1>My Diaries</h1>
+    <button
+      mat-raised-button
+      color="primary"
+      routerLink="new">
+      Create Diary
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading-container">
+    <p>Loading diaries...</p>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="!loading && diaries.length === 0" class="empty-state">
+    <h2>No diaries available</h2>
+    <p>You haven’t created any diaries yet.</p>
+  </div>
+
+  <!-- GRID -->
+  <div *ngIf="!loading && diaries.length > 0" class="diaries-grid">
+    <div *ngFor="let d of diaries" class="diary-card">
+
+      <div class="diary-header">
+        <h3>{{ d.title }}</h3>
+      </div>
+
+      <div class="diary-content">
+        <p>
+          <strong>Location:</strong>
+          {{ d.country }}<span *ngIf="d.city">, {{ d.city }}</span>
+        </p>
+        <p class="datetime">
+          <strong>Created:</strong>
+          {{ d.createdAt | date:'short' }}
+        </p>
+      </div>
+
+      <div class="diary-actions">
+        <button mat-button class="edit-btn" [routerLink]="[d.id, 'edit']">
+          Edit
+        </button>
+
+        <button mat-button color="warn" (click)="delete(d.id)">
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

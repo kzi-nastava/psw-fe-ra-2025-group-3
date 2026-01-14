@@ -12,6 +12,14 @@ import { KeyPointListComponent } from './key-points/key-point-list/key-point-lis
 import { KeyPointPageComponent } from './key-points/key-point-page/key-point-page.component';
 import { TourExecutionModule } from '../tour-execution/tour-execution.module';
 import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
+import { TourProblemsDialogComponent } from './tour-problems-dialog/tour-problems-dialog.component';
+import { BundleListComponent } from './bundle-list/bundle-list.component';
+import { BundleFormComponent } from './bundle-form/bundle-form.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CouponListComponent } from './coupon-list/coupon-list.component';
+import { CouponFormComponent } from './coupon-form/coupon-form.component';
+import { SaleListComponent } from './sale-list/sale-list.component';
+import { SaleFormComponent } from './sale-form/sale-form.component';
 
 @NgModule({
   declarations: [
@@ -22,19 +30,28 @@ import { TourWizardComponent } from './tour-wizard/tour-wizard.component';
     KeyPointPageComponent,
     AuthorProblemListComponent,
     AuthorProblemDetailsComponent,
-    TourWizardComponent
-
+    TourWizardComponent,
+    TourProblemsDialogComponent,
+    BundleListComponent,
+    BundleFormComponent,
+    CouponListComponent,
+    CouponFormComponent,
+    SaleListComponent,
+    SaleFormComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
     SharedModule,
-    TourExecutionModule
+    TourExecutionModule,
+    MatSlideToggleModule
   ],
   exports: [
     TourListComponent,
-    TourFormComponent
+    TourFormComponent,
+    BundleListComponent,
+    SaleListComponent
   ]
 })
 export class TourAuthoringModule { }

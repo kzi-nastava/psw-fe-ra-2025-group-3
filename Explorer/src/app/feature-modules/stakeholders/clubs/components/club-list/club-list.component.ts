@@ -6,6 +6,7 @@ import { ClubDto } from '../../model/club.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.component';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'xp-club-list',
@@ -18,6 +19,7 @@ export class ClubListComponent implements OnInit {
   pageSize = 6;
   totalCount = 0;
   isLoading = false;
+  user: User | undefined;
 
   constructor(
     private clubService: ClubService,
@@ -27,6 +29,13 @@ export class ClubListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      if (user && user.id !== 0) {
+        this.user = user;
+      } else {
+        this.user = undefined;
+      }
+    });
     this.loadClubs();
   }
 
@@ -68,6 +77,28 @@ export class ClubListComponent implements OnInit {
   getClubImageUrl(club: ClubDto): string | null {
     if (!club.featuredImage || !club.featuredImage.imageUrl) return null;
     return this.clubService.buildImageUrl(club.featuredImage.imageUrl);
+  }
+
+  isMember(club: ClubDto): boolean {
+    if (!this.user) return false;
+    return club.memberIds && club.memberIds.includes(this.user.id);
+  }
+
+  isOwner(club: ClubDto): boolean {
+    if (!this.user) return false;
+    return club.ownerId == this.user.id;
+  }
+
+  onJoinClub(clubId: number): void {
+    this.clubService.sendClubJoinRequest(clubId).subscribe({
+      next: () => {
+        this.snackBar.open('Request sent successfully!', 'Close', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error(err);
+        this.showError(err.error?.detail || 'Failed to send request. You might have already requested to join.');
+      }
+    });
   }
 
   private showError(message: string): void {
