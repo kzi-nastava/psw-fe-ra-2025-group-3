@@ -3,23 +3,17 @@
   <div class="card form-card">
 
     <h2 class="mb-6">
-<<<<<<< HEAD
       {{ isEditMode ? 'Edit Facility' : 'Create Facility' }}
-=======
       {{ isEditMode ? 'Edit facilty' : 'Add new facility' }}
->>>>>>> development
     </h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
 
       <!-- Facility Name -->
       <mat-form-field appearance="outline" class="full-width">
-<<<<<<< HEAD
         <mat-label>Facility Name</mat-label>
-=======
         <mat-label>Title</mat-label>
         <input matInput formControlName="name">
->>>>>>> development
         <mat-icon matPrefix>location_on</mat-icon>
         <input matInput formControlName="name">
       </mat-form-field>
@@ -45,15 +39,12 @@
       <!-- Category -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Category</mat-label>
-<<<<<<< HEAD
-=======
         <mat-select formControlName="category">
           <mat-option [value]="0">WC</mat-option>
           <mat-option [value]="1">Restaurant</mat-option>
           <mat-option [value]="2">Parking</mat-option>
           <mat-option [value]="3">Other</mat-option>
         </mat-select>
->>>>>>> development
         <mat-icon matPrefix>category</mat-icon>
         <mat-select formControlName="category">
           <mat-option value="0">WC</mat-option>
@@ -69,11 +60,8 @@
         color="primary" 
         class="submit-btn"
         type="submit">
-<<<<<<< HEAD
         {{ isEditMode ? 'Save Changes' : 'Create Facility' }}
-=======
         {{ isEditMode ? 'Save changes' : 'Add facilty' }}
->>>>>>> development
       </button>
 
     </form>
