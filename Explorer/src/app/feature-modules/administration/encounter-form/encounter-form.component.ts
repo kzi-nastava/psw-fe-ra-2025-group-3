@@ -161,7 +161,12 @@ private updateValidatorsForType(type: EncounterType): void {
       longitude: formValue.longitude,
       xp: formValue.xp,
       status: this.data.actor === 'tourist' ? EncounterStatus.PendingApproval : (formValue.status as EncounterStatus),
-      type: encounterType
+      type: encounterType,
+      // Initialize all optional fields as null/empty to avoid backend validation errors
+      actionDescription: null,
+      requiredPeopleCount: null,
+      rangeInMeters: null,
+      imageUrl: null
     };
 
     // Add type-specific fields
@@ -192,6 +197,8 @@ private updateValidatorsForType(type: EncounterType): void {
     } else {
       const encounter: Encounter = encounterData;
 
+      console.log('📤 Sending encounter create request:', encounter);
+      
       this.encounterService.create(this.data.actor, encounter).subscribe({
         next: () => {
           if(this.data.actor === 'tourist') {
@@ -202,7 +209,12 @@ private updateValidatorsForType(type: EncounterType): void {
           }
           this.dialogRef.close(true);
         },
-        error: () => this.showError('Error creating encounter')
+        error: (err) => {
+          console.error('❌ Error creating encounter:', err);
+          console.error('Error details:', err.error);
+          console.error('Validation errors:', err.error?.errors);
+          this.showError('Error creating encounter: ' + (err.error?.message || err.message));
+        }
       });
     }
   }
