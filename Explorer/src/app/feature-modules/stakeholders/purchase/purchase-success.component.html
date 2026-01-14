@@ -6,12 +6,21 @@
   </p>
 
   <!-- PURCHASE RECORDS -->
-  <div class="purchase-summary" *ngIf="purchaseRecords.length > 0">
+  <div class="purchase-summary" *ngIf="purchaseRecords.length > 0 || bundlePurchaseRecords.length > 0">
     <h2>Purchase Summary</h2>
     <div class="record-list">
       <div class="record-item" *ngFor="let record of purchaseRecords">
         <div class="record-header">
           <span class="tour-badge">TOUR #{{ record.tourId }}</span>
+          <span class="price-badge">{{ record.priceAc }} AC</span>
+        </div>
+        <div class="record-date">
+          {{ record.purchasedAt | date:'medium' }}
+        </div>
+      </div>
+      <div class="record-item" *ngFor="let record of bundlePurchaseRecords">
+        <div class="record-header">
+          <span class="tour-badge">BUNDLE #{{ record.bundleId }}</span>
           <span class="price-badge">{{ record.priceAc }} AC</span>
         </div>
         <div class="record-date">

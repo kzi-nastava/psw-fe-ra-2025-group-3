@@ -110,6 +110,12 @@ export class TourService {
     if (searchParams.minRating !== undefined && searchParams.minRating !== null) {
       params = params.set('minRating', searchParams.minRating.toString());
     }
+    if (searchParams.onSale !== undefined && searchParams.onSale !== null) {
+      params = params.set('onSale', searchParams.onSale.toString());
+    }
+    if (searchParams.sortByDiscount !== undefined && searchParams.sortByDiscount !== null) {
+      params = params.set('sortByDiscount', searchParams.sortByDiscount.toString());
+    }
 
     return this.http.get<Tour[]>(`${environment.apiHost}tourist/tours/search`, { params });
   }
