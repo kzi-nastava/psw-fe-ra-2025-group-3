@@ -19,6 +19,7 @@ export interface Encounter {
   imageUrl?: string;  // Image URL as hint for finding the location
   // NOTE: latitude/longitude above are the REAL coordinates for HiddenLocation
   // Backend sends 0,0 to tourists to hide the location!
+  isMandatory?: boolean; // Whether this encounter is mandatory to complete a key point
 }
 
 export enum EncounterStatus {

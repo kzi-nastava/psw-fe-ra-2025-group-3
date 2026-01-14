@@ -54,7 +54,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
         actionDescription: [''],
         requiredPeopleCount: [null],
         rangeInMeters: [null],
-        imageUrl: [''] // hint image (HiddenLocation)
+        imageUrl: [''], // hint image (HiddenLocation)
+        isMandatory: [false]
       })
     });
     this.toggleEncounter(false);
@@ -86,6 +87,7 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
   get eRequiredPeopleCount() { return this.encounterGroup.get('requiredPeopleCount'); }
   get eRangeInMeters() { return this.encounterGroup.get('rangeInMeters'); }
   get eImageUrl() { return this.encounterGroup.get('imageUrl'); }
+  get eIsMandatory() { return this.encounterGroup.get('isMandatory'); }
 
   onSubmit(): void {
     if (this.keyPointForm.invalid) {
@@ -111,7 +113,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
         description: e.description,
         xp: e.xp,
         status: EncounterStatus.PendingApproval, // autor šalje na odobrenje
-        type: encounterType
+        type: encounterType,
+        isMandatory: e.isMandatory ?? false
       };
 
       if (encounterType === EncounterType.Misc) {
@@ -152,7 +155,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
           name: this.keyPoint.name,
           description: this.keyPoint.description,
           imageUrl: this.keyPoint.imageUrl,
-          secret: this.keyPoint.secret
+          secret: this.keyPoint.secret,
+          isMandatory: this.keyPoint.encounter?.isMandatory ?? false
         });
 
         this.preview = this.keyPoint.imageUrl;
@@ -172,7 +176,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
             actionDescription: this.keyPoint.encounter.actionDescription || '',
             requiredPeopleCount: this.keyPoint.encounter.requiredPeopleCount || null,
             rangeInMeters: this.keyPoint.encounter.rangeInMeters || null,
-            imageUrl: this.keyPoint.encounter.imageUrl || ''
+            imageUrl: this.keyPoint.encounter.imageUrl || '',
+            isMandatory: this.keyPoint.encounter.isMandatory || false
           });
 
           this.updateValidatorsForType(this.keyPoint.encounter.type);
@@ -271,7 +276,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
         actionDescription: '',
         requiredPeopleCount: null,
         rangeInMeters: null,
-        imageUrl: ''
+        imageUrl: '',
+        isMandatory: false
       });
       this.encounterGroup.disable({ emitEvent: false });
       return;
