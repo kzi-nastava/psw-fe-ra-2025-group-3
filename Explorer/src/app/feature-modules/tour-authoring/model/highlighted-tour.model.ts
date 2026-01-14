@@ -14,6 +14,11 @@ export interface HighlightedTour {
   startPoint: string; // name of the first KeyPoint (from backend)
   firstKeyPoint?: FirstKeyPoint; // first KeyPoint object with image
   reviews?: TourReview[];
+  // Sale properties
+  onSale?: boolean;
+  originalPrice?: number;
+  discountedPrice?: number;
+  discountPercentage?: number;
 }
 
 export interface FirstKeyPoint {

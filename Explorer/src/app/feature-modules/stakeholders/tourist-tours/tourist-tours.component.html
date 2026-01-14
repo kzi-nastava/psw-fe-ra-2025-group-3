@@ -101,6 +101,31 @@
           </div>
         </div>
 
+        <!-- Sale Filter and Sort -->
+        <div class="filter-row">
+          <!-- Sale Filter -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">local_offer</mat-icon>
+              On Sale
+            </label>
+            <mat-checkbox [(ngModel)]="filterOnSale" (ngModelChange)="onSaleFilterChange()">
+              Show only tours on sale
+            </mat-checkbox>
+          </div>
+
+          <!-- Sort by Discount -->
+          <div class="filter-section">
+            <label class="filter-label">
+              <mat-icon class="label-icon">sort</mat-icon>
+              Sort by Discount
+            </label>
+            <mat-checkbox [(ngModel)]="sortByDiscount" (ngModelChange)="onSortByDiscountChange()">
+              Sort by discount percentage (descending)
+            </mat-checkbox>
+          </div>
+        </div>
+
         <!-- Tags Filter - Full Width -->
         <div class="filter-row single-column" *ngIf="availableTags.length > 0">
           <div class="filter-section">
@@ -146,10 +171,10 @@
     <div *ngIf="!isLoading && tours.length === 0" class="empty-state">
       <mat-icon>explore_off</mat-icon>
       <h2>No tours found</h2>
-      <p *ngIf="searchControl.value || selectedTags.length > 0 || selectedDifficulties.length > 0 || minPrice || maxPrice || selectedMinRating">
+      <p *ngIf="searchControl.value || selectedTags.length > 0 || selectedDifficulties.length > 0 || minPrice || maxPrice || selectedMinRating || filterOnSale !== null || sortByDiscount">
         There are no tours matching the selected filters. Try adjusting your search criteria.
       </p>
-      <p *ngIf="!searchControl.value && selectedTags.length === 0 && selectedDifficulties.length === 0 && !minPrice && !maxPrice && !selectedMinRating">
+      <p *ngIf="!searchControl.value && selectedTags.length === 0 && selectedDifficulties.length === 0 && !minPrice && !maxPrice && !selectedMinRating && filterOnSale === null && !sortByDiscount">
         There are currently no published tours. Please check back later.
       </p>
     </div>
@@ -194,7 +219,14 @@
                       <!-- CENA U AC -->
             <div class="detail-item price-highlight">
               <mat-icon>monetization_on</mat-icon>
-              <span class="price-value">{{ tour.price }} AC</span>
+              <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
+                <div class="price-row">
+                  <span class="price-value original-price">{{ tour.originalPrice }} AC</span>
+                  <span class="price-value discounted-price">{{ tour.discountedPrice }} AC</span>
+                  <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
+                </div>
+              </div>
+              <span class="price-value" *ngIf="!tour.onSale">{{ tour.price }} AC</span>
             </div>
             
             <div class="detail-item rating-display" *ngIf="tour.averageRating">

@@ -28,8 +28,9 @@
       <div class="full-width" *ngIf="dataLoaded">
         <mat-label>Location</mat-label>
 
+        <!-- [mode]="'edit-object'" vvvv -->
         <xp-map
-          [mode]="'edit-object'"
+          mode="edit-object"
           [points]="mapPoints"
           (pointSelected)="onPointSelected($event)">
         </xp-map>

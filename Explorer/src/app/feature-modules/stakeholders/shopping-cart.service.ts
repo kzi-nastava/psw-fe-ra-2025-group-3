@@ -10,6 +10,7 @@ export interface CheckoutResult {
   message: string;
   tokens: any[];
   purchaseRecords: any[];
+  bundlePurchaseRecords?: any[];
 }
 
 @Injectable({

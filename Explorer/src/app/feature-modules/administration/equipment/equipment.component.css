@@ -23,7 +23,7 @@ table {
 }
 
 thead tr {
-    background-color: #3f51b5;
+    background-color: var(--color-primary-800);
     color: #ffffff;
     text-align: left;
 }

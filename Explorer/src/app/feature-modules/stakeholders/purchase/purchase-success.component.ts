@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class PurchaseSuccessComponent {
   tokens: any[] = [];
   purchaseRecords: any[] = [];
+  bundlePurchaseRecords: any[] = [];
 
   constructor(private router: Router) {
     const nav = this.router.getCurrentNavigation();
@@ -16,9 +17,10 @@ export class PurchaseSuccessComponent {
     
     this.tokens = state?.['tokens'] || [];
     this.purchaseRecords = state?.['purchaseRecords'] || [];
+    this.bundlePurchaseRecords = state?.['bundlePurchaseRecords'] || [];
   }
 
   goExplore(): void {
-    this.router.navigate(['/tourist/my-purchased-tours']);
+    this.router.navigate(['/tourist/my-tours']);
   }
 }

@@ -58,9 +58,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
         );
         tiles.addTo(this.map);
 
-        if (this.mode === 'object-view' || this.isEditMode) {
-            this.loadAllPoints();
-        }
+        // if (this.mode === 'object-view' || this.isEditMode) {
+        //     this.loadAllPoints();
+        // }
+        this.loadAllPoints();
 
         if (this.isRouteMode && this.waypoints && this.waypoints.length > 0) {
             this.setRoute();

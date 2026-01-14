@@ -32,16 +32,24 @@ export class TouristMapComponent implements OnInit {
   this.touristMapService.getMyPosition().subscribe({
     next: (pos: TouristPositionDto | null) => {
       if (!pos) {
-        return;
+        this.initialPoint = {
+            lat: 0,
+            lng: 0
+        };
+        this.selectedPoint = {
+            lat: 0,
+            lng: 0,
+        };
       }
+      else {
+        this.initialPoint = {
+                lat: pos.latitude,
+                lng: pos.longitude
+            };
 
-      this.initialPoint = {
-        lat: pos.latitude,
-        lng: pos.longitude
-      };
-
-      
-      this.selectedPoint = { lat: pos.latitude, lng: pos.longitude };
+            
+        this.selectedPoint = { lat: pos.latitude, lng: pos.longitude };
+      }
     },
     error: (err) => {
       console.error('Failed to load my position', err);

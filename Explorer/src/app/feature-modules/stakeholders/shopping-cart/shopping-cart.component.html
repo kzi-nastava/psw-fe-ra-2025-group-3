@@ -104,6 +104,57 @@
   <span>{{ getTotalItemsCount() }}</span>
 </div>
 
+      <!-- COUPON SECTION -->
+      <div class="coupon-section">
+        <h3>Have a coupon code?</h3>
+        <div class="coupon-input-group" *ngIf="!appliedCouponCode">
+          <mat-form-field appearance="outline" class="coupon-input">
+            <mat-label>Enter coupon code</mat-label>
+            <input matInput 
+                   [(ngModel)]="couponCode" 
+                   placeholder="COUPON123"
+                   (keyup.enter)="validateCoupon()"
+                   [disabled]="validatingCoupon">
+            <mat-icon matPrefix>local_offer</mat-icon>
+          </mat-form-field>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="validateCoupon()"
+                  [disabled]="validatingCoupon || !couponCode">
+            <mat-spinner *ngIf="validatingCoupon" diameter="16"></mat-spinner>
+            <span *ngIf="!validatingCoupon">Apply</span>
+            <span *ngIf="validatingCoupon">Validating...</span>
+          </button>
+        </div>
+        
+        <!-- APPLIED COUPON -->
+        <div class="applied-coupon" *ngIf="appliedCouponCode && couponValidation?.isValid">
+          <div class="coupon-success">
+            <mat-icon>check_circle</mat-icon>
+            <div class="coupon-info">
+              <span class="coupon-code-display">{{ appliedCouponCode }}</span>
+              <span class="coupon-discount">{{ couponValidation?.discountPercentage }}% OFF</span>
+            </div>
+            <button mat-icon-button (click)="removeCoupon()" color="warn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>{{ cart.totalPrice }} AC</span>
+      </div>
+
+      <!-- DISCOUNT ROW -->
+      <div class="summary-row discount-row" *ngIf="couponValidation?.isValid">
+        <span>Discount ({{ couponValidation?.discountPercentage }}%)</span>
+        <span class="discount-amount">-{{ getDiscountAmount() | number:'1.2-2' }} AC</span>
+      </div>
+
       <div class="summary-row">
         <span>Your Balance</span>
         <span class="balance-amount">{{ wallet?.balanceAc ?? 0 }} AC</span>
@@ -113,7 +164,12 @@
 
       <div class="summary-row total-row">
         <span>Total Cost</span>
-        <span>{{ cart.totalPrice }} AC</span>
+        <span>
+          <span *ngIf="couponValidation?.isValid" class="original-price">{{ cart.totalPrice }} AC</span>
+          <span [class.discounted-price]="couponValidation?.isValid">
+            {{ getTotalWithDiscount() | number:'1.2-2' }} AC
+          </span>
+        </span>
       </div>
 
       <!-- INSUFFICIENT FUNDS WARNING -->
@@ -128,7 +184,7 @@
       <!-- BALANCE AFTER PURCHASE -->
       <div class="balance-after" *ngIf="canAffordCheckout()">
         <span>Balance after purchase:</span>
-        <span class="remaining-balance">{{ (wallet!.balanceAc - cart.totalPrice) }} AC</span>
+        <span class="remaining-balance">{{ (wallet!.balanceAc - getTotalWithDiscount()) | number:'1.2-2' }} AC</span>
       </div>
 
       <!-- CHECKOUT BUTTON -->

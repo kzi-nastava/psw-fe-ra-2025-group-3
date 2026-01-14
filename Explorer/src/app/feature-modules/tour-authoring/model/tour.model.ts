@@ -17,6 +17,11 @@ export interface Tour {
   averageRating?: number;
   firstKeyPoint?: KeyPoint;
   reviews?: TourReview[];
+  // Sale properties (from TourPreviewDto)
+  onSale?: boolean;
+  originalPrice?: number;
+  discountedPrice?: number;
+  discountPercentage?: number;
 }
 
 export interface Equipment {
@@ -90,4 +95,6 @@ export interface TourSearchParams {
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
+  onSale?: boolean;
+  sortByDiscount?: boolean;
 }
