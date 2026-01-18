@@ -161,6 +161,13 @@
                 [initialPoint]="currentTouristPosition"
                 (pointSelected)="onMapClick($event)">
                 </xp-map>
+
+                <div class="map-legend">
+                    <div class="legend-item"><img src="assets/icons/tourist.png"> You</div>
+                    <div class="legend-item"><img src="assets/icons/checkpoint.png"> Checkpoint</div>
+                    <div class="legend-item"><img src="assets/icons/fast-food.png"> Restaurant</div>
+                    <div class="legend-item"><img src="assets/icons/group-tourist.png"> Tourist from your group</div>
+                </div>
             </div>
 
             <!-- POSITION SIMULATOR CONTROLS -->

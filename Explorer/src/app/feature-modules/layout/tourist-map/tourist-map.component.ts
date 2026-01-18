@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { Monument } from '../../administration/model/monument.model';
 import { Facility } from '../../administration/model/facility.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
@@ -15,9 +15,17 @@ export class TouristMapComponent implements OnInit {
   isLoading = false;
   monuments: Monument[] = [];
   facilities: Facility[] = [];
-  points: { lat: number; lng: number; name?: string }[] = [];
+  points: { lat: number; lng: number; name?: string; iconUrl?: string; category?: string }[] = [];
+  filteredPoints: { lat: number; lng: number; name?: string; iconUrl?: string }[] = [];
   selectedPoint: { lat: number; lng: number; name?: string } | null = null;
-  initialPoint: { lat: number; lng: number } | undefined;
+  initialPoint: { lat: number; lng: number; iconUrl? : string } | undefined;
+  
+  filters = {
+    restroom: true,
+    restaurant: true,
+    parking: true,
+    monument: true
+  };
 
   constructor(private touristMapService: TouristMapService, 
   private snackBar: MatSnackBar 
@@ -34,7 +42,8 @@ export class TouristMapComponent implements OnInit {
       if (!pos) {
         this.initialPoint = {
             lat: 0,
-            lng: 0
+            lng: 0,
+            iconUrl: 'assets/icons/tourist.png'
         };
         this.selectedPoint = {
             lat: 0,
@@ -44,7 +53,8 @@ export class TouristMapComponent implements OnInit {
       else {
         this.initialPoint = {
                 lat: pos.latitude,
-                lng: pos.longitude
+                lng: pos.longitude,
+                iconUrl: 'assets/icons/tourist.png'
             };
 
             
@@ -69,7 +79,9 @@ export class TouristMapComponent implements OnInit {
           .map(m => ({
             lat: m.latitude,
             lng: m.longitude,
-            name: m.name
+            name: m.name,
+            iconUrl: 'assets/icons/monument.png',
+            category: 'monument'
           }));
 
         this.loadFacilities();
@@ -78,6 +90,41 @@ export class TouristMapComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private getFacilityIcon(category : number) : string {
+    switch(category) {
+        case 0:
+            return 'assets/icons/restroom.png';
+        case 1:
+            return 'assets/icons/fast-food.png';
+        case 2:
+            return 'assets/icons/parking.png';
+        default:
+            return 'assets/icons/parking.png';
+    }
+  }
+
+  private getCategoryName(category: number): string {
+    switch(category) {
+      case 0: return 'restroom';
+      case 1: return 'restaurant';
+      case 2: return 'parking';
+      default: return 'parking';
+    }
+  }
+
+  toggleFilter(filterType: 'restroom' | 'restaurant' | 'parking' | 'monument'): void {
+    this.filters[filterType] = !this.filters[filterType];
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    this.filteredPoints = this.points.filter(point => {
+      if (!point.category) return true;
+      return this.filters[point.category as keyof typeof this.filters];
+    });
+    console.log('Filtered points:', this.filteredPoints);
   }
 
   private loadFacilities(): void {
@@ -92,12 +139,15 @@ export class TouristMapComponent implements OnInit {
         .map(f => ({
           lat: f.latitude,
           lng: f.longitude,
-          name: f.name
+          name: f.name,
+          iconUrl: this.getFacilityIcon(f.category),
+          category: this.getCategoryName(f.category)
         }));
 
       this.points = [...this.points, ...facilityPoints];
 
       console.log('this.points', this.points);
+      this.applyFilters();
       this.isLoading = false;
     },
     error: (err) => {

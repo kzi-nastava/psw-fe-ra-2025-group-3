@@ -13,12 +13,38 @@
   <div *ngIf="!isLoading" class="map-wrapper">
     <xp-map
       [mode]="'object-view'"
-      [points]="points"
+      [points]="filteredPoints"
       [initialPoint]="initialPoint"
       [zoom]="12"
       (pointSelected)="onPointSelected($event)">
     </xp-map>
-    <button (click)="saveChanges()" [disabled]="!selectedPoint">
+    <div class="map-legend">
+      <h3 class="legend-title">Map Filters</h3>
+      <div class="legend-item static">
+        <img src="assets/icons/tourist.png"> You
+      </div>
+      <div class="legend-item filter" (click)="toggleFilter('restroom')" [class.active]="filters.restroom">
+        <img src="assets/icons/restroom.png"> 
+        <span>Restroom</span>
+        <mat-icon class="filter-icon">{{ filters.restroom ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+      </div>
+      <div class="legend-item filter" (click)="toggleFilter('restaurant')" [class.active]="filters.restaurant">
+        <img src="assets/icons/fast-food.png"> 
+        <span>Restaurant</span>
+        <mat-icon class="filter-icon">{{ filters.restaurant ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+      </div>
+      <div class="legend-item filter" (click)="toggleFilter('parking')" [class.active]="filters.parking">
+        <img src="assets/icons/parking.png"> 
+        <span>Parking</span>
+        <mat-icon class="filter-icon">{{ filters.parking ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+      </div>
+      <div class="legend-item filter" (click)="toggleFilter('monument')" [class.active]="filters.monument">
+        <img src="assets/icons/monument.png"> 
+        <span>Monument</span>
+        <mat-icon class="filter-icon">{{ filters.monument ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+      </div>
+    </div>
+    <button class="save-position-btn" click="saveChanges()" [disabled]="!selectedPoint">
         Save my position
     </button>
   </div>
