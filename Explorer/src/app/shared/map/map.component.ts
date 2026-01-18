@@ -98,17 +98,28 @@ export class MapComponent implements AfterViewInit, OnChanges {
             shadowSize: [41, 41]
         });
 
-        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { 
-            draggable: true,
-            icon: defaultIcon,
-            autoPan: false
-        }).addTo(this.map);
-
-        this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
-            const marker = event.target as L.Marker;
-            const pos = marker.getLatLng();
-            this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
-        })
+        if (this.isRouteMode) {
+            this.clickMarker = this.pointMarkers[0];
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
+        } else {
+            this.clickMarker = L.marker(
+                        [this.initialPoint.lat, this.initialPoint.lng],
+                        {
+                            draggable: true,
+                            icon: defaultIcon,
+                            autoPan: false,
+                        },
+                    ).addTo(this.map);
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
+        }
 
         // Don't change zoom/view when marker is set - keep user's current view
     }
