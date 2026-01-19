@@ -66,6 +66,7 @@ import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
+import { WishlistComponent } from 'src/app/feature-modules/stakeholders/wishlist/wishlist.component';
 const routes: Routes = [
 
 
@@ -135,6 +136,7 @@ const routes: Routes = [
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wishlist', component: WishlistComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
