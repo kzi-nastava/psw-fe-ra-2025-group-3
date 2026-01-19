@@ -12,6 +12,8 @@ import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.co
 import { Person } from '../../../model/person.model';
 import { StakeholderService } from '../../../stakeholder.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TourExecutionService } from 'src/app/feature-modules/tour-execution/tour-execution.service';
+import { Tour } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 
 @Component({
   selector: 'xp-club-detail',
@@ -28,7 +30,136 @@ export class ClubDetailComponent implements OnInit {
   touristControl = new FormControl<string | Person>('');
   allTourists: Person[] = [];
   filteredTourists!: Observable<Person[]>;
-  memberDetailsMap: Map<number, Person> = new Map();
+  memberDetailsMap: Map<number, { person: Person, tour: Tour }> = new Map();
+
+  // Tab selection
+  selectedTabIndex = 1; // Default to Content tab (0=Group Tours, 1=Content, 2=Members)
+
+  // Mock data for Group Tours
+  mockGroupTours = [
+    {
+      id: 1,
+      name: 'Weekend Mountain Hike',
+      description: 'Join us for an exciting mountain adventure this weekend!',
+      currentParticipants: 5,
+      maxParticipants: 10,
+      isJoined: false,
+      participants: [
+        { id: 1, name: 'John', surname: 'Doe' },
+        { id: 2, name: 'Jane', surname: 'Smith' },
+        { id: 3, name: 'Mike', surname: 'Johnson' },
+        { id: 4, name: 'Sarah', surname: 'Williams' },
+        { id: 5, name: 'Tom', surname: 'Brown' }
+      ]
+    },
+    {
+      id: 2,
+      name: 'City Photography Walk',
+      description: 'Explore the city and capture beautiful moments together.',
+      currentParticipants: 8,
+      maxParticipants: 12,
+      isJoined: true,
+      participants: [
+        { id: 6, name: 'Emily', surname: 'Davis' },
+        { id: 7, name: 'David', surname: 'Miller' },
+        { id: 8, name: 'Lisa', surname: 'Wilson' },
+        { id: 9, name: 'Chris', surname: 'Moore' },
+        { id: 10, name: 'Anna', surname: 'Taylor' },
+        { id: 11, name: 'James', surname: 'Anderson' },
+        { id: 12, name: 'Sophia', surname: 'Thomas' },
+        { id: 13, name: 'Daniel', surname: 'Jackson' }
+      ]
+    },
+    {
+      id: 3,
+      name: 'Beach Cleanup & Picnic',
+      description: 'Help clean the beach and enjoy a picnic afterwards.',
+      currentParticipants: 3,
+      maxParticipants: 15,
+      isJoined: false,
+      participants: [
+        { id: 14, name: 'Robert', surname: 'White' },
+        { id: 15, name: 'Maria', surname: 'Harris' },
+        { id: 16, name: 'William', surname: 'Martin' }
+      ]
+    }
+  ];
+
+  // Mock data for Announcements
+  mockAnnouncements = [
+    {
+      id: 1,
+      title: 'Welcome New Members!',
+      content: 'We are excited to welcome our newest members to the club. Looking forward to many adventures together!',
+      date: new Date('2025-01-15')
+    },
+    {
+      id: 2,
+      title: 'Upcoming Event: Annual Meetup',
+      content: 'Save the date! Our annual club meetup will be held on February 20th. More details coming soon.',
+      date: new Date('2025-01-10')
+    }
+  ];
+
+  // Mock data for Tour Highlights
+  mockHighlights = [
+    {
+      id: 1,
+      tourName: 'Alpine Lakes Trek',
+      date: new Date('2024-12-15'),
+      participantsCount: 8,
+      imageUrl: 'https://placehold.co/600x400',
+      participants: [
+        { id: 1, name: 'John', surname: 'Doe' },
+        { id: 2, name: 'Jane', surname: 'Smith' },
+        { id: 3, name: 'Mike', surname: 'Johnson' },
+        { id: 4, name: 'Sarah', surname: 'Williams' },
+        { id: 5, name: 'Tom', surname: 'Brown' },
+        { id: 6, name: 'Emily', surname: 'Davis' },
+        { id: 7, name: 'David', surname: 'Miller' },
+        { id: 8, name: 'Lisa', surname: 'Wilson' }
+      ]
+    },
+    {
+      id: 2,
+      tourName: 'Coastal Road Trip',
+      date: new Date('2024-11-20'),
+      participantsCount: 6,
+      imageUrl: 'https://placehold.co/600x400',
+      participants: [
+        { id: 9, name: 'Chris', surname: 'Moore' },
+        { id: 10, name: 'Anna', surname: 'Taylor' },
+        { id: 11, name: 'James', surname: 'Anderson' },
+        { id: 12, name: 'Sophia', surname: 'Thomas' },
+        { id: 13, name: 'Daniel', surname: 'Jackson' },
+        { id: 14, name: 'Robert', surname: 'White' }
+      ]
+    },
+    {
+      id: 3,
+      tourName: 'Historic City Tour',
+      date: new Date('2024-10-10'),
+      participantsCount: 12,
+      imageUrl: 'https://placehold.co/600x400',
+      participants: [
+        { id: 15, name: 'Maria', surname: 'Harris' },
+        { id: 16, name: 'William', surname: 'Martin' },
+        { id: 17, name: 'Olivia', surname: 'Garcia' },
+        { id: 18, name: 'Benjamin', surname: 'Martinez' },
+        { id: 19, name: 'Ava', surname: 'Rodriguez' },
+        { id: 20, name: 'Lucas', surname: 'Lee' },
+        { id: 21, name: 'Mia', surname: 'Walker' },
+        { id: 22, name: 'Henry', surname: 'Hall' },
+        { id: 23, name: 'Charlotte', surname: 'Allen' },
+        { id: 24, name: 'Alexander', surname: 'Young' },
+        { id: 25, name: 'Amelia', surname: 'King' },
+        { id: 26, name: 'Sebastian', surname: 'Wright' }
+      ]
+    }
+  ];
+
+  // Track expanded highlights
+  expandedHighlightIds: Set<number> = new Set();
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +168,8 @@ export class ClubDetailComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private stakeholderService: StakeholderService
+    private stakeholderService: StakeholderService,
+    private tourExecutionService: TourExecutionService,
   ) {}
 
   ngOnInit(): void {
@@ -138,7 +270,14 @@ export class ClubDetailComponent implements OnInit {
     this.club.memberIds.forEach(userId => {
       this.stakeholderService.getPersonByUserId(userId).subscribe({
         next: (person) => {
-          this.memberDetailsMap.set(userId, person);
+          this.tourExecutionService.getActiveTourByTouristId(userId).subscribe({
+            next: (tour) => {
+              this.memberDetailsMap.set(userId, { person, tour });
+            },
+            error: () => {
+              this.memberDetailsMap.set(userId, { person, tour: {} as Tour });
+            }
+          });
         },
         error: () => {
           console.warn(`Failed to load details for user ${userId}`);
@@ -150,9 +289,29 @@ export class ClubDetailComponent implements OnInit {
   getMemberName(userId: number): string {
     const member = this.memberDetailsMap.get(userId);
     if (member) {
-      return `${member.name} ${member.surname}`;
+      return `${member.person.name} ${member.person.surname}`;
     }
     return `User ID: ${userId}`;
+  }
+
+  getMemberActivity(userId: number) : string {
+    const member = this.memberDetailsMap.get(userId);
+    if (member) {
+        return `${member.tour.name}`;
+    }
+    return `No tour`;
+  }
+
+  toggleHighlightParticipants(highlightId: number): void {
+    if (this.expandedHighlightIds.has(highlightId)) {
+      this.expandedHighlightIds.delete(highlightId);
+    } else {
+      this.expandedHighlightIds.add(highlightId);
+    }
+  }
+
+  isHighlightExpanded(highlightId: number): boolean {
+    return this.expandedHighlightIds.has(highlightId);
   }
 
   get featuredImageUrl(): string | null {
@@ -195,7 +354,7 @@ export class ClubDetailComponent implements OnInit {
       next: (updatedClub) => {
         this.club = updatedClub;
         this.touristControl.setValue('');
-        this.memberDetailsMap.set(selectedTourist.userId, selectedTourist);
+        this.memberDetailsMap.set(selectedTourist.userId, { person: selectedTourist, tour: {} as Tour });
         this.showSuccess('Invitation sent successfully');
       },
       error: (err) => this.showError(err.error || 'Failed to invite member')
@@ -229,6 +388,31 @@ export class ClubDetailComponent implements OnInit {
         this.loadClub(this.club.id);
       }
     });
+  }
+
+  openManageMembersDialog(): void {
+    // TODO: Implementirati dialog za upravljanje članovima
+    // Slično kao openEditDialog(), ali sa novim dialogom
+    this.showError('Manage Members dialog - Coming soon!');
+    
+    /* Primer implementacije kada kreirate dialog komponentu:
+    
+    const dialogRef = this.dialog.open(ManageMembersDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
+      data: { 
+        club: this.club,
+        members: this.memberDetailsMap,
+        allTourists: this.allTourists
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.club) {
+        this.loadClub(this.club.id);
+      }
+    });
+    */
   }
 
   deleteClub(): void {
