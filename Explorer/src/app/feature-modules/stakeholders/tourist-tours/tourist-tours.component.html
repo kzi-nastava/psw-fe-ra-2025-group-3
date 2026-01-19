@@ -277,9 +277,10 @@
             mat-stroked-button
             color="primary"
             (click)="addToCart(tour)"
-            [disabled]="tour.status === TourStatus.Archived">
-            <mat-icon>add_shopping_cart</mat-icon>
-            Buy
+            [disabled]="tour.status === TourStatus.Archived || isInCart(tour.id!)">
+            <mat-icon *ngIf="!isInCart(tour.id!)">add_shopping_cart</mat-icon>
+            <mat-icon *ngIf="isInCart(tour.id!)">shopping_cart</mat-icon>
+            {{ isInCart(tour.id!) ? 'In Cart' : 'Add to Cart' }}
           </button>
 
           <span class="locked-msg" *ngIf="tour.status === TourStatus.Archived">

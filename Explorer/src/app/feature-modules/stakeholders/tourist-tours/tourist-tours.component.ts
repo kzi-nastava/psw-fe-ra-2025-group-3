@@ -44,6 +44,7 @@ export class TouristToursComponent implements OnInit {
   hasActiveTour = false;
   TourStatus = TourStatus;
   TourDifficulty = TourDifficulty;
+  toursInCart: Set<number> = new Set();
 
   expandedTourId: number | null = null;
   currentUserId?: number;
@@ -76,6 +77,7 @@ export class TouristToursComponent implements OnInit {
   ngOnInit(): void {
     this.checkActiveTour();
     this.loadAllTags();
+    this.loadCart();
     this.searchTours();
     const user = this.authService.user$.value;
     if (user) {
@@ -91,6 +93,11 @@ export class TouristToursComponent implements OnInit {
       .subscribe(() => {
         this.searchTours();
       });
+
+    // Subscribe to cart updates
+    this.shoppingCartService.cartUpdated.subscribe(() => {
+      this.loadCart();
+    });
   }
 
   loadAllTags(): void {
@@ -169,12 +176,32 @@ export class TouristToursComponent implements OnInit {
     this.shoppingCartService.addToCart(tour.id).subscribe({
       next: () => {
         this.showSuccess('Tour successfully added to your cart!');
+        this.loadCart(); // Refresh cart status
       },
       error: (error) => {
         console.error('Add to cart error:', error);
         this.showError('This tour is already in your cart.');
+        this.loadCart(); // Refresh cart status even on error
       }
     });
+  }
+
+  loadCart(): void {
+    this.shoppingCartService.getMyCart().subscribe({
+      next: (cart) => {
+        this.toursInCart.clear();
+        cart.items?.forEach(item => {
+          if (item.tourId) {
+            this.toursInCart.add(item.tourId);
+          }
+        });
+      },
+      error: () => {}
+    });
+  }
+
+  isInCart(tourId: number): boolean {
+    return this.toursInCart.has(tourId);
   }
 
   startTour(tour: Tour): void {
