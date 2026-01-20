@@ -4,9 +4,36 @@
   padding: 20px;
 }
 
+.title-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .title {
   font-size: 2rem;
   margin-bottom: 10px;
+  flex: 1;
+}
+
+.wishlist-btn {
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.wishlist-btn:hover:not(:disabled) {
+  color: #e91e63;
+  transform: scale(1.1);
+}
+
+.wishlist-btn.active {
+  color: #e91e63;
+}
+
+.wishlist-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .badge {

@@ -1,6 +1,17 @@
 <div class="details-container" *ngIf="!isLoading; else loadingBlock">
 
-  <h1 class="title">{{ details.name }}</h1>
+  <div class="title-section">
+    <h1 class="title">{{ details.name }}</h1>
+    <button 
+      mat-icon-button 
+      class="wishlist-btn"
+      [class.active]="isInWishlist"
+      (click)="toggleWishlist()"
+      [disabled]="isLoadingWishlist || isPurchased"
+      matTooltip="{{ isInWishlist ? 'Remove from wishlist' : 'Add to wishlist' }}">
+      <mat-icon>{{ isInWishlist ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </div>
 
   <div class="badge preview" *ngIf="!isPurchased">PREVIEW ONLY</div>
   <div class="badge purchased" *ngIf="isPurchased">PURCHASED</div>
@@ -18,6 +29,17 @@
     <p><strong>Average duration:</strong> {{ details.averageDuration }} min</p>
     <p><strong>Start point:</strong> {{ details.startPoint }}</p>
   </div>
+
+  <div class="equipment-section" *ngIf="details.equipment && details.equipment.length > 0" style="margin-top: 20px;">
+  <h2 style="font-size: 1.4rem; margin-bottom: 10px;">Required Equipment</h2>
+  <ul style="list-style-type: disc; padding-left: 20px;">
+    <li *ngFor="let item of details.equipment" style="margin-bottom: 5px; color: #555;">
+      <strong>{{ item.name }}</strong> 
+      <span *ngIf="item.description"> - {{ item.description }}</span>
+    </li>
+  </ul>
+</div>
+
 
 
   <!-- KEYPOINTS -->

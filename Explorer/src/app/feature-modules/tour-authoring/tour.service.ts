@@ -52,7 +52,7 @@ export class TourService {
   }
   
   getEquipment(): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>(`${this.equipmentUrl}/all`);
+    return this.http.get<Equipment[]>(environment.apiHost + 'author/equipment');
   }
 
   addEquipmentToTour(tourId: number, equipmentId: number): Observable<Tour> {
