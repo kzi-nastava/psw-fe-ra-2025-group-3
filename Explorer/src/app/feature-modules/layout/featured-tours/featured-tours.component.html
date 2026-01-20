@@ -66,19 +66,37 @@
           <!-- Price -->
           <div class="tour-footer">
             <div class="tour-price">
+
+              <!-- ON SALE -->
               <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
-                <div class="price-row">
-                  <span class="price-amount original-price">€{{ tour.originalPrice | number:'1.2-2' }}</span>
-                  <span class="price-amount discounted-price">€{{ tour.discountedPrice | number:'1.2-2' }}</span>
+                <div class="price-row price-row-sale">
+                  <span class="original-price">
+                    {{ tour.originalPrice | number:'1.2-2' }} <span class="price-currency">AC</span>
+                  </span>
+
+                  <span class="discounted-price">
+                    {{ tour.discountedPrice | number:'1.2-2' }} <span class="price-currency">AC</span>
+                  </span>
                 </div>
+
                 <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
+                <span class="price-label">per person</span>
               </div>
+
+              <!-- NOT ON SALE -->
               <ng-container *ngIf="!tour.onSale">
-                <span class="price-amount">€{{ tour.price | number:'1.2-2' }}</span>
+                <div class="price-row">
+                  <span class="price-amount">{{ tour.price | number:'1.2-2' }}</span>
+                  <span class="price-currency">AC</span>
+                </div>
                 <span class="price-label">per person</span>
               </ng-container>
+
             </div>
-            <button class="btn btn-primary">View Details</button>
+
+            <button class="btn btn-primary" (click)="$event.stopPropagation(); openTourPreview(tour)">
+              View Details
+            </button>
           </div>
         </div>
       </div>

@@ -31,11 +31,11 @@
         <div class="detail-info">
           <span class="detail-label">Price</span>
           <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
-            <span class="detail-value original-price">€{{ tour.originalPrice | number:'1.2-2' }}</span>
-            <span class="detail-value discounted-price">€{{ tour.discountedPrice | number:'1.2-2' }}</span>
+            <span class="detail-value original-price">{{ tour.originalPrice | number:'1.2-2' }} AC</span>
+            <span class="detail-value discounted-price">{{ tour.discountedPrice | number:'1.2-2' }} AC</span>
             <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
           </div>
-          <span class="detail-value" *ngIf="!tour.onSale">€{{ tour.price | number:'1.2-2' }}</span>
+          <span class="detail-value" *ngIf="!tour.onSale">{{ tour.price | number:'1.2-2' }} AC</span>
         </div>
       </div>
       <div class="detail-card">
