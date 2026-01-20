@@ -5,6 +5,7 @@ import { Person } from './model/person.model';
 import { environment } from 'src/env/environment';
 import { AccountRegistrationDto } from './model/account-registration.dto';
 import { WalletDto, WalletTopUpDto } from './model/wallet.model';
+import { AuthorProfileStatsDto } from './model/author-profile-stats.model';
 
 
 @Injectable({
@@ -14,7 +15,7 @@ export class StakeholderService {
 
 
   private readonly profileUrl = environment.apiHost + 'stakeholders/person';
-  
+  private readonly authorStatsUrl = environment.apiHost + 'authors/me/profile-stats';
   private readonly baseUrl = environment.apiHost + 'stakeholders/person';
 
   constructor(private http: HttpClient) {}
@@ -72,5 +73,9 @@ export class StakeholderService {
   topUpWallet(dto: { touristUserId: number; amountAc: number }) {
     return this.http.post<any>(`${this.adminWalletUrl}/topup`, dto);
   }
+  
+getMyAuthorProfileStats(): Observable<AuthorProfileStatsDto> {
+  return this.http.get<AuthorProfileStatsDto>(this.authorStatsUrl);
+}
 
 }
