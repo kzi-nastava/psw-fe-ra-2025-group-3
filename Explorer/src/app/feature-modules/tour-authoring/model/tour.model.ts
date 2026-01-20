@@ -22,6 +22,9 @@ export interface Tour {
   originalPrice?: number;
   discountedPrice?: number;
   discountPercentage?: number;
+  // Additional properties from TourPreviewDto
+  length?: number; // in km
+  averageDuration?: number; // in minutes
 }
 
 export interface Equipment {

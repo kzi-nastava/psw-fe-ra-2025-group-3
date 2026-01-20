@@ -1,6 +1,17 @@
 <div class="details-container" *ngIf="!isLoading; else loadingBlock">
 
-  <h1 class="title">{{ details.name }}</h1>
+  <div class="title-section">
+    <h1 class="title">{{ details.name }}</h1>
+    <button 
+      mat-icon-button 
+      class="wishlist-btn"
+      [class.active]="isInWishlist"
+      (click)="toggleWishlist()"
+      [disabled]="isLoadingWishlist || isPurchased"
+      matTooltip="{{ isInWishlist ? 'Remove from wishlist' : 'Add to wishlist' }}">
+      <mat-icon>{{ isInWishlist ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </div>
 
   <div class="badge preview" *ngIf="!isPurchased">PREVIEW ONLY</div>
   <div class="badge purchased" *ngIf="isPurchased">PURCHASED</div>

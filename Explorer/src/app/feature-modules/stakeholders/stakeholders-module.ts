@@ -44,6 +44,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.component';
 import { TouristBundleService } from './tourist-bundle.service';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { TouristBundleService } from './tourist-bundle.service';
     MyPurchasedToursComponent, // t execution
     TouristEncountersComponent,
     RecommendedToursComponent, // tour recommendations
-    TouristBundlesComponent
+    TouristBundlesComponent,
+    WishlistComponent
     
   ],
   imports: [

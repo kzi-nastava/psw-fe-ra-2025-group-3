@@ -1,6 +1,8 @@
 .notification-badge-container {
   position: relative;
   display: inline-block;
+  overflow: visible;
+  z-index: 10000;
 }
 
 .notification-button {
