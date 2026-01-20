@@ -1,5 +1,12 @@
 import { KeyPoint } from '../../tour-authoring/key-points/model/key-point.model';
 import { TourReview } from '../../tour-execution/model/tour-review.model';   
+import { Equipment } from '../../administration/model/equipment.model';
+
+export interface EquipmentDto {
+  id: number;
+  name: string;
+  description?: string;
+}
 
 export interface TourDetails {
   id: number;
@@ -12,4 +19,5 @@ export interface TourDetails {
   reviews: TourReview[];      // lista recenzija
   
   keyPoints: KeyPoint[] | null;
+  equipment: EquipmentDto[];
 }
