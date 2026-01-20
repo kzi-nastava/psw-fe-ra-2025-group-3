@@ -205,7 +205,7 @@
             <h3>{{ getMemberName(mId) }}</h3>
             <p class="member-activity" *ngIf="getMemberActivity(mId) as activity">
               <mat-icon class="activity-icon">explore</mat-icon>
-              <span class="activity-text">On tour: <strong>{{ activity }}</strong></span>
+              <span class="activity-text">On tour: <strong class="activity-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</strong></span>
             </p>
             <p class="member-activity inactive" *ngIf="!getMemberActivity(mId)">
               <mat-icon class="activity-icon">remove_circle_outline</mat-icon>
@@ -377,7 +377,7 @@
               <h3>{{ getMemberName(mId) }}</h3>
               <p class="member-activity" *ngIf="getMemberActivity(mId) as activity">
                 <mat-icon class="activity-icon">explore</mat-icon>
-                On tour: <span class="tour-name">{{ activity }}</span>
+                On tour: <span class="tour-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</span>
               </p>
               <p class="member-activity inactive" *ngIf="!getMemberActivity(mId)">
                 <mat-icon class="activity-icon">remove_circle_outline</mat-icon>

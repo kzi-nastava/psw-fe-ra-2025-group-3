@@ -294,12 +294,12 @@ export class ClubDetailComponent implements OnInit {
     return `User ID: ${userId}`;
   }
 
-  getMemberActivity(userId: number) : string {
+  getMemberActivity(userId: number) : Tour | null {
     const member = this.memberDetailsMap.get(userId);
-    if (member) {
-        return `${member.tour.name}`;
+    if (member && member.tour) {
+        return member.tour;
     }
-    return `No tour`;
+    return null;
   }
 
   toggleHighlightParticipants(highlightId: number): void {

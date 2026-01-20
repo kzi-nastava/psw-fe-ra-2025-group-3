@@ -624,6 +624,11 @@
   font-weight: 600;
 }
 
+.activity-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 /* Empty States */
 .empty-state {
   display: flex;
@@ -718,6 +723,10 @@
   /* Hide desktop layout, show mobile tabs */
   .desktop-only {
     display: none;
+  }
+
+  .club-banner {
+    height: 150px;
   }
 
   .mobile-only {
