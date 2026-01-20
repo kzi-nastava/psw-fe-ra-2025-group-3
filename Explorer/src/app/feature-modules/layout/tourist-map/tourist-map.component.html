@@ -44,7 +44,7 @@
         <mat-icon class="filter-icon">{{ filters.monument ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
       </div>
     </div>
-    <button class="save-position-btn" click="saveChanges()" [disabled]="!selectedPoint">
+    <button class="save-position-btn" (click)="saveChanges()" [disabled]="!selectedPoint">
         Save my position
     </button>
   </div>
