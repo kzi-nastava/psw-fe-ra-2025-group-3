@@ -31,6 +31,8 @@ export class NotificationItemComponent {
         return 'cancel';
       case NotificationType.WalletTopUp:
         return 'account_balance_wallet';
+      case NotificationType.TourOnSale:
+        return 'local_offer';
       default:
         return 'notifications';
     }
@@ -46,6 +48,8 @@ export class NotificationItemComponent {
         return '#f44336';
       case NotificationType.WalletTopUp:
         return 'var(--color-primary-500)';
+      case NotificationType.TourOnSale:
+        return '#ff6f00';
       default:
         return '#757575';
     }
@@ -93,6 +97,12 @@ export class NotificationItemComponent {
           if (user.role === 'tourist') {
             this.router.navigate(['/tourist/wallet']);
           }
+          this.notificationClicked.emit();
+          return;
+        }
+
+        if (this.notification.type === NotificationType.TourOnSale) {
+          this.router.navigate(['/tourist/tours']); 
           this.notificationClicked.emit();
           return;
         }
