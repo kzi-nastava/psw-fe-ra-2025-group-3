@@ -52,6 +52,7 @@ export class TouristToursComponent implements OnInit {
 
   // Search & Filter
   searchControl = new FormControl('');
+  tagSearchControl = new FormControl('');
   selectedTags: string[] = [];
   selectedDifficulties: TourDifficulty[] = [];
   minPrice: number | null = null;
@@ -406,6 +407,16 @@ export class TouristToursComponent implements OnInit {
         console.error('Error loading popular tours:', error);
       }
     });
+  }
+
+  get filteredTags(): string[] {
+    const searchTerm = this.tagSearchControl.value?.toLowerCase() || '';
+    if (!searchTerm) {
+      return this.availableTags;
+    }
+    return this.availableTags.filter(tag => 
+      tag.toLowerCase().includes(searchTerm)
+    );
   }
 
   onSearchBarFocus(): void {

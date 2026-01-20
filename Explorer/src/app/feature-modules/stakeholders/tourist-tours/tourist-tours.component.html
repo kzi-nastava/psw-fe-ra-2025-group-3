@@ -166,16 +166,31 @@
                 ({{ selectedTags.length }} selected)
               </span>
             </label>
+            
+            <!-- Tag Search Input -->
+            <mat-form-field appearance="outline" class="full-width tag-search-field">
+              <mat-label>Search tags</mat-label>
+              <input matInput [formControl]="tagSearchControl" placeholder="Type to filter tags...">
+              <mat-icon matPrefix>search</mat-icon>
+              <button mat-icon-button matSuffix *ngIf="tagSearchControl.value" (click)="tagSearchControl.setValue('')" aria-label="Clear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+            
             <div class="tags-filter">
               <mat-chip-set>
                 <mat-chip 
-                  *ngFor="let tag of availableTags"
+                  *ngFor="let tag of filteredTags"
                   [class.selected]="isTagSelected(tag)"
                   (click)="onTagToggle(tag)">
                   {{ tag }}
                   <mat-icon *ngIf="isTagSelected(tag)" class="chip-check">check</mat-icon>
                 </mat-chip>
               </mat-chip-set>
+              <div class="no-tags-found" *ngIf="filteredTags.length === 0 && tagSearchControl.value">
+                <mat-icon>search_off</mat-icon>
+                <span>No tags found matching "{{ tagSearchControl.value }}"</span>
+              </div>
             </div>
           </div>
         </div>
