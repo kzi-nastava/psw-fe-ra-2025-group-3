@@ -30,8 +30,8 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   keyPointsWithStatus: KeyPointWithStatus[] = [];
 
   // Map data
-  routeWaypoints: { lat: number; lng: number }[] = [];
-  routePoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+  routeWaypoints: { lat: number; lng: number, iconUrl? : string }[] = [];
+  routePoints: { lat: number; lng: number; name?: string; iconUrl? : string; color?: string; id?: number }[] = [];
 
   // Restaurants
   nearbyRestaurants: Facility[] = [];
@@ -263,6 +263,7 @@ private loadNearbyRestaurants(): void {
         lng: r.longitude,
         name: `${r.name}`,
         color: 'green',
+        iconUrl: 'assets/icons/fast-food.png',
         id: r.id
       }));
 
@@ -296,8 +297,8 @@ private setupMapRoute(): void {
   // ✅ Crtaj putanju do NEXT KeyPoint
   if (this.nextKeyPoint) {
     this.routeWaypoints = [
-      { lat: touristLat, lng: touristLng },
-      { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
+      { lat: touristLat, lng: touristLng, iconUrl: 'assets/icons/tourist.png' },
+      { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude, iconUrl: 'assets/icons/checkpoint.png' }
     ];
   } else {
     this.routeWaypoints = [];
@@ -318,7 +319,8 @@ private setupMapRoute(): void {
   return {
     lat: kp.latitude,
     lng: kp.longitude,
-    name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback ako nema name
+    name: `${icon} ${kp.name || 'Key Point'}`, // ✅ Fallback ako nema name
+    iconUrl: 'assets/icons/checkpoint.png'
   };
 });
 
@@ -363,7 +365,8 @@ private setupMapRouteFallback(): void {
         return {
             lat: kp.latitude,
             lng: kp.longitude,
-            name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback
+            name: `${icon} ${kp.name || 'Key Point'}`, // ✅ Fallback
+            iconUrl: 'assets/icons/checkpoint.png'
         };
     });
 
@@ -505,7 +508,7 @@ private updateMapWithCurrentPosition(lat: number, lng: number): void {
           console.log('[Active Tour] ✅ All KeyPoints completed - clearing route');
           this.routeWaypoints = [];
           // routePoints ostaju - prikazuju se svi markeri
-        }
+        }   
       }
     },
     error: (err) => {

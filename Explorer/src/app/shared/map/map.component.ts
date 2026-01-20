@@ -22,9 +22,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     @Input() mode: 'object-view' | 'route-view' | 'edit-object' | 'route-edit-object';
     @Input() center: [number, number] = [45.2396, 19.8227];
     @Input() zoom = 15;
-    @Input() initialPoint?: { lat: number; lng: number };
-    @Input() waypoints: { lat: number; lng: number }[] = [];
-    @Input() points: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+    @Input() initialPoint?: { lat: number; lng: number; iconUrl? : string };
+    @Input() waypoints: { lat: number; lng: number; iconUrl? : string }[] = [];
+    @Input() points: { lat: number; lng: number; name?: string; color?: string; iconUrl?: string; id?: number }[] = [];
 
     @Output() pointSelected = new EventEmitter<{ lat: number; lng: number }>();
     @Output() routeDistanceChanged = new EventEmitter<number>();
@@ -90,25 +90,39 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         // Use default icon with proper anchor
         const defaultIcon = L.icon({
-            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            iconUrl: this.initialPoint.iconUrl ?? 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
             shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-            iconSize: [25, 41],
+            iconSize: [41, 41],
             iconAnchor: [12, 41], // Point of the icon which corresponds to marker's location
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         });
 
-        this.clickMarker = L.marker([this.initialPoint.lat, this.initialPoint.lng], { 
-            draggable: true,
-            icon: defaultIcon,
-            autoPan: false
-        }).addTo(this.map);
+        if (this.isRouteMode) {
+            this.clickMarker = this.pointMarkers[0];
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
 
-        this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
-            const marker = event.target as L.Marker;
-            const pos = marker.getLatLng();
-            this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
-        })
+            this.clickMarker.setZIndexOffset(100);
+        } else {
+            this.clickMarker = L.marker(
+                        [this.initialPoint.lat, this.initialPoint.lng],
+                        {
+                            draggable: true,
+                            icon: defaultIcon,
+                            autoPan: false,
+                        },
+                    ).addTo(this.map);
+            this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
+                const marker = event.target as L.Marker;
+                const pos = marker.getLatLng();
+                this.pointSelected.emit({ lat: pos.lat, lng: pos.lng });
+            });
+            this.clickMarker.setZIndexOffset(100);
+        }
 
         // Don't change zoom/view when marker is set - keep user's current view
     }
@@ -124,11 +138,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
         this.points.forEach(p => {
             let markerIcon = undefined;
-            if (p.color) {
+            if (p.iconUrl) {
                 markerIcon = L.icon({
-                    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${p.color}.png`,
+                    iconUrl: p.iconUrl,
                     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-                    iconSize: [25, 41],
+                    iconSize: [41, 41],
                     iconAnchor: [12, 41],
                     popupAnchor: [1, -34],
                     shadowSize: [41, 41]
@@ -185,6 +199,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
             waypoints: wp,
             router: (L as any).Routing.mapbox(environment.mapboxApiKey, { profile: 'mapbox/walking' }),
             addWaypoints: false,
+            show: false,
         }).addTo(this.map);
 
         this.routeControl.on('routeselected', () => {
@@ -201,6 +216,31 @@ export class MapComponent implements AfterViewInit, OnChanges {
                     (m as any).dragging && (m as any).dragging.disable();
                     m.bindPopup(address);
                 });
+
+                let icon
+                if (m == markers[0]) {
+                    icon = L.icon({
+                        iconUrl: 'assets/icons/tourist.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                        iconSize: [41, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+                } else {
+                    icon = L.icon({
+                        iconUrl: 'assets/icons/checkpoint.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                        iconSize: [41, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+                }
+
+                
+
+                m.setIcon(icon);
 
                 m.off('drag');
                 m.off('dragstart');
@@ -320,7 +360,12 @@ registerOnClick(): void {
 
     ngAfterViewInit(): void {
         let DefaultIcon = L.icon({
-            iconUrl: 'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
+            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
         });
 
         L.Marker.prototype.options.icon = DefaultIcon;
