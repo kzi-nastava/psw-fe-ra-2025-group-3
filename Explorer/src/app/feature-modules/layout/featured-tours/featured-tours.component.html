@@ -39,9 +39,9 @@
           <!-- Rating -->
           <div class="tour-rating">
             <div class="stars">
-              <span *ngFor="let star of getStars(tour.averageRating)" 
+              <span *ngFor="let fill of getStarsFill(tour.averageRating)" 
                     class="star" 
-                    [class.filled]="star === 1">★</span>
+                    [style.--fill]="fill + '%'">★</span>
             </div>
             <span class="rating-value">{{ tour.averageRating | number:'1.1-1' }}</span>
             <span class="review-count">({{ tour.reviewCount }} reviews)</span>

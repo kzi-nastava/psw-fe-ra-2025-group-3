@@ -166,8 +166,21 @@
 }
 
 .star {
+  position: relative;
+  display: inline-block;
   color: var(--color-neutral-100);
   font-size: var(--font-size-lg);
+  line-height: 1;
+}
+
+.star::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--fill, 0%);
+  overflow: hidden;
+  color: var(--color-warning);
 }
 
 .star.filled {
@@ -299,6 +312,9 @@
   background: linear-gradient(135deg, #00BCD4, #00ACC1);
   color: #FFFFFF;
   box-shadow: 0 6px 25px rgba(0, 188, 212, 0.4);
+  padding: 0.45rem 1rem;   
+  font-size: 0.85rem;     
+  border-radius: 10px;
 }
 
 .btn-primary:hover {
