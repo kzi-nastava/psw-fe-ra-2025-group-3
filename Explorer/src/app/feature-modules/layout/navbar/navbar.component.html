@@ -297,6 +297,20 @@
 
       <xp-notification-badge *ngIf="user && user.username !== ''" (dropdownOpened)="onNotificationDropdownOpened()"></xp-notification-badge>
 
+      <!-- Tourist Level & Rank Badge (only for tourists) -->
+      <button *ngIf="user && user.role === 'tourist' && touristStats" 
+              class="level-rank-button" 
+              (click)="openLevelDialog()" 
+              [style.background]="rankConfig?.gradient"
+              matTooltip="Click to view your progress">
+        <mat-icon class="level-icon">military_tech</mat-icon>
+        <div class="level-rank-info">
+          <span class="rank-name">{{ touristStats.rank }}</span>
+          <span class="level-text">Level {{ touristStats.level }}</span>
+        </div>
+        <span class="rank-emoji">{{ rankConfig?.icon }}</span>
+      </button>
+
       <!-- Home Button (when not authenticated) -->
       <button *ngIf="!user || user.username === ''" mat-flat-button class="btn-home" routerLink="/home">
         <img src="assets/icons/home.png" alt="Home" class="btn-icon-img">
