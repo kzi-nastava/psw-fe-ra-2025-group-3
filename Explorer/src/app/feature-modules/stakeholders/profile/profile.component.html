@@ -55,4 +55,31 @@
     </div>
 
   </form>
+
+  <!-- Welcome Bonus Section -->
+  <div *ngIf="isTourist()" class="bonus-section">
+    <h3>Moji Bonusi</h3>
+    <div *ngIf="isLoadingBonus" class="loading">Učitavanje...</div>
+    <div *ngIf="!isLoadingBonus && welcomeBonus" class="bonus-card">
+      <div class="bonus-header">
+        <span class="bonus-icon">🎁</span>
+        <span class="bonus-title">Welcome Bonus</span>
+      </div>
+      <div class="bonus-details">
+        <p class="bonus-description">{{ getBonusDescription() }}</p>
+        <p class="bonus-status" [class.used]="welcomeBonus.isUsed" [class.active]="!welcomeBonus.isUsed">
+          {{ getBonusStatus() }}
+        </p>
+        <p *ngIf="welcomeBonus.isUsed && welcomeBonus.usedAt" class="bonus-used-date">
+          Iskorišćen: {{ welcomeBonus.usedAt | date:'dd.MM.yyyy' }}
+        </p>
+        <p *ngIf="!welcomeBonus.isUsed" class="bonus-expiry">
+          Važi do: {{ welcomeBonus.expiresAt | date:'dd.MM.yyyy' }}
+        </p>
+      </div>
+    </div>
+    <div *ngIf="!isLoadingBonus && !welcomeBonus" class="no-bonus">
+      <p>Nemate welcome bonus.</p>
+    </div>
+  </div>
 </div>

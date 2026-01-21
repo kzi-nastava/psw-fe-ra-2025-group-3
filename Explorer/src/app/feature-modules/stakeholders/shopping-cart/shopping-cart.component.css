@@ -383,6 +383,18 @@
   font-weight: 600;
 }
 
+.welcome-bonus-discount {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.bonus-icon-small {
+  font-size: 18px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
 .original-price {
   text-decoration: line-through;
   color: var(--color-neutral-600);

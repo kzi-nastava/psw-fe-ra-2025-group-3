@@ -149,10 +149,19 @@
         <span>{{ cart.totalPrice }} AC</span>
       </div>
 
-      <!-- DISCOUNT ROW -->
+      <!-- WELCOME BONUS DISCOUNT ROW -->
+      <div class="summary-row discount-row welcome-bonus-discount" *ngIf="hasActiveWelcomeBonusDiscount()">
+        <span>
+          <span class="bonus-icon-small">🎁</span>
+          Welcome Bonus ({{ getWelcomeBonusDiscountPercentage() }}%)
+        </span>
+        <span class="discount-amount">-{{ getWelcomeBonusDiscountAmount() | number:'1.2-2' }} AC</span>
+      </div>
+
+      <!-- COUPON DISCOUNT ROW -->
       <div class="summary-row discount-row" *ngIf="couponValidation?.isValid">
-        <span>Discount ({{ couponValidation?.discountPercentage }}%)</span>
-        <span class="discount-amount">-{{ getDiscountAmount() | number:'1.2-2' }} AC</span>
+        <span>Coupon Discount ({{ couponValidation?.discountPercentage }}%)</span>
+        <span class="discount-amount">-{{ couponValidation?.discountAmount | number:'1.2-2' }} AC</span>
       </div>
 
       <div class="summary-row">
@@ -165,8 +174,8 @@
       <div class="summary-row total-row">
         <span>Total Cost</span>
         <span>
-          <span *ngIf="couponValidation?.isValid" class="original-price">{{ cart.totalPrice }} AC</span>
-          <span [class.discounted-price]="couponValidation?.isValid">
+          <span *ngIf="couponValidation?.isValid || hasActiveWelcomeBonusDiscount()" class="original-price">{{ cart.totalPrice }} AC</span>
+          <span [class.discounted-price]="couponValidation?.isValid || hasActiveWelcomeBonusDiscount()">
             {{ getTotalWithDiscount() | number:'1.2-2' }} AC
           </span>
         </span>

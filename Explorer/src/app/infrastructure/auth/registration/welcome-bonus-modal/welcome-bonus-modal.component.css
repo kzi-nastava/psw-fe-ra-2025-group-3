@@ -1,0 +1,336 @@
+.bonus-modal-container {
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.95) 0%, rgba(77, 218, 235, 0.92) 30%, rgba(95, 230, 255, 0.9) 60%, rgba(128, 240, 255, 0.88) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 10px 40px rgba(64, 224, 208, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.bonus-modal-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+.bonus-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.bonus-title {
+  font-size: var(--font-size-2xl);
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  color: var(--color-neutral-0);
+  font-family: var(--font-family-display);
+}
+
+.bonus-subtitle {
+  font-size: var(--font-size-base);
+  margin: -5px 0 0 0;
+  opacity: 0.95;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-family-primary);
+}
+
+/* Wheel Container */
+.wheel-container {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin: 15px 0;
+}
+
+.wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 12px solid var(--color-neutral-0);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3), 
+              inset 0 0 30px rgba(255, 255, 255, 0.3),
+              0 0 0 5px rgba(0, 188, 212, 0.2);
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  background: var(--color-primary-500);
+  transform-origin: center center;
+}
+
+.wheel.spinning {
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.wheel-segment {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transform-origin: center center;
+  overflow: visible;
+}
+
+/* Each segment is a perfect triangle starting from center (50%, 50%) */
+/* Points calculated for 60-degree segments (360/6 = 60 degrees each) */
+/* Each triangle: center -> edge point 1 -> edge point 2 */
+/* Edge points: 0°=top, 60°=top-right, 120°=bottom-right, 180°=bottom, 240°=bottom-left, 300°=top-left */
+.wheel-segment.segment-0 {
+  background: var(--color-primary-500);
+  /* 0° to 60°: center -> top (0°) -> top-right (60°) */
+  clip-path: polygon(50% 50%, 50% 0%, 93.3% 25%);
+}
+
+.wheel-segment.segment-1 {
+  background: var(--color-primary-600);
+  /* 60° to 120°: center -> top-right (60°) -> bottom-right (120°) */
+  clip-path: polygon(50% 50%, 93.3% 25%, 93.3% 75%);
+}
+
+.wheel-segment.segment-2 {
+  background: var(--color-primary-700);
+  /* 120° to 180°: center -> bottom-right (120°) -> bottom (180°) */
+  clip-path: polygon(50% 50%, 93.3% 75%, 50% 100%);
+}
+
+.wheel-segment.segment-3 {
+  background: var(--color-secondary-500);
+  /* 180° to 240°: center -> bottom (180°) -> bottom-left (240°) */
+  clip-path: polygon(50% 50%, 50% 100%, 6.7% 75%);
+}
+
+.wheel-segment.segment-4 {
+  background: var(--color-secondary-800);
+  /* 240° to 300°: center -> bottom-left (240°) -> top-left (300°) */
+  clip-path: polygon(50% 50%, 6.7% 75%, 6.7% 25%);
+}
+
+.wheel-segment.segment-5 {
+  background: var(--color-primary-800);
+  /* 300° to 360° (0°): center -> top-left (300°) -> top (0°/360°) */
+  clip-path: polygon(50% 50%, 6.7% 25%, 50% 0%);
+}
+
+/* White borders removed - segments are separated by their natural edges */
+
+.segment-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+  font-weight: 700;
+  width: 80px;
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Position content within each triangle segment - centered at ~65% radius from center */
+/* Each segment is 60 degrees, center is at 30° from segment start */
+/* Coordinates at 65% radius: x = 50% + 32.5% * sin(θ), y = 50% - 32.5% * cos(θ) */
+.wheel-segment.segment-0 .segment-content {
+  /* Segment 0: 0°-60°, center at 30°, at 65% radius */
+  top: 21.9%;
+  left: 66.25%;
+  transform-origin: center center;
+}
+
+.wheel-segment.segment-1 .segment-content {
+  /* Segment 1: 60°-120°, center at 90°, at 65% radius */
+  top: 50%;
+  left: 82.5%;
+  transform-origin: center center;
+}
+
+.wheel-segment.segment-2 .segment-content {
+  /* Segment 2: 120°-180°, center at 150°, at 65% radius */
+  top: 78.1%;
+  left: 66.25%;
+  transform-origin: center center;
+}
+
+.wheel-segment.segment-3 .segment-content {
+  /* Segment 3: 180°-240°, center at 210°, at 65% radius */
+  top: 78.1%;
+  left: 33.75%;
+  transform-origin: center center;
+}
+
+.wheel-segment.segment-4 .segment-content {
+  /* Segment 4: 240°-300°, center at 270°, at 65% radius */
+  top: 50%;
+  left: 17.5%;
+  transform-origin: center center;
+}
+
+.wheel-segment.segment-5 .segment-content {
+  /* Segment 5: 300°-360°, center at 330°, at 65% radius */
+  top: 21.9%;
+  left: 33.75%;
+  transform-origin: center center;
+}
+
+.segment-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.7));
+  line-height: 1;
+  display: block;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.segment-label {
+  font-size: 14px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.2;
+  display: block;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 40px solid var(--color-neutral-0);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  z-index: 10;
+  animation: pointerPulse 2s ease-in-out infinite;
+}
+
+@keyframes pointerPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Result Container */
+.result-container {
+  margin-top: 15px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-in, slideUp 0.5s ease-out;
+  min-width: 280px;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1);
+  }
+}
+
+.bonus-message {
+  font-size: var(--font-size-xl);
+  margin: 10px 0 0 0;
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+  font-family: var(--font-family-primary);
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.spin-button,
+.close-button {
+  padding: 14px 50px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--color-neutral-0) 0%, rgba(255, 255, 255, 0.95) 100%);
+  color: var(--color-primary-700);
+  border: none;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  font-family: var(--font-family-primary);
+}
+
+.spin-button:hover:not(:disabled),
+.close-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-xl);
+  background: linear-gradient(135deg, var(--color-neutral-0) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.spin-button:disabled,
+.close-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
