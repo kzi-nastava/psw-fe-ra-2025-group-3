@@ -65,6 +65,15 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
+    // Osvežavaj tourist stats kada se promeni
+    this.stakeholderService.touristStatsUpdated
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.user && this.user.role === 'tourist') {
+          this.loadTouristStats();
+        }
+      });
+
     // Osvežavaj korpu kada se naviguje na stranicu
     this.router.events
       .pipe(
@@ -74,6 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         if (this.user && this.user.role === 'tourist') {
           this.loadCart();
+          this.loadTouristStats();
         }
       });
   }

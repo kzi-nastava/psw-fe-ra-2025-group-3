@@ -123,6 +123,8 @@ export class ClubDetailComponent implements OnInit {
                 this.getRequests(this.club.id);
                 if(accepted) {
                     this.loadClub(this.club.id);
+                    // Notifikuj da se stats promenio - korisnik je ušao u klub
+                    this.stakeholderService.notifyTouristStatsUpdated();
                 }
             }
         },

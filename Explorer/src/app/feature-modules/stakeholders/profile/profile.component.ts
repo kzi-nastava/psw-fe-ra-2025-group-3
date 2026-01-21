@@ -116,6 +116,12 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.profileForm.disable();
         this.isEditing = false;
+        // Notifikuj da se stats promenio (samo za turiste)
+        this.authService.user$.subscribe(user => {
+          if (user && user.role === 'tourist') {
+            this.service.notifyTouristStatsUpdated();
+          }
+        });
       },
       error: (err) => {
         console.error('Failed to update profile:', err);
