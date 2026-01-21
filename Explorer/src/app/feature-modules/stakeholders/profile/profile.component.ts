@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StakeholderService } from '../stakeholder.service';
 import { Person } from '../model/person.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { WelcomeBonusService } from '../welcome-bonus.service';
+import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
 import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 
@@ -14,8 +16,8 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 export class ProfileComponent implements OnInit {
 
   isEditing = false;
-
-  
+  welcomeBonus: WelcomeBonus | null = null;
+  isLoadingBonus = false;
   authorStats: AuthorProfileStatsDto | null = null;
   isAuthor = false;
   
@@ -32,13 +34,16 @@ export class ProfileComponent implements OnInit {
  
   constructor(
     private service: StakeholderService,
+    private welcomeBonusService: WelcomeBonusService,
     private authService: AuthService
   ) { }
  
 
   ngOnInit(): void {
     this.loadProfile();
-
+    if (this.isTourist()) {
+      this.loadWelcomeBonus();
+    }
     
     this.authService.user$.subscribe((user: User | undefined) => {
       this.isAuthor = user?.role === 'author';
@@ -121,5 +126,52 @@ export class ProfileComponent implements OnInit {
         console.error('Failed to update profile:', err);
       }
     });
+  }
+
+
+  loadWelcomeBonus(): void {
+    this.isLoadingBonus = true;
+    this.welcomeBonusService.getWelcomeBonus().subscribe({
+      next: (bonus) => {
+        this.welcomeBonus = bonus;
+        this.isLoadingBonus = false;
+      },
+      error: () => {
+        this.welcomeBonus = null;
+        this.isLoadingBonus = false;
+      }
+    });
+  }
+
+  getBonusStatus(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.isUsed) {
+      return 'Iskorišćen';
+    }
+    
+    if (this.welcomeBonus.bonusType === BonusType.Discount10 || 
+        this.welcomeBonus.bonusType === BonusType.Discount20 || 
+        this.welcomeBonus.bonusType === BonusType.Discount30) {
+      return 'Aktivan - Važi do prve kupovine';
+    }
+    
+    return 'Aktivan';
+  }
+
+  getBonusDescription(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.bonusType === BonusType.AC100 || 
+        this.welcomeBonus.bonusType === BonusType.AC250 || 
+        this.welcomeBonus.bonusType === BonusType.AC500) {
+      return `${this.welcomeBonus.value} Adventure Coins`;
+    } else {
+      return `${this.welcomeBonus.value}% popusta na prvu kupovinu`;
+    }
+  }
+
+  isTourist(): boolean {
+    return this.authService.isTourist();
   }
 }
