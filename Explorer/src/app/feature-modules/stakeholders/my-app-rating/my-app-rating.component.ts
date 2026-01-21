@@ -81,18 +81,4 @@ export class MyAppRatingComponent implements OnInit {
       }
     });
   }
-
-  onDelete(): void {
-    if (!this.existingRating) return;
-
-    this.appRatingService.deleteRating(this.role).subscribe({
-      next: () => {
-        this.existingRating = null;
-        this.form.reset();
-      },
-      error: (err) => {
-        console.error('Error while deleting rating', err);
-      }
-    });
-  }
 }
