@@ -10,6 +10,9 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationBadgeComponent } from '../notification-badge/notification-badge.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LevelProgressDialogComponent } from '../level-progress-dialog/level-progress-dialog.component';
+import { TouristStats, getRankConfig } from '../../stakeholders/model/tourist-stats.model';
 
 @Component({
   selector: 'xp-navbar',
@@ -21,6 +24,8 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   profilePictureUrl: string = '';
   cartItemsCount: number = 0;
   isCartDropdownOpen: boolean = false;
+  touristStats: TouristStats | null = null;
+  rankConfig: any = null;
   private destroy$ = new Subject<void>();
 
   @ViewChildren(MatMenuTrigger) menuTriggers!: QueryList<MatMenuTrigger>;
@@ -30,7 +35,8 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private stakeholderService: StakeholderService,
     private shoppingCartService: ShoppingCartService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -40,10 +46,13 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadProfile();
         if (user.role === 'tourist') {
           this.loadCart();
+          this.loadTouristStats();
         }
       } else {
         this.profilePictureUrl = '';
         this.cartItemsCount = 0;
+        this.touristStats = null;
+        this.rankConfig = null;
       }
     });
 
@@ -170,6 +179,33 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+
+  loadTouristStats(): void {
+    this.stakeholderService.getTouristStats()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (stats: TouristStats) => {
+          this.touristStats = stats;
+          this.rankConfig = getRankConfig(stats.level);
+        },
+        error: (err) => {
+          console.error('Failed to load tourist stats:', err);
+          this.touristStats = null;
+          this.rankConfig = null;
+        }
+      });
+  }
+
+  openLevelDialog(): void {
+    if (this.touristStats) {
+      this.dialog.open(LevelProgressDialogComponent, {
+        data: this.touristStats,
+        width: '600px',
+        maxWidth: '90vw',
+        panelClass: 'level-dialog'
+      });
+    }
+  }
   onLogout(): void {
     this.authService.logout();
   }

@@ -9,6 +9,7 @@ import { RegistrationComponent } from '../auth/registration/registration.compone
 
 import { MapTestComponent } from 'src/app/feature-modules/layout/map-test/map-test.component';
 import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/tourist-map.component';
+import { LevelUpGuideComponent } from 'src/app/feature-modules/layout/level-up-guide/level-up-guide.component';
 
 import { EquipmentComponent } from 'src/app/feature-modules/administration/equipment/equipment.component';
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component';
@@ -74,6 +75,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
+  { path: 'level-up-guide', component: LevelUpGuideComponent },
 
   { path: 'map-test', component: MapTestComponent },
 
