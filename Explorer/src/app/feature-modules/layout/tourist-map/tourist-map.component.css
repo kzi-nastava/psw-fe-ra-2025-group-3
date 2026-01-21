@@ -38,6 +38,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6);
+  position: relative;
 }
 
 .map-wrapper xp-map {
@@ -46,9 +47,11 @@
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   padding: var(--spacing-4);
+  padding-right: 280px;
+  position: relative;
 }
 
-.map-wrapper button {
+.save-position-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -67,14 +70,152 @@
   box-shadow: var(--shadow-md);
 }
 
-.map-wrapper button:hover:not(:disabled) {
+.save-position-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
-.map-wrapper button:disabled {
+.save-position-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ============================================================================
+   MAP LEGEND
+   ============================================================================ */
+
+.map-legend {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  padding: var(--spacing-5);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: 1000;
+  border: 2px solid rgba(0, 188, 212, 0.3);
+  min-width: 220px;
+  max-width: 260px;
+}
+
+.legend-title {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  text-align: center;
+  padding-bottom: var(--spacing-3);
+  border-bottom: 2px solid var(--color-primary-200);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-2);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  transition: all 0.2s ease;
+  border-radius: var(--border-radius-md);
+  position: relative;
+}
+
+.legend-item.static {
+  background: rgba(0, 188, 212, 0.08);
+  margin-bottom: var(--spacing-3);
+  pointer-events: none;
+}
+
+.legend-item.filter {
+  cursor: pointer;
+  user-select: none;
+}
+
+.legend-item.filter:hover {
+  background: rgba(0, 188, 212, 0.1);
+  transform: translateX(-3px);
+}
+
+.legend-item.filter.active {
+  background: linear-gradient(135deg, rgba(0, 200, 83, 0.15), rgba(0, 137, 123, 0.15));
+  border-left: 3px solid var(--color-primary-600);
+}
+
+.legend-item:not(:last-child):not(.static) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.legend-item img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  flex-shrink: 0;
+}
+
+.legend-item span {
+  flex: 1;
+}
+
+.legend-item .filter-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary-600);
+  margin-left: auto;
+}
+
+/* ============================================================================
+   RESPONSIVE - MOBILE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .tourist-map-container {
+    padding: var(--spacing-4);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .header p {
+    font-size: var(--font-size-base);
+  }
+
+  .map-wrapper {
+    position: relative;
+  }
+
+  .map-legend {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    max-width: 100%;
+    margin-top: var(--spacing-4);
+    order: 2;
+  }
+
+  .map-wrapper xp-map {
+    order: 1;
+    min-height: 400px;
+  }
+
+  .save-position-btn {
+    order: 3;
+    width: 100%;
+  }
+
+  .legend-item.filter:hover {
+    transform: translateX(0);
+  }
+
+  .legend-item img {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 /* SNACKBAR STILOVI */

@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StakeholderService } from '../stakeholder.service';
 import { Person } from '../model/person.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { WelcomeBonusService } from '../welcome-bonus.service';
 import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
-import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'xp-profile',
@@ -16,7 +18,10 @@ export class ProfileComponent implements OnInit {
   isEditing = false;
   welcomeBonus: WelcomeBonus | null = null;
   isLoadingBonus = false;
+  authorStats: AuthorProfileStatsDto | null = null;
+  isAuthor = false;
   
+
   profileForm = new FormGroup({
     name: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
@@ -26,17 +31,29 @@ export class ProfileComponent implements OnInit {
     profilePictureUrl: new FormControl('')
   });
 
+ 
   constructor(
     private service: StakeholderService,
     private welcomeBonusService: WelcomeBonusService,
     private authService: AuthService
   ) { }
+ 
 
   ngOnInit(): void {
     this.loadProfile();
     if (this.isTourist()) {
       this.loadWelcomeBonus();
     }
+    
+    this.authService.user$.subscribe((user: User | undefined) => {
+      this.isAuthor = user?.role === 'author';
+      if (this.isAuthor) {
+        this.loadAuthorStats();
+      } else {
+        this.authorStats = null;
+      }
+    });
+    
   }
 
   loadProfile(): void {
@@ -59,6 +76,20 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // ===== DODATO =====
+  loadAuthorStats(): void {
+    this.service.getMyAuthorProfileStats().subscribe({
+      next: (stats) => {
+        this.authorStats = stats;
+      },
+      error: (err) => {
+        console.error('Failed to load author stats:', err);
+        this.authorStats = null;
+      }
+    });
+  }
+  // ==================
+
   toggleEdit(): void {
     if (this.isEditing) {
       this.profileForm.disable();
@@ -77,7 +108,7 @@ export class ProfileComponent implements OnInit {
 
     const updatedProfile: Person = {
       id: 0,
-      userId: 0, 
+      userId: 0,
       name: this.profileForm.value.name || '',
       surname: this.profileForm.value.surname || '',
       email: this.profileForm.value.email || '',
@@ -96,6 +127,7 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
 
   loadWelcomeBonus(): void {
     this.isLoadingBonus = true;

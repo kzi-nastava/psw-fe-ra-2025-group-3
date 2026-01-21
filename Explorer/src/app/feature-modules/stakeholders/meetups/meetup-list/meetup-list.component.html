@@ -26,7 +26,7 @@
           <strong>Date:</strong> {{ meetup.dateTime | date:'short' }}
         </p>
         <p class="location">
-          <strong>Location:</strong> {{ meetup.latitude }}, {{ meetup.longitude }}
+          <strong>Location:</strong> {{ meetup.latitude | number:'1.2-2' }}, {{ meetup.longitude | number:'1.2-2' }}
         </p>
       </div>
 
@@ -35,5 +35,14 @@
         <button mat-button color="warn" (click)="deleteMeetup(meetup)">Delete</button>
       </div>
     </div>
+  </div>
+  <div class="map-container" *ngIf="!isLoading">
+    <xp-map 
+      [points]="mapPoints" 
+      [center]="[45.2396, 19.8227]" 
+      [zoom]="12"
+      [mode]="'object-view'"
+      (markerClicked)="onMarkerClicked($event)">
+    </xp-map>
   </div>
 </div>

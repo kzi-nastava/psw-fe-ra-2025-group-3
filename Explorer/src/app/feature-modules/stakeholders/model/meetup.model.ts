@@ -29,3 +29,12 @@ export interface MeetupUpdateDto {
   longitude: number;
   tourId?: number;
 }
+
+export interface MeetupMapPreview {
+  id: number;
+  title: string;
+  description: string;
+  startTime: Date;
+  latitude: number;
+  longitude: number;
+}

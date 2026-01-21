@@ -27,12 +27,42 @@
         <!-- Search and Difficulty Row -->
         <div class="filter-row">
           <!-- Search by Name -->
-          <div class="filter-section">
+          <div class="filter-section search-section" #searchSection>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Search tours</mat-label>
-              <input matInput [formControl]="searchControl" placeholder="Type to search...">
+              <input 
+                matInput 
+                [formControl]="searchControl" 
+                placeholder="Type to search..."
+                (focus)="onSearchBarFocus()">
               <mat-icon matPrefix>search</mat-icon>
             </mat-form-field>
+            
+            <!-- Popular Tours Dropdown -->
+            <div class="popular-tours-dropdown" *ngIf="showPopularToursDropdown && popularTours.length > 0">
+              <div class="dropdown-header">
+                <mat-icon>trending_up</mat-icon>
+                <span>Popular Tours</span>
+              </div>
+              <div class="dropdown-list">
+                <div 
+                  class="dropdown-item" 
+                  *ngFor="let tour of popularTours"
+                  (click)="onPopularTourSelect(tour)">
+                  <div class="tour-info">
+                    <span class="tour-name">{{ tour.name }}</span>
+                    <div class="tour-meta">
+                      <span class="tour-rating" *ngIf="tour.averageRating > 0">
+                        <mat-icon class="star-icon">star</mat-icon>
+                        {{ tour.averageRating | number:'1.1-1' }}
+                      </span>
+                      <span class="tour-difficulty">{{ getDifficultyLabel(tour.difficulty) }}</span>
+                    </div>
+                  </div>
+                  <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Difficulty Filter -->
@@ -67,7 +97,7 @@
           <div class="filter-section">
             <label class="filter-label">
               <mat-icon class="label-icon">attach_money</mat-icon>
-              Price (RSD)
+              Price (AC)
             </label>
             <div class="price-inputs">
               <mat-form-field appearance="outline">
@@ -136,16 +166,31 @@
                 ({{ selectedTags.length }} selected)
               </span>
             </label>
+            
+            <!-- Tag Search Input -->
+            <mat-form-field appearance="outline" class="full-width tag-search-field">
+              <mat-label>Search tags</mat-label>
+              <input matInput [formControl]="tagSearchControl" placeholder="Type to filter tags...">
+              <mat-icon matPrefix>search</mat-icon>
+              <button mat-icon-button matSuffix *ngIf="tagSearchControl.value" (click)="tagSearchControl.setValue('')" aria-label="Clear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+            
             <div class="tags-filter">
               <mat-chip-set>
                 <mat-chip 
-                  *ngFor="let tag of availableTags"
+                  *ngFor="let tag of filteredTags"
                   [class.selected]="isTagSelected(tag)"
                   (click)="onTagToggle(tag)">
                   {{ tag }}
                   <mat-icon *ngIf="isTagSelected(tag)" class="chip-check">check</mat-icon>
                 </mat-chip>
               </mat-chip-set>
+              <div class="no-tags-found" *ngIf="filteredTags.length === 0 && tagSearchControl.value">
+                <mat-icon>search_off</mat-icon>
+                <span>No tags found matching "{{ tagSearchControl.value }}"</span>
+              </div>
             </div>
           </div>
         </div>

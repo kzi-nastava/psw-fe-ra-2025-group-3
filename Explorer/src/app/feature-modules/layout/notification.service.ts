@@ -83,6 +83,26 @@ export class NotificationService {
     this.getUnreadCount().subscribe();
   }
 
+  private getMyPersonIdFromToken(): number | null {
+    const token = this.tokenStorage.getAccessToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      // najčešći slučaj u vašem projektu: 'personId'
+      const raw = payload['personId']
+        ?? payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+        ?? payload['nameid']
+        ?? payload['sub'];
+
+      const id = Number(raw);
+      return Number.isFinite(id) ? id : null;
+    } catch {
+      return null;
+    }
+  }
+
   // =====================
   // ===== SIGNALR =======
   // =====================
@@ -120,6 +140,11 @@ export class NotificationService {
     this.hubConnection.on(
       'ReceiveNotification',
       (notification: NotificationDto) => {
+
+        const myId = this.getMyPersonIdFromToken();
+        if (myId !== null && notification.recipientId !== myId) {
+          return; // ignoriše tuđe notifikacije 
+        }
 
         // 1️⃣ povećaj badge
         this.unreadCountSubject.next(
