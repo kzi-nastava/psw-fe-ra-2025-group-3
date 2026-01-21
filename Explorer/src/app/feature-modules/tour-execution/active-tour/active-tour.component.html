@@ -148,40 +148,47 @@
       <!-- MAP CARD -->
       <mat-card class="map-card">
         <mat-card-header>
-          <mat-card-title>Route to Next Key Point</mat-card-title>
+            <mat-card-title>Route to Next Key Point</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="map-wrapper">
-<xp-map
-  [mode]="'route-view'"
-  [center]="[execution.startLatitude, execution.startLongitude]"
-  [zoom]="14"
-  [waypoints]="routeWaypoints"
-  [points]="routePoints"
-  [initialPoint]="currentTouristPosition"
-  (pointSelected)="onMapClick($event)">
-</xp-map>
-</div>
+            <div class="map-wrapper">
+                <xp-map
+                [mode]="'route-view'"
+                [center]="[execution.startLatitude, execution.startLongitude]"
+                [zoom]="14"
+                [waypoints]="routeWaypoints"
+                [points]="routePoints"
+                [initialPoint]="currentTouristPosition"
+                (pointSelected)="onMapClick($event)">
+                </xp-map>
 
-      <!-- POSITION SIMULATOR CONTROLS -->
-<div class="position-controls" [class.position-ready]="tempSelectedPosition">
-  <p class="position-hint">
-    <mat-icon>{{tempSelectedPosition ? 'check_circle' : 'info'}}</mat-icon>
-    <span *ngIf="!tempSelectedPosition">Click or drag the "Your Current Position" marker to change your test location</span>
-    <span *ngIf="tempSelectedPosition">📍 New position ready - click "Save my position" to confirm</span>
-  </p>
-  <button 
-    mat-raised-button 
-    color="primary"
-    class="save-position-btn"
-    [disabled]="!tempSelectedPosition"
-    (click)="savePosition()">
-    <mat-icon>save</mat-icon>
-    Save my position
-  </button>
-</div>
-    </mat-card-content>
-  </mat-card>
+                <div class="map-legend">
+                    <div class="legend-item"><img src="assets/icons/tourist.png"> You</div>
+                    <div class="legend-item"><img src="assets/icons/checkpoint.png"> Checkpoint</div>
+                    <div class="legend-item"><img src="assets/icons/fast-food.png"> Restaurant</div>
+                    <div class="legend-item"><img src="assets/icons/group-tourist.png"> Tourist from your group</div>
+                </div>
+            </div>
+
+            <!-- POSITION SIMULATOR CONTROLS -->
+            <div class="position-controls" [class.position-ready]="tempSelectedPosition">
+                <p class="position-hint">
+                    <mat-icon>{{tempSelectedPosition ? 'check_circle' : 'info'}}</mat-icon>
+                    <span *ngIf="!tempSelectedPosition">Click on the map to select your current location</span>
+                    <span *ngIf="tempSelectedPosition">📍 New position ready - click "Save my position" to confirm</span>
+                </p>
+                <button 
+                    mat-raised-button 
+                    color="primary"
+                    class="save-position-btn"
+                    [disabled]="!tempSelectedPosition"
+                    (click)="savePosition()">
+                    <mat-icon>save</mat-icon>
+                    Save my position
+                </button>
+            </div>
+            </mat-card-content>
+        </mat-card>
     </div>
   </div>
 </div>

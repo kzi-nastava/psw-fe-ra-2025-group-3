@@ -55,4 +55,50 @@
     </div>
 
   </form>
+  <!-- AUTHOR STATS -->
+<div *ngIf="isAuthor && authorStats as s" class="author-stats-container">
+
+  <h2 class="section-title">Author Statistics</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Average rating</div>
+      <div class="stat-value">⭐ {{ s.averageRating }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Total tours</div>
+      <div class="stat-value">{{ s.totalTours }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Total reviews</div>
+      <div class="stat-value">{{ s.totalReviews }}</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Total purchases</div>
+      <div class="stat-value">{{ s.totalPurchases }}</div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Recent reviews</h3>
+
+  <div *ngIf="s.recentReviews?.length; else noReviews">
+    <div class="review-card" *ngFor="let r of s.recentReviews">
+      <div class="review-header">
+        <div class="review-tour">{{ r.tourName }}</div>
+        <div class="review-rating">⭐ {{ r.rating }}</div>
+      </div>
+      <div class="review-date">{{ r.createdAt | date:'medium' }}</div>
+      <div class="review-comment">{{ r.comment || 'No comment' }}</div>
+    </div>
+  </div>
+
+  <ng-template #noReviews>
+    <p>No reviews yet.</p>
+  </ng-template>
+
+</div>
+
 </div>

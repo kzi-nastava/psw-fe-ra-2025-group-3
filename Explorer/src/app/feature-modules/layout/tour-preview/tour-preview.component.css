@@ -150,8 +150,21 @@
 }
 
 .star {
+  position: relative;
+  display: inline-block;
   color: var(--color-neutral-100);
   font-size: var(--font-size-xl);
+  line-height: 1;
+}
+
+.star::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--fill, 0%);
+  overflow: hidden;
+  color: var(--color-warning);
 }
 
 .star.filled {

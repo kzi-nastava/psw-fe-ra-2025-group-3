@@ -14,9 +14,9 @@
         <h2 class="tour-name">{{ tour.name }}</h2>
         <div class="tour-rating-large">
           <div class="stars">
-            <span *ngFor="let star of getStars(tour.averageRating)" 
+            <span *ngFor="let fill of getStarsFill(tour.averageRating)" 
                   class="star" 
-                  [class.filled]="star === 1">★</span>
+                  [style.--fill]="fill + '%'">★</span>
           </div>
           <span class="rating-value">{{ tour.averageRating | number:'1.1-1' }}</span>
           <span class="review-count">({{ tour.reviewCount }} reviews)</span>
@@ -31,11 +31,11 @@
         <div class="detail-info">
           <span class="detail-label">Price</span>
           <div class="price-container" *ngIf="tour.onSale && tour.originalPrice && tour.discountedPrice">
-            <span class="detail-value original-price">€{{ tour.originalPrice | number:'1.2-2' }}</span>
-            <span class="detail-value discounted-price">€{{ tour.discountedPrice | number:'1.2-2' }}</span>
+            <span class="detail-value original-price">{{ tour.originalPrice | number:'1.2-2' }} AC</span>
+            <span class="detail-value discounted-price">{{ tour.discountedPrice | number:'1.2-2' }} AC</span>
             <span class="discount-badge">-{{ tour.discountPercentage | number:'1.0-0' }}%</span>
           </div>
-          <span class="detail-value" *ngIf="!tour.onSale">€{{ tour.price | number:'1.2-2' }}</span>
+          <span class="detail-value" *ngIf="!tour.onSale">{{ tour.price | number:'1.2-2' }} AC</span>
         </div>
       </div>
       <div class="detail-card">

@@ -1,10 +1,40 @@
-div {
-    width: 400px;
-    display:flex;
-    gap: 20px;
-    flex-direction: column;
+.styled-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px; 
 }
 
-.mat-icon {
-    vertical-align: middle;
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 0.95rem;
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 12px;
+  color: #00897b; 
+}
+
+mat-label {
+  color: #546e7a;
+  font-weight: 500;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 8px !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #00897b, #00695c) !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(0, 105, 92, 0.3);
+  margin-top: 10px;
+}
+
+.submit-btn:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 105, 92, 0.4);
 }

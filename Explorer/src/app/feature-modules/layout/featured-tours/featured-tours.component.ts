@@ -70,9 +70,16 @@ export class FeaturedToursComponent implements OnInit {
     }
   }
 
-  getStars(rating: number): number[] {
-    return Array(5).fill(0).map((_, i) => i < Math.round(rating) ? 1 : 0);
+  getStarsFill(rating: number): number[] {
+    const safe = Math.max(0, Math.min(5, rating || 0));
+
+    return Array.from({ length: 5 }, (_, i) => {
+      const value = safe - i;             
+      const clamped = Math.max(0, Math.min(1, value));
+      return Math.round(clamped * 100);   
+    });
   }
+
 
   formatDuration(minutes: number): string {
     const hours = Math.floor(minutes / 60);
