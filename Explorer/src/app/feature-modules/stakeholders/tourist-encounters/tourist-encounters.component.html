@@ -40,7 +40,7 @@
 
       <div class="map-container">
         <xp-map 
-          [mode]="'edit-object'" 
+          [mode]="'object-view'" 
           [center]="myPosition ? [myPosition.lat, myPosition.lng] : [45.2396, 19.8227]"
           [zoom]="currentZoom"
           [points]="mapPoints"
@@ -55,23 +55,23 @@
           <h3>Legend:</h3>
           <div class="legend-items">
             <div class="legend-item">
-              <span class="legend-marker green"></span>
-              <span>Completed</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-marker yellow"></span>
-              <span>In Progress</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-marker red"></span>
-              <span>Can Activate</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-marker blue"></span>
+              <img style="width: 44px; height: auto" src="assets/icons/tourist.png">
               <span>My Position</span>
             </div>
             <div class="legend-item">
-              <span class="legend-marker grey"></span>
+              <img style="width: 44px; height: auto" src="assets/icons/completed_encounter.png">
+              <span>Completed</span>
+            </div>
+            <div class="legend-item">
+              <img style="width: 44px; height: auto" src="assets/icons/in_progress_encounter.png">
+              <span>In Progress</span>
+            </div>
+            <div class="legend-item">
+              <img style="width: 44px; height: auto" src="assets/icons/can_activate_encounter.png">
+              <span>Can Activate</span>
+            </div>
+            <div class="legend-item">
+              <img style="width: 44px; height: auto" src="assets/icons/too_far_encounter.png">
               <span>Too Far</span>
             </div>
           </div>
