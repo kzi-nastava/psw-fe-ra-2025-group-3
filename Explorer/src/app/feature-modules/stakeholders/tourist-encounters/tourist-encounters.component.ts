@@ -23,10 +23,10 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
 
   encounters: NearbyEncounterDto[] = [];
   activeEncounterIds: Set<number> = new Set();
-  mapPoints: { lat: number; lng: number; name?: string; color?: string }[] = [];
+  mapPoints: { lat: number; lng: number; name?: string; iconUrl?: string; color?: string }[] = [];
   isLoading = false;
-  selectedPoint: { lat: number; lng: number } | null = null;
-  myPosition: { lat: number; lng: number } | null = null;
+  selectedPoint: { lat: number; lng: number; iconUrl?: string } | null = null;
+  myPosition: { lat: number; lng: number; iconUrl?: string } | null = null;
   currentZoom: number = 15;
   selectedFilter: string | null = null; // null = show all
   highlightedEncounterId: number | null = null;
@@ -80,7 +80,7 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
       this.activationService.getMyPosition().subscribe({
         next: (position) => {
           if (position) {
-            this.myPosition = { lat: position.latitude, lng: position.longitude };
+            this.myPosition = { lat: position.latitude, lng: position.longitude, iconUrl: 'assets/icons/tourist.png' };
             this.loadNearbyEncounters();
           } else {
             // No position, load all active encounters without distance
@@ -128,7 +128,7 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
     this.activationService.getMyPosition().subscribe({
       next: (position) => {
         if (position) {
-          this.myPosition = { lat: position.latitude, lng: position.longitude };
+          this.myPosition = { lat: position.latitude, lng: position.longitude, iconUrl: 'assets/icons/tourist.png' };
         }
       },
       error: (err) => {
@@ -185,21 +185,21 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
         return true;
       })
       .map(e => {
-        let color = 'grey'; // Default: too far
+        let iconUrl = 'assets/icons/too_far_encounter.png'; // Default: too far
         
         if (e.isCompleted) {
-          color = 'green'; // Completed
+          iconUrl = 'assets/icons/completed_encounter.png'; // Completed
         } else if (this.isEncounterActive(e.id)) {
-          color = 'yellow'; // In progress
+          iconUrl = 'assets/icons/in_progress_encounter.png'; // In progress
         } else if (e.canActivate) {
-          color = 'red'; // Can activate
+          iconUrl = 'assets/icons/can_activate_encounter.png'; // Can activate
         }
 
         return {
           lat: e.latitude,
           lng: e.longitude,
           name: `${e.name} - ${e.xp} XP`,
-          color: color,
+          iconUrl: iconUrl,
           id: e.id // Add ID for marker click identification
         };
       });
@@ -209,7 +209,7 @@ export class TouristEncountersComponent implements OnInit, OnDestroy {
   }
 
   onPointSelected(point: { lat: number; lng: number }): void {
-    this.selectedPoint = point;
+    this.selectedPoint = { ...point, iconUrl: 'assets/icons/tourist.png' };
     // The map's initialPoint binding will automatically update the draggable marker
   }
 
