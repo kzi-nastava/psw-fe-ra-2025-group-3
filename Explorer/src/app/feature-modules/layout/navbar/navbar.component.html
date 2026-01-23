@@ -232,9 +232,12 @@
             <mat-icon>badge</mat-icon>
             <span>My Clubs</span>
           </button>
-          <button mat-menu-item routerLink="/meetups">
+          <button mat-menu-item routerLink="/meetups" 
+                  [disabled]="touristStats && touristStats.level < 2"
+                  [matTooltip]="touristStats && touristStats.level < 2 ? '🔒 Unlocked at Bronze rank (Level 2+)' : ''">
             <mat-icon>event</mat-icon>
             <span>Meetups</span>
+            <mat-icon *ngIf="touristStats && touristStats.level < 2" class="lock-icon">lock</mat-icon>
           </button>
         </mat-menu>
 

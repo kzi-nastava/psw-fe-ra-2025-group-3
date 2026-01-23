@@ -149,13 +149,36 @@
         <span>{{ cart.totalPrice }} AC</span>
       </div>
 
-      <!-- WELCOME BONUS DISCOUNT ROW -->
-      <div class="summary-row discount-row welcome-bonus-discount" *ngIf="hasActiveWelcomeBonusDiscount()">
+      <!-- RANK DISCOUNT (Applied) -->
+      <div class="summary-row discount-row rank-discount-applied" *ngIf="getAppliedDiscountType() === 'rank'">
+        <span>
+          <mat-icon class="discount-icon">military_tech</mat-icon>
+          {{ touristStats?.rank }} Rank Discount ({{ getRankDiscountPercentage() }}%)
+        </span>
+        <span class="discount-amount">-{{ cart.totalPrice * (getRankDiscountPercentage() / 100) | number:'1.2-2' }} AC</span>
+      </div>
+
+      <!-- WELCOME BONUS DISCOUNT (Applied) -->
+      <div class="summary-row discount-row welcome-bonus-discount" *ngIf="getAppliedDiscountType() === 'welcome'">
         <span>
           <span class="bonus-icon-small">🎁</span>
           Welcome Bonus ({{ getWelcomeBonusDiscountPercentage() }}%)
         </span>
         <span class="discount-amount">-{{ getWelcomeBonusDiscountAmount() | number:'1.2-2' }} AC</span>
+      </div>
+
+      <!-- Info: Not applied discount (if exists but smaller) -->
+      <div class="summary-row info-row not-applied-discount" *ngIf="getAppliedDiscountType() === 'rank' && hasActiveWelcomeBonusDiscount()">
+        <span class="info-note">
+          <mat-icon class="info-icon-small">info</mat-icon>
+          Welcome Bonus ({{ getWelcomeBonusDiscountPercentage() }}%) available but rank discount is greater
+        </span>
+      </div>
+      <div class="summary-row info-row not-applied-discount" *ngIf="getAppliedDiscountType() === 'welcome' && hasRankDiscount()">
+        <span class="info-note">
+          <mat-icon class="info-icon-small">info</mat-icon>
+          {{ touristStats?.rank }} Rank Discount ({{ getRankDiscountPercentage() }}%) available but welcome bonus is greater
+        </span>
       </div>
 
       <!-- COUPON DISCOUNT ROW -->
@@ -174,8 +197,8 @@
       <div class="summary-row total-row">
         <span>Total Cost</span>
         <span>
-          <span *ngIf="couponValidation?.isValid || hasActiveWelcomeBonusDiscount()" class="original-price">{{ cart.totalPrice }} AC</span>
-          <span [class.discounted-price]="couponValidation?.isValid || hasActiveWelcomeBonusDiscount()">
+          <span *ngIf="couponValidation?.isValid || getAppliedDiscountType() !== 'none'" class="original-price">{{ cart.totalPrice }} AC</span>
+          <span [class.discounted-price]="couponValidation?.isValid || getAppliedDiscountType() !== 'none'">
             {{ getTotalWithDiscount() | number:'1.2-2' }} AC
           </span>
         </span>

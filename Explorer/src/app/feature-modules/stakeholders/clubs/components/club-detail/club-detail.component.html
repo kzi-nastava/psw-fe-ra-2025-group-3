@@ -72,7 +72,20 @@
           <div class="member-content">
             <div class="member-info">
               <mat-icon color="primary">person</mat-icon>
-              <span>{{ getMemberName(mId) }}</span>
+              <div class="member-name-container">
+                <span class="member-name">{{ getMemberName(mId) }}</span>
+                <span *ngIf="getMemberRankIcon(mId)" 
+                      class="rank-badge"
+                      [class.vista-badge]="getMemberRank(mId) === 'Vista'"
+                      [matTooltip]="getMemberRank(mId) + ' Tourist'">
+                  {{ getMemberRankIcon(mId) }}
+                </span>
+                <span *ngIf="isFeaturedTourist(mId)" 
+                      class="featured-badge"
+                      matTooltip="Featured Tourist">
+                  ⭐
+                </span>
+              </div>
             </div>
             <button mat-icon-button color="warn" (click)="kickMember(mId)" *ngIf="c.status === 'Active'"
               matTooltip="Kick Member">
