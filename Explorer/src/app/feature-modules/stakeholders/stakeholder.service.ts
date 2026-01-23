@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Person } from './model/person.model';
 import { environment } from 'src/env/environment';
 import { AccountRegistrationDto } from './model/account-registration.dto';
@@ -14,6 +15,8 @@ import { TouristStats } from './model/tourist-stats.model';
 })
 export class StakeholderService {
 
+  private touristStatsUpdated$ = new Subject<void>();
+  public touristStatsUpdated = this.touristStatsUpdated$.asObservable();
 
   private readonly profileUrl = environment.apiHost + 'stakeholders/person';
   private readonly authorStatsUrl = environment.apiHost + 'authors/me/profile-stats';
@@ -82,6 +85,10 @@ getMyAuthorProfileStats(): Observable<AuthorProfileStatsDto> {
 
 getTouristStats(): Observable<TouristStats> {
   return this.http.get<TouristStats>(this.touristStatsUrl);
+}
+
+notifyTouristStatsUpdated(): void {
+  this.touristStatsUpdated$.next();
 }
 
 }
