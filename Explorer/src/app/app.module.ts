@@ -19,14 +19,13 @@ import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
 
+// **UBACENO**: AiModule
+import { AiModule } from './feature-modules/ai/ai.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MyWalletComponent
-  
-   
-
   ],
   imports: [
     BrowserModule,
@@ -43,7 +42,10 @@ import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-w
     AuthModule,
     HttpClientModule,
     StakeholdersModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+
+    // **UBACENO**: tvoj AiModule
+    AiModule
   ],
   providers: [
     {
