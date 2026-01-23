@@ -13,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TouristMapService, TouristPositionDto } from '../../layout/tourist-map/tourist-map.service';
 import { FacilityService } from '../../administration/facility.service';
 import { Facility } from '../../administration/model/facility.model';
+import { GroupTourSessionService } from '../group-tour-session.service';
+import { GroupTourSessionParticipantDto } from '../model/group-tour-session.model';
 
 @Component({
   selector: 'xp-active-tour',
@@ -35,7 +37,11 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
 
   // Restaurants
   nearbyRestaurants: Facility[] = [];
-  restaurantPoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+  restaurantPoints: { lat: number; lng: number; name?: string; iconUrl?: string; color?: string; id?: number }[] = [];
+
+  // Group session participants
+  groupSessionParticipants: GroupTourSessionParticipantDto[] = [];
+  groupSessionParticipantPoints: { lat: number; lng: number; name?: string; iconUrl?: string; color?: string; id?: number }[] = [];
 
   private locationCheckSubscription: Subscription | null = null;
   lastCheckTime: Date | null = null;
@@ -53,7 +59,8 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
     private positionSimulator: PositionSimulatorService,
     private snackBar: MatSnackBar,
     private touristMapService: TouristMapService,
-    private facilityService: FacilityService
+    private facilityService: FacilityService,
+    private groupTourSessionService: GroupTourSessionService
   ) {}
 
   ngOnInit(): void {
@@ -151,6 +158,7 @@ loadKeyPoints(tourId: number): void {
 
       // Ucitaj restorane u blizini svih keypointova
       this.loadNearbyRestaurants();
+      this.loadGroupSessionParticipants();
 
       this.positionSimulator.getCurrentPosition().subscribe({
         next: (currentPosition) => {
@@ -275,6 +283,38 @@ private loadNearbyRestaurants(): void {
   });
 }
 
+private loadGroupSessionParticipants(): void {
+    if (!this.execution) return;
+
+    this.groupTourSessionService
+      .getOtherGroupParticipantsByTouristId(this.execution.touristId)
+      .subscribe({
+        next: (participants) => {          
+          const valid = (participants || []).filter(p => !!p.position);
+
+          const byId = new Map<number, GroupTourSessionParticipantDto>();
+          valid.forEach(p => {
+            if (!byId.has(p.touristId)) {
+              byId.set(p.touristId, p);
+            }
+          });
+
+          this.groupSessionParticipants = Array.from(byId.values());
+
+          this.groupSessionParticipantPoints = this.groupSessionParticipants.map(p => ({
+            lat: p.position!.latitude,
+            lng: p.position!.longitude,
+            iconUrl: 'assets/icons/group-tourist.png',
+            id: p.touristId
+          }));
+
+          this.setupMapRoute();
+        },
+        error: () => {          
+        }
+      });
+}
+
 private setupMapRoute(): void {
   if (!this.execution) {
     console.error('[Active Tour] ❌ Cannot setup route - missing execution');
@@ -326,8 +366,9 @@ private setupMapRoute(): void {
 
   // Restorani kao dodatni markeri (narandzasta boja)
   const restaurantMarkers = this.restaurantPoints || [];
+  const groupSessionParticipantMarkers = this.groupSessionParticipantPoints || [];
 
-  this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
+  this.routePoints = [...keyPointMarkers, ...restaurantMarkers, ...groupSessionParticipantMarkers];
 
   console.log('[Active Tour] 📍 Created routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Map route setup complete');
@@ -371,8 +412,9 @@ private setupMapRouteFallback(): void {
     });
 
       const restaurantMarkers = this.restaurantPoints || [];
+      const groupSessionParticipantMarkers = this.groupSessionParticipantPoints || [];
 
-      this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
+      this.routePoints = [...keyPointMarkers, ...restaurantMarkers, ...groupSessionParticipantMarkers];
 
   console.log('[Active Tour] 📍 Created fallback routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Fallback route setup complete');
@@ -402,6 +444,9 @@ private setupMapRouteFallback(): void {
 
         // AŽURIRANJE MAPE SA TRENUTNOM POZICIJOM 
         this.updateMapWithCurrentPosition(position.latitude, position.longitude);
+
+        
+        this.loadGroupSessionParticipants();
 
         const dto: LocationCheckDto = {
           tourId: this.execution!.tourId,

@@ -43,57 +43,98 @@
     <div class="column left-column">
       <div class="column-header">
         <h2>Group Tours</h2>
-        <p class="text-muted">Active group tours</p>
+        <p class="text-muted">Active group tour sessions</p>
+      </div>
+
+      <div class="start-session-box" *ngIf="c.status === 'Active'">
+        <div class="column-header" style="margin-top: 16px;">
+            <h2 style="font-size: 1.05rem;">Start session</h2>
+            <p class="text-muted">Choose a purchased tour</p>
+        </div>
+
+        <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Purchased tours</mat-label>
+            <mat-select [(value)]="selectedPurchasedTourId" [disabled]="isPurchasedToursLoading || purchasedTours.length === 0">
+            <mat-option *ngFor="let t of purchasedTours" [value]="t.id">
+                {{ t.name }}
+            </mat-option>
+            </mat-select>
+            <mat-hint *ngIf="!isPurchasedToursLoading && purchasedTours.length === 0">
+            No purchased tours available.
+            </mat-hint>
+        </mat-form-field>
+
+        <button
+            mat-raised-button
+            color="primary"
+            class="start-session-btn"
+            (click)="startGroupTourSession()"
+            [disabled]="!selectedPurchasedTourId">
+            <mat-icon>group_add</mat-icon>
+            Start group tour session
+        </button>
       </div>
 
       <div class="group-tours-list">
-        <div class="tour-card" *ngFor="let tour of mockGroupTours">
+        <div class="tour-card" *ngFor="let session of activeGroupSessions">
           <div class="tour-info">
             <div class="tour-header">
-              <h3><mat-icon>map</mat-icon>{{ tour.name }}</h3>
-              <span class="participants-badge">{{ tour.currentParticipants }}/{{ tour.maxParticipants }}</span>
+              <h3><mat-icon>map</mat-icon>{{ sessionDisplayTourName(session) ?? ('Tour #' + session.tourId) }}</h3>
+              <span class="participants-badge">{{ getActiveParticipants(session).length || 0 }} participants</span>
             </div>
-            <p class="tour-description">{{ tour.description }}</p>
+            <p class="tour-description">
+              Session started {{ session.startTime | date:'MMM dd, yyyy HH:mm' }}
+            </p>
           </div>
 
-          <!-- Participants List (Discord style) -->
-          <div class="tour-participants" *ngIf="tour.participants && tour.participants.length > 0">
-            <div class="participant-item" *ngFor="let participant of tour.participants">
-              <div class="participant-avatar">
+          <!-- Participants List -->
+          <div class="tour-participants" *ngIf="hasActiveParticipants(session)">
+            <div class="participant-item" *ngFor="let participant of getActiveParticipants(session)">
+              <div class="participant-avatar" *ngIf="participantDisplayProfilePicture(participant.touristId) == null">
                 <mat-icon>account_circle</mat-icon>
               </div>
-              <span class="participant-name">{{ participant.name }} {{ participant.surname }}</span>
+
+              <div class="participant-avatar" *ngIf="participantDisplayProfilePicture(participant.touristId) != null">
+                <img src={{participantDisplayProfilePicture(participant.touristId)}} >
+              </div>
+
+              <span class="participant-name">{{ participantDisplayName(participant.touristId) }}</span>
             </div>
           </div>
 
           <div class="tour-actions">
-            <button mat-raised-button [color]="tour.isJoined ? 'warn' : 'primary'" class="tour-btn">
-              <mat-icon>{{ tour.isJoined ? 'exit_to_app' : 'login' }}</mat-icon>
-              {{ tour.isJoined ? 'Abandon' : 'Join' }}
+            <button
+              mat-raised-button
+              class="tour-btn"
+              [color]="isJoined(session) ? 'warn' : 'primary'"
+              (click)="isJoined(session) ? onLeaveSession(session) : onJoinSession(session)">
+              <mat-icon>{{ isJoined(session) ? 'exit_to_app' : 'login' }}</mat-icon>
+              {{ isJoined(session) ? 'Leave' : 'Join' }}
             </button>
           </div>
         </div>
 
-        <div *ngIf="mockGroupTours.length === 0" class="empty-state-small">
+        <div *ngIf="!isGroupToursLoading && activeGroupSessions.length === 0" class="empty-state-small">
           <mat-icon>explore_off</mat-icon>
           <p>No active tours</p>
-          <button mat-raised-button color="primary" *ngIf="isOwner()">
-            <mat-icon>add</mat-icon> Create Tour
-          </button>
+        </div>
+
+        <div *ngIf="isGroupToursLoading" class="empty-state-small">
+          <mat-icon>hourglass_top</mat-icon>
+          <p>Loading group tours...</p>
         </div>
       </div>
     </div>
 
     <!-- Middle Column: Content -->
     <div class="column middle-column">
-      
       <!-- About Section -->
       <div class="content-section">
         <h2>About this club</h2>
         <p class="description">{{ c.description }}</p>
       </div>
 
-      <!-- Announcements Section -->
+      <!-- Announcements Section (still mock)
       <div class="content-section" *ngIf="isOwner() || mockAnnouncements.length > 0">
         <h2>Announcements</h2>
         <div class="announcements-list">
@@ -109,9 +150,9 @@
             <p>No announcements yet</p>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Tour Highlights Section -->
+      <!-- Tour Highlights (still mock) -->
       <div class="content-section">
         <h2>Tour Highlights</h2>
         <div class="highlights-grid">
@@ -230,36 +271,45 @@
     <mat-tab label="Group Tours">
       <div class="tab-content">
         <div class="group-tours-list">
-          <div class="tour-card" *ngFor="let tour of mockGroupTours">
+          <div class="tour-card" *ngFor="let session of activeGroupSessions">
             <div class="tour-info">
               <div class="tour-header">
-                <h3><mat-icon>map</mat-icon>{{ tour.name }}</h3>
-                <span class="participants-badge">{{ tour.currentParticipants }}/{{ tour.maxParticipants }}</span>
+                <h3><mat-icon>map</mat-icon>Tour #{{ session.tourId }}</h3>
+                <span class="participants-badge">{{ session.participants!.length || 0 }} participants</span>
               </div>
-              <p class="tour-description">{{ tour.description }}</p>
+              <p class="tour-description">
+                Session #{{ session.id }} • started {{ session.startTime | date:'MMM dd, yyyy HH:mm' }}
+              </p>
             </div>
 
-            <!-- Participants List (Discord style) -->
-            <div class="tour-participants" *ngIf="tour.participants && tour.participants.length > 0">
-              <div class="participant-item" *ngFor="let participant of tour.participants">
+            <div class="tour-participants" *ngIf="session.participants && session.participants.length > 0">
+              <div class="participant-item" *ngFor="let participant of session.participants">
                 <div class="participant-avatar">
                   <mat-icon>account_circle</mat-icon>
                 </div>
-                <span class="participant-name">{{ participant.name }} {{ participant.surname }}</span>
+                <span class="participant-name">{{ participantDisplayName(participant.touristId) }}</span>
               </div>
             </div>
 
             <div class="tour-actions">
-              <button mat-raised-button [color]="tour.isJoined ? 'warn' : 'primary'">
-                <mat-icon>{{ tour.isJoined ? 'exit_to_app' : 'login' }}</mat-icon>
-                {{ tour.isJoined ? 'Abandon' : 'Join' }}
+              <button
+                mat-raised-button
+                [color]="isJoined(session) ? 'warn' : 'primary'"
+                (click)="isJoined(session) ? onLeaveSession(session) : onJoinSession(session)">
+                <mat-icon>{{ isJoined(session) ? 'exit_to_app' : 'login' }}</mat-icon>
+                {{ isJoined(session) ? 'Leave' : 'Join' }}
               </button>
             </div>
           </div>
 
-          <div *ngIf="mockGroupTours.length === 0" class="empty-state">
+          <div *ngIf="!isGroupToursLoading && activeGroupSessions.length === 0" class="empty-state">
             <mat-icon>explore_off</mat-icon>
-            <p>No active group tours</p>
+            <p>No active group tour sessions</p>
+          </div>
+
+          <div *ngIf="isGroupToursLoading" class="empty-state">
+            <mat-icon>hourglass_top</mat-icon>
+            <p>Loading group tours...</p>
           </div>
         </div>
       </div>
@@ -268,7 +318,6 @@
     <!-- Content Tab -->
     <mat-tab label="Content">
       <div class="tab-content">
-        
         <!-- About Section -->
         <div class="content-section">
           <h2>About this club</h2>

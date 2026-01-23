@@ -10,7 +10,8 @@ export interface TourExecution {
   abandonTime?: Date;
   lastActivity: Date;
   progressPercentage: number;
-    completedKeyPoints: KeyPointCompletion[]; // 
+  completedKeyPoints: KeyPointCompletion[]; // 
+  sessionId?: number | null;
 }
 
 export enum TourExecutionStatus {
