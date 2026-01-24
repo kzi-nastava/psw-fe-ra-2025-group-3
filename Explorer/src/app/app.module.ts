@@ -18,12 +18,14 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
 import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyWalletComponent
+    MyWalletComponent,
+    MyWalletTransactionsComponent
   
    
 
