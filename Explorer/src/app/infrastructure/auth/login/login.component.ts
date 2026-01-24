@@ -4,6 +4,9 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Login } from '../model/login.model';
 import { environment } from 'src/env/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { WelcomeBonusService } from 'src/app/feature-modules/stakeholders/welcome-bonus.service';
+import { WelcomeBonusModalComponent } from '../registration/welcome-bonus-modal/welcome-bonus-modal.component';
 
 declare const google: any;
 
@@ -17,7 +20,9 @@ export class LoginComponent implements AfterViewInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private dialog: MatDialog,
+    private welcomeBonusService: WelcomeBonusService
   ) {}
 
   loginForm = new FormGroup({
@@ -56,8 +61,27 @@ export class LoginComponent implements AfterViewInit {
     this.ngZone.run(() => {
       const idToken = response.credential;
       this.authService.googleLogin(idToken).subscribe({
-        next: () => {
-          this.router.navigate(['/']);
+        next: (authResponse) => {
+          if (authResponse.isNewUser) {
+            this.welcomeBonusService.getWelcomeBonus().subscribe({
+              next: (bonus) => {
+                const dialogRef = this.dialog.open(WelcomeBonusModalComponent, {
+                  width: '500px',
+                  data: { bonus },
+                  disableClose: false
+                });
+
+                dialogRef.afterClosed().subscribe(() => {
+                  this.router.navigate(['/']);
+                });
+              },
+              error: () => {
+                this.router.navigate(['/']);
+              }
+            });
+          } else {
+            this.router.navigate(['/']);
+          }
         },
         error: (err) => {
           console.error('Google login failed:', err);
