@@ -240,6 +240,9 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
   }
+  goToTopAuthors(): void {
+  this.router.navigate(['/tourist/authors']);
+}
   onLogout(): void {
     this.authService.logout();
   }
