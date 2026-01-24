@@ -5,6 +5,12 @@
     Your tours have been unlocked and added to your collection!
   </p>
 
+  <!-- Discount Info from Backend -->
+  <div class="discount-info" *ngIf="successMessage">
+    <mat-icon>local_offer</mat-icon>
+    <span>{{ successMessage }}</span>
+  </div>
+
   <!-- PURCHASE RECORDS -->
   <div class="purchase-summary" *ngIf="purchaseRecords.length > 0 || bundlePurchaseRecords.length > 0">
     <h2>Purchase Summary</h2>
@@ -27,6 +33,12 @@
           {{ record.purchasedAt | date:'medium' }}
         </div>
       </div>
+    </div>
+
+    <!-- Total Paid -->
+    <div class="total-paid">
+      <span class="total-label">Total Paid:</span>
+      <span class="total-amount">{{ getTotalPaid() }} AC</span>
     </div>
   </div>
 

@@ -7,6 +7,12 @@
              alt="Profile Picture" 
              class="profile-image">
       </div>
+      
+      <!-- Vista Exclusive Badge -->
+      <div *ngIf="isTourist() && isVistaRank()" class="vista-exclusive-badge">
+        <span class="crown-icon">👑</span>
+        <span class="badge-text">VISTA EXCLUSIVE</span>
+      </div>
     </div>
 
     <div class="edit-toggle">

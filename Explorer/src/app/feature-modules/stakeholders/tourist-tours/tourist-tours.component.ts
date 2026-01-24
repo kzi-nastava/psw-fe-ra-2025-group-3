@@ -153,18 +153,24 @@ export class TouristToursComponent implements OnInit {
 
     this.tourService.searchTours(searchParams).subscribe({
       next: (tours: Tour[]) => {
-        this.tours = tours as TouristTourView[];
-        this.totalResults = tours.length;
-
-        // Check purchase status for each tour
+        // Filter out purchased tours
+        this.tours = (tours as TouristTourView[]).filter(tour => !tour.isPurchased);
+        
+        // Check purchase status for remaining tours
         this.tours.forEach(tour => {
           if (tour.id) {
             this.tourService.getTourDetails(tour.id).subscribe(details => {
               tour.isPurchased = !!details.keyPoints;
+              // Re-filter if tour is actually purchased
+              if (tour.isPurchased) {
+                this.tours = this.tours.filter(t => t.id !== tour.id);
+                this.totalResults = this.tours.length;
+              }
             });
           }
         });
-
+        
+        this.totalResults = this.tours.length;
         this.isLoading = false;
       },
       error: (error: any) => {
@@ -451,7 +457,14 @@ export class TouristToursComponent implements OnInit {
       case TourDifficulty.Hard:
         return 'Hard';
       default:
-        return '';
+        return 'Unknown';
+    }
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/default-tour.jpg';
     }
   }
 }

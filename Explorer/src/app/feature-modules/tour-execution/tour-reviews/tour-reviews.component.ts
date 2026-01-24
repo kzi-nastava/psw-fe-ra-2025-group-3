@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TourReviewService } from '../tour-review.service';
-import { TourReview } from '../model/tour-review.model';
+import { TourReview, TourReviewEligibility } from '../model/tour-review.model';
 import { TourReviewsListComponent } from '../tour-reviews-list/tour-reviews-list.component';
 
 @Component({
@@ -16,15 +16,29 @@ export class TourReviewsComponent implements OnInit {
   myReview?: TourReview;
   showForm = false;
   isLoadingMyReview = true;
+  eligibility?: TourReviewEligibility;
 
   constructor(private reviewService: TourReviewService) {}
 
   ngOnInit(): void {
     if (this.currentUserId) {
       this.loadMyReview();
+      this.checkEligibility();
     } else {
       this.isLoadingMyReview = false;
     }
+  }
+
+  checkEligibility(): void {
+    this.reviewService.checkEligibility(this.tourId).subscribe({
+      next: (eligibility) => {
+        this.eligibility = eligibility;
+      },
+      error: (err) => {
+        // Ako dođe do greške, ne prikazuj dugme
+        this.eligibility = { canReview: false, reasonIfNot: '', currentProgress: 0, daysSinceLastActivity: 0 };
+      }
+    });
   }
 
   loadMyReview(): void {
@@ -59,5 +73,9 @@ export class TourReviewsComponent implements OnInit {
 
   get hasMyReview(): boolean {
     return !!this.myReview;
+  }
+
+  get canShowLeaveReviewButton(): boolean {
+    return !this.hasMyReview && !this.showForm && !!this.eligibility?.canReview;
   }
 }
