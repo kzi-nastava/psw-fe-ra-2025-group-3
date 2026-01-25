@@ -10,6 +10,8 @@ import { CouponValidationResultDto } from 'src/app/feature-modules/tour-authorin
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { WelcomeBonusService } from '../welcome-bonus.service';
 import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
+import { StakeholderService } from '../stakeholder.service';
+import { TouristStats } from '../model/tourist-stats.model';
 
 @Component({
   selector: 'xp-shopping-cart',
@@ -28,6 +30,7 @@ export class ShoppingCartComponent implements OnInit {
   validatingCoupon = false;
   appliedCouponCode: string | null = null;
   welcomeBonus: WelcomeBonus | null = null;
+  touristStats: TouristStats | null = null;
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -36,7 +39,8 @@ export class ShoppingCartComponent implements OnInit {
     private snackBar: MatSnackBar,
     private couponService: CouponService,
     private fb: FormBuilder,
-    private welcomeBonusService: WelcomeBonusService
+    private welcomeBonusService: WelcomeBonusService,
+    private stakeholderService: StakeholderService
   ) {
     this.couponForm = this.fb.group({
       couponCode: ['']
@@ -47,6 +51,7 @@ export class ShoppingCartComponent implements OnInit {
     this.loadCart();
     this.loadWallet();
     this.loadWelcomeBonus();
+    this.loadTouristStats();
   }
 
   loadCart(): void {
@@ -87,11 +92,14 @@ export class ShoppingCartComponent implements OnInit {
       }
     }
     
-    // Apply welcome bonus discount if active
-    if (this.hasActiveWelcomeBonusDiscount()) {
-      const welcomeDiscountAmount = this.getWelcomeBonusDiscountAmount();
-      total -= welcomeDiscountAmount;
-    }
+    // Backend applies either welcome bonus OR rank discount (whichever is greater)
+    // So we need to check which one will be applied
+    const welcomeDiscountAmount = this.hasActiveWelcomeBonusDiscount() ? this.getWelcomeBonusDiscountAmount() : 0;
+    const rankDiscountAmount = this.hasRankDiscount() ? (total * (this.getRankDiscountPercentage() / 100)) : 0;
+    
+    // Apply the greater discount (backend logic)
+    const appliedDiscount = Math.max(welcomeDiscountAmount, rankDiscountAmount);
+    total -= appliedDiscount;
     
     return Math.max(0, total);
   }
@@ -139,6 +147,45 @@ export class ShoppingCartComponent implements OnInit {
   getWelcomeBonusDiscountPercentage(): number {
     if (!this.hasActiveWelcomeBonusDiscount()) return 0;
     return this.welcomeBonus!.value;
+  }
+
+  loadTouristStats(): void {
+    this.stakeholderService.getTouristStats().subscribe({
+      next: (stats) => {
+        this.touristStats = stats;
+      },
+      error: () => {
+        this.touristStats = null;
+      }
+    });
+  }
+
+  getRankDiscountPercentage(): number {
+    if (!this.touristStats) return 0;
+    const rank = this.touristStats.rank;
+    const discounts: { [key: string]: number } = {
+      'Silver': 5,
+      'Gold': 5,
+      'Platinum': 10,
+      'Diamond': 20,
+      'Vista': 40
+    };
+    return discounts[rank] || 0;
+  }
+
+  hasRankDiscount(): boolean {
+    return this.getRankDiscountPercentage() > 0;
+  }
+
+  // Check which discount will actually be applied (backend applies the greater one)
+  getAppliedDiscountType(): 'rank' | 'welcome' | 'none' {
+    if (!this.cart) return 'none';
+    
+    const welcomeDiscountAmount = this.hasActiveWelcomeBonusDiscount() ? this.getWelcomeBonusDiscountAmount() : 0;
+    const rankDiscountAmount = this.hasRankDiscount() ? (this.cart.totalPrice * (this.getRankDiscountPercentage() / 100)) : 0;
+    
+    if (rankDiscountAmount === 0 && welcomeDiscountAmount === 0) return 'none';
+    return rankDiscountAmount > welcomeDiscountAmount ? 'rank' : 'welcome';
   }
 
   canAffordCheckout(): boolean {
@@ -209,7 +256,8 @@ onCheckout(): void {
             state: { 
               tokens: result.tokens,
               purchaseRecords: result.purchaseRecords,
-              bundlePurchaseRecords: result.bundlePurchaseRecords || []
+              bundlePurchaseRecords: result.bundlePurchaseRecords || [],
+              successMessage: result.message
             }
           });
         }, 1500);

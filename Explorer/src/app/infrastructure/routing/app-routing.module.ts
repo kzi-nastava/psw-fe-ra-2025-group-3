@@ -49,6 +49,7 @@ import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shop
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
 import { MyWalletComponent } from 'src/app/feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from 'src/app/feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -138,6 +139,7 @@ const routes: Routes = [
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wallet/transactions', component: MyWalletTransactionsComponent, canActivate: [AuthGuard], data: { role: 'tourist' }},
   { path: 'tourist/wishlist', component: WishlistComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },

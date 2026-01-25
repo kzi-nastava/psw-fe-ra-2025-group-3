@@ -1,11 +1,4 @@
 <div class="tour-reviews-section">
-  <!-- Header -->
-  <div class="section-header">
-    <h2>
-      <mat-icon>rate_review</mat-icon>
-      Tour Reviews
-    </h2>
-  </div>
 
   <!-- My Review Section (if logged in as tourist) -->
   <div *ngIf="currentUserId && !isLoadingMyReview" class="my-review-section">
@@ -53,10 +46,9 @@
     </mat-card>
 
     <!-- Review Form -->
-    <div *ngIf="showForm || !hasMyReview" class="form-section">
+    <div *ngIf="showForm" class="form-section">
       <div class="form-header">
         <button 
-          *ngIf="hasMyReview"
           mat-icon-button 
           (click)="toggleForm()"
           class="close-button">
@@ -70,9 +62,9 @@
       </xp-tour-review-form>
     </div>
 
-    <!-- Leave Review Button (if no review yet and form hidden) -->
+    <!-- Leave Review Button (if no review yet and form hidden and eligible) -->
     <button 
-      *ngIf="!hasMyReview && !showForm"
+      *ngIf="canShowLeaveReviewButton"
       mat-raised-button 
       color="primary"
       (click)="toggleForm()"

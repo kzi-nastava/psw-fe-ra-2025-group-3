@@ -194,3 +194,271 @@
 .wallet-hint {
   text-align: center;
 }
+
+/* =========================
+   Earn AC section
+========================= */
+.earn-section {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 131, 143, 0.10);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  padding: 18px 18px 16px;
+  margin-top: 8px;
+}
+
+.earn-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 16px;
+}
+
+.earn-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.earn-header-icon {
+  width: 34px;
+  height: 34px;
+  font-size: 34px;
+  color: var(--color-primary-700);
+}
+
+.earn-title {
+  font-family: var(--font-family-display);
+  font-weight: 900;
+  font-size: 18px;
+  color: #213547;
+}
+
+.earn-subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.earn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+
+  background: linear-gradient(135deg, #00838F, #00ACC1);
+  color: white;
+  box-shadow: 0 6px 14px rgba(0, 131, 143, 0.22);
+}
+
+.earn-badge mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.earn-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.earn-card {
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: default;
+}
+
+.earn-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+}
+
+.earn-card.admin { border-top: 4px solid #4CAF50; }
+.earn-card.welcome { border-top: 4px solid #9C27B0; }
+.earn-card.encounters { border-top: 4px solid #2196F3; }
+
+.earn-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  background: linear-gradient(135deg, #00838F, #00ACC1);
+}
+
+.earn-icon mat-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+  color: white;
+}
+
+.earn-content h3 {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #1f2937;
+}
+
+.earn-content p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.earn-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.25);
+}
+
+.earn-pill.highlight {
+  background: linear-gradient(135deg, #9C27B0, #BA68C8);
+  box-shadow: 0 2px 10px rgba(156, 39, 176, 0.25);
+}
+
+.earn-pill.variable {
+  background: linear-gradient(135deg, #2196F3, #64B5F6);
+  box-shadow: 0 2px 10px rgba(33, 150, 243, 0.25);
+}
+
+/* =========================
+   Transactions CTA button
+========================= */
+.wallet-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.wallet-cta {
+  width: 100%;
+  max-width: 520px;
+  border: 0;
+  border-radius: 16px;
+  padding: 14px 14px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: linear-gradient(135deg, #00838F, #00ACC1);
+  color: white;
+  box-shadow: 0 12px 26px rgba(0, 131, 143, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-cta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: rgba(255,255,255,0.22);
+  transform: skewX(-20deg);
+  filter: blur(2px);
+  transition: left 0.6s ease;
+}
+
+.wallet-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(0, 131, 143, 0.32);
+}
+
+.wallet-cta:hover::after {
+  left: 120%;
+}
+
+.cta-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.22);
+  flex-shrink: 0;
+}
+
+.cta-icon mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  color: white;
+}
+
+.cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  flex: 1;
+}
+
+.cta-title {
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  font-size: 15px;
+}
+
+.cta-subtitle {
+  opacity: 0.92;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.cta-arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.22);
+}
+
+.cta-arrow mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .earn-grid {
+    grid-template-columns: 1fr;
+  }
+}

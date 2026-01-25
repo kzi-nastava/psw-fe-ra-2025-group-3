@@ -87,6 +87,14 @@ getTouristStats(): Observable<TouristStats> {
   return this.http.get<TouristStats>(this.touristStatsUrl);
 }
 
+getTouristStatsByUserId(userId: number): Observable<TouristStats> {
+  return this.http.get<TouristStats>(`${environment.apiHost}stakeholders/person/tourist-stats/${userId}`);
+}
+
+claimRankRewards(): Observable<any> {
+  return this.http.post<any>(environment.apiHost + 'tourist/rank-rewards/claim', {});
+}
+
 notifyTouristStatsUpdated(): void {
   this.touristStatsUpdated$.next();
 }
