@@ -14,13 +14,6 @@ import { WelcomeBonusModalComponent } from './welcome-bonus-modal/welcome-bonus-
 })
 export class RegistrationComponent {
 
-  // enum direktno ovdje, nema novog fajla
-  UserRole = {
-    Administrator: 'Administrator',
-    Author: 'Author',
-    Tourist: 'Tourist'
-  } as const; // readonly
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -33,8 +26,7 @@ export class RegistrationComponent {
     surname: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    role: new FormControl('Tourist', [Validators.required]) // default Tourist
+    password: new FormControl('', [Validators.required])
   });
 
   register(): void {
@@ -46,33 +38,27 @@ export class RegistrationComponent {
       email: this.registrationForm.value.email || "",
       username: this.registrationForm.value.username || "",
       password: this.registrationForm.value.password || "",
-      role: this.registrationForm.value.role!
+      role: 'Tourist'
     };
 
     this.authService.register(registration).subscribe({
       next: () => {
-        // Ako je turista, prikaži bonus modal
-        if (registration.role === 'Tourist') {
-          this.welcomeBonusService.getWelcomeBonus().subscribe({
-            next: (bonus) => {
-              const dialogRef = this.dialog.open(WelcomeBonusModalComponent, {
-                width: '500px',
-                data: { bonus },
-                disableClose: false
-              });
+        this.welcomeBonusService.getWelcomeBonus().subscribe({
+          next: (bonus) => {
+            const dialogRef = this.dialog.open(WelcomeBonusModalComponent, {
+              width: '500px',
+              data: { bonus },
+              disableClose: false
+            });
 
-              dialogRef.afterClosed().subscribe(() => {
-                this.router.navigate(['home']);
-              });
-            },
-            error: () => {
-              // Ako ne postoji bonus ili greška, samo navigiraj
+            dialogRef.afterClosed().subscribe(() => {
               this.router.navigate(['home']);
-            }
-          });
-        } else {
-          this.router.navigate(['home']);
-        }
+            });
+          },
+          error: () => {
+            this.router.navigate(['home']);
+          }
+        });
       },
     });
   }
