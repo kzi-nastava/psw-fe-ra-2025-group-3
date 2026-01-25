@@ -249,7 +249,7 @@
 }
 
 .map-wrapper {
-  height: 500px;
+  min-height: 500px;
   width: 100%;
   position: relative;
   
@@ -270,10 +270,62 @@
   border-radius: 0;
 }
 
+/* ============================================================================
+   MAP LEGEND
+   ============================================================================ */
+
+.map-legend {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  border: 2px solid var(--color-primary-500);
+  min-width: 200px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) 0;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  transition: all 0.2s ease;
+}
+
+.legend-item:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.legend-item:hover {
+  color: var(--color-primary-600);
+  transform: translateX(-2px);
+}
+
+.legend-item img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
 
 @media (max-width: 768px) {
   .active-tour-container {
     padding: var(--spacing-4);
+  }
+
+  .map-legend {
+    position: relative;
+    top: 0;
+    right: 0;
+    border-radius: 0;
   }
 
   .success-banner {
@@ -313,7 +365,7 @@
   }
 
   .map-wrapper {
-    height: 350px;
+    min-height: 700px;
   }
 
   .map-card mat-card-title {

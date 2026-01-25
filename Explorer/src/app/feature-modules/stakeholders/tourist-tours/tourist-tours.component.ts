@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Tour, TourStatus, TourSearchParams, TourDifficulty } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { HighlightedTour } from '../../tour-authoring/model/highlighted-tour.model';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { Router } from '@angular/router';
 import { TourExecutionService } from '../../tour-execution/tour-execution.service';
@@ -44,12 +45,14 @@ export class TouristToursComponent implements OnInit {
   hasActiveTour = false;
   TourStatus = TourStatus;
   TourDifficulty = TourDifficulty;
+  toursInCart: Set<number> = new Set();
 
   expandedTourId: number | null = null;
   currentUserId?: number;
 
   // Search & Filter
   searchControl = new FormControl('');
+  tagSearchControl = new FormControl('');
   selectedTags: string[] = [];
   selectedDifficulties: TourDifficulty[] = [];
   minPrice: number | null = null;
@@ -63,6 +66,11 @@ export class TouristToursComponent implements OnInit {
   totalResults = 0;
   isFiltersExpanded = false;
 
+  // Advanced search bar - popular tours dropdown
+  showPopularToursDropdown = false;
+  popularTours: HighlightedTour[] = [];
+  @ViewChild('searchSection', { read: ElementRef }) searchSection?: ElementRef;
+
   constructor(
     private tourService: TourService,
     private shoppingCartService: ShoppingCartService,
@@ -70,12 +78,15 @@ export class TouristToursComponent implements OnInit {
     private positionSimulator: PositionSimulatorService,
     private tourExecutionService: TourExecutionService,
     private router: Router,
-    private authService: AuthService 
+    private authService: AuthService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
     this.checkActiveTour();
     this.loadAllTags();
+    this.loadCart();
+    this.loadPopularTours();
     this.searchTours();
     const user = this.authService.user$.value;
     if (user) {
@@ -89,8 +100,14 @@ export class TouristToursComponent implements OnInit {
         distinctUntilChanged()
       )
       .subscribe(() => {
+        this.showPopularToursDropdown = false; // Hide dropdown when typing
         this.searchTours();
       });
+
+    // Subscribe to cart updates
+    this.shoppingCartService.cartUpdated.subscribe(() => {
+      this.loadCart();
+    });
   }
 
   loadAllTags(): void {
@@ -136,18 +153,24 @@ export class TouristToursComponent implements OnInit {
 
     this.tourService.searchTours(searchParams).subscribe({
       next: (tours: Tour[]) => {
-        this.tours = tours as TouristTourView[];
-        this.totalResults = tours.length;
-
-        // Check purchase status for each tour
+        // Filter out purchased tours
+        this.tours = (tours as TouristTourView[]).filter(tour => !tour.isPurchased);
+        
+        // Check purchase status for remaining tours
         this.tours.forEach(tour => {
           if (tour.id) {
             this.tourService.getTourDetails(tour.id).subscribe(details => {
               tour.isPurchased = !!details.keyPoints;
+              // Re-filter if tour is actually purchased
+              if (tour.isPurchased) {
+                this.tours = this.tours.filter(t => t.id !== tour.id);
+                this.totalResults = this.tours.length;
+              }
             });
           }
         });
-
+        
+        this.totalResults = this.tours.length;
         this.isLoading = false;
       },
       error: (error: any) => {
@@ -169,12 +192,32 @@ export class TouristToursComponent implements OnInit {
     this.shoppingCartService.addToCart(tour.id).subscribe({
       next: () => {
         this.showSuccess('Tour successfully added to your cart!');
+        this.loadCart(); // Refresh cart status
       },
       error: (error) => {
         console.error('Add to cart error:', error);
         this.showError('This tour is already in your cart.');
+        this.loadCart(); // Refresh cart status even on error
       }
     });
+  }
+
+  loadCart(): void {
+    this.shoppingCartService.getMyCart().subscribe({
+      next: (cart) => {
+        this.toursInCart.clear();
+        cart.items?.forEach(item => {
+          if (item.tourId) {
+            this.toursInCart.add(item.tourId);
+          }
+        });
+      },
+      error: () => {}
+    });
+  }
+
+  isInCart(tourId: number): boolean {
+    return this.toursInCart.has(tourId);
   }
 
   startTour(tour: Tour): void {
@@ -360,6 +403,51 @@ export class TouristToursComponent implements OnInit {
     return this.selectedDifficulties.includes(difficulty);
   }
 
+  // Advanced search bar - popular tours methods
+  loadPopularTours(): void {
+    this.tourService.getHighlightedTours().subscribe({
+      next: (tours) => {
+        this.popularTours = tours;
+      },
+      error: (error) => {
+        console.error('Error loading popular tours:', error);
+      }
+    });
+  }
+
+  get filteredTags(): string[] {
+    const searchTerm = this.tagSearchControl.value?.toLowerCase() || '';
+    if (!searchTerm) {
+      return this.availableTags;
+    }
+    return this.availableTags.filter(tag => 
+      tag.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  onSearchBarFocus(): void {
+    // Show dropdown only if search bar is empty
+    if (!this.searchControl.value || this.searchControl.value.trim() === '') {
+      this.showPopularToursDropdown = true;
+    }
+  }
+
+  onPopularTourSelect(tour: HighlightedTour): void {
+    this.searchControl.setValue(tour.name);
+    this.showPopularToursDropdown = false;
+    this.searchTours();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.searchSection) {
+      const clickedInside = this.searchSection.nativeElement.contains(event.target);
+      if (!clickedInside) {
+        this.showPopularToursDropdown = false;
+      }
+    }
+  }
+
   getDifficultyLabel(difficulty: TourDifficulty): string {
     switch (difficulty) {
       case TourDifficulty.Easy:
@@ -369,7 +457,14 @@ export class TouristToursComponent implements OnInit {
       case TourDifficulty.Hard:
         return 'Hard';
       default:
-        return '';
+        return 'Unknown';
+    }
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/default-tour.jpg';
     }
   }
 }

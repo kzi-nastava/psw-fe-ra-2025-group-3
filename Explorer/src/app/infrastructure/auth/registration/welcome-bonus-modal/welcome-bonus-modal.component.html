@@ -1,0 +1,74 @@
+<div class="bonus-modal-container">
+  <div class="bonus-content">
+    <h2 class="bonus-title">Welcome!</h2>
+    <p class="bonus-subtitle">Spin the wheel of fortune and see what bonus you got!</p>
+    
+    <div class="wheel-container">
+      <div class="wheel" [style.transform]="getWheelTransform()" [class.spinning]="isSpinning">
+        <div class="wheel-segment segment-0">
+          <div class="segment-content" [style.transform]="getContentTransform(0)">
+            <span class="segment-icon">💰</span>
+            <span class="segment-label">100 AC</span>
+          </div>
+        </div>
+        <div class="wheel-segment segment-1">
+          <div class="segment-content" [style.transform]="getContentTransform(1)">
+            <span class="segment-icon">💰</span>
+            <span class="segment-label">250 AC</span>
+          </div>
+        </div>
+        <div class="wheel-segment segment-2">
+          <div class="segment-content" [style.transform]="getContentTransform(2)">
+            <span class="segment-icon">💰</span>
+            <span class="segment-label">500 AC</span>
+          </div>
+        </div>
+        <div class="wheel-segment segment-3">
+          <div class="segment-content" [style.transform]="getContentTransform(3)">
+            <span class="segment-icon">🎁</span>
+            <span class="segment-label">10%</span>
+          </div>
+        </div>
+        <div class="wheel-segment segment-4">
+          <div class="segment-content" [style.transform]="getContentTransform(4)">
+            <span class="segment-icon">🎁</span>
+            <span class="segment-label">20%</span>
+          </div>
+        </div>
+        <div class="wheel-segment segment-5">
+          <div class="segment-content" [style.transform]="getContentTransform(5)">
+            <span class="segment-icon">🎁</span>
+            <span class="segment-label">30%</span>
+          </div>
+        </div>
+      </div>
+      <div class="wheel-pointer"></div>
+    </div>
+
+    <div class="result-container" *ngIf="showResult">
+      <div class="result-icon">{{ getBonusIcon() }}</div>
+      <p class="bonus-message">{{ getBonusMessage() }}</p>
+    </div>
+
+    <div class="button-container">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="spinWheel()" 
+        class="spin-button" 
+        [disabled]="isSpinning || showResult"
+        *ngIf="!showResult">
+        Spin the Wheel!
+      </button>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="close()" 
+        class="close-button" 
+        [disabled]="isSpinning"
+        *ngIf="showResult">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

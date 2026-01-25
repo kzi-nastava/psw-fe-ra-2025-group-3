@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Registration } from '../model/registration.model';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { WelcomeBonusService } from 'src/app/feature-modules/stakeholders/welcome-bonus.service';
+import { WelcomeBonusModalComponent } from './welcome-bonus-modal/welcome-bonus-modal.component';
 
 @Component({
   selector: 'xp-registration',
@@ -20,7 +23,9 @@ export class RegistrationComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private welcomeBonusService: WelcomeBonusService
   ) {}
 
   registrationForm = new FormGroup({
@@ -46,7 +51,28 @@ export class RegistrationComponent {
 
     this.authService.register(registration).subscribe({
       next: () => {
-        this.router.navigate(['home']);
+        // Ako je turista, prikaži bonus modal
+        if (registration.role === 'Tourist') {
+          this.welcomeBonusService.getWelcomeBonus().subscribe({
+            next: (bonus) => {
+              const dialogRef = this.dialog.open(WelcomeBonusModalComponent, {
+                width: '500px',
+                data: { bonus },
+                disableClose: false
+              });
+
+              dialogRef.afterClosed().subscribe(() => {
+                this.router.navigate(['home']);
+              });
+            },
+            error: () => {
+              // Ako ne postoji bonus ili greška, samo navigiraj
+              this.router.navigate(['home']);
+            }
+          });
+        } else {
+          this.router.navigate(['home']);
+        }
       },
     });
   }

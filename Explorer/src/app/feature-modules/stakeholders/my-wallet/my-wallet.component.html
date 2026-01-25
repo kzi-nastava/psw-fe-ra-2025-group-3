@@ -27,11 +27,76 @@
         </div>
       </div>
 
-      <div class="wallet-info">
-        <mat-icon>info</mat-icon>
-        <span>Wallet is automatically updated when admin tops you up.</span>
+      <!-- HOW TO EARN AC -->
+      <div class="earn-section">
+        <div class="earn-header">
+          <div class="earn-header-left">
+            <mat-icon class="earn-header-icon">savings</mat-icon>
+            <div>
+              <div class="earn-title">How to earn AC?</div>
+              <div class="earn-subtitle">Three ways to build your Adventure Coins balance</div>
+            </div>
+          </div>
+
+          <span class="earn-badge">
+            <mat-icon>bolt</mat-icon>
+            Earn AC
+          </span>
+        </div>
+
+        <div class="earn-grid">
+          <!-- 1) Admin top up -->
+          <div class="earn-card admin">
+            <div class="earn-icon">
+              <mat-icon>admin_panel_settings</mat-icon>
+            </div>
+            <div class="earn-content">
+              <h3>Admin top-up</h3>
+              <p>Admins can add AC directly to your wallet (promo, compensation, rewards).</p>
+              <div class="earn-pill">Instant balance update</div>
+            </div>
+          </div>
+
+          <!-- 2) Welcome bonus / wheel -->
+          <div class="earn-card welcome">
+            <div class="earn-icon">
+              <mat-icon>casino</mat-icon>
+            </div>
+            <div class="earn-content">
+              <h3>Welcome bonus</h3>
+              <p>After registration you can spin the Wheel of Fortune and win AC.</p>
+              <div class="earn-pill highlight">One-time reward</div>
+            </div>
+          </div>
+
+          <!-- 3) Encounters + leveling -->
+          <div class="earn-card encounters">
+            <div class="earn-icon">
+              <mat-icon>explore</mat-icon>
+            </div>
+            <div class="earn-content">
+              <h3>Encounters & levels</h3>
+              <p>Complete encounters, gain XP, level up and unlock AC rewards on certain ranks.</p>
+              <div class="earn-pill variable">Progress-based rewards</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="wallet-actions">
+        <button class="wallet-cta" matRipple routerLink="/tourist/wallet/transactions">
+          <span class="cta-icon">
+            <mat-icon>receipt_long</mat-icon>
+          </span>
+          <span class="cta-text">
+            <span class="cta-title">All my transactions</span>
+            <span class="cta-subtitle">See full AC history and changes</span>
+          </span>
+          <span class="cta-arrow">
+            <mat-icon>arrow_forward</mat-icon>
+          </span>
+        </button>
+      </div>
 
   </div>
 </div>

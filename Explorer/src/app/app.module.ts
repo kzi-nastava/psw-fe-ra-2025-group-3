@@ -18,6 +18,7 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
 import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
 // **UBACENO**: AiModule
 import { AiModule } from './feature-modules/ai/ai.module';
@@ -25,7 +26,9 @@ import { AiModule } from './feature-modules/ai/ai.module';
 @NgModule({
   declarations: [
     AppComponent,
-    MyWalletComponent
+    MyWalletComponent,
+    MyWalletComponent,
+    MyWalletTransactionsComponent
   ],
   imports: [
     BrowserModule,

@@ -111,29 +111,240 @@
 
 .tours-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-6);
 }
 
 .tour-card {
-  padding: var(--spacing-6);
-  border-top: 4px solid var(--color-primary-500);
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+}
+
+.tour-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Tour Image Container */
+.tour-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #00838F, #004D40);
+}
+
+.tour-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.tour-card:hover .tour-image {
+  transform: scale(1.05);
+}
+
+.purchased-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.purchased-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.status-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.archived-label {
+  background: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .tour-card mat-card-header {
-  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .tour-card mat-card-title {
   font-size: var(--font-size-lg);
   font-weight: 700;
+  color: var(--color-secondary-800);
+  margin-bottom: 4px;
 }
 
 .tour-card mat-card-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tour-card mat-card-subtitle mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary-600);
+}
+
+.tour-card mat-card-content {
+  padding: 0 var(--spacing-4) var(--spacing-4);
+}
+
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  margin-bottom: var(--spacing-4);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 60px;
+  line-height: 1.5;
+}
+
+/* Tour Info Grid */
+.tour-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-3);
+  background: var(--color-neutral-50);
+  border-radius: var(--border-radius-md);
+}
+
+.info-item {
+  display: grid;
+  grid-template-columns: 24px auto 1fr;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.info-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary-600);
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--color-neutral-700);
+}
+
+.info-value {
+  color: var(--color-neutral-900);
+  font-weight: 500;
+  justify-self: end;
+}
+
+.star-icon {
+  color: #FFA000 !important;
+}
+
+.rating-text {
+  font-weight: 700;
+  color: #F57C00;
+}
+
+.price-item {
+  border-top: 1px solid var(--color-neutral-200);
+  padding-top: var(--spacing-2);
   margin-top: var(--spacing-2);
+}
+
+.current-price {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-700);
+}
+
+.tour-card mat-card-actions {
+  padding: var(--spacing-3) var(--spacing-4);
   display: flex;
   gap: var(--spacing-2);
   flex-wrap: wrap;
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+/* Tour Action Buttons */
+.tour-btn {
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  border-radius: var(--border-radius-lg) !important;
+  transition: all var(--transition-normal) !important;
+  text-transform: none !important;
+  letter-spacing: 0.025em !important;
+}
+
+.tour-btn[color="primary"] {
+  background: var(--color-primary-700) !important;
+  color: white !important;
+}
+
+.tour-btn[color="primary"]:hover:not([disabled]) {
+  background: var(--color-primary-800) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.3) !important;
+}
+
+.tour-btn[color="accent"] {
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3) !important;
+}
+
+.tour-btn[color="accent"]:hover:not([disabled]) {
+  background: linear-gradient(135deg, #26C6DA, #00BCD4) !important;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.tour-btn[disabled] {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.tour-btn mat-icon {
+  margin-right: 6px;
 }
 
 .status-badge {
@@ -160,43 +371,10 @@
   border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
-.badge-owned {
-  background: rgba(33, 150, 243, 0.15);
-  color: #0D47A1;
-  border: 1px solid rgba(33, 150, 243, 0.3);
-}
-
 .badge-owned mat-icon {
   font-size: 16px;
   width: 16px;
   height: 16px;
-}
-
-.description {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--spacing-4);
-}
-
-.tour-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-4);
-}
-
-.detail-item {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-900);
-}
-
-.detail-item mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
 }
 
 .tags {
@@ -218,16 +396,6 @@
   justify-content: flex-end;
   margin-top: var(--spacing-4);
 } */
-
-mat-card-actions {
-  display: block;
-  margin-top: var(--spacing-8);
-}
-
-mat-card-actions button {
-    display: block;
-    margin-top: var(--spacing-4);
-}
 
 /* START TOUR DUGME - CIJAN */
 mat-card-actions button[mat-raised-button] {

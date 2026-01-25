@@ -12,6 +12,7 @@ import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.co
 import { Person } from '../../../model/person.model';
 import { StakeholderService } from '../../../stakeholder.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TouristStats, RANK_CONFIGS } from '../../../model/tourist-stats.model';
 
 @Component({
   selector: 'xp-club-detail',
@@ -29,6 +30,7 @@ export class ClubDetailComponent implements OnInit {
   allTourists: Person[] = [];
   filteredTourists!: Observable<Person[]>;
   memberDetailsMap: Map<number, Person> = new Map();
+  memberStatsMap: Map<number, TouristStats> = new Map();
 
   constructor(
     private route: ActivatedRoute,
@@ -123,6 +125,8 @@ export class ClubDetailComponent implements OnInit {
                 this.getRequests(this.club.id);
                 if(accepted) {
                     this.loadClub(this.club.id);
+                    // Notifikuj da se stats promenio - korisnik je ušao u klub
+                    this.stakeholderService.notifyTouristStatsUpdated();
                 }
             }
         },
@@ -142,6 +146,16 @@ export class ClubDetailComponent implements OnInit {
         },
         error: () => {
           console.warn(`Failed to load details for user ${userId}`);
+        }
+      });
+
+      // Učitaj i tourist stats
+      this.stakeholderService.getTouristStatsByUserId(userId).subscribe({
+        next: (stats) => {
+          this.memberStatsMap.set(userId, stats);
+        },
+        error: () => {
+          // User nije turist ili nema stats - to je ok
         }
       });
     });
@@ -244,6 +258,42 @@ export class ClubDetailComponent implements OnInit {
         this.showError('Error deleting club');
       }
     });
+  }
+
+  // Novi getter za rank badge
+  getMemberRankIcon(userId: number): string {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return '';
+
+    const rankConfig = RANK_CONFIGS.find(
+      config => stats.level >= config.minLevel && stats.level <= config.maxLevel
+    );
+
+    // Prikaži samo za Gold (🥇) i Vista (👑)
+    if (rankConfig?.name === 'Gold' || rankConfig?.name === 'Vista') {
+      return rankConfig.icon;
+    }
+
+    return '';
+  }
+
+  // Novi getter za rank name
+  getMemberRank(userId: number): string {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return '';
+
+    const rankConfig = RANK_CONFIGS.find(
+      config => stats.level >= config.minLevel && stats.level <= config.maxLevel
+    );
+
+    return rankConfig?.name || '';
+  }
+
+  // Da li je Featured Tourist (Platinum+)
+  isFeaturedTourist(userId: number): boolean {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return false;
+    return stats.level >= 15; // Platinum and above
   }
 
   private showSuccess(message: string): void {

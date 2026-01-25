@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Person } from './model/person.model';
 import { environment } from 'src/env/environment';
 import { AccountRegistrationDto } from './model/account-registration.dto';
 import { WalletDto, WalletTopUpDto } from './model/wallet.model';
+import { AuthorProfileStatsDto } from './model/author-profile-stats.model';
+import { TouristStats } from './model/tourist-stats.model';
 
 
 @Injectable({
@@ -12,10 +15,13 @@ import { WalletDto, WalletTopUpDto } from './model/wallet.model';
 })
 export class StakeholderService {
 
+  private touristStatsUpdated$ = new Subject<void>();
+  public touristStatsUpdated = this.touristStatsUpdated$.asObservable();
 
   private readonly profileUrl = environment.apiHost + 'stakeholders/person';
-  
+  private readonly authorStatsUrl = environment.apiHost + 'authors/me/profile-stats';
   private readonly baseUrl = environment.apiHost + 'stakeholders/person';
+  private readonly touristStatsUrl = environment.apiHost + 'stakeholders/person/tourist-stats';
 
   constructor(private http: HttpClient) {}
 
@@ -72,5 +78,25 @@ export class StakeholderService {
   topUpWallet(dto: { touristUserId: number; amountAc: number }) {
     return this.http.post<any>(`${this.adminWalletUrl}/topup`, dto);
   }
+  
+getMyAuthorProfileStats(): Observable<AuthorProfileStatsDto> {
+  return this.http.get<AuthorProfileStatsDto>(this.authorStatsUrl);
+}
+
+getTouristStats(): Observable<TouristStats> {
+  return this.http.get<TouristStats>(this.touristStatsUrl);
+}
+
+getTouristStatsByUserId(userId: number): Observable<TouristStats> {
+  return this.http.get<TouristStats>(`${environment.apiHost}stakeholders/person/tourist-stats/${userId}`);
+}
+
+claimRankRewards(): Observable<any> {
+  return this.http.post<any>(environment.apiHost + 'tourist/rank-rewards/claim', {});
+}
+
+notifyTouristStatsUpdated(): void {
+  this.touristStatsUpdated$.next();
+}
 
 }

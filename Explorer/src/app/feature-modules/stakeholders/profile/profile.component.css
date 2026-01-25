@@ -9,8 +9,11 @@
 
 .profile-header {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-bottom: 24px;
+    gap: 16px;
 }
 
 .image-container {
@@ -20,6 +23,48 @@
     overflow: hidden;
     border: 4px solid #f1f3f5;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vista-exclusive-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+    animation: badgePulse 2s infinite ease-in-out;
+}
+
+.crown-icon {
+    font-size: 24px;
+    animation: crownPulse 2s infinite ease-in-out;
+}
+
+@keyframes crownPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 24px rgba(255, 215, 0, 0.6);
+    }
+}
+
+.badge-text {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .profile-image {
@@ -92,9 +137,160 @@ button[mat-raised-button].save-button:hover {
 }
 
 
+.bonus-section {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 2px solid #f1f3f5;
+}
+
+.bonus-section h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.bonus-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 24px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.bonus-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.bonus-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.bonus-icon {
+    font-size: 32px;
+}
+
+.bonus-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.bonus-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bonus-description {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.bonus-status {
+    font-size: 14px;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.bonus-status.active {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.bonus-status.used {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.bonus-expiry {
+    font-size: 12px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.bonus-used-date {
+    font-size: 12px;
+    margin: 0;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.no-bonus {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+}
+
 @media (max-width: 768px) {
     .profile-container {
         padding: 20px;
         margin: 20px 16px;
     }
+}
+
+.author-stats-container {
+  margin-top: 24px;
+}
+
+.section-title {
+  margin: 16px 0 12px 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.stat-label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.review-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.review-date {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 6px;
 }

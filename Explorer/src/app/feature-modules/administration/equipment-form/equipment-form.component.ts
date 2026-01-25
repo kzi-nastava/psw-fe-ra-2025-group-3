@@ -35,7 +35,7 @@ export class EquipmentFormComponent implements OnChanges {
       description: this.equipmentForm.value.description || "",
     };
     this.service.addEquipment(equipment).subscribe({
-      next: () => { this.equimpentUpdated.emit() }
+      next: () => { this.equimpentUpdated.emit(); this.equipmentForm.reset(); }
     });
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
-import { Meetup, MeetupCreateDto, MeetupUpdateDto } from '../model/meetup.model';
+import { Meetup, MeetupCreateDto, MeetupMapPreview, MeetupUpdateDto } from '../model/meetup.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Injectable({
@@ -26,6 +26,11 @@ export class MeetupService {
   getAllMeetups(): Observable<Meetup[]> {
     const url = this.getUserBaseUrl();
     return this.http.get<Meetup[]>(url);
+  }
+
+  getMeetupMapLocations(): Observable<MeetupMapPreview[]> {
+    const url = this.getUserBaseUrl();
+    return this.http.get<MeetupMapPreview[]>(`${url}/map-locations`);
   }
 
   getMeetupById(id: number): Observable<Meetup> {

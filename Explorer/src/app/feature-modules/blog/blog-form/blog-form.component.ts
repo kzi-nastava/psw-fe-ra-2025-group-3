@@ -6,6 +6,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlogService } from '../blog.service';
 import { Blog, BlogCreateDto, BlogUpdateDto, BlogImageCreateDto, BlogStatus } from '../model/blog.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { StakeholderService } from '../../stakeholders/stakeholder.service';
 
 interface ImageItem {
   type: 'url' | 'file';
@@ -40,7 +42,9 @@ export class BlogFormComponent implements OnInit {
     private blogService: BlogService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<BlogFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'create' | 'edit', blog?: Blog }
+    @Inject(MAT_DIALOG_DATA) public data: { mode: 'create' | 'edit', blog?: Blog },
+    private authService: AuthService,
+    private stakeholderService: StakeholderService
   ) {
     this.isEditMode = data.mode === 'edit';
     this.blogForm = this.createForm();
@@ -301,6 +305,12 @@ export class BlogFormComponent implements OnInit {
         this.blogService.createBlog(createDto).subscribe({
           next: () => {
             this.showSuccess('Blog successfully created');
+            // Notifikuj da se stats promenio (samo za turiste)
+            this.authService.user$.subscribe(user => {
+              if (user && user.role === 'tourist') {
+                this.stakeholderService.notifyTouristStatsUpdated();
+              }
+            });
             this.dialogRef.close(true);
           },
           error: (error) => {

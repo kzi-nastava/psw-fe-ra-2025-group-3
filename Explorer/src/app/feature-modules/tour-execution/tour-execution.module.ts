@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';        
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TourProblemListComponent } from './tour-problem-list/tour-problem-list.component';
 import { TourProblemFormComponent } from './tour-problem-form/tour-problem-form.component';
 import { TourProblemDetailsComponent } from './tour-problem-details/tour-problem-details.component';
@@ -55,7 +56,8 @@ import { MyReviewsComponent } from './my-reviews/my-reviews.component';
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatDividerModule,       
-    MatSnackBarModule,     
+    MatSnackBarModule,
+    MatTooltipModule,
     SharedModule
   ],
   exports: [

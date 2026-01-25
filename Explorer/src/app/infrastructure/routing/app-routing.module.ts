@@ -9,6 +9,7 @@ import { RegistrationComponent } from '../auth/registration/registration.compone
 
 import { MapTestComponent } from 'src/app/feature-modules/layout/map-test/map-test.component';
 import { TouristMapComponent } from 'src/app/feature-modules/layout/tourist-map/tourist-map.component';
+import { LevelUpGuideComponent } from 'src/app/feature-modules/layout/level-up-guide/level-up-guide.component';
 
 import { EquipmentComponent } from 'src/app/feature-modules/administration/equipment/equipment.component';
 import { AccountListComponent } from 'src/app/feature-modules/administration/account-list/account-list.component';
@@ -48,6 +49,7 @@ import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shop
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
 import { MyWalletComponent } from 'src/app/feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from 'src/app/feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -66,6 +68,7 @@ import { DiaryFormComponent } from 'src/app/feature-modules/tour-execution/diary
 import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour-wizard/tour-wizard.component';
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
+import { WishlistComponent } from 'src/app/feature-modules/stakeholders/wishlist/wishlist.component';
 const routes: Routes = [
 
 
@@ -73,6 +76,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
+  { path: 'level-up-guide', component: LevelUpGuideComponent },
 
   { path: 'map-test', component: MapTestComponent },
 
@@ -135,6 +139,8 @@ const routes: Routes = [
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wallet/transactions', component: MyWalletTransactionsComponent, canActivate: [AuthGuard], data: { role: 'tourist' }},
+  { path: 'tourist/wishlist', component: WishlistComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
   { path: 'tour-execution/tour-problems/:id', component: TourProblemDetailsComponent, canActivate: [AuthGuard] },
