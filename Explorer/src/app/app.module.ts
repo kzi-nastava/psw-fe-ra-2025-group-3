@@ -20,15 +20,15 @@ import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
 import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
+// **UBACENO**: AiModule
+import { AiModule } from './feature-modules/ai/ai.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     MyWalletComponent,
+    MyWalletComponent,
     MyWalletTransactionsComponent
-  
-   
-
   ],
   imports: [
     BrowserModule,
@@ -45,7 +45,10 @@ import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my
     AuthModule,
     HttpClientModule,
     StakeholdersModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+
+    // **UBACENO**: tvoj AiModule
+    AiModule
   ],
   providers: [
     {
