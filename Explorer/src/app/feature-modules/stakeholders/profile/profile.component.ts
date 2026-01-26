@@ -172,16 +172,16 @@ export class ProfileComponent implements OnInit {
     if (!this.welcomeBonus) return '';
     
     if (this.welcomeBonus.isUsed) {
-      return 'Iskorišćen';
+      return 'Used';
     }
     
     if (this.welcomeBonus.bonusType === BonusType.Discount10 || 
         this.welcomeBonus.bonusType === BonusType.Discount20 || 
         this.welcomeBonus.bonusType === BonusType.Discount30) {
-      return 'Aktivan - Važi do prve kupovine';
+      return 'Active - Valid until first purchase';
     }
     
-    return 'Aktivan';
+    return 'Active';
   }
 
   getBonusDescription(): string {
@@ -192,7 +192,7 @@ export class ProfileComponent implements OnInit {
         this.welcomeBonus.bonusType === BonusType.AC500) {
       return `${this.welcomeBonus.value} Adventure Coins`;
     } else {
-      return `${this.welcomeBonus.value}% popusta na prvu kupovinu`;
+      return `${this.welcomeBonus.value}% discount on first purchase`;
     }
   }
 

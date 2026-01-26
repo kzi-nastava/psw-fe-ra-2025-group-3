@@ -1,3 +1,18 @@
+/* Profile Layout with Sidebar for Tourists */
+.profile-layout {
+  display: flex;
+  min-height: calc(100vh - 80px);
+  background: #f5f5f5;
+  padding: 24px;
+  gap: 24px;
+}
+
+/* Main Content Area */
+.profile-content {
+  flex: 1;
+  min-width: 0;
+}
+
 /* ============================================================================
    WISHLIST PAGE - Usklađeno sa globalnim stilom
    ============================================================================ */
@@ -290,6 +305,28 @@
    ============================================================================ */
 
 @media (max-width: 1024px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+  
+  .profile-sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .sidebar-nav-item {
+    flex: 1;
+    min-width: 150px;
+    justify-content: center;
+  }
+
   .tours-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--spacing-4);
@@ -297,6 +334,11 @@
 }
 
 @media (max-width: 768px) {
+  .profile-layout {
+    padding: 16px;
+    gap: 16px;
+  }
+
   .wishlist-container {
     padding: var(--spacing-4) var(--spacing-3);
   }
@@ -307,6 +349,18 @@
 
   .header h1 {
     font-size: var(--font-size-xl);
+  }
+
+  .profile-sidebar {
+    padding: 16px;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+  }
+  
+  .sidebar-nav-item {
+    width: 100%;
   }
 
   .tours-grid {
