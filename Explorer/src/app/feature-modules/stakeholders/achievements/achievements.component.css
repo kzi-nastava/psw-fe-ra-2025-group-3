@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  width: 100%;
+}
+.achievements-section {
+  margin-bottom: 24px;
+  text-align: center;
+}
+.achievements-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.achievements-row {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 90px);
+  gap: 14px;
+}
+.achievement-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  justify-content: center; 
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  background: #fff;
+}
+.achievement-tile img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+.achievement-label {
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+}
+.achievements-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}

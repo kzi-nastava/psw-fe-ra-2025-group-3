@@ -1,1 +1,41 @@
-<p>achievements wosddrks!</p>
+<h3 class="achievements-title">Achievements</h3>
+
+<div class="achievements-section">
+  <h4>Tours bought</h4>
+  <div class="achievements-row">
+    <div class="achievement-tile" *ngFor="let a of toursBought">
+      <img [src]="a.iconPath" [alt]="a.title" />
+      <span class="achievement-label">{{ a.title }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="achievements-section">
+  <h4>Tours completed</h4>
+  <div class="achievements-row">
+    <div class="achievement-tile" *ngFor="let a of toursCompleted">
+      <img [src]="a.iconPath" [alt]="a.title" />
+      <span class="achievement-label">{{ a.title }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="achievements-section">
+  <h4>Tour reviews</h4>
+  <div class="achievements-row">
+    <div class="achievement-tile" *ngFor="let a of tourReviews">
+      <img [src]="a.iconPath" [alt]="a.title" />
+      <span class="achievement-label">{{ a.title }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="achievements-section">
+  <h4>Other achievements</h4>
+  <div class="achievements-row">
+    <div class="achievement-tile" *ngFor="let a of otherAchievements">
+      <img [src]="a.iconPath" [alt]="a.title" />
+      <span class="achievement-label">{{ a.title }}</span>
+    </div>
+  </div>
+</div>
