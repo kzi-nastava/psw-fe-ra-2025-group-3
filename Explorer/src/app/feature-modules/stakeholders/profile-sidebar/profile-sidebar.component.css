@@ -1,0 +1,123 @@
+/* Sidebar Styles */
+.profile-sidebar {
+    width: 280px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 104px;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #f1f3f5;
+    margin-bottom: 24px;
+}
+
+.sidebar-profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #f1f3f5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin: 0 auto 16px;
+}
+
+.sidebar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sidebar-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px 0;
+}
+
+.sidebar-email {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #666;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sidebar-nav-item:hover {
+    background: rgba(0, 188, 212, 0.08);
+    color: #00bcd4;
+}
+
+.sidebar-nav-item.active {
+    background: linear-gradient(135deg, #00bcd4 0%, #009688 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+}
+
+.sidebar-nav-item mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-nav-item.active mat-icon {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .profile-sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+    
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .sidebar-nav-item {
+        flex: 1;
+        min-width: 150px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-sidebar {
+        padding: 16px;
+    }
+    
+    .sidebar-nav {
+        flex-direction: column;
+    }
+    
+    .sidebar-nav-item {
+        width: 100%;
+    }
+}

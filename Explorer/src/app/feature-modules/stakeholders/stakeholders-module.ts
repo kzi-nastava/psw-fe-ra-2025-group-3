@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
+import { ProfileSidebarComponent } from './profile-sidebar/profile-sidebar.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -50,6 +51,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
 @NgModule({
   declarations: [
     ProfileComponent,
+    ProfileSidebarComponent,
     AppRatingListComponent,
     MyAppRatingComponent,
     MeetupListComponent,
@@ -101,6 +103,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
   ],
   exports: [
     ProfileComponent,
+    ProfileSidebarComponent,
     ProfileFormComponent,
     ProfileListComponent,
     TouristEquipmentComponent,

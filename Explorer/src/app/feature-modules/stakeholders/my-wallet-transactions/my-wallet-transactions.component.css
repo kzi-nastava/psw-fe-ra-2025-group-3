@@ -1,13 +1,27 @@
+/* Profile Layout with Sidebar for Tourists */
+.profile-layout {
+  display: flex;
+  min-height: calc(100vh - 80px);
+  background: #f5f5f5;
+  padding: 24px;
+  gap: 24px;
+}
+
+/* Main Content Area */
+.profile-content {
+  flex: 1;
+  min-width: 0;
+}
+
 /* =========================
    PAGE
 ========================= */
 .tx-page {
   padding: 32px;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 /* =========================
@@ -16,7 +30,6 @@
 .tx-card {
   width: 100%;
   max-width: 920px;
-  margin-top: 70px;
   border-radius: 22px;
   overflow: hidden;
   background: white;
@@ -444,6 +457,12 @@
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 1024px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 900px) {
   .tx-summary {
     grid-template-columns: 1fr;
@@ -451,5 +470,9 @@
 
   .tx-amount {
     min-width: 110px;
+  }
+
+  .tx-page {
+    padding: 16px;
   }
 }
