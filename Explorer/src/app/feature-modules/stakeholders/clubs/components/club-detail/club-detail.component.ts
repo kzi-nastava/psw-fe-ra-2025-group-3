@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,19 +16,14 @@ import { TourExecutionService } from 'src/app/feature-modules/tour-execution/tou
 import { Tour } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { GroupTourSessionService } from 'src/app/feature-modules/tour-execution/group-tour-session.service';
-import { GroupTourSessionDto } from 'src/app/feature-modules/tour-execution/model/group-tour-session.model';
+import { GroupTourSessionDto, HighlightedSessionParticipant } from 'src/app/feature-modules/tour-execution/model/group-tour-session.model';
 import { GroupTourSessionParticipantDto } from 'src/app/feature-modules/tour-execution/model/group-tour-session.model';
+import { ManageHighlightedDialogComponent, ManageHighlightedDialogResult } from '../manage-highlighted-dialog/manage-highlighted-dialog.component';
+import { ManageMembershipRequestsDialogComponent, ManageMembershipRequestsDialogResult } from '../manage-membership-requests-dialog/manage-membership-requests-dialog.component';
 
 interface MemberDetails {
   person: Person;
   tour: Tour;
-}
-
-interface Announcement {
-  id: number;
-  title: string;
-  content: string;
-  date: Date;
 }
 
 interface TourHighlight {
@@ -46,6 +41,9 @@ interface TourHighlight {
   styleUrls: ['./club-detail.component.css']
 })
 export class ClubDetailComponent implements OnInit, OnDestroy {
+  @ViewChild('loadingTpl', { static: true })
+  loadingTpl!: TemplateRef<any>;
+
   // Core data
   club: ClubDto | null = null;
   user: User | undefined;
@@ -54,6 +52,8 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
   isLoading = false;
   isGroupToursLoading = false;
   isPurchasedToursLoading = false;
+  isHighlightedSessionsLoading = false;
+  isSessionsForHighlightMarkingLoading = false;
 
   // Join requests
   requests: ClubJoinRequestByTouristDto[] = [];
@@ -80,32 +80,9 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
   purchasedTours: Tour[] = [];
   selectedPurchasedTourId: number | null = null;
 
-  // Mock data
-  readonly mockAnnouncements: Announcement[] = [
-    {
-      id: 1,
-      title: 'Welcome New Members!',
-      content: 'We are excited to welcome our newest members to the club. Looking forward to many adventures together!',
-      date: new Date('2025-01-15')
-    },
-    {
-      id: 2,
-      title: 'Upcoming Event: Annual Meetup',
-      content: 'Save the date! Our annual club meetup will be held on February 20th. More details coming soon.',
-      date: new Date('2025-01-10')
-    }
-  ];
-
-  readonly mockHighlights: TourHighlight[] = [
-    {
-      id: 1,
-      tourName: 'Alpine Lakes Trek',
-      date: new Date('2024-12-15'),
-      participantsCount: 8,
-      imageUrl: 'https://placehold.co/600x400',
-      participants: [{ id: 1, name: 'John', surname: 'Doe' }]
-    }
-  ];
+  // Highlighted sessions
+  highlightedSessions: GroupTourSessionDto[] = [];
+  sessionsForHighlightMarking: GroupTourSessionDto[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -148,6 +125,8 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
     const clubId = this.getClubIdFromRoute();
     if (clubId) {
       this.loadClub(clubId);
+      this.loadHighlightedSessions(clubId);
+      this.loadSessionsForHighlightMarking(clubId);
     }
     this.loadTourists();
     this.loadMyPurchasedTours();
@@ -231,10 +210,60 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  openManageMembersDialog(): void {
+    if (!this.club) return;
+    const dialogRef = this.dialog.open(ManageMembershipRequestsDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
+      data: {
+        requests: this.requests
+      }
+    });
+
+    dialogRef.afterClosed()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result: ManageMembershipRequestsDialogResult | undefined) => {
+        if (!result) return;
+        if (result.action !== 'respond') return;
+
+        this.onRespond(result.requestId, result.accepted);
+      });
+  }
+
+  openManageToursHighlightsDialog(): void {
+    if (!this.club) return;
+    const dialogRef = this.dialog.open(ManageHighlightedDialogComponent, {
+        width: '700px',
+        maxWidth: '95vw',
+        minHeight: '500px',
+        data: {
+          sessions: this.sessionsForHighlightMarking,
+          getParticipants: (sessionId: number) => this.getHighlightedSessionParticipants(sessionId, true)
+        }
+    });
+
+    dialogRef.afterClosed()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: ManageHighlightedDialogResult | undefined) => {
+          if (!result) return;
+
+          if (result.action === 'accept') {
+            this.highlightSession(result.sessionId);
+            return;
+          }
+
+          if (result.action === 'reject') {
+            this.refuseHighlightSession(result.sessionId);
+          }
+        });
+  }
+
   // ===== Member Management =====
   loadMemberDetails(): void {
-    if (!this.club?.memberIds?.length) return;
-
+    this.loadSingleMemberDetails(this.club!.ownerId);
+    console.log(this.memberDetailsMap);
+    if (!this.club?.memberIds?.length) 
+        return;
     this.club.memberIds.forEach(userId => {
       this.loadSingleMemberDetails(userId);
     });
@@ -250,7 +279,7 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
             .subscribe({
               next: (tour) => this.memberDetailsMap.set(userId, { person, tour }),
               error: () => this.memberDetailsMap.set(userId, { person, tour: {} as Tour })
-            });
+            });            
         }
       });
   }
@@ -413,8 +442,9 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
     this.groupTourSessionService
       .createSession({ 
         clubId: this.club.id, 
-        tourId: this.selectedPurchasedTourId 
-      })
+        tourId: this.selectedPurchasedTourId,
+        tourName: this.purchasedTours.find(pt => pt.id == this.selectedPurchasedTourId)!.name
+     })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -585,6 +615,7 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
           if (this.club) {
             this.loadActiveGroupSessions(this.club.id);
             this.loadMemberDetails();
+            this.loadSessionsForHighlightMarking(this.club.id);
           }
         },
         error: (err) => {
@@ -606,6 +637,103 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
   isHighlightExpanded(highlightId: number): boolean {
     return this.expandedHighlightIds.has(highlightId);
   }
+
+  highlightSession(sessionId: number): void {
+    this.groupTourSessionService
+        .highlightSession(sessionId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+            next: () => {
+                this.showSuccess('Group tour session highlighted');
+                this.loadHighlightedSessions(this.club!.id);
+                this.loadSessionsForHighlightMarking(this.club!.id);
+            },
+            error: (err) => {
+                console.error(err);
+                this.showError(err?.error ?? 'Failed to highlight group session');
+            }
+        });
+  }
+
+  refuseHighlightSession(sessionId: number): void {
+    this.groupTourSessionService
+        .refuseHighlightSession(sessionId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+            next: () => {
+                this.showSuccess('Group tour session refused to highlight');
+                this.loadHighlightedSessions(this.club!.id);
+                this.loadSessionsForHighlightMarking(this.club!.id);
+            },
+            error: (err) => {
+                console.error(err);
+                this.showError(err?.error ?? 'Failed to highlight group session');
+            }
+        });
+  }
+
+  loadSessionsForHighlightMarking(clubId: number): void {
+    this.isSessionsForHighlightMarkingLoading = true;
+    this.groupTourSessionService.getSessionsForHighlightMarking(clubId).pipe(
+        catchError(err => {
+            console.error('Failed to load highlighted sessions', err);
+            this.showError('Failed to load highlighted sessions');
+            return of([]);
+        }),
+        takeUntil(this.destroy$)
+    ).subscribe(sessions => {
+        this.sessionsForHighlightMarking = sessions ?? [];
+        this.isSessionsForHighlightMarkingLoading = false;
+    });
+
+    console.log(this.sessionsForHighlightMarking);
+  }
+
+  loadHighlightedSessions(clubId: number): void {
+    this.isHighlightedSessionsLoading = true;
+    this.groupTourSessionService.getHighlightedSessionsByClubId(clubId).pipe(
+        catchError(err => {
+            console.error('Failed to load highlighted sessions', err);
+            this.showError('Failed to load highlighted sessions');
+            return of([]);
+        }),
+        takeUntil(this.destroy$)
+    ).subscribe(sessions => {
+        this.highlightedSessions = sessions ?? [];
+        this.isHighlightedSessionsLoading = false;
+    });
+  }
+
+  getHighlightedSessionParticipants(sessionId: number, isMarkingMode: boolean): HighlightedSessionParticipant[] {
+    if (isMarkingMode)
+        var session = this.sessionsForHighlightMarking.find(s => s.id === sessionId);
+    else
+        var session = this.highlightedSessions.find(s => s.id === sessionId);
+    if (!session) return [];
+    
+    var participantSet: Set<number> = new Set();
+    var filteredParticipants: HighlightedSessionParticipant[] = [];
+    if (session.participants != null) {        
+        for (const p of session.participants) {
+            var member = this.memberDetailsMap.get(p.touristId);
+            
+            if (participantSet.has(p.touristId))
+                continue;
+
+            participantSet.add(p.touristId);
+
+            filteredParticipants.push({
+                touristId: p.touristId,
+                leftAt: p.leftAt,
+                name: member?.person?.name ?? '',
+                surname: member?.person?.surname ?? ''
+            } as HighlightedSessionParticipant);
+        };
+    }
+
+    return filteredParticipants;
+  }
+
 
   // ===== Getters =====
   get featuredImageUrl(): string | null {
@@ -645,9 +773,5 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
       duration: 4000, 
       panelClass: ['error-snackbar'] 
     });
-  }
-
-  openManageMembersDialog(): void {
-    this.showError('Manage Members dialog - Coming soon!');
   }
 }

@@ -551,9 +551,19 @@
 }
 
 /* Members (Right Column) */
-.manage-btn {
-  width: 100%;
-  margin-bottom: var(--spacing-4);
+.manage-header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-2) 0;
+}
+
+.member-numbers-header {
+    display: flex;
+    justify-content: space-between;    
+}
+
+.manage-btn {    
+  margin-bottom: var(--spacing-4);  
 }
 
 .members-list {

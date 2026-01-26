@@ -8,6 +8,8 @@ import { ClubListComponent } from './components/club-list/club-list.component';
 import { MyClubsComponent } from './components/my-clubs/my-clubs.component';
 import { ClubDetailComponent } from './components/club-detail/club-detail.component';
 import { ClubFormDialogComponent } from './components/club-form-dialog/club-form-dialog.component';
+import { ManageHighlightedDialogComponent } from './components/manage-highlighted-dialog/manage-highlighted-dialog.component';
+import { ManageMembershipRequestsDialogComponent } from './components/manage-membership-requests-dialog/manage-membership-requests-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list'; 
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -29,7 +31,9 @@ const routes: Routes = [
     ClubListComponent,
     MyClubsComponent,
     ClubDetailComponent,
-    ClubFormDialogComponent
+    ClubFormDialogComponent,
+    ManageHighlightedDialogComponent,
+    ManageMembershipRequestsDialogComponent
   ],
   imports: [
     CommonModule,
