@@ -24,9 +24,6 @@ import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-w
   declarations: [
     AppComponent,
     MyWalletComponent
-  
-   
-
   ],
   imports: [
     BrowserModule,

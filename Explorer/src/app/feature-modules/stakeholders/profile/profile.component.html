@@ -82,6 +82,10 @@
       <p>Nemate welcome bonus.</p>
     </div>
   </div>
+
+  <div *ngIf="isTourist()">
+    <xp-achievements></xp-achievements>
+  </div>
   
   <!-- AUTHOR STATS -->
 <div *ngIf="isAuthor && authorStats as s" class="author-stats-container">
