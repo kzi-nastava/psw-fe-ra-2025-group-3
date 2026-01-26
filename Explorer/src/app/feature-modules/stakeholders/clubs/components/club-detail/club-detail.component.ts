@@ -215,6 +215,7 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ManageMembershipRequestsDialogComponent, {
       width: '700px',
       maxWidth: '95vw',
+      minHeight: '500px',
       data: {
         requests: this.requests
       }

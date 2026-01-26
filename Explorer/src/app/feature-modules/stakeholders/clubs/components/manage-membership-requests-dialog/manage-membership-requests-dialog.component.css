@@ -5,6 +5,12 @@
   padding: var(--spacing-2);
 }
 
+.cancel-btn {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
 .dialog-header {
   display: flex;
   align-items: center;

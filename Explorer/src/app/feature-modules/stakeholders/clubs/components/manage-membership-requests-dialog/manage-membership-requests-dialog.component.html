@@ -1,9 +1,6 @@
 <div class="dialog-wrapper">
   <div class="dialog-header">
     <h2>Pending Membership Requests</h2>
-    <button mat-icon-button (click)="close()" aria-label="Close dialog">
-      <mat-icon>close</mat-icon>
-    </button>
   </div>
 
   <div class="requests-list" *ngIf="requests.length > 0; else emptyTpl">
@@ -33,4 +30,9 @@
       <p>No pending requests.</p>
     </div>
   </ng-template>
+</div>
+
+
+<div class="cancel-btn" mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close>Cancel</button>
 </div>
