@@ -1,0 +1,87 @@
+<!-- author-top-list.component.html -->
+<div class="author-top-container">
+
+  <div class="header">
+    <div>
+      <h1>Top Authors</h1>
+      <p class="subtitle">Pick an author and view their profile, tours, and reviews.</p>
+    </div>
+
+    <div class="controls">
+      <label class="control-label">Sort by</label>
+      <select class="select" [(ngModel)]="sort" (change)="load()">
+        <option value="rating">Average rating</option>
+        <option value="purchases">Purchases</option>
+        <option value="reviews">Number of reviews</option>
+        <option value="tours">Number of tours</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loader"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <div *ngIf="!isLoading && items.length === 0" class="empty-state">
+    <div class="empty-title">No authors to display</div>
+    <div class="empty-subtitle">Try again later or change the sorting criteria.</div>
+  </div>
+
+  <div *ngIf="!isLoading && items.length > 0" class="authors-grid">
+    <div
+      *ngFor="let a of items; index as i; trackBy: trackByAuthorId"
+      class="author-card"
+      [class.top-1]="i === 0"
+      [class.top-2]="i === 1"
+      [class.top-3]="i === 2"
+      (click)="openAuthor(a.authorId)"
+      role="button"
+      tabindex="0"
+    >
+      <div class="card-header">
+        <div class="left">
+          <div class="rank-pill"
+               [class.rank-1]="i===0"
+               [class.rank-2]="i===1"
+               [class.rank-3]="i===2">
+            <span class="crown" *ngIf="i===0">👑</span>
+            <span class="rank-text">#{{ i + 1 }}</span>
+            <span class="rank-label" *ngIf="i===0">Best</span>
+          </div>
+
+          <div class="author-name">{{ a.authorName }}</div>
+        </div>
+
+        <div class="badge">
+          ★ {{ a.averageRating | number:'1.0-2' }}
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="stat-row">
+          <span class="stat-label">Rating</span>
+          <span class="stat-value">
+            {{ a.averageRating | number:'1.0-2' }}
+            <span class="muted">({{ a.totalReviews }} reviews)</span>
+          </span>
+        </div>
+
+        <div class="stat-row">
+          <span class="stat-label">Tours</span>
+          <span class="stat-value">{{ a.totalTours }}</span>
+        </div>
+
+        <div class="stat-row">
+          <span class="stat-label">Purchases</span>
+          <span class="stat-value">{{ a.totalPurchases }}</span>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <span class="hint">Click to open the author profile →</span>
+      </div>
+    </div>
+  </div>
+
+</div>

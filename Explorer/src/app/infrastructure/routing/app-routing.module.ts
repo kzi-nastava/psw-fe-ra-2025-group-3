@@ -69,6 +69,9 @@ import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
 import { WishlistComponent } from 'src/app/feature-modules/stakeholders/wishlist/wishlist.component';
+import { AuthorTopListComponent } from 'src/app/feature-modules/stakeholders/author-toplist/author-top-list.component';
+import { AuthorProfileComponent } from 'src/app/feature-modules/stakeholders/author-profile/author-profile.component';
+
 const routes: Routes = [
 
 
@@ -165,9 +168,14 @@ const routes: Routes = [
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
+    // Tourist – Authors (Top list + Author profile)
+  { path: 'tourist/authors', component: AuthorTopListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/authors/:id', component: AuthorProfileComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+
   // Authoring
   { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
-  { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
+  { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' },
+  
 },
 {
   path: 'tourist/diaries',
