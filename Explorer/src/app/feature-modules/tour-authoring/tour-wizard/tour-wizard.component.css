@@ -1,106 +1,370 @@
-/* Layout */
+/* ============================================================================
+   1. WIZARD LAYOUT (HEADER, FOOTER, TABS)
+   ============================================================================ */
+
 .wizard {
   display: flex;
   flex-direction: column;
-  height: 80vh;
-  max-height: 80vh;
-  min-height: 520px;
+  height: 85vh;
+  max-height: 900px;
+  min-height: 600px;
   gap: 0;
   overflow: hidden;
   border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Header */
 .wizard__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-4, 16px);
-  padding: var(--spacing-6, 24px) var(--spacing-6, 24px);
-  background: var(--color-neutral-0, #fff);
+  gap: 16px;
+  padding: 24px 32px;
+  background: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .wizard__title-wrap {
   min-width: 0;
+  flex: 1;
 }
 
 .wizard__title {
   margin: 0;
-  font-family: var(--font-family-display, Poppins);
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--color-secondary-800, #00695C);
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #00695C;
   line-height: 1.2;
 }
 
 .wizard__subtitle {
-  margin-top: 6px;
-  font-family: var(--font-family-primary, Inter);
+  margin-top: 4px;
   font-size: 14px;
-  color: var(--color-neutral-800, #424242);
-  opacity: 0.85;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #666;
+  font-weight: 400;
 }
 
 .wizard__actions {
   flex: 0 0 auto;
 }
 
-/* Tabs take remaining space */
 .wizard__tabs {
   flex: 1;
-  min-height: 0; /* critical for inner scroll */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Only one scroll: inside tab content */
 .step-content {
   height: 100%;
-  overflow: auto;
-  padding: var(--spacing-6, 24px);
+  overflow-y: auto;
+  padding: 32px;
   box-sizing: border-box;
+  background-color: #FAFAFA;
 }
 
-/* Empty state */
-.empty-state {
-  padding: var(--spacing-6, 24px);
-  border: 1px dashed rgba(0, 0, 0, 0.25);
-  border-radius: 12px;
-  background: rgba(0, 188, 212, 0.08); /* ok, but prefer variable if you have it */
-  color: var(--color-neutral-800, #424242);
-}
-
-/* Footer */
 .wizard__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-4, 16px);
-  padding: var(--spacing-5, 20px) var(--spacing-6, 24px);
-  background: var(--color-neutral-0, #fff);
+  gap: 16px;
+  padding: 20px 32px;
+  background: #fff;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .wizard__footer-actions {
   display: flex;
-  gap: var(--spacing-2, 8px);
+  gap: 12px;
 }
 
-/* ---- Material internals: prevent dialog from adding its own scrollbar ---- */
-:host ::ng-deep .mat-mdc-dialog-content {
-  overflow: hidden !important;
-  max-height: none !important;
-  padding: 0 !important;
+/* ============================================================================
+   2. EQUIPMENT DUAL LIST STYLES
+   ============================================================================ */
+
+.equipment-dual-container {
+    display: flex;
+    gap: 24px;
+    height: 550px;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: stretch;
 }
 
-:host ::ng-deep .mat-mdc-tab-body-wrapper {
-  flex: 1;
-  min-height: 0;
+.eq-list-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: all 0.2s ease;
 }
 
-:host ::ng-deep .mat-mdc-tab-body-content {
-  height: 100%;
-  overflow: hidden; /* we scroll only inside .step-content */
+.selected-wrapper {
+    border: 1px solid #00BCD4;
+    background: #fff;
+}
+
+.eq-list-header {
+    padding: 16px;
+    border-bottom: 1px solid #EEE;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.eq-list-header h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #424242;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.eq-search {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #BDBDBD;
+    border-radius: 4px;
+    padding: 8px 12px;
+    transition: all 0.2s;
+}
+
+.eq-search:focus-within {
+    border-color: #00BCD4;
+    border-width: 2px;
+    padding: 7px 11px; 
+}
+
+.eq-search mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #757575;
+    margin-right: 8px;
+}
+
+.eq-search:focus-within mat-icon {
+    color: #00BCD4;
+}
+
+.eq-search input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: #212121;
+}
+
+.eq-search input::placeholder {
+    color: #BDBDBD;
+}
+
+.eq-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    background: #FAFAFA; 
+    position: relative;
+}
+
+.eq-arrows {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #BDBDBD;
+    font-size: 24px;
+}
+
+/* ============================================================================
+   3. EQUIPMENT ITEMS STYLING (CLEAN CARD STYLE)
+   ============================================================================ */
+
+.eq-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px 0 16px;
+    margin-bottom: 8px;
+    
+    background: #fff;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    
+    cursor: grab;
+    transition: all 0.2s ease;
+    user-select: none;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.eq-item:active {
+    cursor: grabbing;
+}
+
+.eq-item:hover {
+    background: #E0F7FA;
+    border-color: #00BCD4;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.eq-item-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.drag-handle {
+    color: #BDBDBD;
+    cursor: move;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.eq-item:hover .drag-handle {
+    color: #00BCD4;
+}
+
+.eq-item span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #424242;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.action-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    padding: 0 !important;
+    border-radius: 50%;
+    
+    color: #00BCD4;
+    background: transparent;
+    transition: all 0.2s;
+}
+
+.action-btn mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.eq-item:hover .action-btn {
+    background: #fff; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-btn.remove {
+    color: #F44336;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.empty-list-placeholder {
+    text-align: center;
+    color: #9E9E9E;
+    margin-top: 40px;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #757575;
+    padding: 32px;
+    text-align: center;
+}
+
+.empty-state mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    color: #BDBDBD;
+}
+
+/* ============================================================================
+   4. CDK DRAG & DROP STYLES
+   ============================================================================ */
+
+::ng-deep .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    background: #fff;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #00BCD4;
+    width: 100%;
+    height: 48px;
+    z-index: 10000 !important;
+    opacity: 0.95;
+    cursor: grabbing;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+    background: rgba(0, 188, 212, 0.05);
+    border: 1px dashed #00BCD4;
+    border-radius: 8px;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.eq-list-container.cdk-drop-list-dragging .eq-item:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   5. MATERIAL OVERRIDES
+   ============================================================================ */
+
+:host ::ng-deep .mat-mdc-dialog-content { padding: 0 !important; margin: 0 !important; max-height: none !important; }
+:host ::ng-deep .mat-mdc-tab-body-wrapper { flex: 1; }
+:host ::ng-deep .mat-mdc-tab-body-content { height: 100%; overflow: hidden; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .equipment-dual-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .eq-list-wrapper {
+        min-height: 300px;
+    }
+    .eq-arrows {
+        transform: rotate(90deg);
+        padding: 16px;
+    }
 }

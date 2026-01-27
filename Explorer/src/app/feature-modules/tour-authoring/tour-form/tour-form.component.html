@@ -1,136 +1,161 @@
-<h2 mat-dialog-title>{{ isEditMode ? 'Edit Tour' : 'Create New Tour' }}</h2>
+<h2 mat-dialog-title *ngIf="!embedded">
+  {{ isEditMode ? 'Edit Tour' : 'Create New Tour' }}
+</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="tourForm" class="tour-form">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Tour Name</mat-label>
-      <input matInput formControlName="name" placeholder="Enter tour name">
-      <mat-icon matPrefix>explore</mat-icon>
-      <mat-error *ngIf="tourForm.get('name')?.invalid">
-        {{ getErrorMessage('name') }}
-      </mat-error>
-    </mat-form-field>
+<mat-dialog-content class="tour-dialog-content">
+  <form [formGroup]="tourForm" class="tour-form-grid">
+    
+    <div class="form-column">
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tour Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter tour name">
+        <mat-icon matPrefix>explore</mat-icon>
+        <mat-error *ngIf="tourForm.get('name')?.invalid">
+          {{ getErrorMessage('name') }}
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description" rows="4"></textarea>
-      <mat-icon matPrefix>description</mat-icon>
-      <mat-error *ngIf="tourForm.get('description')?.invalid">
-        {{ getErrorMessage('description') }}
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width flex-grow-field">
+        <mat-label>Description</mat-label>
+        <textarea 
+          matInput 
+          formControlName="description" 
+          rows="10" 
+          placeholder="Describe your tour..."
+        ></textarea>
+        <mat-icon matPrefix>description</mat-icon>
+        <mat-error *ngIf="tourForm.get('description')?.invalid">
+          {{ getErrorMessage('description') }}
+        </mat-error>
+      </mat-form-field>
 
-    <div class="row-inputs">
-        <mat-form-field appearance="outline" class="half-width">
-        <mat-label>Difficulty</mat-label>
-        <mat-select formControlName="difficulty">
-            <mat-option *ngFor="let diff of difficulties" [value]="diff.value">
-            {{ diff.label }}
-            </mat-option>
-        </mat-select>
-
-        <!-- small info tooltip and persistent hint to explain meaning of difficulty -->
-        <button
-          class="help-btn"
-          mat-icon-button
-          matSuffix
-          [matTooltip]="difficultyTooltip"
-          matTooltipShowDelay="200"
-          matTooltipHideDelay="100"
-          matTooltipClass="tooltip-blue"
-          aria-label="Difficulty help">
-
-          <mat-icon>help_outline</mat-icon>
-        </button>
-
-        <mat-hint class="difficulty-hint" align="start">Overall tour difficulty (duration and pace).</mat-hint>
-
-        <mat-icon matPrefix>terrain</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field *ngIf="isEditMode" appearance="outline" class="half-width">
+      <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
         <mat-label>Price (AC)</mat-label>
-        <input matInput type="number" formControlName="price" min="0">
+        <input matInput type="number" formControlName="price" min="0" placeholder="0">
         <mat-icon matPrefix>attach_money</mat-icon>
-        </mat-form-field>
+      </mat-form-field>
     </div>
 
-    <div class="tags-section">
-      <label class="tags-label">Tags</label>
+    <div class="form-column">
+      
+      <div class="difficulty-row">
+        <mat-form-field appearance="outline" style="flex: 1;">
+          <mat-label>Difficulty</mat-label>
+          <mat-select formControlName="difficulty">
+            <mat-option *ngFor="let diff of difficulties" [value]="diff.value">
+              {{ diff.label }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>terrain</mat-icon>
+        </mat-form-field>
+        
+        <button 
+          mat-icon-button 
+          type="button" 
+          [matTooltip]="difficultyTooltip" 
+          matTooltipClass="tooltip-blue"
+        >
+          <mat-icon>help_outline</mat-icon>
+        </button>
+      </div>
+
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Add tags</mat-label>
+        <mat-label>Tags</mat-label>
         <mat-chip-grid #chipGrid>
           <mat-chip-row *ngFor="let tag of tags" (removed)="removeTag(tag)" [editable]="false">
             {{ tag }}
             <button matChipRemove><mat-icon>cancel</mat-icon></button>
           </mat-chip-row>
         </mat-chip-grid>
-        <input placeholder="New tag..." [matChipInputFor]="chipGrid"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
+        <input 
+          placeholder="Add tag..." 
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes" 
+          (matChipInputTokenEnd)="addTag($event)"
+        >
         <mat-icon matPrefix>label</mat-icon>
       </mat-form-field>
-    </div>
 
-    <div class="duration-section">
-        <label class="tags-label">Travel Time & Transport</label>
+    <div class="transport-section">
+        <label class="section-label">Travel Time & Transport</label>
         
-        <div class="add-duration-row">
-            <mat-form-field appearance="outline" class="duration-input">
-                <mat-label>Time (minutes)</mat-label>
-                <input matInput type="number" formControlName="durationTime" min="1">
+        <div class="transport-inputs">
+            
+            <mat-form-field appearance="outline" class="time-input">
+                <mat-label>Time (min)</mat-label>
+                <input matInput type="number" formControlName="durationTime" min="1" placeholder="30">
+                <mat-icon matPrefix>timer</mat-icon>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="transport-input">
+            <mat-form-field appearance="outline" class="type-input">
                 <mat-label>Transport</mat-label>
                 <mat-select formControlName="transportType">
                     <mat-option *ngFor="let type of transportTypes" [value]="type.value">
                         {{ type.label }}
                     </mat-option>
                 </mat-select>
+                <mat-icon matPrefix>commute</mat-icon>
             </mat-form-field>
 
-            <button mat-raised-button color="accent" type="button" (click)="addDuration()" [disabled]="!tourForm.get('durationTime')?.value">
-                Add
+            <button 
+                mat-mini-fab 
+                color="primary" 
+                class="add-transport-btn" 
+                type="button" 
+                (click)="addDuration()" 
+                [disabled]="!tourForm.get('durationTime')?.value"
+                matTooltip="Add duration"
+            >
+                <mat-icon>add</mat-icon>
             </button>
         </div>
 
-        <div class="duration-list" *ngIf="tourDurations.length > 0">
-            <div *ngFor="let item of tourDurations; let i = index" class="duration-item">
-                <span>
-                    <mat-icon>timer</mat-icon> 
-                    <strong>{{ item.timeInMinutes }} min</strong> 
-                     {{ getTransportLabel(item.transportType) }}
-                </span>
-                <button mat-icon-button color="warn" (click)="removeDuration(i)" [disabled]="isArchived">
-                    <mat-icon>delete</mat-icon>
-                </button>
+        <div class="transport-chips" *ngIf="tourDurations.length > 0">
+            <div *ngFor="let item of tourDurations; let i = index" class="transport-chip">
+                <div class="chip-content">
+                    <mat-icon class="chip-icon">schedule</mat-icon>
+                    <span class="chip-text">
+                        <b>{{ item.timeInMinutes }}m</b> 
+                        <span class="separator">|</span> 
+                        {{ getTransportLabel(item.transportType) }}
+                    </span>
+                </div>
+                <div class="chip-remove" (click)="removeDuration(i)">
+                    <mat-icon>close</mat-icon>
+                </div>
             </div>
         </div>
-        <mat-hint *ngIf="tourDurations.length === 0" style="color: orange; font-size: small;">
-            * At least one duration is required to publish the tour.
-        </mat-hint>
+        
+        <mat-error *ngIf="tourDurations.length === 0" style="font-size: 12px; margin-top: 4px; color: #F44336;">
+            * At least one duration is required.
+        </mat-error>
+
+      </div>
+
     </div>
-    <div class="equipment-section" *ngIf="isEditMode && availableEquipment.length > 0">
-        <label class="tags-label" style="margin-top: 20px;">Equipment</label>
-        <div class="equipment-list">
-            <div *ngFor="let eq of availableEquipment" class="equipment-item">
-                <mat-checkbox 
-                    [checked]="isEquipmentSelected(eq.id)"
-                    (change)="onEquipmentChange(eq.id, $event)"
-                    [disabled]="isArchived"
-                    color="primary">
-                    {{ eq.name }}
-                </mat-checkbox>
-            </div>
+
+    <div class="full-width-section" *ngIf="!embedded && availableEquipment.length > 0">
+      <label class="section-label">Equipment</label>
+      <div class="equipment-list-grid">
+        <div *ngFor="let eq of availableEquipment" class="equipment-item">
+          <mat-checkbox 
+            [checked]="isEquipmentSelected(eq.id)"
+            (change)="onEquipmentChange(eq.id, $event)"
+            [disabled]="isArchived"
+            color="primary">
+            {{ eq.name }}
+          </mat-checkbox>
         </div>
+      </div>
     </div>
 
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" *ngIf="!embedded">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="tourForm.invalid">
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="tourForm.invalid">
     {{ isEditMode ? 'Save Changes' : 'Create Tour' }}
   </button>
 </mat-dialog-actions>

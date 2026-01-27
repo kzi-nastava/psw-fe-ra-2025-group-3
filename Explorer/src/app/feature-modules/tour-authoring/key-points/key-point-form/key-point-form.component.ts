@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { KeyPoint } from '../model/key-point.model';
 import { KeyPointService } from '../key-point.service';
 import { EncounterStatus, EncounterType } from 'src/app/feature-modules/administration/model/encounter.model';
@@ -16,6 +16,8 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
   @Input() keyPoint: KeyPoint | null = null;
   @Output() save = new EventEmitter<any>();
   @Output() cancel = new EventEmitter<void>();
+
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
   EncounterStatus = EncounterStatus;
   EncounterType = EncounterType;
@@ -35,8 +37,6 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
     private keyPointService: KeyPointService
   ) {}
 
-
-
   ngOnInit(): void {
     this.keyPointForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -54,7 +54,7 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
         actionDescription: [''],
         requiredPeopleCount: [null],
         rangeInMeters: [null],
-        imageUrl: [''], // hint image (HiddenLocation)
+        imageUrl: [''],
         isMandatory: [false]
       })
     });
@@ -112,7 +112,7 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
         name: e.name,
         description: e.description,
         xp: e.xp,
-        status: EncounterStatus.PendingApproval, // autor šalje na odobrenje
+        status: EncounterStatus.PendingApproval,
         type: encounterType,
         isMandatory: e.isMandatory ?? false
       };
@@ -132,7 +132,6 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
     }
 
     this.save.emit(payload);
-    this.preview = null;
   }
 
   onCancel(): void {
@@ -143,6 +142,10 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
   resetForm() {
     this.keyPointForm.reset();
     this.preview = null;
+
+    if (this.formGroupDirective) {
+        this.formGroupDirective.resetForm();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -150,7 +153,6 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
 
     if (changes['keyPoint']) {
       if (this.keyPoint) {
-        // EDIT mode – populate KeyPoint fields
         this.keyPointForm.patchValue({
           name: this.keyPoint.name,
           description: this.keyPoint.description,
@@ -161,7 +163,6 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
 
         this.preview = this.keyPoint.imageUrl;
 
-        // Encounter (embedded)
         const hasE = !!this.keyPoint.encounter;
         this.keyPointForm.patchValue({ hasEncounter: hasE });
 
@@ -182,15 +183,12 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
 
           this.updateValidatorsForType(this.keyPoint.encounter.type);
         } else {
-          // No encounter on this key point
           this.toggleEncounter(false);
         }
       } else {
-        // Exited edit mode – full reset
-        this.keyPointForm.reset();
-        this.preview = null;
 
-        // Ensure encounter section is off and disabled
+        this.resetForm();
+        
         this.keyPointForm.patchValue({ hasEncounter: false });
         this.toggleEncounter(false);
       }
@@ -304,19 +302,16 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
   }
 
   private updateValidatorsForType(type: EncounterType): void {
-    // base validators
     this.eName?.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
     this.eDescription?.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(500)]);
     this.eXp?.setValidators([Validators.required, Validators.min(1), Validators.max(10000)]);
     this.eType?.setValidators([Validators.required]);
 
-    // clear type-specific
     this.eActionDescription?.clearValidators();
     this.eRequiredPeopleCount?.clearValidators();
     this.eRangeInMeters?.clearValidators();
     this.eImageUrl?.clearValidators();
 
-    // reset type-specific values
     this.eActionDescription?.setValue('');
     this.eRequiredPeopleCount?.setValue(null);
     this.eRangeInMeters?.setValue(null);
@@ -332,7 +327,6 @@ export class KeyPointFormComponent implements OnInit, OnChanges {
       this.eImageUrl?.setValidators([Validators.required]);
     }
 
-    // update validity
     this.eName?.updateValueAndValidity({ emitEvent: false });
     this.eDescription?.updateValueAndValidity({ emitEvent: false });
     this.eXp?.updateValueAndValidity({ emitEvent: false });
