@@ -1,0 +1,86 @@
+<div class="tour-history-page-bg">
+	<div class="tour-history-container">
+		<div *ngIf="loading" class="loading">Loading...</div>
+		<div *ngIf="error" class="error">{{ error }}</div>
+		<ng-container *ngIf="!loading && !error">
+			<!-- Page Header -->
+			<div class="header">
+				<h1>Tour History</h1>
+				<p class="subtitle">All tours you have completed and your progress stats</p>
+			</div>
+
+			<!-- Stats Cards Grid -->
+			<xp-tour-stats-cards 
+				[stats]="statistics" 
+				[comparison]="comparison">
+			</xp-tour-stats-cards>
+		<!-- Comparison Section with Progress Bars -->
+		<xp-comparison-section [comparison]="comparison"></xp-comparison-section>
+			<!-- Tour List -->
+			<div class="section-container">
+				<div class="section-header">
+					<mat-icon>check_circle</mat-icon>
+					<h2>Completed Tours</h2>
+				</div>
+				<div *ngIf="completedTours.length > 0" class="tour-list-grid">
+					<div class="tour-card" *ngFor="let tour of completedTours">
+						<!-- Tour Image -->
+						<div class="tour-image-container">
+							<img 
+								*ngIf="tour.tourImageUrl || tour.firstKeyPoint?.imageUrl; else defaultImage"
+								[src]="tour.tourImageUrl || tour.firstKeyPoint?.imageUrl" 
+								[alt]="tour.tourName"
+								class="tour-image">
+							<ng-template #defaultImage>
+								<img 
+									src="assets/images/pozadina.jpg" 
+									[alt]="tour.tourName"
+									class="tour-image">
+							</ng-template>
+							<div class="completed-badge">
+								<mat-icon>check_circle</mat-icon>
+								COMPLETED
+							</div>
+						</div>
+
+						<!-- Tour Header -->
+						<div class="tour-card-header">
+							<h3 class="tour-name">{{ tour.tourName }}</h3>
+							<div class="tour-location">
+								<mat-icon>location_on</mat-icon>
+								{{ tour.location }}
+							</div>
+						</div>
+
+						<!-- Tour Content -->
+						<div class="tour-card-content">
+							<div class="tour-info-row">
+								<div class="info-item">
+									<mat-icon>event</mat-icon>
+									<span>{{ tour.completedAt | date:'dd.MM.yyyy' }}</span>
+								</div>
+								<div class="info-item">
+									<mat-icon>directions_walk</mat-icon>
+									<span>{{ tour.distanceInKm }} km</span>
+								</div>
+								<div class="info-item">
+									<mat-icon>timer</mat-icon>
+									<span>{{ getTotalTime(tour.durationInMinutes) }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="completedTours.length === 0" class="empty-state">
+					<mat-icon class="empty-icon">explore_off</mat-icon>
+					<h3>No Completed Tours Yet</h3>
+					<p>Start your adventure! Complete your purchased tours to see them here.</p>
+					<button class="start-tour-button" (click)="navigateToMyTours()">
+						<mat-icon>hiking</mat-icon>
+						Go to My Purchased Tours
+					</button>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+</div>

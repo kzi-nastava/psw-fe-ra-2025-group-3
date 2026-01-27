@@ -71,6 +71,8 @@ import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/to
 import { WishlistComponent } from 'src/app/feature-modules/stakeholders/wishlist/wishlist.component';
 import { AuthorTopListComponent } from 'src/app/feature-modules/stakeholders/author-toplist/author-top-list.component';
 import { AuthorProfileComponent } from 'src/app/feature-modules/stakeholders/author-profile/author-profile.component';
+import { TourHistoryComponent } from '../../feature-modules/tour-history/tour-history/tour-history.component';
+ 
 
 const routes: Routes = [
 
@@ -124,6 +126,7 @@ const routes: Routes = [
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
+   { path: 'tourist/tour-history', component: TourHistoryComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
 {
   path: 'tourist/bundles',component: TouristBundlesComponent,canActivate: [AuthGuard]},

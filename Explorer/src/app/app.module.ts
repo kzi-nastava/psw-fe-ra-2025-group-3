@@ -1,3 +1,4 @@
+import { TourHistoryModule } from './feature-modules/tour-history/tour-history.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -19,6 +20,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
 import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
+import { TourHistoryComponent } from './feature-modules/tour-history/tour-history/tour-history.component';
 
 // **UBACENO**: AiModule
 import { AiModule } from './feature-modules/ai/ai.module';
@@ -28,7 +30,8 @@ import { AiModule } from './feature-modules/ai/ai.module';
     AppComponent,
     MyWalletComponent,
     MyWalletComponent,
-    MyWalletTransactionsComponent
+    MyWalletTransactionsComponent,
+    TourHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { AiModule } from './feature-modules/ai/ai.module';
     MarkdownModule.forRoot(),
 
     // **UBACENO**: tvoj AiModule
-    AiModule
+    AiModule,
+    TourHistoryModule
   ],
   providers: [
     {
