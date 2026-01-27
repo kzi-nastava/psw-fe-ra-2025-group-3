@@ -1,0 +1,64 @@
+<div class="comparison-container" *ngIf="comparison">
+  <div class="comparison-header">
+    <mat-icon>leaderboard</mat-icon>
+    <h2>YOU vs AVERAGE TOURIST</h2>
+  </div>
+
+  <div class="comparison-items">
+    <!-- Tours Comparison -->
+    <div class="comparison-item">
+      <div class="comparison-title">Completed Tours</div>
+      <div class="progress-bars">
+        <div class="progress-row you">
+          <span class="label">YOU:</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill you-fill" 
+                 [style.width.%]="getPercentageWidth(comparison.yourCompletedTours, comparison.averageCompletedTours)">
+            </div>
+          </div>
+          <span class="value">{{ comparison.yourCompletedTours }} tours</span>
+        </div>
+        <div class="progress-row avg">
+          <span class="label">AVG:</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill avg-fill" 
+                 [style.width.%]="getAvgPercentageWidth(comparison.yourCompletedTours, comparison.averageCompletedTours)">
+            </div>
+          </div>
+          <span class="value">{{ comparison.averageCompletedTours }} tours</span>
+        </div>
+      </div>
+      <div class="comparison-result" [class.positive]="comparison.toursPercentageDifference > 0" [class.negative]="comparison.toursPercentageDifference < 0">
+        {{ getDifferenceText(comparison.toursPercentageDifference) }} {{ getDifferenceEmoji(comparison.toursPercentageDifference) }}
+      </div>
+    </div>
+
+    <!-- Distance Comparison -->
+    <div class="comparison-item">
+      <div class="comparison-title">Total Distance</div>
+      <div class="progress-bars">
+        <div class="progress-row you">
+          <span class="label">YOU:</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill you-fill" 
+                 [style.width.%]="getPercentageWidth(comparison.yourTotalDistance, comparison.averageTotalDistance)">
+            </div>
+          </div>
+          <span class="value">{{ comparison.yourTotalDistance.toFixed(1) }} km</span>
+        </div>
+        <div class="progress-row avg">
+          <span class="label">AVG:</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill avg-fill" 
+                 [style.width.%]="getAvgPercentageWidth(comparison.yourTotalDistance, comparison.averageTotalDistance)">
+            </div>
+          </div>
+          <span class="value">{{ comparison.averageTotalDistance.toFixed(1) }} km</span>
+        </div>
+      </div>
+      <div class="comparison-result" [class.positive]="comparison.distancePercentageDifference > 0" [class.negative]="comparison.distancePercentageDifference < 0">
+        {{ getDifferenceText(comparison.distancePercentageDifference) }} {{ getDifferenceEmoji(comparison.distancePercentageDifference) }}
+      </div>
+    </div>
+  </div>
+</div>

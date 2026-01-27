@@ -1,0 +1,57 @@
+<!-- author-profile.component.html -->
+<div class="author-profile-container">
+
+  <div *ngIf="isLoading" class="loading-card">
+    <div class="loader"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <div *ngIf="stats">
+    <div class="header-card">
+      <h2 class="header-title">Author profile #{{ stats.authorId }}</h2>
+      <p class="header-subtitle">Overview of the author's stats and most recent reviews.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Average rating</div>
+        <div class="stat-value">{{ stats.averageRating }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total reviews</div>
+        <div class="stat-value">{{ stats.totalReviews }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total tours</div>
+        <div class="stat-value">{{ stats.totalTours }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total purchases</div>
+        <div class="stat-value">{{ stats.totalPurchases }}</div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3 class="section-title">Most recent reviews</h3>
+
+      <div *ngFor="let r of stats.recentReviews" class="review-item">
+        <div class="review-top">
+          <div class="review-tour">{{ r.tourName }}</div>
+          <div class="review-rating">{{ r.rating }}</div>
+        </div>
+
+        <div class="review-comment">{{ r.comment }}</div>
+        <small class="review-date">{{ r.createdAt | date:'medium' }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !stats" class="empty-state">
+    <div class="empty-title">Author profile is not available</div>
+    <div class="empty-subtitle">Try again or go back to the top authors list.</div>
+  </div>
+
+</div>

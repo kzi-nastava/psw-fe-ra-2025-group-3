@@ -1,0 +1,121 @@
+<div class="profile-layout">
+  <xp-profile-sidebar></xp-profile-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="profile-content">
+    <div class="tx-page">
+      <div class="tx-card">
+
+    <!-- Header -->
+    <div class="tx-header">
+      <div class="tx-header-left">
+        <div class="tx-icon">
+          <mat-icon>receipt_long</mat-icon>
+        </div>
+        <div>
+          <div class="tx-title">Transactions</div>
+          <div class="tx-subtitle">Your Adventure Coins ledger</div>
+        </div>
+      </div>
+
+      <button class="tx-back" matRipple routerLink="/tourist/wallet">
+        <mat-icon>arrow_back</mat-icon>
+        Back to wallet
+      </button>
+    </div>
+
+    <!-- Filter pills -->
+    <div class="tx-controls" *ngIf="!loading && !error && totalCount > 0">
+      <div class="pill-row">
+        <button class="pill" [class.active]="filter === 'all'" (click)="setFilter('all')">
+          <mat-icon>all_inclusive</mat-icon> 
+          <span>All</span>
+        </button>
+        <button class="pill" [class.active]="filter === 'credit'" (click)="setFilter('credit')">
+          <mat-icon>add</mat-icon> 
+          <span>Credits</span>
+        </button>
+        <button class="pill" [class.active]="filter === 'debit'" (click)="setFilter('debit')">
+          <mat-icon>remove</mat-icon>
+            <span>Debits</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- States -->
+    <div *ngIf="loading" class="tx-state">
+      <mat-icon>hourglass_top</mat-icon>
+      <span>Loading your transactions…</span>
+    </div>
+
+    <div *ngIf="!loading && error" class="tx-state error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+
+    <div *ngIf="!loading && !error && totalCount === 0" class="tx-empty">
+      <div class="tx-empty-box">
+        <div class="tx-empty-icon">
+        <mat-icon>receipt_long</mat-icon>
+        </div>
+
+        <div class="tx-empty-title">No transactions yet</div>
+            <div class="tx-empty-subtitle">
+            Once you earn or spend AC, your history will show up here.
+            </div>
+        </div>
+    </div>
+
+    <!-- List -->
+    <div *ngIf="!loading && !error && totalCount > 0" class="tx-list">
+      <div *ngFor="let tx of displayedTransactions" class="tx-item"
+           [class.credit]="isCredit(tx.amountAc)"
+           [class.debit]="!isCredit(tx.amountAc)">
+
+        <div class="tx-left">
+          <div class="tx-amount">
+            <span class="amount-sign">{{ isCredit(tx.amountAc) ? '+' : '−' }}</span>
+            <span class="amount-num">{{ absAmount(tx.amountAc) }}</span>
+            <span class="amount-unit">AC</span>
+          </div>
+
+          <div class="tx-meta">
+            <div class="tx-type-row">
+              <span class="tx-type">{{ typeLabel(tx.type) }}</span>
+              <span class="tx-chip" [class.credit]="isCredit(tx.amountAc)" [class.debit]="!isCredit(tx.amountAc)">
+                {{ isCredit(tx.amountAc) ? 'Credit' : 'Debit' }}
+              </span>
+            </div>
+
+            <div class="tx-desc">{{ formatDescription(tx) }}</div>
+
+            <div class="tx-date">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ tx.createdAtUtc | date:'medium' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tx-right">
+          <div class="tx-circle">
+            <mat-icon>{{ isCredit(tx.amountAc) ? 'add' : 'remove' }}</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="tx-pagination" *ngIf="totalCount > pageSize">
+        <button class="pg-btn" matRipple (click)="prevPage()" [disabled]="page === 1">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <span class="pg-info">Page <b>{{ page }}</b> of <b>{{ maxPage }}</b></span>
+
+        <button class="pg-btn" matRipple (click)="nextPage()" [disabled]="page >= maxPage">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

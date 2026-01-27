@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
+import { ProfileSidebarComponent } from './profile-sidebar/profile-sidebar.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -46,11 +47,14 @@ import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.compo
 import { TouristBundleService } from './tourist-bundle.service';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { AchievementsComponent } from './achievements/achievements.component';
+import { AuthorTopListComponent } from './author-toplist/author-top-list.component';
+import { AuthorProfileComponent } from './author-profile/author-profile.component';
 
 
 @NgModule({
   declarations: [
     ProfileComponent,
+    ProfileSidebarComponent,
     AppRatingListComponent,
     MyAppRatingComponent,
     MeetupListComponent,
@@ -70,8 +74,9 @@ import { AchievementsComponent } from './achievements/achievements.component';
     RecommendedToursComponent, // tour recommendations
     TouristBundlesComponent,
     WishlistComponent,
-    AchievementsComponent
-    
+    AchievementsComponent,
+    AuthorProfileComponent,
+    AuthorTopListComponent
   ],
   imports: [
     CommonModule,
@@ -103,6 +108,7 @@ import { AchievementsComponent } from './achievements/achievements.component';
   ],
   exports: [
     ProfileComponent,
+    ProfileSidebarComponent,
     ProfileFormComponent,
     ProfileListComponent,
     TouristEquipmentComponent,

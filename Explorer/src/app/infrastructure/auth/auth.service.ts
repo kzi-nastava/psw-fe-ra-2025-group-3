@@ -49,6 +49,17 @@ export class AuthService {
     );
   }
 
+  googleLogin(idToken: string): Observable<AuthenticationResponse> {
+    return this.http
+      .post<AuthenticationResponse>(environment.apiHost + 'users/google-login', { idToken })
+      .pipe(
+        tap((authenticationResponse) => {
+          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          this.setUser();
+        })
+      );
+  }
+
   logout(): void {
     this.router.navigate(['/home']).then(_ => {
       this.tokenStorage.clear();

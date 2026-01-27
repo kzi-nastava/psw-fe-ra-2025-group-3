@@ -40,8 +40,21 @@
             <div class="author-info">
               <mat-icon class="avatar-icon">account_circle</mat-icon>
               <div>
-                <!-- ✅ ISPRAVI OVO - koristi metodu umesto property-ja -->
-                <div class="author-name">{{ getTouristName(review.touristId) }}</div>
+                <!-- ✅ Prikaži ime sa badge-om -->
+                <div class="author-name-container">
+                  <span class="author-name">{{ getTouristName(review.touristId) }}</span>
+                  <span *ngIf="getTouristRankIcon(review.touristId)" 
+                        class="rank-badge"
+                        [class.vista-badge]="getTouristRank(review.touristId) === 'Vista'"
+                        [matTooltip]="getTouristRank(review.touristId) + ' Tourist'">
+                    {{ getTouristRankIcon(review.touristId) }}
+                  </span>
+                  <span *ngIf="isFeaturedTourist(review.touristId)" 
+                        class="featured-badge"
+                        matTooltip="Featured Tourist">
+                    ⭐
+                  </span>
+                </div>
                 <div class="review-meta">
                   <span>{{ getFormattedDate(review.createdAt) }}</span>
                   <span *ngIf="review.isEdited" class="edited-badge">

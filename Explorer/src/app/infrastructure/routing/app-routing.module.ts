@@ -49,6 +49,7 @@ import { ShoppingCartComponent } from 'src/app/feature-modules/stakeholders/shop
 import { MyPurchasedToursComponent } from 'src/app/feature-modules/stakeholders/my-purchased-tours/my-purchased-tours.component'; // t execution
 import { RecommendedToursComponent } from 'src/app/feature-modules/stakeholders/preferences/recommended-tours/recommended-tours.component'; //t recommendations
 import { MyWalletComponent } from 'src/app/feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from 'src/app/feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 
 import { MeetupListComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-list/meetup-list.component';
 import { MeetupDetailsComponent } from 'src/app/feature-modules/stakeholders/meetups/meetup-details/meetup-details.component';
@@ -68,6 +69,11 @@ import { TourWizardComponent } from 'src/app/feature-modules/tour-authoring/tour
 import { MyReviewsComponent } from 'src/app/feature-modules/tour-execution/my-reviews/my-reviews.component'; 
 import { TouristBundlesComponent } from 'src/app/feature-modules/stakeholders/tourist-bundles/tourist-bundles.component';
 import { WishlistComponent } from 'src/app/feature-modules/stakeholders/wishlist/wishlist.component';
+import { AuthorTopListComponent } from 'src/app/feature-modules/stakeholders/author-toplist/author-top-list.component';
+import { AuthorProfileComponent } from 'src/app/feature-modules/stakeholders/author-profile/author-profile.component';
+import { TourHistoryComponent } from '../../feature-modules/tour-history/tour-history/tour-history.component';
+ 
+
 const routes: Routes = [
 
 
@@ -120,6 +126,7 @@ const routes: Routes = [
   { path: 'tourist/map', component: TouristMapComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/preferences', component: PreferenceOverviewComponent, canActivate: [AuthGuard] },
   { path: 'tourist/equipment', component: TouristEquipmentComponent, canActivate: [AuthGuard]},
+   { path: 'tourist/tour-history', component: TourHistoryComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
 {
   path: 'tourist/bundles',component: TouristBundlesComponent,canActivate: [AuthGuard]},
@@ -138,6 +145,7 @@ const routes: Routes = [
   { path: 'tourist/purchase-success',  component: PurchaseSuccessComponent,  canActivate: [AuthGuard],  data: { role: 'tourist' }},
   { path: 'tourist/my-reviews', component: MyReviewsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/wallet', component: MyWalletComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/wallet/transactions', component: MyWalletTransactionsComponent, canActivate: [AuthGuard], data: { role: 'tourist' }},
   { path: 'tourist/wishlist', component: WishlistComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   // Tour execution
   { path: 'tour-execution/tour-problems', component: TourProblemListComponent, canActivate: [AuthGuard] },
@@ -163,9 +171,14 @@ const routes: Routes = [
   { path: 'tourist/blogs', component: BlogListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
   { path: 'tourist/blogs/:id', component: BlogDetailComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
 
+    // Tourist – Authors (Top list + Author profile)
+  { path: 'tourist/authors', component: AuthorTopListComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+  { path: 'tourist/authors/:id', component: AuthorProfileComponent, canActivate: [AuthGuard], data: { role: 'tourist' } },
+
   // Authoring
   { path: 'test-keypoints', component: KeyPointPageComponent, canActivate: [AuthGuard], data: { role: 'author' } },
-  { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' } 
+  { path: 'tourist/tours/:id/details', component: TourDetailsComponent, canActivate: [AuthGuard], data: { role: 'tourist' },
+  
 },
 {
   path: 'tourist/diaries',

@@ -170,13 +170,13 @@
             <mat-icon>rate_review</mat-icon>
             <span>My Reviews</span>
           </button>
+          <button mat-menu-item routerLink="/tourist/tour-history">
+            <mat-icon>history_edu</mat-icon>
+            <span>Tour History</span>
+          </button>
           <button mat-menu-item routerLink="/tourist/diaries">
             <mat-icon>menu_book</mat-icon>
             <span>My Diaries</span>
-          </button>
-          <button mat-menu-item routerLink="/tourist/wishlist">
-            <mat-icon>favorite</mat-icon>
-            <span>My Wishlist</span>
           </button>
           <button mat-menu-item routerLink="/tourist/equipment">
             <mat-icon>backpack</mat-icon>
@@ -202,6 +202,10 @@
           <button mat-menu-item routerLink="/tourist/tours">
             <mat-icon>map</mat-icon>
             <span>Tours</span>
+          </button>
+          <button mat-menu-item (click)="goToTopAuthors()">
+            <mat-icon>groups</mat-icon>
+            <span>Top Authors</span>
           </button>
           <button mat-menu-item routerLink="/tourist/bundles">
             <mat-icon>inventory_2</mat-icon>
@@ -232,9 +236,12 @@
             <mat-icon>badge</mat-icon>
             <span>My Clubs</span>
           </button>
-          <button mat-menu-item routerLink="/meetups">
+          <button mat-menu-item routerLink="/meetups" 
+                  [disabled]="touristStats && touristStats.level < 2"
+                  [matTooltip]="touristStats && touristStats.level < 2 ? '🔒 Unlocked at Bronze rank (Level 2+)' : ''">
             <mat-icon>event</mat-icon>
             <span>Meetups</span>
+            <mat-icon *ngIf="touristStats && touristStats.level < 2" class="lock-icon">lock</mat-icon>
           </button>
         </mat-menu>
 
@@ -252,27 +259,6 @@
           <button mat-menu-item routerLink="/tourist/blogs">
             <mat-icon>article</mat-icon>
             <span>My Blogs</span>
-          </button>
-        </mat-menu>
-
-        <!-- Dropdown: Account -->
-        <button mat-button [matMenuTriggerFor]="touristAccountMenu" class="nav-menu-button">
-          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
-          <span>Account</span>
-          <mat-icon>account_circle</mat-icon>
-        </button>
-        <mat-menu #touristAccountMenu="matMenu" class="custom-menu">
-          <button mat-menu-item routerLink="/tourist/wallet">
-            <mat-icon>account_balance_wallet</mat-icon>
-            <span>My Wallet</span>
-          </button>
-          <button mat-menu-item routerLink="/profile">
-            <mat-icon>account_circle</mat-icon>
-            <span>My Profile</span>
-          </button>
-          <button mat-menu-item routerLink="/tourist/app-rating">
-            <mat-icon>star</mat-icon>
-            <span>Rate App</span>
           </button>
         </mat-menu>
       </ng-container>

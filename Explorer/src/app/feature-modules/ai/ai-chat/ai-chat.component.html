@@ -1,0 +1,57 @@
+<!-- Floating button -->
+<div
+  class="ai-chat-float"
+  [class.dragging]="dragging"
+  *ngIf="!chatOpen"
+  [ngStyle]="{'top.px': floatTop, 'left.px': floatLeft}"
+  (mousedown)="startDrag($event)"
+  (touchstart)="startDrag($event)"
+  (click)="toggleChat()">
+  <span>Vista<br>Asistent</span>
+</div>
+
+<!-- Chat box -->
+<div class="ai-chat" *ngIf="chatOpen">
+  <div class="ai-header">
+    <span>Vista Asistent</span>
+    <button (click)="toggleChat()">✕</button>
+  </div>
+
+  <div class="messages">
+    <div *ngFor="let msg of messages" [class.user]="msg.from === 'user'" [class.bot]="msg.from === 'bot'">
+      {{ msg.text }}
+    </div>
+    <div *ngIf="loading" class="bot typing">AI piše...</div>
+  </div>
+
+  <div class="input">
+    <input
+      type="text"
+      [(ngModel)]="userMessage"
+      (input)="onInputChange()"
+      (keyup.enter)="send()"
+      placeholder="Postavi pitanje..." />
+    
+    <!-- MIKROFON DUGME - pored dugmeta Pošalji -->
+    <button 
+      class="voice-btn" 
+      [class.listening]="isListening"
+      (click)="isListening ? stopVoiceInput() : startVoiceInput()"
+      *ngIf="speechSupported"
+      type="button"
+      [attr.aria-label]="isListening ? 'Zaustavi snimanje' : 'Pokreni glasovni unos'">
+      <!-- SVG ikonica mikrofona -->
+      <svg *ngIf="!isListening" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="22"></line>
+      </svg>
+      <!-- SVG ikonica za listening (pulse efekat) -->
+      <svg *ngIf="isListening" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="8"></circle>
+      </svg>
+    </button>
+    
+    <button class="send-btn" (click)="send()" [disabled]="loading">Pošalji</button>
+  </div>
+</div>

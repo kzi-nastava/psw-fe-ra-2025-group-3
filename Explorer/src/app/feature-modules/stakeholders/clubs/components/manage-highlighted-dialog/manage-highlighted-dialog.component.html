@@ -1,0 +1,54 @@
+<div class="manage-highlighted-wrapper">
+  <h2>Tours for highlighting</h2>
+
+  <div class="highlights-grid">
+    <div class="highlight-card" *ngFor="let highlight of sessions">
+      <div class="highlight-info">
+        <div class="highlight-header">
+          <div>
+            <h3>{{ highlight.tourName }}</h3>
+            <p class="text-muted">
+              {{ highlight.startTime | date: 'MMM dd, yyyy' }} • {{ getParticipants(highlight.id).length }} participants
+            </p>
+          </div>
+
+          <div class="request-actions">
+            <button mat-icon-button color="primary" (click)="highlightSession(highlight.id)" matTooltip="Accept">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="refuseHighlightSession(highlight.id)" matTooltip="Reject">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+
+          <button mat-icon-button (click)="toggleHighlightParticipants(highlight.id)" class="expand-btn">
+            <mat-icon>{{ isHighlightExpanded(highlight.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+        </div>
+
+        <div class="highlight-participants" *ngIf="isHighlightExpanded(highlight.id)">
+          <div class="participants-list-header">
+            <mat-icon>group</mat-icon>
+            <span>Participants</span>
+          </div>
+
+          <div class="participant-item" *ngFor="let participant of getParticipants(highlight.id)">
+            <div class="participant-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <span class="participant-name">{{ participant.name }} {{ participant.surname }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="sessions.length === 0" class="empty-state-small">
+    <mat-icon>explore_off</mat-icon>
+    <p>No sessions available for highlighting</p>
+  </div>
+</div>
+
+<div class="cancel-btn" mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close>Cancel</button>
+</div>

@@ -195,13 +195,37 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (stats: TouristStats) => {
+          const previousLevel = this.touristStats?.level || 0;
           this.touristStats = stats;
           this.rankConfig = getRankConfig(stats.level);
+          
+          // Auto-claim rank rewards if level increased
+          if (previousLevel > 0 && stats.level > previousLevel) {
+            this.claimRankRewards();
+          } else if (previousLevel === 0) {
+            // First load - check for unclaimed rewards
+            this.claimRankRewards();
+          }
         },
         error: (err) => {
           console.error('Failed to load tourist stats:', err);
           this.touristStats = null;
           this.rankConfig = null;
+        }
+      });
+  }
+
+  claimRankRewards(): void {
+    this.stakeholderService.claimRankRewards()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.acAwarded > 0) {
+            alert(`🎉 Rank Reward Claimed!\n\n${response.message}\n+${response.acAwarded} AC added to your wallet!`);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to claim rank rewards:', err);
         }
       });
   }
@@ -216,6 +240,9 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
   }
+  goToTopAuthors(): void {
+  this.router.navigate(['/tourist/authors']);
+}
   onLogout(): void {
     this.authService.logout();
   }

@@ -1,3 +1,4 @@
+import { TourHistoryModule } from './feature-modules/tour-history/tour-history.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -18,12 +19,20 @@ import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders-
 import { MarkdownModule } from 'ngx-markdown';
 import { DiaryModule } from './feature-modules/tour-execution/diary/diary.module';
 import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-wallet.component';
+import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
+import { TourHistoryComponent } from './feature-modules/tour-history/tour-history/tour-history.component';
 
+// **UBACENO**: AiModule
+import { AiModule } from './feature-modules/ai/ai.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyWalletComponent
+    MyWalletComponent,
+    MyWalletComponent,
+    MyWalletComponent,
+    MyWalletTransactionsComponent,
+    TourHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +49,11 @@ import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-w
     AuthModule,
     HttpClientModule,
     StakeholdersModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+
+    // **UBACENO**: tvoj AiModule
+    AiModule,
+    TourHistoryModule
   ],
   providers: [
     {

@@ -6,27 +6,6 @@
 
   <!-- Form Content -->
   <div *ngIf="!isLoading">
-    <!-- Eligibility Warning -->
-    <mat-card *ngIf="eligibility && !eligibility.canReview" class="warning-card">
-      <div class="warning-content">
-        <mat-icon>warning</mat-icon>
-        <div>
-          <h3>Cannot {{ isEditMode ? 'Edit' : 'Post' }} Review</h3>
-          <p>{{ eligibility.reasonIfNot }}</p>
-          <div class="eligibility-details">
-            <div class="detail-item">
-              <mat-icon>route</mat-icon>
-              <span>Current progress: {{ eligibility.currentProgress | number:'1.0-0' }}%</span>
-            </div>
-            <div class="detail-item">
-              <mat-icon>schedule</mat-icon>
-              <span>Days since last activity: {{ eligibility.daysSinceLastActivity }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </mat-card>
-
     <!-- Review Form -->
     <mat-card *ngIf="eligibility?.canReview || isEditMode" class="form-card">
       <mat-card-header>

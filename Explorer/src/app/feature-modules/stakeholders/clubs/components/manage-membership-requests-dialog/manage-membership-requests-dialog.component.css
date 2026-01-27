@@ -1,0 +1,79 @@
+.dialog-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-2);
+}
+
+.cancel-btn {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--color-secondary-800);
+}
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.request-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3);
+  background: white;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.request-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.request-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.req-name {
+  font-weight: 600;
+  color: var(--color-secondary-800);
+}
+
+.req-email {
+  font-size: 0.85rem;
+  color: var(--color-neutral-600);
+}
+
+.request-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-6);
+  color: var(--color-neutral-500);
+}

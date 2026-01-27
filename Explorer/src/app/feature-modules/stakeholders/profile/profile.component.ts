@@ -7,6 +7,7 @@ import { WelcomeBonusService } from '../welcome-bonus.service';
 import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
 import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TouristStats, RANK_CONFIGS } from '../model/tourist-stats.model';
 
 @Component({
   selector: 'xp-profile',
@@ -20,6 +21,7 @@ export class ProfileComponent implements OnInit {
   isLoadingBonus = false;
   authorStats: AuthorProfileStatsDto | null = null;
   isAuthor = false;
+  touristStats: TouristStats | null = null;
   
 
   profileForm = new FormGroup({
@@ -43,6 +45,7 @@ export class ProfileComponent implements OnInit {
     this.loadProfile();
     if (this.isTourist()) {
       this.loadWelcomeBonus();
+      this.loadTouristStats();
     }
     
     this.authService.user$.subscribe((user: User | undefined) => {
@@ -149,20 +152,36 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  loadTouristStats(): void {
+    this.service.getTouristStats().subscribe({
+      next: (stats) => {
+        this.touristStats = stats;
+      },
+      error: () => {
+        this.touristStats = null;
+      }
+    });
+  }
+
+  isVistaRank(): boolean {
+    if (!this.touristStats) return false;
+    return this.touristStats.level >= 30; // Vista rank starts at level 30
+  }
+
   getBonusStatus(): string {
     if (!this.welcomeBonus) return '';
     
     if (this.welcomeBonus.isUsed) {
-      return 'Iskorišćen';
+      return 'Used';
     }
     
     if (this.welcomeBonus.bonusType === BonusType.Discount10 || 
         this.welcomeBonus.bonusType === BonusType.Discount20 || 
         this.welcomeBonus.bonusType === BonusType.Discount30) {
-      return 'Aktivan - Važi do prve kupovine';
+      return 'Active - Valid until first purchase';
     }
     
-    return 'Aktivan';
+    return 'Active';
   }
 
   getBonusDescription(): string {
@@ -173,7 +192,7 @@ export class ProfileComponent implements OnInit {
         this.welcomeBonus.bonusType === BonusType.AC500) {
       return `${this.welcomeBonus.value} Adventure Coins`;
     } else {
-      return `${this.welcomeBonus.value}% popusta na prvu kupovinu`;
+      return `${this.welcomeBonus.value}% discount on first purchase`;
     }
   }
 

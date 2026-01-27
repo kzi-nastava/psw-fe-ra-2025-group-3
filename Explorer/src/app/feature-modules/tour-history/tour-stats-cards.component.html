@@ -1,0 +1,26 @@
+<div class="stats-cards-grid">
+  <div class="stat-card hero-card">
+    <div class="stat-icon hero-icon">
+      <mat-icon>emoji_events</mat-icon>
+    </div>
+    <div class="stat-value hero-value">{{ stats?.totalCompletedTours ?? 0 }}</div>
+    <div class="stat-label">Tours Completed</div>
+    <div class="hero-motivation" *ngIf="comparison && comparison.toursPercentageDifference !== 0">
+      {{ getMotivationalMessage() }}
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <mat-icon>directions_walk</mat-icon>
+    </div>
+    <div class="stat-value">{{ stats?.totalDistanceTraveled ?? 0 }} <span class="unit">km</span></div>
+    <div class="stat-label">Distance</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">
+      <mat-icon>timer</mat-icon>
+    </div>
+    <div class="stat-value">{{ getTotalTime(stats?.totalTimeSpent ?? 0) }}</div>
+    <div class="stat-label">Time</div>
+  </div>
+</div>
