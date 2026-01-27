@@ -264,7 +264,6 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
   // ===== Member Management =====
   loadMemberDetails(): void {
     this.loadSingleMemberDetails(this.club!.ownerId);
-    console.log(this.memberDetailsMap);
     if (!this.club?.memberIds?.length) 
         return;
     this.club.memberIds.forEach(userId => {
@@ -724,8 +723,6 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
         this.sessionsForHighlightMarking = sessions ?? [];
         this.isSessionsForHighlightMarkingLoading = false;
     });
-
-    console.log(this.sessionsForHighlightMarking);
   }
 
   loadHighlightedSessions(clubId: number): void {
