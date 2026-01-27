@@ -3,8 +3,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StakeholderService } from '../stakeholder.service';
 import { Person } from '../model/person.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { WelcomeBonusService } from '../welcome-bonus.service';
+import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
 import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TouristStats, RANK_CONFIGS } from '../model/tourist-stats.model';
 
 @Component({
   selector: 'xp-profile',
@@ -14,10 +17,11 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 export class ProfileComponent implements OnInit {
 
   isEditing = false;
-
-  
+  welcomeBonus: WelcomeBonus | null = null;
+  isLoadingBonus = false;
   authorStats: AuthorProfileStatsDto | null = null;
   isAuthor = false;
+  touristStats: TouristStats | null = null;
   
 
   profileForm = new FormGroup({
@@ -32,13 +36,17 @@ export class ProfileComponent implements OnInit {
  
   constructor(
     private service: StakeholderService,
+    private welcomeBonusService: WelcomeBonusService,
     private authService: AuthService
   ) { }
  
 
   ngOnInit(): void {
     this.loadProfile();
-
+    if (this.isTourist()) {
+      this.loadWelcomeBonus();
+      this.loadTouristStats();
+    }
     
     this.authService.user$.subscribe((user: User | undefined) => {
       this.isAuthor = user?.role === 'author';
@@ -116,10 +124,79 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.profileForm.disable();
         this.isEditing = false;
+        // Notifikuj da se stats promenio (samo za turiste)
+        this.authService.user$.subscribe(user => {
+          if (user && user.role === 'tourist') {
+            this.service.notifyTouristStatsUpdated();
+          }
+        });
       },
       error: (err) => {
         console.error('Failed to update profile:', err);
       }
     });
+  }
+
+
+  loadWelcomeBonus(): void {
+    this.isLoadingBonus = true;
+    this.welcomeBonusService.getWelcomeBonus().subscribe({
+      next: (bonus) => {
+        this.welcomeBonus = bonus;
+        this.isLoadingBonus = false;
+      },
+      error: () => {
+        this.welcomeBonus = null;
+        this.isLoadingBonus = false;
+      }
+    });
+  }
+
+  loadTouristStats(): void {
+    this.service.getTouristStats().subscribe({
+      next: (stats) => {
+        this.touristStats = stats;
+      },
+      error: () => {
+        this.touristStats = null;
+      }
+    });
+  }
+
+  isVistaRank(): boolean {
+    if (!this.touristStats) return false;
+    return this.touristStats.level >= 30; // Vista rank starts at level 30
+  }
+
+  getBonusStatus(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.isUsed) {
+      return 'Used';
+    }
+    
+    if (this.welcomeBonus.bonusType === BonusType.Discount10 || 
+        this.welcomeBonus.bonusType === BonusType.Discount20 || 
+        this.welcomeBonus.bonusType === BonusType.Discount30) {
+      return 'Active - Valid until first purchase';
+    }
+    
+    return 'Active';
+  }
+
+  getBonusDescription(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.bonusType === BonusType.AC100 || 
+        this.welcomeBonus.bonusType === BonusType.AC250 || 
+        this.welcomeBonus.bonusType === BonusType.AC500) {
+      return `${this.welcomeBonus.value} Adventure Coins`;
+    } else {
+      return `${this.welcomeBonus.value}% discount on first purchase`;
+    }
+  }
+
+  isTourist(): boolean {
+    return this.authService.isTourist();
   }
 }

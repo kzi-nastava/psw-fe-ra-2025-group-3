@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
+import { ProfileSidebarComponent } from './profile-sidebar/profile-sidebar.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -45,11 +46,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.component';
 import { TouristBundleService } from './tourist-bundle.service';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { AuthorTopListComponent } from './author-toplist/author-top-list.component';
+import { AuthorProfileComponent } from './author-profile/author-profile.component';
 
 
 @NgModule({
   declarations: [
     ProfileComponent,
+    ProfileSidebarComponent,
     AppRatingListComponent,
     MyAppRatingComponent,
     MeetupListComponent,
@@ -68,7 +72,9 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     TouristEncountersComponent,
     RecommendedToursComponent, // tour recommendations
     TouristBundlesComponent,
-    WishlistComponent
+    WishlistComponent,
+    AuthorProfileComponent,
+    AuthorTopListComponent
     
   ],
   imports: [
@@ -101,6 +107,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
   ],
   exports: [
     ProfileComponent,
+    ProfileSidebarComponent,
     ProfileFormComponent,
     ProfileListComponent,
     TouristEquipmentComponent,

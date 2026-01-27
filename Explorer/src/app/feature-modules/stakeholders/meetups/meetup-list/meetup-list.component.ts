@@ -13,6 +13,7 @@ import { MeetupFormComponent } from '../meetup-form/meetup-form.component';
 })
 export class MeetupListComponent implements OnInit {
   meetups: Meetup[] = [];
+  mapPoints: { lat: number; lng: number; name?: string; id?: number, color?: string }[] = [];
   isLoading: boolean = false;
   currentUserId: number = 0;
 
@@ -26,6 +27,7 @@ export class MeetupListComponent implements OnInit {
   ngOnInit(): void {
     this.currentUserId = this.authService.user$.value.id;
     this.loadMeetups();
+    this.loadMapPoints();
   }
 
   loadMeetups(): void {
@@ -41,6 +43,25 @@ export class MeetupListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  loadMapPoints(): void {
+    this.meetupService.getMeetupMapLocations().subscribe({
+      next: (result) => {
+        this.mapPoints = result.map(m => ({
+          lat: m.latitude,
+          lng: m.longitude,
+          name: m.title,
+          id: m.id,
+          color: 'red'
+        }));
+      },
+      error: (err) => console.error('Error loading map points', err)
+    });
+  }
+
+  onMarkerClicked(id: number): void {
+    this.viewDetails(id);
   }
 
   isCreator(meetup: Meetup): boolean {
@@ -60,6 +81,7 @@ export class MeetupListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadMeetups();
+        this.loadMapPoints();
       }
     });
   }
@@ -73,6 +95,7 @@ export class MeetupListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadMeetups();
+        this.loadMapPoints();
       }
     });
   }
@@ -87,6 +110,7 @@ export class MeetupListComponent implements OnInit {
       this.meetupService.deleteMeetup(meetup.id).subscribe({
         next: () => {
           this.loadMeetups();
+          this.loadMapPoints();
         },
         error: (error) => {
           console.error('Error deleting meetup:', error);

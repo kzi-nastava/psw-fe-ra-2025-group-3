@@ -711,6 +711,13 @@
   gap: var(--spacing-4);
 }
 
+.member-name-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.member-name 
 .loading-text {
   color: var(--color-primary-600);
   font-size: 1rem;
@@ -719,6 +726,49 @@
 /* Text Utilities */
 .text-muted {
   color: var(--color-neutral-600);
+}
+
+.rank-badge {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+
+.vista-badge {
+  animation: crownPulse 2s infinite ease-in-out;
+}
+
+@keyframes crownPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.featured-badge {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  animation: starTwinkle 1.5s infinite ease-in-out;
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: rotate(10deg);
+  }
 }
 
 /* Mobile Tabs (hidden on desktop) */

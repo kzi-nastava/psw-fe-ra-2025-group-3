@@ -22,6 +22,28 @@
   margin-bottom: var(--spacing-6);
 }
 
+/* DISCOUNT INFO */
+.discount-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  margin: var(--spacing-4) 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.discount-info mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #4caf50;
+}
+
 /* PURCHASE SUMMARY */
 .purchase-summary {
   margin: var(--spacing-6) 0;
@@ -67,6 +89,28 @@
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-primary-700);
+}
+
+.total-paid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background: linear-gradient(135deg, #00838F, #00ACC1);
+  color: white;
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.total-label {
+  font-size: var(--font-size-lg);
+}
+
+.total-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
 }
 
 .record-date {

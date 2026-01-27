@@ -12,7 +12,9 @@ export class MyWalletComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private walletService: WalletService) {}
+  constructor(
+    private walletService: WalletService
+  ) {}
 
   ngOnInit(): void {
     this.load();

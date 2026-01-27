@@ -12,6 +12,7 @@ import { ClubFormDialogComponent } from '../club-form-dialog/club-form-dialog.co
 import { Person } from '../../../model/person.model';
 import { StakeholderService } from '../../../stakeholder.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TouristStats, RANK_CONFIGS } from '../../../model/tourist-stats.model';
 import { TourExecutionService } from 'src/app/feature-modules/tour-execution/tour-execution.service';
 import { Tour } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
@@ -85,6 +86,7 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
   sessionsForHighlightMarking: GroupTourSessionDto[] = [];
 
   private destroy$ = new Subject<void>();
+  memberStatsMap: Map<number, TouristStats> = new Map();
 
   constructor(
     private route: ActivatedRoute,
@@ -671,6 +673,42 @@ export class ClubDetailComponent implements OnInit, OnDestroy {
                 this.showError(err?.error ?? 'Failed to highlight group session');
             }
         });
+  }
+
+  // Novi getter za rank badge
+  getMemberRankIcon(userId: number): string {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return '';
+
+    const rankConfig = RANK_CONFIGS.find(
+      config => stats.level >= config.minLevel && stats.level <= config.maxLevel
+    );
+
+    // Prikaži samo za Gold (🥇) i Vista (👑)
+    if (rankConfig?.name === 'Gold' || rankConfig?.name === 'Vista') {
+      return rankConfig.icon;
+    }
+
+    return '';
+  }
+
+  // Novi getter za rank name
+  getMemberRank(userId: number): string {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return '';
+
+    const rankConfig = RANK_CONFIGS.find(
+      config => stats.level >= config.minLevel && stats.level <= config.maxLevel
+    );
+
+    return rankConfig?.name || '';
+  }
+
+  // Da li je Featured Tourist (Platinum+)
+  isFeaturedTourist(userId: number): boolean {
+    const stats = this.memberStatsMap.get(userId);
+    if (!stats) return false;
+    return stats.level >= 15; // Platinum and above
   }
 
   loadSessionsForHighlightMarking(clubId: number): void {

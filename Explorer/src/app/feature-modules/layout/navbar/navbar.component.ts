@@ -10,6 +10,9 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationBadgeComponent } from '../notification-badge/notification-badge.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LevelProgressDialogComponent } from '../level-progress-dialog/level-progress-dialog.component';
+import { TouristStats, getRankConfig } from '../../stakeholders/model/tourist-stats.model';
 
 @Component({
   selector: 'xp-navbar',
@@ -21,6 +24,8 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   profilePictureUrl: string = '';
   cartItemsCount: number = 0;
   isCartDropdownOpen: boolean = false;
+  touristStats: TouristStats | null = null;
+  rankConfig: any = null;
   private destroy$ = new Subject<void>();
 
   @ViewChildren(MatMenuTrigger) menuTriggers!: QueryList<MatMenuTrigger>;
@@ -30,7 +35,8 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private stakeholderService: StakeholderService,
     private shoppingCartService: ShoppingCartService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -40,10 +46,13 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadProfile();
         if (user.role === 'tourist') {
           this.loadCart();
+          this.loadTouristStats();
         }
       } else {
         this.profilePictureUrl = '';
         this.cartItemsCount = 0;
+        this.touristStats = null;
+        this.rankConfig = null;
       }
     });
 
@@ -56,6 +65,15 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
 
+    // Osvežavaj tourist stats kada se promeni
+    this.stakeholderService.touristStatsUpdated
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.user && this.user.role === 'tourist') {
+          this.loadTouristStats();
+        }
+      });
+
     // Osvežavaj korpu kada se naviguje na stranicu
     this.router.events
       .pipe(
@@ -65,6 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         if (this.user && this.user.role === 'tourist') {
           this.loadCart();
+          this.loadTouristStats();
         }
       });
   }
@@ -170,6 +189,60 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+
+  loadTouristStats(): void {
+    this.stakeholderService.getTouristStats()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (stats: TouristStats) => {
+          const previousLevel = this.touristStats?.level || 0;
+          this.touristStats = stats;
+          this.rankConfig = getRankConfig(stats.level);
+          
+          // Auto-claim rank rewards if level increased
+          if (previousLevel > 0 && stats.level > previousLevel) {
+            this.claimRankRewards();
+          } else if (previousLevel === 0) {
+            // First load - check for unclaimed rewards
+            this.claimRankRewards();
+          }
+        },
+        error: (err) => {
+          console.error('Failed to load tourist stats:', err);
+          this.touristStats = null;
+          this.rankConfig = null;
+        }
+      });
+  }
+
+  claimRankRewards(): void {
+    this.stakeholderService.claimRankRewards()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.acAwarded > 0) {
+            alert(`🎉 Rank Reward Claimed!\n\n${response.message}\n+${response.acAwarded} AC added to your wallet!`);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to claim rank rewards:', err);
+        }
+      });
+  }
+
+  openLevelDialog(): void {
+    if (this.touristStats) {
+      this.dialog.open(LevelProgressDialogComponent, {
+        data: this.touristStats,
+        width: '600px',
+        maxWidth: '90vw',
+        panelClass: 'level-dialog'
+      });
+    }
+  }
+  goToTopAuthors(): void {
+  this.router.navigate(['/tourist/authors']);
+}
   onLogout(): void {
     this.authService.logout();
   }
