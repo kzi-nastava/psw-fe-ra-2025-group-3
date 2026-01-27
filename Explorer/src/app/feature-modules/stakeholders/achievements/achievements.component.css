@@ -44,3 +44,11 @@
   font-weight: 600;
   margin-bottom: 20px;
 }
+.locked {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+.locked:hover {
+  transform: none;
+  box-shadow: none;
+}

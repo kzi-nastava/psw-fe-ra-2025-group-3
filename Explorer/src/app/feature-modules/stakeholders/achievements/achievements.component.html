@@ -3,7 +3,7 @@
 <div class="achievements-section">
   <h4>Tours bought</h4>
   <div class="achievements-row">
-    <div class="achievement-tile" *ngFor="let a of toursBought">
+    <div class="achievement-tile" *ngFor="let a of toursBought" [class.locked]="!isUnlocked(a.code)">
       <img [src]="a.iconPath" [alt]="a.title" />
       <span class="achievement-label">{{ a.title }}</span>
     </div>
@@ -13,7 +13,7 @@
 <div class="achievements-section">
   <h4>Tours completed</h4>
   <div class="achievements-row">
-    <div class="achievement-tile" *ngFor="let a of toursCompleted">
+    <div class="achievement-tile" *ngFor="let a of toursCompleted" [class.locked]="!isUnlocked(a.code)">
       <img [src]="a.iconPath" [alt]="a.title" />
       <span class="achievement-label">{{ a.title }}</span>
     </div>
@@ -23,7 +23,7 @@
 <div class="achievements-section">
   <h4>Tour reviews</h4>
   <div class="achievements-row">
-    <div class="achievement-tile" *ngFor="let a of tourReviews">
+    <div class="achievement-tile" *ngFor="let a of tourReviews" [class.locked]="!isUnlocked(a.code)">
       <img [src]="a.iconPath" [alt]="a.title" />
       <span class="achievement-label">{{ a.title }}</span>
     </div>
@@ -33,7 +33,7 @@
 <div class="achievements-section">
   <h4>Other achievements</h4>
   <div class="achievements-row">
-    <div class="achievement-tile" *ngFor="let a of otherAchievements">
+    <div class="achievement-tile" *ngFor="let a of otherAchievements" [class.locked]="!isUnlocked(a.code)">
       <img [src]="a.iconPath" [alt]="a.title" />
       <span class="achievement-label">{{ a.title }}</span>
     </div>
