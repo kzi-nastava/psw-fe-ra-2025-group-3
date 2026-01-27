@@ -197,7 +197,7 @@
         <div class="member-numbers-header">
             <p class="text-muted">{{ c.memberIds.length+1 }} {{ c.memberIds.length+1 === 1 ? 'member' : 'members' }}</p>
 
-            <p class="text-muted">
+            <p class="text-muted" *ngIf="isOwner()">
                     {{ requests.length }} pending {{ requests.length === 1 ? 'request' : 'requests' }}
             </p>
         </div>
@@ -290,15 +290,15 @@
             <div class="tour-info">
               <div class="tour-header">
                 <h3><mat-icon>map</mat-icon>{{session.tourName}}</h3>
-                <span class="participants-badge">{{ session.participants!.length || 0 }} participants</span>
+                <span class="participants-badge">{{ getActiveParticipants(session)!.length || 0 }} participants</span>
               </div>
               <p class="tour-description">
                 Session started {{ session.startTime | date:'MMM dd, yyyy HH:mm' }}
               </p>
             </div>
 
-            <div class="tour-participants" *ngIf="session.participants && session.participants.length > 0">
-              <div class="participant-item" *ngFor="let participant of session.participants">
+            <div class="tour-participants" *ngIf="getActiveParticipants(session) && getActiveParticipants(session).length > 0">
+              <div class="participant-item" *ngFor="let participant of getActiveParticipants(session)">
                 <div class="participant-avatar">
                   <mat-icon>account_circle</mat-icon>
                 </div>
@@ -404,7 +404,7 @@
             <div class="member-numbers-header">
                 <p class="text-muted">{{ c.memberIds.length+1 }} {{ c.memberIds.length+1 === 1 ? 'member' : 'members' }}</p>
 
-                <p class="text-muted">
+                <p class="text-muted" *ngIf="isOwner()">
                         {{ requests.length }} pending {{ requests.length === 1 ? 'request' : 'requests' }}
                 </p>
             </div>
