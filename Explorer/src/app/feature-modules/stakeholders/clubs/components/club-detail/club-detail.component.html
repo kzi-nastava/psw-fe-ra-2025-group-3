@@ -1,144 +1,468 @@
-<div class="club-detail-container card animate-fade-in-up" *ngIf="club as c; else loadingTpl">
-  <div class="header">
-    <div class="title-section">
+<div class="club-detail-wrapper" *ngIf="club as c; else loadingTpl">
+  
+  <!-- Banner Section -->
+  <div class="club-banner" [style.background-image]="featuredImageUrl ? 'url(' + featuredImageUrl + ')' : 'url(https://via.placeholder.com/1400x200/0d9488/ffffff?text=Club+Banner)'">
+  </div>
+
+  <!-- Club Info Header -->
+  <div class="club-info-header">
+    <div class="club-title-section">
       <h1>{{ c.name }}</h1>
       <span class="status-badge" [class.active]="c.status === 'Active'" [class.closed]="c.status === 'Closed'">
         {{ c.status }}
       </span>
     </div>
-
-    <div class="actions" *ngIf="isOwner()">
-      <button mat-stroked-button color="primary" (click)="openEditDialog()" [disabled]="c.status === 'Closed'">
-        <mat-icon>edit</mat-icon> Edit
-      </button>
-
-      <button mat-stroked-button color="warn" (click)="deleteClub()">
-        <mat-icon>delete</mat-icon> Delete
-      </button>
-
-      <button mat-stroked-button [color]="c.status === 'Active' ? 'accent' : 'primary'" (click)="toggleStatus()">
-        <mat-icon>{{ c.status === 'Active' ? 'lock' : 'lock_open' }}</mat-icon>
-        {{ c.status === 'Active' ? 'Close Club' : 'Activate Club' }}
-      </button>
+    <div class="club-meta">
+      <span class="founded-date">
+        <mat-icon>calendar_today</mat-icon>
+        Founded January 2025
+      </span>
     </div>
   </div>
 
-  <div class="featured-image" *ngIf="featuredImageUrl as url">
-    <img [src]="url" alt="Featured image" />
+  <!-- Owner Actions Bar -->
+  <div class="owner-actions-bar" *ngIf="isOwner()">
+    <button mat-stroked-button color="primary" (click)="openEditDialog()" [disabled]="c.status === 'Closed'">
+      <mat-icon>edit</mat-icon> Edit Club
+    </button>
+
+    <button mat-stroked-button [color]="c.status === 'Active' ? 'accent' : 'primary'" (click)="toggleStatus()">
+      <mat-icon>{{ c.status === 'Active' ? 'lock' : 'lock_open' }}</mat-icon>
+      {{ c.status === 'Active' ? 'Close Club' : 'Activate Club' }}
+    </button>
+
+    <button mat-stroked-button color="warn" (click)="deleteClub()">
+      <mat-icon>delete</mat-icon> Delete Club
+    </button>
   </div>
 
-  <div class="content-section">
-    <h3>About this club</h3>
-    <p class="description">{{ c.description }}</p>
-  </div>
-
-  <div class="gallery content-section" *ngIf="galleryUrls.length > 0">
-    <h2>Gallery</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item" *ngFor="let url of galleryUrls">
-        <img [src]="url" alt="Club image" />
+  <!-- Desktop: Three Column Layout -->
+  <div class="three-column-layout desktop-only">
+    
+    <!-- Left Column: Group Tours -->
+    <div class="column left-column">
+      <div class="column-header">
+        <h2>Group Tours</h2>
+        <p class="text-muted">Active group tour sessions</p>
       </div>
-    </div>
-  </div>
 
-  <div class="members-section" *ngIf="isOwner()">
-    <div class="section-header">
-      <h3>Member Management</h3>
-    </div>
+      <div class="start-session-box" *ngIf="c.status === 'Active'">
+        <div class="column-header" style="margin-top: 16px;">
+            <h2 style="font-size: 1.05rem;">Start session</h2>
+            <p class="text-muted">Choose a purchased tour</p>
+        </div>
 
-    <div class="invite-box" *ngIf="c.status === 'Active'; else closedRestriction">
-      <mat-form-field appearance="fill" class="tourist-select">
-        <mat-label>Search Tourist</mat-label>
-        <input type="text" matInput [formControl]="touristControl" [matAutocomplete]="auto"
-          placeholder="Type name or surname...">
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayTourist">
-          <mat-option *ngFor="let tourist of filteredTourists | async" [value]="tourist">
-            {{ tourist.name }} {{ tourist.surname }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-      <button class="btn btn-primary" (click)="inviteMember()" [disabled]="!touristControl.value">
-        <mat-icon>person_add</mat-icon> Invite Member
-      </button>
-    </div>
+        <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Purchased tours</mat-label>
+            <mat-select [(value)]="selectedPurchasedTourId" [disabled]="isPurchasedToursLoading || purchasedTours.length === 0">
+            <mat-option *ngFor="let t of purchasedTours" [value]="t.id">
+                {{ t.name }}
+            </mat-option>
+            </mat-select>
+            <mat-hint *ngIf="!isPurchasedToursLoading && purchasedTours.length === 0">
+            No purchased tours available.
+            </mat-hint>
+        </mat-form-field>
 
-    <div class="members-list-wrapper">
-      <p class="text-muted">
-        Current Members: <strong>{{ c.memberIds.length }}</strong>
-      </p>
+        <button
+            mat-raised-button
+            color="primary"
+            class="start-session-btn"
+            (click)="startGroupTourSession()"
+            [disabled]="!selectedPurchasedTourId">
+            <mat-icon>group_add</mat-icon>
+            Start group tour session
+        </button>
+      </div>
 
-      <mat-list *ngIf="c.memberIds && c.memberIds.length > 0">
-        <mat-list-item *ngFor="let mId of c.memberIds" class="member-item">
-          <div class="member-content">
-            <div class="member-info">
-              <mat-icon color="primary">person</mat-icon>
-              <div class="member-name-container">
-                <span class="member-name">{{ getMemberName(mId) }}</span>
-                <span *ngIf="getMemberRankIcon(mId)" 
-                      class="rank-badge"
-                      [class.vista-badge]="getMemberRank(mId) === 'Vista'"
-                      [matTooltip]="getMemberRank(mId) + ' Tourist'">
-                  {{ getMemberRankIcon(mId) }}
-                </span>
-                <span *ngIf="isFeaturedTourist(mId)" 
-                      class="featured-badge"
-                      matTooltip="Featured Tourist">
-                  ⭐
-                </span>
-              </div>
+      <div class="group-tours-list">
+        <div class="tour-card" *ngFor="let session of activeGroupSessions">
+          <div class="tour-info">
+            <div class="tour-header">
+              <h3><mat-icon>map</mat-icon>{{ session.tourName }}</h3>
+              <span class="participants-badge">{{ getActiveParticipants(session).length || 0 }} participants</span>
             </div>
-            <button mat-icon-button color="warn" (click)="kickMember(mId)" *ngIf="c.status === 'Active'"
-              matTooltip="Kick Member">
-              <mat-icon>person_remove</mat-icon>
+            <p class="tour-description">
+              Session started {{ session.startTime | date:'MMM dd, yyyy HH:mm' }}
+            </p>
+          </div>
+
+          <!-- Participants List -->
+          <div class="tour-participants" *ngIf="hasActiveParticipants(session)">
+            <div class="participant-item" *ngFor="let participant of getActiveParticipants(session)">
+              <div class="participant-avatar" *ngIf="participantDisplayProfilePicture(participant.touristId) == null">
+                <mat-icon>account_circle</mat-icon>
+              </div>
+
+              <div class="participant-avatar" *ngIf="participantDisplayProfilePicture(participant.touristId) != null">
+                <img src={{participantDisplayProfilePicture(participant.touristId)}} >
+              </div>
+
+              <span class="participant-name">{{ participantDisplayName(participant.touristId) }}</span>
+            </div>
+          </div>
+
+          <div class="tour-actions">
+            <button
+              mat-raised-button
+              class="tour-btn"
+              [color]="isJoined(session) ? 'warn' : 'primary'"
+              (click)="isJoined(session) ? onLeaveSession(session) : onJoinSession(session)">
+              <mat-icon>{{ isJoined(session) ? 'exit_to_app' : 'login' }}</mat-icon>
+              {{ isJoined(session) ? 'Leave' : 'Join' }}
             </button>
           </div>
-        </mat-list-item>
-      </mat-list>
+        </div>
 
-      <div *ngIf="!c.memberIds || c.memberIds.length === 0" class="no-members text-center">
-        <mat-icon class="text-muted">group_off</mat-icon>
-        <p>No members yet.</p>
+        <div *ngIf="!isGroupToursLoading && activeGroupSessions.length === 0" class="empty-state-small">
+          <mat-icon>explore_off</mat-icon>
+          <p>No active tours</p>
+        </div>
+
+        <div *ngIf="isGroupToursLoading" class="empty-state-small">
+          <mat-icon>hourglass_top</mat-icon>
+          <p>Loading group tours...</p>
+        </div>
       </div>
     </div>
 
-    <ng-template #closedRestriction>
-      <div class="restriction-banner">
-        <mat-icon>info_outline</mat-icon>
-        <span>Club is closed. Member management is disabled.</span>
+    <!-- Middle Column: Content -->
+    <div class="column middle-column">
+      <!-- About Section -->
+      <div class="content-section">
+        <h2>About this club</h2>
+        <p class="description">{{ c.description }}</p>
       </div>
-    </ng-template>
+
+      <!-- Tour Highlights -->
+        <div class="content-section">
+          <div class="manage-header">
+            <h2>Tour Highlights</h2>
+            <button mat-raised-button color="primary" class="manage-btn" *ngIf="isOwner()" (click)="openManageToursHighlightsDialog()">
+                <mat-icon>settings</mat-icon> Manage
+            </button>
+          </div>
+          <div class="highlights-grid">
+            <div class="highlight-card" *ngFor="let highlight of highlightedSessions">
+              <!-- <div class="highlight-image" [style.background-image]="'url(' + highlight.imageUrl + ')'"></div> -->
+              <div class="highlight-info">
+                <div class="highlight-header">
+                  <div>
+                    <h3>{{ highlight.tourName }}</h3>
+                    <p class="text-muted">{{ highlight.startTime | date: 'MMM dd, yyyy' }} • {{ getHighlightedSessionParticipants(highlight.id, false).length }} participants</p>
+                  </div>
+                  <button mat-icon-button (click)="toggleHighlightParticipants(highlight.id)" class="expand-btn">
+                    <mat-icon>{{ isHighlightExpanded(highlight.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
+                  </button>
+                </div>
+                
+                <div class="highlight-participants" *ngIf="isHighlightExpanded(highlight.id) && getHighlightedSessionParticipants(highlight.id, false)">
+                  <div class="participants-list-header">
+                    <mat-icon>group</mat-icon>
+                    <span>Participants</span>
+                  </div>
+                  <div class="participant-item" *ngFor="let participant of getHighlightedSessionParticipants(highlight.id, false)">
+                    <div class="participant-avatar">
+                      <mat-icon>account_circle</mat-icon>
+                    </div>
+                    <span class="participant-name">{{ participant.name }} {{ participant.surname }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- Gallery Section -->
+      <div class="content-section" *ngIf="galleryUrls.length > 0">
+        <h2>Gallery</h2>
+        <div class="gallery-grid">
+          <div class="gallery-item" *ngFor="let url of galleryUrls">
+            <img [src]="url" alt="Club image" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Members -->
+    <div class="column right-column">
+      <div class="column-header">
+        <div class="manage-header">
+            <h2>Members</h2>
+            <button mat-raised-button color="primary" class="manage-btn" *ngIf="isOwner()" (click)="openManageMembersDialog()">
+                <mat-icon>settings</mat-icon> Manage
+            </button>
+            
+        </div>
+        <div class="member-numbers-header">
+            <p class="text-muted">{{ c.memberIds.length+1 }} {{ c.memberIds.length+1 === 1 ? 'member' : 'members' }}</p>
+
+            <p class="text-muted" *ngIf="isOwner()">
+                    {{ requests.length }} pending {{ requests.length === 1 ? 'request' : 'requests' }}
+            </p>
+        </div>
+      </div>
+
+      <div class="members-list">
+        <div>Owner</div>
+        <div class="member-card">
+          
+          <div class="member-avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <div class="member-details">
+            <h3>{{ getMemberName(c.ownerId) }}</h3>
+            <p class="member-activity" *ngIf="getMemberActivity(c.ownerId) as activity">
+              <mat-icon class="activity-icon">explore</mat-icon>
+              <span class="activity-text">On tour: <strong class="activity-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</strong></span>
+            </p>
+            <p class="member-activity inactive" *ngIf="!getMemberActivity(c.ownerId)">
+              <mat-icon class="activity-icon">remove_circle_outline</mat-icon>
+              <span class="activity-text">No active tour</span>
+            </p>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="member-card" *ngFor="let mId of c.memberIds">
+          <div class="member-avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <div class="member-details">
+            <h3>{{ getMemberName(mId) }}</h3>
+            <p class="member-activity" *ngIf="getMemberActivity(mId) as activity">
+              <mat-icon class="activity-icon">explore</mat-icon>
+              <span class="activity-text">On tour: <strong class="activity-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</strong></span>
+            </p>
+            <p class="member-activity inactive" *ngIf="!getMemberActivity(mId)">
+              <mat-icon class="activity-icon">remove_circle_outline</mat-icon>
+              <span class="activity-text">No active tour</span>
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="!c.memberIds || c.memberIds.length === 0" class="empty-state-small">
+          <mat-icon>group_off</mat-icon>
+          <p>No members yet</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="requests-section" *ngIf="club && user && club.ownerId === user.id">
-    <h3>Membership Requests</h3>
+  <!-- Mobile: Tabs Layout -->
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="mobile-tabs mobile-only" animationDuration="300ms">
     
-    <div *ngIf="requests.length === 0" class="no-requests">
-        <p>No pending requests.</p>
-    </div>
-
-    <div class="request-list" *ngIf="requests.length > 0">
-        <div class="request-item" *ngFor="let req of requests">
-            <div class="request-info">
-                <span class="req-name">{{ req.username }}</span>
-                <span class="req-email">({{ req.email }})</span>
+    <!-- Group Tours Tab -->
+    <mat-tab label="Group Tours">
+      <div class="tab-content">
+        <div class="start-session-box" *ngIf="c.status === 'Active'">
+            <div class="column-header" style="margin-top: 16px;">
+                <h2 style="font-size: 1.05rem;">Start session</h2>
+                <p class="text-muted">Choose a purchased tour</p>
             </div>
-            <div class="request-actions">
-                <button mat-icon-button color="primary" (click)="onRespond(req.id, true)" matTooltip="Accept">
-                    <mat-icon>check_circle</mat-icon>
+
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Purchased tours</mat-label>
+                <mat-select [(value)]="selectedPurchasedTourId" [disabled]="isPurchasedToursLoading || purchasedTours.length === 0">
+                <mat-option *ngFor="let t of purchasedTours" [value]="t.id">
+                    {{ t.name }}
+                </mat-option>
+                </mat-select>
+                <mat-hint *ngIf="!isPurchasedToursLoading && purchasedTours.length === 0">
+                No purchased tours available.
+                </mat-hint>
+            </mat-form-field>
+
+            <button
+                mat-raised-button
+                color="primary"
+                class="start-session-btn"
+                (click)="startGroupTourSession()"
+                [disabled]="!selectedPurchasedTourId">
+                <mat-icon>group_add</mat-icon>
+                Start group tour session
+            </button>
+        </div>
+        <div class="group-tours-list">
+          <div class="tour-card" *ngFor="let session of activeGroupSessions">
+            <div class="tour-info">
+              <div class="tour-header">
+                <h3><mat-icon>map</mat-icon>{{session.tourName}}</h3>
+                <span class="participants-badge">{{ getActiveParticipants(session)!.length || 0 }} participants</span>
+              </div>
+              <p class="tour-description">
+                Session started {{ session.startTime | date:'MMM dd, yyyy HH:mm' }}
+              </p>
+            </div>
+
+            <div class="tour-participants" *ngIf="getActiveParticipants(session) && getActiveParticipants(session).length > 0">
+              <div class="participant-item" *ngFor="let participant of getActiveParticipants(session)">
+                <div class="participant-avatar">
+                  <mat-icon>account_circle</mat-icon>
+                </div>
+                <span class="participant-name">{{ participantDisplayName(participant.touristId) }}</span>
+              </div>
+            </div>
+
+            <div class="tour-actions">
+              <button
+                mat-raised-button
+                [color]="isJoined(session) ? 'warn' : 'primary'"
+                (click)="isJoined(session) ? onLeaveSession(session) : onJoinSession(session)">
+                <mat-icon>{{ isJoined(session) ? 'exit_to_app' : 'login' }}</mat-icon>
+                {{ isJoined(session) ? 'Leave' : 'Join' }}
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!isGroupToursLoading && activeGroupSessions.length === 0" class="empty-state">
+            <mat-icon>explore_off</mat-icon>
+            <p>No active group tour sessions</p>
+          </div>
+
+          <div *ngIf="isGroupToursLoading" class="empty-state">
+            <mat-icon>hourglass_top</mat-icon>
+            <p>Loading group tours...</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Content Tab -->
+    <mat-tab label="Content">
+      <div class="tab-content">
+        <!-- About Section -->
+        <div class="content-section">
+          <h2>About this club</h2>
+          <p class="description">{{ c.description }}</p>
+        </div>
+
+        <!-- Tour Highlights -->
+        <div class="content-section">
+          <div class="manage-header">
+            <h2>Tour Highlights</h2>
+            <button mat-raised-button color="primary" class="manage-btn" *ngIf="isOwner()" (click)="openManageToursHighlightsDialog()">
+                <mat-icon>settings</mat-icon> Manage
+            </button>
+          </div>
+          <div class="highlights-grid">
+            <div class="highlight-card" *ngFor="let highlight of highlightedSessions">
+              <div class="highlight-info">
+                <div class="highlight-header">
+                  <div>
+                    <h3>{{ highlight.tourName }}</h3>
+                    <p class="text-muted">{{ highlight.startTime | date: 'MMM dd, yyyy' }} • {{ getHighlightedSessionParticipants(highlight.id, true) }} participants</p>
+                  </div>
+                  <button mat-icon-button (click)="toggleHighlightParticipants(highlight.id)" class="expand-btn">
+                    <mat-icon>{{ isHighlightExpanded(highlight.id) ? 'expand_less' : 'expand_more' }}</mat-icon>
+                  </button>
+                </div>
+                
+                <div class="highlight-participants" *ngIf="isHighlightExpanded(highlight.id) && getHighlightedSessionParticipants(highlight.id, true)">
+                  <div class="participants-list-header">
+                    <mat-icon>group</mat-icon>
+                    <span>Participants</span>
+                  </div>
+                  <div class="participant-item" *ngFor="let participant of getHighlightedSessionParticipants(highlight.id, true)">
+                    <div class="participant-avatar">
+                      <mat-icon>account_circle</mat-icon>
+                    </div>
+                    <span class="participant-name">{{ participant.name }} {{ participant.surname }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="content-section" *ngIf="galleryUrls.length > 0">
+          <h2>Gallery</h2>
+          <div class="gallery-grid">
+            <div class="gallery-item" *ngFor="let url of galleryUrls">
+              <img [src]="url" alt="Club image" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <!-- Members Tab -->
+    <mat-tab label="Members">
+      <div class="tab-content">
+        <div class="column-header">
+            <div class="manage-header">
+                <h2>Members</h2>
+                <button mat-raised-button color="primary" class="manage-btn" *ngIf="isOwner()" (click)="openManageMembersDialog()">
+                    <mat-icon>settings</mat-icon> Manage
                 </button>
-                <button mat-icon-button color="warn" (click)="onRespond(req.id, false)" matTooltip="Reject">
-                    <mat-icon>cancel</mat-icon>
-                </button>
+                
+            </div>
+            <div class="member-numbers-header">
+                <p class="text-muted">{{ c.memberIds.length+1 }} {{ c.memberIds.length+1 === 1 ? 'member' : 'members' }}</p>
+
+                <p class="text-muted" *ngIf="isOwner()">
+                        {{ requests.length }} pending {{ requests.length === 1 ? 'request' : 'requests' }}
+                </p>
             </div>
         </div>
-    </div>
-</div>
+
+        <div class="members-grid">
+            <div style="margin-top: 10px;">Owner</div>
+            <div class="member-card">          
+                <div class="member-avatar">
+                    <mat-icon>account_circle</mat-icon>
+                </div>
+                <div class="member-details">
+                    <h3>{{ getMemberName(c.ownerId) }}</h3>
+                    <p class="member-activity" *ngIf="getMemberActivity(c.ownerId) as activity">
+                    <mat-icon class="activity-icon">explore</mat-icon>
+                    <span class="activity-text">On tour: <strong class="activity-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</strong></span>
+                    </p>
+                    <p class="member-activity inactive" *ngIf="!getMemberActivity(c.ownerId)">
+                    <mat-icon class="activity-icon">remove_circle_outline</mat-icon>
+                    <span class="activity-text">No active tour</span>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+          <div class="member-card" *ngFor="let mId of c.memberIds">
+            <div class="member-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="member-details">
+              <h3>{{ getMemberName(mId) }}</h3>
+              <p class="member-activity" *ngIf="getMemberActivity(mId) as activity">
+                <mat-icon class="activity-icon">explore</mat-icon>
+                On tour: <span class="tour-name" [routerLink]="['/tourist/tours', activity.id, 'details']">{{ activity.name }}</span>
+              </p>
+              <p class="member-activity inactive" *ngIf="!getMemberActivity(mId)">
+                <mat-icon class="activity-icon">remove_circle_outline</mat-icon>
+                No active tour
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="!c.memberIds || c.memberIds.length === 0" class="empty-state">
+            <mat-icon>group_off</mat-icon>
+            <p>No members yet</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
 
 </div>
 
 <ng-template #loadingTpl>
-  <div class="loading-container flex-col flex-center py-8">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p class="mt-4 text-primary">Loading club details...</p>
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Loading club details...</p>
   </div>
 </ng-template>
