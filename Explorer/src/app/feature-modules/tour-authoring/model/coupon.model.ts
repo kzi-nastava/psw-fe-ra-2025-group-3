@@ -24,6 +24,7 @@ export interface CouponValidationDto {
   code: string;
   tourId: number;
   tourIds?: number[]; // Lista tour ID-jeva iz korpe (opciono)
+  tourPrices?: { [key: number]: number }; // Cene tura iz korpe (tourId -> price) - opciono
 }
 
 export interface CouponValidationResultDto {

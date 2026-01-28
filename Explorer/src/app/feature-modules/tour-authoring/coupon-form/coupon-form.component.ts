@@ -69,6 +69,14 @@ export class CouponFormComponent implements OnInit {
     this.tourService.getMyTours().subscribe({
       next: (tours) => {
         this.availableTours = tours.filter(t => t.status === TourStatus.Published);
+        // Debug: loguj ture sa cenama
+        console.log('Loaded tours:', this.availableTours.map(t => ({
+          name: t.name,
+          price: t.price,
+          discountedPrice: t.discountedPrice,
+          onSale: t.onSale,
+          discountPercentage: t.discountPercentage
+        })));
         this.isLoading = false;
       },
       error: (error) => {
@@ -157,5 +165,11 @@ export class CouponFormComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  getDisplayPrice(tour: Tour): number {
+    // Backend sets Price to discounted price when on sale, so use price directly
+    // If discountedPrice exists, it means there's a sale, but Price is already set to discounted value
+    return tour.price;
   }
 }

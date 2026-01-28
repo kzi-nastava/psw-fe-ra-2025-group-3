@@ -5,6 +5,7 @@ export interface Tour {
   difficulty: TourDifficulty;
   status: TourStatus;
   price: number;
+  discountedPrice?: number; // Snižena cena ako postoji sale
   tags: string[];
   equipment: Equipment[];
   authorId: number;
@@ -20,7 +21,6 @@ export interface Tour {
   // Sale properties (from TourPreviewDto)
   onSale?: boolean;
   originalPrice?: number;
-  discountedPrice?: number;
   discountPercentage?: number;
   // Additional properties from TourPreviewDto
   length?: number; // in km
