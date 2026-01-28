@@ -30,6 +30,7 @@ import { AiModule } from './feature-modules/ai/ai.module';
     AppComponent,
     MyWalletComponent,
     MyWalletComponent,
+    MyWalletComponent,
     MyWalletTransactionsComponent,
     TourHistoryComponent
   ],

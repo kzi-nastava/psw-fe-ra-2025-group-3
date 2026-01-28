@@ -46,6 +46,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TouristBundlesComponent } from './tourist-bundles/tourist-bundles.component';
 import { TouristBundleService } from './tourist-bundle.service';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { AchievementsComponent } from './achievements/achievements.component';
 import { AuthorTopListComponent } from './author-toplist/author-top-list.component';
 import { AuthorProfileComponent } from './author-profile/author-profile.component';
 
@@ -73,9 +74,9 @@ import { AuthorProfileComponent } from './author-profile/author-profile.componen
     RecommendedToursComponent, // tour recommendations
     TouristBundlesComponent,
     WishlistComponent,
+    AchievementsComponent,
     AuthorProfileComponent,
     AuthorTopListComponent
-    
   ],
   imports: [
     CommonModule,
