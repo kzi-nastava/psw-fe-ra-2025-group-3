@@ -39,7 +39,7 @@
         <mat-select formControlName="tourId">
           <mat-option [value]="null">All My Tours</mat-option>
           <mat-option *ngFor="let tour of availableTours" [value]="tour.id">
-            {{ tour.name }} ({{ tour.price | number:'1.2-2' }} AC)
+            {{ tour.name }} ({{ getDisplayPrice(tour) | number:'1.2-2' }} AC<ng-container *ngIf="tour.onSale && tour.discountPercentage"> - {{ tour.discountPercentage }}% OFF</ng-container>)
           </mat-option>
         </mat-select>
         <mat-icon matPrefix>tour</mat-icon>

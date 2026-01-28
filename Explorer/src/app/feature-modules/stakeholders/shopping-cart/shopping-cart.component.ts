@@ -340,12 +340,19 @@ validateCoupon(): void {
 
   // Prikupi sve tour ID-jeve iz korpe
   const tourIds = this.cart.items.map(item => item.tourId);
+  
+  // Kreiraj mapu cena tura iz korpe (tourId -> price)
+  const tourPrices: { [key: number]: number } = {};
+  this.cart.items.forEach(item => {
+    tourPrices[item.tourId] = item.price;
+  });
 
   this.validatingCoupon = true;
   this.couponService.validateCoupon({
     code: this.couponCode.trim().toUpperCase(),
     tourId: tourIds[0], // Za backward compatibility
-    tourIds: tourIds // Lista svih tour ID-jeva za validaciju cele korpe
+    tourIds: tourIds, // Lista svih tour ID-jeva za validaciju cele korpe
+    tourPrices: tourPrices // Cene tura iz korpe (već snižene)
   }).subscribe({
     next: (result) => {
       this.validatingCoupon = false;

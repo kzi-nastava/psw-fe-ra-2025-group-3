@@ -505,8 +505,8 @@
 }
 
 .keypoint-item.completed {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(129, 199, 132, 0.08) 100%);
-  border-color: #4CAF50;
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.08) 0%, rgba(0, 172, 193, 0.08) 100%);
+  border-color: #00BCD4; /* Cyan color */
 }
 
 .keypoint-item.locked {
@@ -541,7 +541,7 @@
 }
 
 .keypoint-item.completed .keypoint-number {
-  background: #4CAF50;
+  background: #00BCD4; /* Cyan color */
 }
 
 .keypoint-item.locked .keypoint-number {
@@ -575,7 +575,7 @@
   font-size: 32px;
   width: 32px;
   height: 32px;
-  color: #4CAF50;
+  color: #00BCD4; /* Cyan color */
   animation: unlock 0.5s ease-out;
 }
 
@@ -640,7 +640,7 @@
 .completed-time {
   margin-left: auto;
   font-size: var(--font-size-xs);
-  color: var(--color-neutral-600);
+  color: #00BCD4 !important; /* Cyan color for timestamp */
   font-weight: 500;
 }
 
@@ -806,18 +806,18 @@
 
 .stat-item.progress-stat {
   background: linear-gradient(135deg, 
-    rgba(76, 175, 80, 0.1) 0%, 
-    rgba(129, 199, 132, 0.1) 100%
+    rgba(0, 188, 212, 0.1) 0%, 
+    rgba(0, 172, 193, 0.1) 100%
   );
-  border-left: 3px solid #4CAF50;
+  border-left: 3px solid #00BCD4; /* Cyan color */
 }
 
 .stat-item.progress-stat mat-icon {
-  color: #4CAF50;
+  color: #00BCD4; /* Cyan color */
 }
 
 .stat-item.progress-stat span {
-  color: #2E7D32;
+  color: #00ACC1; /* Darker cyan */
   font-weight: 700;
 }
 
@@ -828,9 +828,9 @@
 .position-controls {
   margin-top: var(--spacing-4);
   padding: var(--spacing-4);
-  background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(66, 165, 245, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.08) 0%, rgba(0, 172, 193, 0.08) 100%);
   border-radius: var(--border-radius-lg);
-  border-left: 4px solid #2196F3;
+  border-left: 4px solid #00BCD4; /* Cyan color */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -840,7 +840,7 @@
 .position-hint {
   margin: 0;
   font-size: var(--font-size-sm);
-  color: #1565C0;
+  color: #00BCD4; /* Cyan color */
   font-weight: 600;
   text-align: center;
   display: flex;
@@ -852,7 +852,7 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
-  color: #2196F3;
+  color: #00BCD4; /* Cyan color */
 }
 
 .save-position-btn {
@@ -867,12 +867,16 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
+  background-color: #00BCD4 !important; /* Cyan color */
+  color: white !important;
 }
 
 .save-position-btn:not(:disabled):hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  background-color: #00ACC1 !important; /* Darker cyan on hover */
 }
+
 
 .save-position-btn:disabled {
   opacity: 0.5;
@@ -901,7 +905,7 @@
    ============================================================================ */
 
 ::ng-deep .info-snackbar {
-  background: linear-gradient(135deg, #2196F3, #42A5F5) !important;
+  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important; /* Cyan gradient */
   color: white !important;
   font-weight: 600 !important;
   font-size: 16px !important;
@@ -915,16 +919,16 @@
 
 /* POSITION READY STATE */
 .position-controls.position-ready {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.12) 0%, rgba(129, 199, 132, 0.12) 100%);
-  border-left-color: #4CAF50;
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.12) 0%, rgba(0, 172, 193, 0.12) 100%);
+  border-left-color: #00BCD4; /* Cyan color */
 }
 
 .position-controls.position-ready .position-hint {
-  color: #2E7D32;
+  color: #00ACC1; /* Darker cyan */
 }
 
 .position-controls.position-ready .position-hint mat-icon {
-  color: #4CAF50;
+  color: #00BCD4; /* Cyan color */
   animation: checkPulse 1s ease-in-out;
 }
 

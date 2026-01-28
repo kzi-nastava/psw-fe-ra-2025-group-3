@@ -112,6 +112,34 @@
   margin-bottom: var(--spacing-4);
 }
 
+.cart-empty .cart-btn {
+  min-width: 200px;
+  height: 48px;
+  padding: 0 var(--spacing-4);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.cart-empty .cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cart-empty .cart-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
 /* CART GRID */
 .cart-grid {
   display: grid;
