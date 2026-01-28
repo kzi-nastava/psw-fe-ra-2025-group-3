@@ -11,26 +11,17 @@ import { TourService } from '../../tour.service';
 })
 export class KeyPointPageComponent implements OnInit, OnChanges {
 
-  @ViewChild(KeyPointFormComponent)
-  keyPointFormComponent!: KeyPointFormComponent;
+  @ViewChild(KeyPointFormComponent) keyPointFormComponent!: KeyPointFormComponent;
   
-  // Location selected on the map (for new or edited key point)
   selectedPoint: { lat: number; lng: number } | null = null;
-
-  // Currently selected key point from the list (for edit)
   selectedKeyPoint: KeyPoint | null = null;
 
-  // For map – coordinates for the route
   routeWayPoints: { lat: number; lng: number }[] = [];
-
-  // For map – markers with name
   routePoints: { lat: number; lng: number; name?: string }[] = [];
 
-  // For list – full key point objects
   keyPoints: KeyPoint[] = [];
 
   @Input() currentTourId!: number;
-
 
   constructor(
     private keyPointService: KeyPointService,
@@ -38,117 +29,54 @@ export class KeyPointPageComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-  if (this.currentTourId) this.loadKeyPoints();
-}
-
-ngOnChanges(changes: SimpleChanges): void {
-  if (changes['currentTourId'] && this.currentTourId) {
-    this.loadKeyPoints();
+    if (this.currentTourId) this.loadKeyPoints();
   }
-}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentTourId'] && this.currentTourId) {
+      this.loadKeyPoints();
+    }
+  }
 
   private loadKeyPoints(): void {
     this.keyPointService.getAll(this.currentTourId).subscribe({
       next: (response) => {
-        console.log('Key points response:', response);
-        this.keyPoints = response.results.sort((a, b) => a.id - b.id);
-
-        this.routeWayPoints = this.keyPoints.map(kp => ({
-          lat: kp.latitude,
-          lng: kp.longitude
-        }));
-        console.log('🔵 loadKeyPoints routeWayPoints:', this.routeWayPoints);
-
-        this.routePoints = this.keyPoints.map(kp => ({
-          lat: kp.latitude,
-          lng: kp.longitude,
-          name: kp.name
-        }));
+        const results = (Array.isArray(response) ? response : response.results || []);
+        this.keyPoints = results.sort((a: any, b: any) => a.id - b.id);
+        this.updateMapData();
       },
-      error: (err: any) => {
-        console.error('Error while loading key points:', err);
+      error: () => {
         this.keyPoints = [];
-        this.routeWayPoints = [];
-        this.routePoints = [];
+        this.updateMapData();
       }
     });
   }
 
-  // Click on map (either new KP, or moving existing location)
-  onPointSelected(point: { lat: number; lng: number }) {
-    this.selectedPoint = point;
-    console.log('Selected point:', point);
+  private updateMapData(): void {
+    this.routeWayPoints = this.keyPoints.map(kp => ({ lat: kp.latitude, lng: kp.longitude }));
+    this.routePoints = this.keyPoints.map(kp => ({ lat: kp.latitude, lng: kp.longitude, name: kp.name }));
   }
 
-  // "Add key point" button – enter CREATE mode
+
+  onPointSelected(point: { lat: number; lng: number }) {
+    this.selectedPoint = point;
+    console.log("Point selected:", point);
+  }
+
   onAddNewKeyPoint(): void {
     this.selectedKeyPoint = null;
     this.selectedPoint = null;
     this.keyPointFormComponent?.resetForm();
   }
 
-  // Click on list item – enter EDIT mode
   onKeyPointSelectedFromList(kp: KeyPoint): void {
     this.selectedKeyPoint = kp;
-    this.selectedPoint = {
-      lat: kp.latitude,
-      lng: kp.longitude
-    };
-
-    console.log('Key point selected for edit:', kp);
+    this.selectedPoint = { lat: kp.latitude, lng: kp.longitude };
   }
 
-  // DELETE from list – triggered by trash icon
-  onKeyPointDelete(kp: KeyPoint): void {
-    if (!kp.id) {
-      console.error('Cannot delete key point without id.');
-      return;
-    }
-
-    const confirmed = window.confirm(
-      `Are you sure you want to delete key point "${kp.name}"?`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    this.keyPointService.delete(kp.id).subscribe({
-      next: () => {
-        console.log('Key point deleted:', kp);
-
-        // Remove from local array
-        this.keyPoints = this.keyPoints.filter(k => k.id !== kp.id);
-
-        // Rebuild route data for the map
-        this.routeWayPoints = this.keyPoints.map(point => ({
-          lat: point.latitude,
-          lng: point.longitude
-        }));
-
-        this.routePoints = this.keyPoints.map(point => ({
-          lat: point.latitude,
-          lng: point.longitude,
-          name: point.name
-        }));
-
-        // If deleted point was currently selected – clear selection + form
-        if (this.selectedKeyPoint && this.selectedKeyPoint.id === kp.id) {
-          this.selectedKeyPoint = null;
-          this.selectedPoint = null;
-          this.keyPointFormComponent?.resetForm();
-        }
-      },
-      error: (err: any) => {
-        console.error('Error while deleting key point:', err);
-      }
-    });
-  }
-
-  // Save from form – CREATE or UPDATE depending on selectedKeyPoint
   onKeyPointSave(formData: any) {
     if (!this.selectedPoint) {
-      console.error('No map location selected – cannot save key point.');
+      alert("Please click on the map to set the location!");
       return;
     }
 
@@ -161,60 +89,44 @@ ngOnChanges(changes: SimpleChanges): void {
       latitude: this.selectedPoint.lat,
       longitude: this.selectedPoint.lng
     };
-    
 
-    // EDIT mode – UPDATE existing key point
-    if (this.selectedKeyPoint && this.selectedKeyPoint.id != null) {
-      const updatedKeyPoint: KeyPoint = {
-        ...this.selectedKeyPoint,
-        ...baseKeyPoint
-      };
-
-      this.keyPointService.update(updatedKeyPoint).subscribe({
-        next: (saved: KeyPoint) => {
-          console.log('Key point updated:', saved);
-          this.loadKeyPoints();
-
-          this.keyPointFormComponent?.resetForm();
-          this.selectedPoint = null;
-          this.selectedKeyPoint = null;
-        },
-        error: (err: any) => {
-          console.error('Error while updating key point:', err);
-        }
+    if (this.selectedKeyPoint && this.selectedKeyPoint.id) {
+      const updated = { ...this.selectedKeyPoint, ...baseKeyPoint };
+      this.keyPointService.update(updated).subscribe({
+        next: () => { this.loadKeyPoints(); this.onAddNewKeyPoint(); },
+        error: (err) => console.error(err)
       });
-
-      return;
+    } 
+    else {
+      const createRequest = {
+        keyPoint: baseKeyPoint,
+        encounter: formData.encounter ?? null
+      };
+      this.keyPointService.create(createRequest as any).subscribe({
+        next: () => { this.loadKeyPoints(); this.onAddNewKeyPoint(); },
+        error: (err) => console.error(err)
+      });
     }
-    const createRequest = {
-      keyPoint: baseKeyPoint,
-      encounter: formData.encounter ?? null
-    };
+  }
 
-    // CREATE mode – new key point
-    this.keyPointService.create(createRequest as any).subscribe({
-      next: (saved: KeyPoint) => {
-        console.log('Key point saved:', saved);
-        this.loadKeyPoints();
-
-        this.keyPointFormComponent?.resetForm();
-        this.selectedPoint = null;
-        this.selectedKeyPoint = null;
-      },
-      error: (err: any) => {
-        console.error('Error while saving key point:', err);
+  onKeyPointDelete(kp: KeyPoint): void {
+    if (!kp.id || !confirm(`Delete "${kp.name}"?`)) return;
+    this.keyPointService.delete(kp.id).subscribe({
+      next: () => {
+        this.keyPoints = this.keyPoints.filter(k => k.id !== kp.id);
+        this.updateMapData();
+        if (this.selectedKeyPoint?.id === kp.id) this.onAddNewKeyPoint();
       }
     });
   }
 
   onKeyPointCancel() {
-    console.log('Key point create/edit cancelled.');
-    this.selectedKeyPoint = null;
-    this.selectedPoint = null;
-    this.keyPointFormComponent?.resetForm();
+    this.onAddNewKeyPoint();
   }
 
   onRouteDistanceChanged(distanceKm: number) {
-    this.tourService.updateDistance(this.currentTourId, distanceKm).subscribe();
+    if (this.currentTourId) {
+       this.tourService.updateDistance(this.currentTourId, distanceKm).subscribe();
+    }
   }
 }

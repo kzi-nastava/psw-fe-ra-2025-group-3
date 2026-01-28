@@ -1,73 +1,82 @@
-<div class="step-content">
-  <div class="kp-page">
-    <div class="kp-container">
+<div class="kp-layout">
 
-      <!-- Top: map + sidebar -->
-      <div class="kp-main">
+  <div class="kp-top-section">
+    
+    <div class="kp-card kp-map-wrapper">
+      <div class="kp-card-header">
+        <h3 class="kp-card-title">Route Map</h3>
+        <span *ngIf="selectedPoint" class="coordinates-badge">
+          Selected: {{ selectedPoint.lat | number:'1.4-4' }}, {{ selectedPoint.lng | number:'1.4-4' }}
+        </span>
+      </div>
+      
+      <div class="map-content">
+        <xp-map
+          [mode]="'route-edit-object'"
+          [waypoints]="routeWayPoints"
+          [points]="routePoints"
+          [initialPoint]="selectedPoint || undefined"
+          (pointSelected)="onPointSelected($event)"
+          (routeDistanceChanged)="onRouteDistanceChanged($event)">
+        </xp-map>
 
-        <!-- Map as the main card -->
-        <div class="kp-card kp-map">
-          <div class="kp-card-header">
-            <h2 class="kp-title">Key point route</h2>
-            <p class="kp-subtitle">
-              Overview of the route and positions of all key points on the map.
-            </p>
-          </div>
-
-          <div class="kp-map-wrapper">
-            <xp-map
-              [mode]="'route-edit-object'"
-              [waypoints]="routeWayPoints"
-              [points]="routePoints"
-              [initialPoint]="selectedPoint || undefined"
-              (pointSelected)="onPointSelected($event)"
-              (routeDistanceChanged)="onRouteDistanceChanged($event)">
-            </xp-map>
-          </div>
-
-          <p *ngIf="selectedPoint" class="kp-selected">
-            Selected point:
-            <span>{{ selectedPoint.lat | number:'1.5-5' }}, {{ selectedPoint.lng | number:'1.5-5' }}</span>
-          </p>
+        <div *ngIf="!selectedPoint" class="map-overlay-instruction">
+          Click on map to add pin
         </div>
+      </div>
+    </div>
 
-        <!-- Sidebar: button + list -->
-        <div class="kp-card kp-side">
-          <div class="kp-card-header kp-side-header">
-            <h3 class="kp-side-title">Key points</h3>
-            <button mat-raised-button color="primary" (click)="onAddNewKeyPoint()">
-              Add key point
-            </button>
-          </div>
-
-          <xp-key-point-list
-            [keyPoints]="keyPoints"
-            (keyPointSelected)="onKeyPointSelectedFromList($event)"
-            (keyPointDelete)="onKeyPointDelete($event)">
-          </xp-key-point-list>
-        </div>
-
+    <div class="kp-card kp-list-wrapper">
+      <div class="kp-card-header">
+        <h3 class="kp-card-title">Key Points</h3>
+        <button 
+          mat-icon-button 
+          color="primary" 
+          (click)="onAddNewKeyPoint()" 
+          *ngIf="selectedKeyPoint" 
+          matTooltip="Add New Key Point"
+        >
+          <mat-icon>add_circle</mat-icon>
+        </button>
       </div>
 
-      <!-- Bottom: form -->
-      <div class="kp-card kp-form">
-        <div class="kp-card-header">
-          <h3 class="kp-form-title">
-            {{ selectedKeyPoint ? 'Edit key point' : 'New key point' }}
-          </h3>
-          <p class="kp-subtitle">
-            Enter the details and choose a location on the map to save a key point.
-          </p>
+      <div class="list-scroll-area">
+        <xp-key-point-list
+          [keyPoints]="keyPoints"
+          (keyPointSelected)="onKeyPointSelectedFromList($event)"
+          (keyPointDelete)="onKeyPointDelete($event)">
+        </xp-key-point-list>
+        
+        <div *ngIf="keyPoints.length === 0" class="list-empty-state">
+          <mat-icon>format_list_bulleted</mat-icon>
+          <p>List is empty</p>
         </div>
-
-        <xp-key-point-form
-          [isEditMode]="!!selectedKeyPoint"
-          [keyPoint]="selectedKeyPoint"
-          (save)="onKeyPointSave($event)"
-          (cancel)="onKeyPointCancel()">
-        </xp-key-point-form>
       </div>
+    </div>
 
+  </div>
+
+  <div class="kp-card kp-form-wrapper">
+    <div class="kp-card-header form-header">
+      <div class="header-left">
+        <mat-icon class="header-icon">{{ selectedKeyPoint ? 'edit' : 'add_location' }}</mat-icon>
+        <h3 class="kp-card-title">{{ selectedKeyPoint ? 'Edit Key Point' : 'Create New Key Point' }}</h3>
+      </div>
+      
+      <span *ngIf="!selectedPoint" class="warning-badge">
+        <mat-icon>warning</mat-icon>
+        Location required
+      </span>
+    </div>
+
+    <div class="form-content">
+      <xp-key-point-form
+        [isEditMode]="!!selectedKeyPoint"
+        [keyPoint]="selectedKeyPoint"
+        (save)="onKeyPointSave($event)"
+        (cancel)="onKeyPointCancel()">
+      </xp-key-point-form>
     </div>
   </div>
+
 </div>
