@@ -30,18 +30,14 @@
   gap: var(--spacing-6);
   padding: var(--spacing-8);
   margin-bottom: var(--spacing-8);
-  
-
   background: linear-gradient(135deg, 
     #00C853 0%,      
     #00897B 50%,    
     #00ACC1 100%     
   );
-  
   color: var(--color-neutral-0);
   border-radius: var(--border-radius-2xl);
   box-shadow: var(--shadow-xl);
-  
   position: relative;
   overflow: hidden;
 }
@@ -109,10 +105,7 @@
   border-radius: var(--border-radius-2xl);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
-  
- 
   border-top: 5px solid var(--color-primary-500);
-  
   transition: all var(--transition-normal);
   background: var(--color-neutral-0);
 }
@@ -743,18 +736,42 @@
 }
 
 
-/* COMPLETE DUGME  */
+/* COMPLETE DUGME - Cyan boja u skladu sa globalnim stilom */
 .action-buttons button.complete-btn {
-  background: linear-gradient(135deg, #00BCD4, #00ACC1) !important; 
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important; 
   color: var(--color-neutral-0) !important;
   border: none !important;
   box-shadow: var(--shadow-md);
+  font-weight: 700;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-buttons button.complete-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.action-buttons button.complete-btn:hover::before {
+  left: 100%;
 }
 
 .action-buttons button.complete-btn:hover {
-  background: linear-gradient(135deg, #00ACC1, #0097A7) !important; 
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700)) !important; 
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
+}
+
+.action-buttons button.complete-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
 }
 
 /* ABANDON DUGME  */

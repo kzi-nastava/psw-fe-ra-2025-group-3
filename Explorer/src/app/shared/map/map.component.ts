@@ -84,10 +84,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
     private setInitialPointMarker(): void {
         if (!this.map || !this.initialPoint) return;
 
-        if (this.clickMarker) {
-            this.map.removeLayer(this.clickMarker);
-        }
-
         // Use default icon with proper anchor
         const defaultIcon = L.icon({
             iconUrl: this.initialPoint.iconUrl ?? 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -99,7 +95,32 @@ export class MapComponent implements AfterViewInit, OnChanges {
         });
 
         if (this.isRouteMode) {
-            this.clickMarker = this.pointMarkers[0];
+            
+            if (this.pointMarkers && this.pointMarkers.length > 0) {
+                // Ako clickMarker nije pointMarkers[0], ukloni ga i koristi pointMarkers[0]
+                if (this.clickMarker && this.clickMarker !== this.pointMarkers[0]) {
+                    this.map.removeLayer(this.clickMarker);
+                }
+                this.clickMarker = this.pointMarkers[0];
+                // Ažuriraj poziciju
+                this.clickMarker.setLatLng([this.initialPoint.lat, this.initialPoint.lng]);
+            } else {
+                // Ako nema pointMarkers[0], ukloni stari clickMarker i kreiraj novi
+                if (this.clickMarker) {
+                    this.map.removeLayer(this.clickMarker);
+                }
+                this.clickMarker = L.marker(
+                    [this.initialPoint.lat, this.initialPoint.lng],
+                    {
+                        draggable: true,
+                        icon: defaultIcon,
+                        autoPan: false,
+                    }
+                ).addTo(this.map);
+            }
+            
+          
+            this.clickMarker.off('dragend');
             this.clickMarker.on('dragend', (event: L.LeafletEvent) => {
                 const marker = event.target as L.Marker;
                 const pos = marker.getLatLng();
@@ -108,6 +129,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
             this.clickMarker.setZIndexOffset(100);
         } else {
+          
+            if (this.clickMarker) {
+                this.map.removeLayer(this.clickMarker);
+            }
             this.clickMarker = L.marker(
                         [this.initialPoint.lat, this.initialPoint.lng],
                         {
@@ -130,8 +155,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
     private loadAllPoints(): void {
         if (!this.map) return;   // ako mapa još nije spremna, ne radi ništa
 
-        // skloni sve stare markere sa mape
-        this.pointMarkers.forEach(m => this.map.removeLayer(m));
+        // clickMarker se uklanja samo u setInitialPointMarker() kada se pozove
+        this.pointMarkers.forEach(m => {
+            if (this.map.hasLayer(m)) {
+                this.map.removeLayer(m);
+            }
+        });
         this.pointMarkers = [];
 
         if (!this.points) return;
@@ -285,7 +314,6 @@ registerOnClick(): void {
         const lat = coord.lat;
         const lng = coord.lng;
 
-        // ✅ Route-view mod: SAMO pomeri marker
         if (this.isRouteMode) {
             if (this.clickMarker) {
                 this.clickMarker.setLatLng([lat, lng]);
@@ -294,7 +322,6 @@ registerOnClick(): void {
             return;
         }
 
-        // ✅ Object-view mod: SAMO pomeri marker
         if (this.mode === 'object-view') {
             if (this.clickMarker) {
                 this.clickMarker.setLatLng([lat, lng]);
@@ -303,7 +330,6 @@ registerOnClick(): void {
             return;
         }
 
-        // ✅ Edit mod: Standardna logika sa API pozivima
         if (this.mode === 'edit-object') {
             this.mapService.reverseSearch(lat, lng).subscribe({
                 next: () => { },
