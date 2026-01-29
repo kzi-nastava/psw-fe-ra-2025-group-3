@@ -8,6 +8,7 @@ import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
 import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { TouristStats, RANK_CONFIGS } from '../model/tourist-stats.model';
+import  { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'xp-profile',
@@ -37,7 +38,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private service: StakeholderService,
     private welcomeBonusService: WelcomeBonusService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) { }
  
 
@@ -54,6 +56,14 @@ export class ProfileComponent implements OnInit {
         this.loadAuthorStats();
       } else {
         this.authorStats = null;
+      }
+    });
+
+    this.route.fragment.subscribe(fragment => {
+      if (fragment === 'achievements') {
+        setTimeout(() => {
+          document.getElementById('achievements')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
       }
     });
     
