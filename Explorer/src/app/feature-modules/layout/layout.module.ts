@@ -10,6 +10,7 @@ import { TouristMapComponent } from './tourist-map/tourist-map.component';
 import { NotificationBadgeComponent } from './notification-badge/notification-badge.component';
 import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
+import { AcRewardNotificationComponent } from './ac-reward-notification/ac-reward-notification.component';
 import { CartDropdownComponent } from './cart-dropdown/cart-dropdown.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -29,6 +30,7 @@ import { LevelUpGuideComponent } from './level-up-guide/level-up-guide.component
     NotificationBadgeComponent,
     NotificationDropdownComponent,
     NotificationItemComponent,
+    AcRewardNotificationComponent,
     CartDropdownComponent,
     FeaturedToursComponent,
     TourPreviewComponent,

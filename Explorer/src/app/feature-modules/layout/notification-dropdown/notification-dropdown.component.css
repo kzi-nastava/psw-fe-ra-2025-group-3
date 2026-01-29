@@ -113,6 +113,12 @@
   padding: 8px;
 }
 
+/* Special styling for AC reward notifications */
+.notification-list xp-ac-reward-notification {
+  display: block;
+  margin-bottom: 12px;
+}
+
 .notification-list::-webkit-scrollbar {
   width: 6px;
 }

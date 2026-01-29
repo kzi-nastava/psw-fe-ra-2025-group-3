@@ -33,6 +33,8 @@ export class NotificationItemComponent {
         return 'account_balance_wallet';
       case NotificationType.TourOnSale:
         return 'local_offer';
+      case NotificationType.TourRewardAc:
+        return 'stars';
       default:
         return 'notifications';
     }
@@ -50,6 +52,8 @@ export class NotificationItemComponent {
         return 'var(--color-primary-500)';
       case NotificationType.TourOnSale:
         return '#ff6f00';
+      case NotificationType.TourRewardAc:
+        return '#ffd700';
       default:
         return '#757575';
     }
@@ -103,6 +107,14 @@ export class NotificationItemComponent {
 
         if (this.notification.type === NotificationType.TourOnSale) {
           this.router.navigate(['/tourist/tours']); 
+          this.notificationClicked.emit();
+          return;
+        }
+
+        if (this.notification.type === NotificationType.TourRewardAc) {
+          if (user.role === 'tourist') {
+            this.router.navigate(['/tourist/wallet']);
+          }
           this.notificationClicked.emit();
           return;
         }

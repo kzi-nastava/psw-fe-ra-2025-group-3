@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { NotificationService } from '../notification.service';
-import { NotificationDto } from '../model/notification.model';
+import { NotificationDto, NotificationType } from '../model/notification.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,6 +14,7 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
 
   notifications: NotificationDto[] = [];
   isLoading: boolean = true;
+  NotificationType = NotificationType;
 
   private destroy$ = new Subject<void>();
 
@@ -24,6 +25,10 @@ export class NotificationDropdownComponent implements OnInit, OnDestroy {
     this.notificationService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe(n => {
+        console.log('Notifications updated in dropdown:', {
+          count: n.length,
+          types: n.map(notif => ({ id: notif.id, type: notif.type, message: notif.message }))
+        });
         this.notifications = n.slice(0, 20);
         this.isLoading = false;
       });
