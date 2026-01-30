@@ -16,6 +16,8 @@ export class AchievementsComponent implements OnInit {
 
   unlockedCodes = new Set<string>();
 
+  
+
   toursCompleted: AchievementIcon[] = [
     { code: 'FirstTourCompleted', title: '1 tour completed', iconPath: 'assets/achievement-icons/oneTourCompleted.png' },
     { code: 'FiveToursCompleted', title: '5 tours completed', iconPath: 'assets/achievement-icons/fiveToursCompleted.png' },
@@ -40,6 +42,12 @@ export class AchievementsComponent implements OnInit {
     { code: 'FirstAppReview', title: 'Reviewed the app', iconPath: 'assets/achievement-icons/appReviewed.png' },
     { code: 'FirstProfilePictureSet', title: 'Profile picture set', iconPath: 'assets/achievement-icons/profilePictureSet.png' }
   ];
+  groups = [
+    { title: 'Tours bought', items: this.toursBought },
+    { title: 'Tours completed', items: this.toursCompleted },
+    { title: 'Tour reviews', items: this.tourReviews },
+    { title: 'Other achievements', items: this.otherAchievements }
+  ];
 
   constructor(private achievementsService: AchievementsService) {}
 
@@ -57,5 +65,34 @@ export class AchievementsComponent implements OnInit {
 
   isUnlocked(code: string): boolean {
     return this.unlockedCodes.has(code);
+  }
+  get totalCount(): number {
+    return (
+      this.toursBought.length +
+      this.toursCompleted.length +
+      this.tourReviews.length +
+      this.otherAchievements.length
+    );
+  }
+
+  get unlockedCount(): number {
+    const all = [
+      ...this.toursBought,
+      ...this.toursCompleted,
+      ...this.tourReviews,
+      ...this.otherAchievements
+    ];
+
+    let count = 0;
+    for (const a of all) {
+      if (this.unlockedCodes.has(a.code)) count++;
+    }
+    return count;
+  }
+
+  get unlockedPercent(): number {
+    const total = this.totalCount;
+    if (total === 0) return 0;
+    return Math.round((this.unlockedCount / total) * 100);
   }
 }
