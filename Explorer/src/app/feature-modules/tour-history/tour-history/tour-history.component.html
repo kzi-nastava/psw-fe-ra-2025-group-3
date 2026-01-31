@@ -69,7 +69,16 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					<!-- Tour Actions -->
+					<div class="tour-card-actions">
+						<button 
+							mat-raised-button 
+							color="primary" 
+							(click)="viewDetails(tour.tourId)">
+							<mat-icon>info</mat-icon>
+							View Details
+						</button>
+					</div>					</div>
 				</div>
 				<div *ngIf="completedTours.length === 0" class="empty-state">
 					<mat-icon class="empty-icon">explore_off</mat-icon>
