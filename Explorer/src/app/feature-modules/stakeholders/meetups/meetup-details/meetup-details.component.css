@@ -7,6 +7,7 @@
 }
 
 .back-button {
+  color: var(--color-primary-500);
   margin-bottom: var(--spacing-6);
   font-size: var(--font-size-base);
 }
@@ -63,7 +64,22 @@
   font-size: var(--font-size-base);
 }
 
+.map-section {
+    height: 400px;
+    width: 100%;
+    margin-bottom: var(--spacing-8);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 188, 212, 0.2);
+}
 
+::ng-deep .map-section xp-map, 
+::ng-deep .map-section #map {
+  height: 100% !important;
+  width: 100% !important;
+  display: block;
+}
 
 .related-tour-box {
   background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-800));
