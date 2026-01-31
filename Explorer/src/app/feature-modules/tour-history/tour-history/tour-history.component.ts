@@ -140,4 +140,8 @@ export class TourHistoryComponent implements OnInit {
   navigateToMyTours(): void {
     this.router.navigate(['/tourist/my-tours']);
   }
+
+  viewDetails(tourId: number): void {
+    this.router.navigate(['/tourist/tours', tourId, 'details']);
+  }
 }

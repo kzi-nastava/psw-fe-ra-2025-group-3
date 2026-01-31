@@ -208,6 +208,7 @@
 	flex-direction: column;
 	transition: all 0.3s ease;
 	cursor: pointer;
+	height: 100%;
 }
 .tour-card:hover {
 	box-shadow: 0 8px 30px rgba(0, 131, 143, 0.20);
@@ -281,6 +282,10 @@
 /* Tour Content */
 .tour-card-content {
 	padding: 8px 20px 20px 20px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
 }
 .tour-info-row {
 	display: flex;
@@ -305,6 +310,41 @@
 	height: 18px;
 	color: #00ACC1;
 }
+
+/* Tour Actions */
+.tour-card-actions {
+	padding: 16px 20px;
+	display: flex;
+	gap: 12px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.tour-card-actions button {
+	flex: 1;
+	font-weight: 600 !important;
+	padding: 10px 20px !important;
+	border-radius: 12px !important;
+	transition: all 0.3s ease !important;
+	text-transform: none !important;
+	letter-spacing: 0.025em !important;
+	background: #00838F !important;
+	color: white !important;
+	box-shadow: 0 2px 8px rgba(0, 131, 143, 0.3) !important;
+}
+
+.tour-card-actions button:hover {
+	background: #006064 !important;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 131, 143, 0.4) !important;
+}
+
+.tour-card-actions button mat-icon {
+	margin-right: 6px;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
 .empty-state {
 	display: flex;
 	flex-direction: column;
