@@ -20,6 +20,9 @@ export class StakeholderService {
   private touristStatsUpdated$ = new Subject<void>();
   public touristStatsUpdated = this.touristStatsUpdated$.asObservable();
 
+  private profileUpdated$ = new Subject<void>();
+  public profileUpdated = this.profileUpdated$.asObservable();
+
   private readonly profileUrl = environment.apiHost + 'stakeholders/person';
   private readonly authorStatsUrl = environment.apiHost + 'authors/me/profile-stats';
   private readonly baseUrl = environment.apiHost + 'stakeholders/person';
@@ -102,6 +105,11 @@ claimRankRewards(): Observable<any> {
 notifyTouristStatsUpdated(): void {
   this.touristStatsUpdated$.next();
 }
+
+notifyProfileUpdated(): void {
+  this.profileUpdated$.next();
+}
+
 getTopAuthors(sort: string = 'rating', take: number = 20): Observable<AuthorTopListItemDto[]> {
   return this.http.get<AuthorTopListItemDto[]>(`${this.authorsTopUrl}?sort=${sort}&take=${take}`);
 }

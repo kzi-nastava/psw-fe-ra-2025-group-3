@@ -1,10 +1,16 @@
-<div class="container py-8">
+<!-- Profile Layout with Sidebar for Tourists -->
+<div class="profile-layout">
+  <xp-profile-sidebar></xp-profile-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="profile-content">
+    <div class="container py-8">
   
-  <!-- Header Section -->
-    <div class="header">
-      <h1>My preferences</h1>
-      <p class="cart-subtitle">Customize your journey according to your preferences</p>
-    </div>
+      <!-- Header Section -->
+      <div class="header">
+        <h1>My preferences</h1>
+        <p class="cart-subtitle">Customize your journey according to your preferences</p>
+      </div>
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="card text-center animate-fade-in-up">
@@ -52,7 +58,11 @@
             <mat-icon class="text-primary">directions_walk</mat-icon>
             <div>
               <strong>Walking</strong>
-              <p class="m-0">{{ getRatingStars(preference!.walkingRating) }}</p>
+              <p class="m-0 rating-stars">
+                <mat-icon *ngFor="let star of getRatingStars(preference!.walkingRating)" [class.filled]="star === 1">
+                  {{ star === 1 ? 'star' : 'star_border' }}
+                </mat-icon>
+              </p>
             </div>
           </div>
         </div>
@@ -63,7 +73,11 @@
             <mat-icon class="text-primary">directions_bike</mat-icon>
             <div>
               <strong>Bicycle</strong>
-              <p class="m-0">{{ getRatingStars(preference!.bicycleRating) }}</p>
+              <p class="m-0 rating-stars">
+                <mat-icon *ngFor="let star of getRatingStars(preference!.bicycleRating)" [class.filled]="star === 1">
+                  {{ star === 1 ? 'star' : 'star_border' }}
+                </mat-icon>
+              </p>
             </div>
           </div>
         </div>
@@ -74,7 +88,11 @@
             <mat-icon class="text-primary">directions_car</mat-icon>
             <div>
               <strong>Car</strong>
-              <p class="m-0">{{ getRatingStars(preference!.carRating) }}</p>
+              <p class="m-0 rating-stars">
+                <mat-icon *ngFor="let star of getRatingStars(preference!.carRating)" [class.filled]="star === 1">
+                  {{ star === 1 ? 'star' : 'star_border' }}
+                </mat-icon>
+              </p>
             </div>
           </div>
         </div>
@@ -85,7 +103,11 @@
             <mat-icon class="text-primary">directions_boat</mat-icon>
             <div>
               <strong>Boat</strong>
-              <p class="m-0">{{ getRatingStars(preference!.boatRating) }}</p>
+              <p class="m-0 rating-stars">
+                <mat-icon *ngFor="let star of getRatingStars(preference!.boatRating)" [class.filled]="star === 1">
+                  {{ star === 1 ? 'star' : 'star_border' }}
+                </mat-icon>
+              </p>
             </div>
           </div>
         </div>
@@ -137,4 +159,6 @@
     </xp-preference-form>
   </div>
 
+    </div>
+  </div>
 </div>

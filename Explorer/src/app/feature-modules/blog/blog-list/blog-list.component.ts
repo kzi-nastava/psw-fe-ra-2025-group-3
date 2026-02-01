@@ -29,6 +29,10 @@ export class BlogListComponent implements OnInit {
     this.loadBlogs();
   }
 
+  goToProfile(): void {
+    this.router.navigate(['/profile']);
+  }
+
   loadBlogs(): void {
     this.isLoading = true;
     this.blogService.getMyBlogs().subscribe({

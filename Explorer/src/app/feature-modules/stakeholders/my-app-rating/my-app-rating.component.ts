@@ -17,6 +17,7 @@ export class MyAppRatingComponent implements OnInit {
   role!: 'author' | 'tourist';
 
   stars: number[] = [1, 2, 3, 4, 5];
+  hoveredStar: number = 0;
 
   constructor(
     private fb: FormBuilder,
