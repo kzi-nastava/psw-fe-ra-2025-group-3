@@ -8,59 +8,84 @@
       <mat-card class="rating-card">
         
         <div class="rating-header">
-          <h2>Rate application</h2>
+          <div class="header-content">
+            <mat-icon class="header-icon">star_rate</mat-icon>
+            <div>
+              <h2>Rate Travel Vista</h2>
+              <p class="header-subtitle">Help us improve your experience</p>
+            </div>
+          </div>
         </div>
 
         <mat-card-content>
           <form [formGroup]="form" (ngSubmit)="onSave()">
 
             <div class="field-row">
-              <label>Rating (1–5)</label>
+              <label class="field-label">
+                <mat-icon class="label-icon">grade</mat-icon>
+                How would you rate your experience?
+              </label>
 
-              <div class="stars">
-                <span
-                  *ngFor="let v of stars"
-                  class="star"
-                  [class.selected]="v <= form.get('rating')?.value"
-                  (click)="setRating(v)"
-                >
-                  ★
-                </span>
-              </div>
+              <div class="stars-container">
+                <div class="stars">
+                  <span
+                    *ngFor="let v of stars"
+                    class="star"
+                    [class.selected]="v <= form.get('rating')?.value"
+                    [class.hovered]="v <= hoveredStar"
+                    (click)="setRating(v)"
+                    (mouseenter)="hoveredStar = v"
+                    (mouseleave)="hoveredStar = 0"
+                  >
+                    ★
+                  </span>
+                </div>
 
-              <div class="current-rating" *ngIf="form.get('rating')?.value">
-                {{ form.get('rating')?.value }}/5
+                <div class="rating-labels">
+                  <span class="rating-label" *ngIf="form.get('rating')?.value === 1">Poor</span>
+                  <span class="rating-label" *ngIf="form.get('rating')?.value === 2">Fair</span>
+                  <span class="rating-label" *ngIf="form.get('rating')?.value === 3">Good</span>
+                  <span class="rating-label" *ngIf="form.get('rating')?.value === 4">Very Good</span>
+                  <span class="rating-label" *ngIf="form.get('rating')?.value === 5">Excellent</span>
+                </div>
+
+                <div class="current-rating" *ngIf="form.get('rating')?.value">
+                  <mat-icon class="rating-icon">stars</mat-icon>
+                  {{ form.get('rating')?.value }}/5 Stars
+                </div>
               </div>
 
               <div class="error" *ngIf="form.get('rating')?.touched && form.get('rating')?.invalid">
-                Rating is required and must be between 1 and 5.
+                <mat-icon>error_outline</mat-icon>
+                Please select a rating between 1 and 5 stars
               </div>
             </div>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Comment (optional)</mat-label>
-              <textarea
-                matInput
-                rows="4"
-                formControlName="comment">
-              </textarea>
-
-              <mat-error *ngIf="form.get('comment')?.hasError('maxlength')">
-                Comment cannot be longer than 1000 characters.
-              </mat-error>
-            </mat-form-field>
-
-            <div class="buttons">
-              <button mat-raised-button color="primary" class="submit-btn" type="submit">
-                {{ existingRating ? 'Update rating' : 'Create rating' }}
-              </button>
+            <div class="comment-section">
+              <label class="field-label">
+                <mat-icon class="label-icon">comment</mat-icon>
+                Share your thoughts (optional)
+              </label>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tell us more about your experience...</mat-label>
+                <textarea
+                  matInput
+                  rows="5"
+                  formControlName="comment"
+                  placeholder="What did you like? What could be better?">
+                </textarea>
+                <mat-hint align="end">{{ form.get('comment')?.value?.length || 0 }}/1000</mat-hint>
+                <mat-error *ngIf="form.get('comment')?.hasError('maxlength')">
+                  Comment cannot exceed 1000 characters
+                </mat-error>
+              </mat-form-field>
             </div>
 
-            <div class="meta" *ngIf="existingRating">
-              <p>Created at: {{ existingRating.createdAt | date:'short' }}</p>
-              <p *ngIf="existingRating.updatedAt">
-                Last updated: {{ existingRating.updatedAt | date:'short' }}
-              </p>
+            <div class="buttons">
+              <button mat-raised-button color="primary" class="submit-btn" type="submit" [disabled]="form.invalid">
+                <mat-icon>{{ existingRating ? 'update' : 'send' }}</mat-icon>
+                {{ existingRating ? 'Update Rating' : 'Submit Rating' }}
+              </button>
             </div>
 
           </form>
@@ -76,59 +101,84 @@
   <mat-card class="rating-card">
     
     <div class="rating-header">
-      <h2>Rate application</h2>
+      <div class="header-content">
+        <mat-icon class="header-icon">star_rate</mat-icon>
+        <div>
+          <h2>Rate Travel Vista</h2>
+          <p class="header-subtitle">Help us improve your experience</p>
+        </div>
+      </div>
     </div>
 
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSave()">
 
         <div class="field-row">
-          <label>Rating (1–5)</label>
+          <label class="field-label">
+            <mat-icon class="label-icon">grade</mat-icon>
+            How would you rate your experience?
+          </label>
 
-          <div class="stars">
-            <span
-              *ngFor="let v of stars"
-              class="star"
-              [class.selected]="v <= form.get('rating')?.value"
-              (click)="setRating(v)"
-            >
-              ★
-            </span>
-          </div>
+          <div class="stars-container">
+            <div class="stars">
+              <span
+                *ngFor="let v of stars"
+                class="star"
+                [class.selected]="v <= form.get('rating')?.value"
+                [class.hovered]="v <= hoveredStar"
+                (click)="setRating(v)"
+                (mouseenter)="hoveredStar = v"
+                (mouseleave)="hoveredStar = 0"
+              >
+                ★
+              </span>
+            </div>
 
-          <div class="current-rating" *ngIf="form.get('rating')?.value">
-            {{ form.get('rating')?.value }}/5
+            <div class="rating-labels">
+              <span class="rating-label" *ngIf="form.get('rating')?.value === 1">Poor</span>
+              <span class="rating-label" *ngIf="form.get('rating')?.value === 2">Fair</span>
+              <span class="rating-label" *ngIf="form.get('rating')?.value === 3">Good</span>
+              <span class="rating-label" *ngIf="form.get('rating')?.value === 4">Very Good</span>
+              <span class="rating-label" *ngIf="form.get('rating')?.value === 5">Excellent</span>
+            </div>
+
+            <div class="current-rating" *ngIf="form.get('rating')?.value">
+              <mat-icon class="rating-icon">stars</mat-icon>
+              {{ form.get('rating')?.value }}/5 Stars
+            </div>
           </div>
 
           <div class="error" *ngIf="form.get('rating')?.touched && form.get('rating')?.invalid">
-            Rating is required and must be between 1 and 5.
+            <mat-icon>error_outline</mat-icon>
+            Please select a rating between 1 and 5 stars
           </div>
         </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Comment (optional)</mat-label>
-          <textarea
-            matInput
-            rows="4"
-            formControlName="comment">
-          </textarea>
-
-          <mat-error *ngIf="form.get('comment')?.hasError('maxlength')">
-            Comment cannot be longer than 1000 characters.
-          </mat-error>
-        </mat-form-field>
-
-        <div class="buttons">
-          <button mat-raised-button color="primary" class="submit-btn" type="submit">
-            {{ existingRating ? 'Update rating' : 'Create rating' }}
-          </button>
+        <div class="comment-section">
+          <label class="field-label">
+            <mat-icon class="label-icon">comment</mat-icon>
+            Share your thoughts (optional)
+          </label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tell us more about your experience...</mat-label>
+            <textarea
+              matInput
+              rows="5"
+              formControlName="comment"
+              placeholder="What did you like? What could be better?">
+            </textarea>
+            <mat-hint align="end">{{ form.get('comment')?.value?.length || 0 }}/1000</mat-hint>
+            <mat-error *ngIf="form.get('comment')?.hasError('maxlength')">
+              Comment cannot exceed 1000 characters
+            </mat-error>
+          </mat-form-field>
         </div>
 
-        <div class="meta" *ngIf="existingRating">
-          <p>Created at: {{ existingRating.createdAt | date:'short' }}</p>
-          <p *ngIf="existingRating.updatedAt">
-            Last updated: {{ existingRating.updatedAt | date:'short' }}
-          </p>
+        <div class="buttons">
+          <button mat-raised-button color="primary" class="submit-btn" type="submit" [disabled]="form.invalid">
+            <mat-icon>{{ existingRating ? 'update' : 'send' }}</mat-icon>
+            {{ existingRating ? 'Update Rating' : 'Submit Rating' }}
+          </button>
         </div>
 
       </form>

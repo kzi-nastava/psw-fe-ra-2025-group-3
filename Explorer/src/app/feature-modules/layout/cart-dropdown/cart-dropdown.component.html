@@ -1,9 +1,15 @@
 <div class="cart-dropdown">
   <div class="dropdown-header">
     <h3>My Cart</h3>
-    <span class="items-count" *ngIf="cart && getTotalItemsCount() > 0">
-      {{ getTotalItemsCount() }} {{ getTotalItemsCount() === 1 ? 'item' : 'items' }}
-    </span>
+    <div class="header-info">
+      <span class="balance-info" *ngIf="wallet">
+        <mat-icon class="balance-icon">account_balance_wallet</mat-icon>
+        Balance: {{ wallet.balanceAc }} AC
+      </span>
+      <span class="items-count" *ngIf="cart && getTotalItemsCount() > 0">
+        {{ getTotalItemsCount() }} {{ getTotalItemsCount() === 1 ? 'item' : 'items' }}
+      </span>
+    </div>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">

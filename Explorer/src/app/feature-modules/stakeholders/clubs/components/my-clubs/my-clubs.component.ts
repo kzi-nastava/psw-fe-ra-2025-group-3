@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { ClubService } from '../../club.service';
 import { ClubDto } from '../../model/club.model';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
@@ -23,11 +24,16 @@ export class MyClubsComponent implements OnInit {
     private clubService: ClubService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadClubs();
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['/profile']);
   }
 
   loadClubs(): void {

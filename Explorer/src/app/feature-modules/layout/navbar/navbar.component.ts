@@ -56,6 +56,13 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+    // Subscribe to profile updates
+    this.stakeholderService.profileUpdated
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadProfile();
+      });
+
     // Osvežavaj korpu kada se promeni
     this.shoppingCartService.cartUpdated
       .pipe(takeUntil(this.destroy$))

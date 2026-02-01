@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ShoppingCartService } from '../../stakeholders/shopping-cart.service';
+import { WalletService } from '../../stakeholders/wallet.service';
 import { ShoppingCart } from '../../stakeholders/model/shopping-cart.model';
+import { WalletDto } from '../../stakeholders/model/wallet.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -14,17 +16,20 @@ export class CartDropdownComponent implements OnInit, OnDestroy {
   @Output() closeDropdown = new EventEmitter<void>();
 
   cart: ShoppingCart | null = null;
+  wallet: WalletDto | null = null;
   isLoading: boolean = true;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private shoppingCartService: ShoppingCartService,
+    private walletService: WalletService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadCart();
+    this.loadWallet();
 
     // Osvežavaj korpu kada se promeni
     this.shoppingCartService.cartUpdated
@@ -50,6 +55,17 @@ export class CartDropdownComponent implements OnInit, OnDestroy {
         console.error('Error loading cart:', error);
         this.cart = null;
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadWallet(): void {
+    this.walletService.getMyWallet().subscribe({
+      next: (wallet) => {
+        this.wallet = wallet;
+      },
+      error: (error) => {
+        console.error('Error loading wallet:', error);
       }
     });
   }

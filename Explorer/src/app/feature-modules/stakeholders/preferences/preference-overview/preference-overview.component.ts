@@ -54,8 +54,8 @@ export class PreferenceOverviewComponent implements OnInit {
     }
   }
 
-  getRatingStars(rating: number): string {
-    return '⭐'.repeat(rating) + '☆'.repeat(3 - rating);
+  getRatingStars(rating: number): number[] {
+    return Array(rating).fill(1).concat(Array(3 - rating).fill(0));
   }
 
   onEditClicked(): void {
