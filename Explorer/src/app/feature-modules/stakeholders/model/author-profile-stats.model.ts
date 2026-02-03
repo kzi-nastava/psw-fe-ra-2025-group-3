@@ -1,3 +1,4 @@
+import { AuthorTourDto } from './author-tour.model';
 export interface RecentTourReviewDto {
   reviewId: number;
   tourId: number;
@@ -10,8 +11,11 @@ export interface RecentTourReviewDto {
 export interface AuthorProfileStatsDto {
   authorId: number;
   totalTours: number;
+  authorName: string;
+  authorSurname: string;
   totalReviews: number;
   averageRating: number;
   totalPurchases: number;
   recentReviews: RecentTourReviewDto[];
+  tours: AuthorTourDto[];
 }
