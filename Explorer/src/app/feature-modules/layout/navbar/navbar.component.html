@@ -151,44 +151,61 @@
 
       <!-- Tourist Dropdowns -->
       <ng-container *ngIf="user && user.role === 'tourist'">
-        <!-- Dropdown: My Activities -->
-        <button mat-button [matMenuTriggerFor]="touristActivitiesMenu" class="nav-menu-button">
+        <!-- Dropdown: Tours -->
+        <button mat-button [matMenuTriggerFor]="touristToursMenu" class="nav-menu-button">
           <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
-          <span>My Activities</span>
-          <mat-icon>play_circle</mat-icon>
+          <span>Tours</span>
+          <mat-icon>map</mat-icon>
         </button>
-        <mat-menu #touristActivitiesMenu="matMenu" class="custom-menu">
+        <mat-menu #touristToursMenu="matMenu" class="custom-menu">
           <button mat-menu-item routerLink="/tour-execution/active">
             <mat-icon>play_circle</mat-icon>
             <span>Active Tour</span>
           </button>
+          <button mat-menu-item routerLink="/tourist/tours">
+            <mat-icon>shopping_bag</mat-icon>
+            <span>Tours Shop</span>
+          </button>
+          <button mat-menu-item routerLink="/tourist/bundles">
+            <mat-icon>inventory_2</mat-icon>
+            <span>Tour Bundles Shop</span>
+          </button>
           <button mat-menu-item routerLink="/tourist/my-tours">
             <mat-icon>list</mat-icon>
-            <span>My Purchased Tours</span>
-          </button>
-          <button mat-menu-item routerLink="/tourist/my-reviews">
-            <mat-icon>rate_review</mat-icon>
-            <span>My Reviews</span>
+            <span>Purchased Tours</span>
           </button>
           <button mat-menu-item routerLink="/tourist/tour-history">
-            <mat-icon>history_edu</mat-icon>
+            <mat-icon>history</mat-icon>
             <span>Tour History</span>
+          </button>
+        </mat-menu>
+
+        <!-- Dropdown: My Activity -->
+        <button mat-button [matMenuTriggerFor]="touristActivityMenu" class="nav-menu-button">
+          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+          <span>My Activity</span>
+          <mat-icon>local_activity</mat-icon>
+        </button>
+        <mat-menu #touristActivityMenu="matMenu" class="custom-menu">
+          <button mat-menu-item routerLink="/tourist/my-reviews">
+            <mat-icon>rate_review</mat-icon>
+            <span>Reviews</span>
           </button>
           <button mat-menu-item routerLink="/tourist/diaries">
             <mat-icon>menu_book</mat-icon>
-            <span>My Diaries</span>
+            <span>Diaries</span>
           </button>
-          <button mat-menu-item routerLink="/tourist/equipment">
-            <mat-icon>backpack</mat-icon>
-            <span>My Equipment</span>
+          <button mat-menu-item routerLink="/my-clubs">
+            <mat-icon>groups</mat-icon>
+            <span>My Clubs</span>
           </button>
-          <button mat-menu-item routerLink="/tourist/preferences">
-            <mat-icon>tune</mat-icon>
-            <span>Preferences</span>
+          <button mat-menu-item routerLink="/tourist/blogs">
+            <mat-icon>article</mat-icon>
+            <span>My Blogs</span>
           </button>
           <button mat-menu-item routerLink="/tour-execution/tour-problems">
             <mat-icon>report_problem</mat-icon>
-            <span>My Problems</span>
+            <span>Problems</span>
           </button>
         </mat-menu>
 
@@ -199,25 +216,17 @@
           <mat-icon>explore</mat-icon>
         </button>
         <mat-menu #touristExploreMenu="matMenu" class="custom-menu">
-          <button mat-menu-item routerLink="/tourist/tours">
-            <mat-icon>map</mat-icon>
-            <span>Tours</span>
-          </button>
           <button mat-menu-item (click)="goToTopAuthors()">
-            <mat-icon>groups</mat-icon>
+            <mat-icon>person</mat-icon>
             <span>Top Authors</span>
           </button>
-          <button mat-menu-item routerLink="/tourist/bundles">
-            <mat-icon>inventory_2</mat-icon>
-            <span>Tour Bundles</span>
-          </button>
           <button mat-menu-item routerLink="/tourist/encounters">
-            <mat-icon>star</mat-icon>
+            <mat-icon>stars</mat-icon>
             <span>Encounters</span>
           </button>
           <button mat-menu-item routerLink="/tourist/map">
-            <mat-icon>place</mat-icon>
-            <span>Explore Map</span>
+            <mat-icon>map</mat-icon>
+            <span>Map</span>
           </button>
         </mat-menu>
 
@@ -225,16 +234,16 @@
         <button mat-button [matMenuTriggerFor]="touristSocialMenu" class="nav-menu-button">
           <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
           <span>Social</span>
-          <mat-icon>groups</mat-icon>
+          <mat-icon>people</mat-icon>
         </button>
         <mat-menu #touristSocialMenu="matMenu" class="custom-menu">
+          <button mat-menu-item routerLink="/blogs">
+            <mat-icon>article</mat-icon>
+            <span>Blogs</span>
+          </button>
           <button mat-menu-item routerLink="/clubs">
             <mat-icon>groups</mat-icon>
             <span>Clubs</span>
-          </button>
-          <button mat-menu-item routerLink="/my-clubs">
-            <mat-icon>badge</mat-icon>
-            <span>My Clubs</span>
           </button>
           <button mat-menu-item routerLink="/meetups" 
                   [disabled]="touristStats && touristStats.level < 2"
@@ -242,23 +251,6 @@
             <mat-icon>event</mat-icon>
             <span>Meetups</span>
             <mat-icon *ngIf="touristStats && touristStats.level < 2" class="lock-icon">lock</mat-icon>
-          </button>
-        </mat-menu>
-
-        <!-- Dropdown: Blog -->
-        <button mat-button [matMenuTriggerFor]="touristBlogMenu" class="nav-menu-button">
-          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
-          <span>Blog</span>
-          <mat-icon>article</mat-icon>
-        </button>
-        <mat-menu #touristBlogMenu="matMenu" class="custom-menu">
-          <button mat-menu-item routerLink="/blogs">
-            <mat-icon>article</mat-icon>
-            <span>Blogs</span>
-          </button>
-          <button mat-menu-item routerLink="/tourist/blogs">
-            <mat-icon>article</mat-icon>
-            <span>My Blogs</span>
           </button>
         </mat-menu>
       </ng-container>
@@ -310,11 +302,14 @@
       </button>
 
       <!-- Profile Picture (when authenticated) -->
-      <a *ngIf="user && user.username !== ''" routerLink="/profile" class="profile-picture-link" [matTooltip]="user.username || 'Profile'">
-        <img [src]="profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
-             (error)="onImageError($event)"
-             alt="Profile" 
-             class="profile-picture">
+      <a *ngIf="user && user.username !== ''" routerLink="/profile" class="profile-picture-link">
+        <div class="profile-picture-container">
+          <img [src]="profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
+               (error)="onImageError($event)"
+               alt="Profile" 
+               class="profile-picture">
+          <span class="profile-label">My Profile</span>
+        </div>
       </a>
 
       <!-- Logout Button (when authenticated) -->
