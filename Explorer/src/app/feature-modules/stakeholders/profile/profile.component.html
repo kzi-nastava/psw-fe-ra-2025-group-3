@@ -8,11 +8,24 @@
       <!-- Profile Header Card -->
       <div class="profile-header-card">
         <div class="profile-header-content">
-          <div class="image-container">
+          <div class="image-container" 
+               [class.editing]="isEditing"
+               [class.dragging]="isDragging"
+               (dragover)="onDragOver($event)" 
+               (dragleave)="onDragLeave($event)" 
+               (drop)="onDrop($event)"
+               (click)="isEditing ? fileInputHeader.click() : null">
+            
             <img [src]="profileForm.value.profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
                  alt="Profile Picture" 
                  class="profile-image">
+            <div class="upload-overlay" *ngIf="isEditing">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Change Photo</span>
+            </div>
+            <input #fileInputHeader type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
           </div>
+
           <div class="profile-header-info">
             <h1 class="profile-name">{{ profileForm.value.name }} {{ profileForm.value.surname }}</h1>
             <p class="profile-email">
@@ -64,12 +77,33 @@
               <input matInput formControlName="email" type="email">
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Profile Picture URL</mat-label>
-              <mat-icon matPrefix>image</mat-icon>
-              <input matInput formControlName="profilePictureUrl" placeholder="https://example.com/my-photo.jpg">
-            </mat-form-field>
-          </div>
+            <div class="full-width upload-container" *ngIf="isEditing">
+              <label class="upload-label">Profile Picture</label>
+              
+              <div class="upload-box" 
+                   [class.dragging]="isDragging"
+                   (dragover)="onDragOver($event)" 
+                   (dragleave)="onDragLeave($event)" 
+                   (drop)="onDrop($event)"
+                   (click)="fileInputForm.click()">
+                
+                <div class="upload-content">
+                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                  
+                  <div class="upload-text">
+                    <span *ngIf="!profileForm.value.profilePictureUrl">Click or Drag image here to upload</span>
+                    <span *ngIf="profileForm.value.profilePictureUrl" class="file-success">
+                      <mat-icon>check_circle</mat-icon> New image selected
+                    </span>
+                  </div>
+                  
+                  <p class="upload-hint">Supported formats: JPG, PNG</p>
+                </div>
+            
+                <input #fileInputForm type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+              </div>
+            </div>
+            </div>
         </div>
 
         <!-- About Me Section -->
@@ -143,10 +177,24 @@
   <!-- Profile Header Card -->
   <div class="profile-header-card">
     <div class="profile-header-content">
-      <div class="image-container">
+      <div class="image-container" 
+           [class.editing]="isEditing"
+           [class.dragging]="isDragging"
+           (dragover)="onDragOver($event)" 
+           (dragleave)="onDragLeave($event)" 
+           (drop)="onDrop($event)"
+           (click)="isEditing ? fileInputAuthorHeader.click() : null">
+           
         <img [src]="profileForm.value.profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
              alt="Profile Picture" 
              class="profile-image">
+             
+         <div class="upload-overlay" *ngIf="isEditing">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Change Photo</span>
+          </div>
+
+         <input #fileInputAuthorHeader type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
       </div>
       <div class="profile-header-info">
         <h1 class="profile-name">{{ profileForm.value.name }} {{ profileForm.value.surname }}</h1>
@@ -194,12 +242,33 @@
           <input matInput formControlName="email" type="email">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Profile Picture URL</mat-label>
-          <mat-icon matPrefix>image</mat-icon>
-          <input matInput formControlName="profilePictureUrl" placeholder="https://example.com/my-photo.jpg">
-        </mat-form-field>
-      </div>
+        <div class="full-width upload-container" *ngIf="isEditing">
+          <label class="upload-label">Profile Picture</label>
+          
+          <div class="upload-box" 
+               [class.dragging]="isDragging"
+               (dragover)="onDragOver($event)" 
+               (dragleave)="onDragLeave($event)" 
+               (drop)="onDrop($event)"
+               (click)="fileInputAuthorForm.click()">
+            
+            <div class="upload-content">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              
+              <div class="upload-text">
+                <span *ngIf="!profileForm.value.profilePictureUrl">Click or Drag image here to upload</span>
+                <span *ngIf="profileForm.value.profilePictureUrl" class="file-success">
+                  <mat-icon>check_circle</mat-icon> New image selected
+                </span>
+              </div>
+              
+              <p class="upload-hint">Supported formats: JPG, PNG</p>
+            </div>
+        
+            <input #fileInputAuthorForm type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+          </div>
+        </div>
+        </div>
     </div>
 
     <!-- About Me Section -->

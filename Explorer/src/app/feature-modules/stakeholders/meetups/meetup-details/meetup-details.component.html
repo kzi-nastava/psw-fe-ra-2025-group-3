@@ -17,9 +17,18 @@
       </div>
 
       <div class="info-item">
-        <strong>Location:</strong>
-        <p>Latitude: {{ meetup.latitude }}, Longitude: {{ meetup.longitude }}</p>
+        <strong>Address:</strong>
+        <p>{{ meetup.address }}</p>
       </div>
+    </div>
+
+    <div class="map-section">
+        <xp-map 
+            [center]="[meetup.latitude, meetup.longitude]" 
+            [points]="mapPoints" 
+            [zoom]="15" 
+            [mode]="'object-view'">
+        </xp-map>
     </div>
 
     <div class="related-tour-box mb-8 p-6" *ngIf="meetup.tourId && userRole === 'tourist'">

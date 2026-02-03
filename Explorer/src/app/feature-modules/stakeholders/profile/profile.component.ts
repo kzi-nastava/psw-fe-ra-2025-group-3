@@ -23,8 +23,9 @@ export class ProfileComponent implements OnInit {
   authorStats: AuthorProfileStatsDto | null = null;
   isAuthor = false;
   touristStats: TouristStats | null = null;
-  
 
+  isDragging = false;
+  
   profileForm = new FormGroup({
     name: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
@@ -82,6 +83,7 @@ export class ProfileComponent implements OnInit {
         });
         this.profileForm.disable();
         this.isEditing = false;
+        this.isDragging = false;
       },
       error: (err) => {
         console.error('Failed to load profile:', err);
@@ -112,6 +114,58 @@ export class ProfileComponent implements OnInit {
       this.profileForm.enable();
       this.isEditing = true;
     }
+  }
+
+  onDragOver(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      this.handleFile(file);
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    if (!this.isEditing) return;
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.handleFile(input.files[0]);
+    }
+  }
+
+  private handleFile(file: File): void {
+    // Basic validation
+    if (!file.type.match('image.*')) {
+      alert('Only image files are allowed!');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      // Postavljamo Base64 string u formu
+      this.profileForm.patchValue({
+        profilePictureUrl: e.target.result
+      });
+      this.profileForm.markAsDirty();
+    };
+    reader.readAsDataURL(file);
   }
 
   saveChanges(): void {

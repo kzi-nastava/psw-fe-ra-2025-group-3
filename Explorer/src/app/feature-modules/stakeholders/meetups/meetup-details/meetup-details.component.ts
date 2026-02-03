@@ -14,6 +14,8 @@ export class MeetupDetailsComponent implements OnInit {
   isLoading: boolean = true;
   userRole: string = '';
 
+  mapPoints: { lat: number; lng: number; name?: string; color?: string }[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -22,6 +24,7 @@ export class MeetupDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.userRole = this.authService.user$.getValue().role.toLowerCase();
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -37,6 +40,12 @@ export class MeetupDetailsComponent implements OnInit {
     this.meetupService.getMeetupById(id).subscribe({
       next: (meetup) => {
         this.meetup = meetup;
+        this.mapPoints = [{
+            lat: meetup.latitude,
+            lng: meetup.longitude,
+            name: meetup.title,
+            color: 'red'
+        }];
         this.isLoading = false;
       },
       error: (error) => {
