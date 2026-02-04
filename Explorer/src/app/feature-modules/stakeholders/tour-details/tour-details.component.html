@@ -1,100 +1,218 @@
 <div class="details-container" *ngIf="!isLoading; else loadingBlock">
 
-  <div class="title-section">
-    <h1 class="title">{{ details.name }}</h1>
-    <button 
-      mat-icon-button 
-      class="wishlist-btn"
-      [class.active]="isInWishlist"
-      (click)="toggleWishlist()"
-      [disabled]="isLoadingWishlist || isPurchased"
-      matTooltip="{{ isInWishlist ? 'Remove from wishlist' : 'Add to wishlist' }}">
-      <mat-icon>{{ isInWishlist ? 'favorite' : 'favorite_border' }}</mat-icon>
-    </button>
-  </div>
+  <!-- Title header - full width -->
+  <div class="details-header">
+    <a class="back-to-tours" routerLink="/tourist/tours">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back to tours</span>
+    </a>
 
-  <div class="badge preview" *ngIf="!isPurchased">PREVIEW ONLY</div>
-  <div class="badge purchased" *ngIf="isPurchased">PURCHASED</div>
-
-  <p class="description">{{ details.description }}</p>
-
-  <!-- SLIDESHOW SLIKA -->
-  <div class="images" *ngIf="details?.images?.length">
-    <img *ngFor="let img of details.images" [src]="img" alt="Tour image">
-  </div>
-
-  <!-- INFO -->
-  <div class="info-box">
-    <p><strong>Length:</strong> {{ details.length }} km</p>
-    <p><strong>Average duration:</strong> {{ details.averageDuration }} min</p>
-    <p><strong>Start point:</strong> {{ details.startPoint }}</p>
-  </div>
-
-  <div class="equipment-section" *ngIf="details.equipment && details.equipment.length > 0" style="margin-top: 20px;">
-  <h2 style="font-size: 1.4rem; margin-bottom: 10px;">Required Equipment</h2>
-  <ul style="list-style-type: disc; padding-left: 20px;">
-    <li *ngFor="let item of details.equipment" style="margin-bottom: 5px; color: #555;">
-      <strong>{{ item.name }}</strong> 
-      <span *ngIf="item.description"> - {{ item.description }}</span>
-    </li>
-  </ul>
-</div>
-
-
-
-  <!-- KEYPOINTS -->
-  <div class="kp-section">
-
-    <h2>Route Key Points</h2>
-  
-    <!-- CANNOT SEE -->
-    <div *ngIf="!isPurchased" class="locked">
-      <mat-icon>lock</mat-icon>
-      <p>You must purchase this tour to unlock all key points.</p>
-    </div>
-
-    <!-- CAN SEE -->
-    <ul *ngIf="isPurchased">
-      <li *ngFor="let kp of details.keyPoints">
-        <strong>{{ kp.name }}</strong>  
-        <span class="coords">({{ kp.latitude }}, {{ kp.longitude }})</span>
-      </li>
-    </ul>
-
-  </div>
-
- <!-- MEETUPS -->
-<div class="meetups-section" *ngIf="meetups && meetups.length > 0">
-    <h2>Related Meetups</h2>
-    
-    
-    <div class="meetup-list">
-      <div 
-        class="meetup-card" 
-        *ngFor="let m of meetups" 
-        (click)="openMeetup(m.id)">
-        
-        <div class="meetup-header">
-          <strong>{{ m.title }}</strong>
-          <span class="meetup-date">{{ m.dateTime | date:'mediumDate' }}</span>
+    <div class="header-main">
+      <div class="header-left">
+        <h1 class="details-title">{{ details.name }}</h1>
+        <div class="badges-row">
+          <span class="details-badge preview" *ngIf="!isPurchased">Preview only</span>
+          <span class="details-badge purchased" *ngIf="isPurchased">Purchased</span>
         </div>
-        <p class="meetup-desc">{{ m.description | slice:0:100 }}{{ m.description.length > 100 ? '...' : '' }}</p>
+      </div>
+
+      <div class="header-right">
+        <button
+          mat-icon-button
+          class="wishlist-btn"
+          [class.active]="isInWishlist"
+          (click)="toggleWishlist()"
+          [disabled]="isLoadingWishlist || isPurchased"
+          matTooltip="{{ isInWishlist ? 'Remove from wishlist' : 'Add to wishlist' }}">
+          <mat-icon>{{ isInWishlist ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+        <button
+          class="add-to-cart-btn tour-btn"
+          mat-raised-button
+          color="accent"
+          (click)="addToCart()"
+          [disabled]="isPurchased || isInCart">
+          <mat-icon>{{ isInCart ? 'shopping_cart' : 'add_shopping_cart' }}</mat-icon>
+          {{ isInCart ? 'In Cart' : 'Add to Cart' }}
+        </button>
       </div>
     </div>
   </div>
 
- <!-- REVIEWS -->
- <h2 class="reviews-title">Reviews</h2>
-  <xp-tour-reviews 
-    [tourId]="details.id"
-    [currentUserId]="currentUserId">
-  </xp-tour-reviews>
+  <!-- Main section: images left 60% | content right 40% -->
+  <div class="details-main-grid">
+    <!-- LEFT: Images -->
+    <div class="details-left">
+      <div class="image-carousel-wrapper" *ngIf="details?.images?.length">
+        <div class="image-carousel">
+          <button *ngIf="(details?.images?.length ?? 0) > 1" class="carousel-btn carousel-btn-left" (click)="prevImage()" aria-label="Previous image">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <div class="carousel-viewport" (click)="openFullscreen()">
+            <img
+              [src]="details.images[currentImageIndex]"
+              [alt]="'Tour image ' + (currentImageIndex + 1)"
+              class="carousel-image carousel-image-clickable" />
+            <span class="carousel-fullscreen-hint">
+              <mat-icon>fullscreen</mat-icon>
+              Click to view fullscreen
+            </span>
+          </div>
+
+          <button *ngIf="(details?.images?.length ?? 0) > 1" class="carousel-btn carousel-btn-right" (click)="nextImage()" aria-label="Next image">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <div class="carousel-indicators" *ngIf="(details?.images?.length ?? 0) > 1">
+          <button
+            *ngFor="let img of details.images; let i = index"
+            class="carousel-dot"
+            [class.active]="i === currentImageIndex"
+            (click)="goToImage(i)"
+            [attr.aria-label]="'Go to image ' + (i + 1)">
+          </button>
+        </div>
+
+        <div class="thumbnail-strip" *ngIf="(details?.images?.length ?? 0) > 1">
+          <button
+            *ngFor="let img of details.images; let i = index"
+            class="thumbnail-btn"
+            [class.active]="i === currentImageIndex"
+            (click)="goToImage(i)"
+            [attr.aria-label]="'Go to image ' + (i + 1)">
+            <img [src]="img" [alt]="'Thumbnail ' + (i + 1)" loading="lazy" />
+          </button>
+        </div>
+      </div>
+
+      <div class="image-placeholder" *ngIf="!details?.images?.length">
+        <mat-icon>image_not_supported</mat-icon>
+        <span>No images</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Description, info, equipment, key points, meetups -->
+    <div class="details-right">
+      <div class="details-card header-card description-block">
+        <p class="details-description">{{ details.description }}</p>
+      </div>
+
+      <div class="details-card info-card">
+        <h2 class="section-title">
+          <mat-icon>info</mat-icon>
+          Tour info
+        </h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>straighten</mat-icon>
+            <span><strong>Length:</strong> {{ details.length }} km</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>schedule</mat-icon>
+            <span><strong>Duration:</strong> {{ details.averageDuration }} min</span>
+          </div>
+          <div class="info-item">
+            <mat-icon>place</mat-icon>
+            <span><strong>Start:</strong> {{ details.startPoint }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-card equipment-card" *ngIf="details.equipment && details.equipment.length > 0">
+        <h2 class="section-title">
+          <mat-icon>backpack</mat-icon>
+          Required equipment
+        </h2>
+        <ul class="equipment-list">
+          <li *ngFor="let item of details.equipment" class="equipment-item">
+            <mat-icon>check_circle</mat-icon>
+            <span><strong>{{ item.name }}</strong><ng-container *ngIf="item.description"> – {{ item.description }}</ng-container></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="details-card kp-card">
+        <h2 class="section-title">
+          <mat-icon>map</mat-icon>
+          Route key points
+        </h2>
+
+        <div *ngIf="!isPurchased" class="locked-message">
+          <mat-icon>lock</mat-icon>
+          <p>Purchase this tour to unlock all key points.</p>
+        </div>
+
+        <ul *ngIf="isPurchased" class="kp-list">
+          <li *ngFor="let kp of details.keyPoints" class="kp-item">
+            <mat-icon>place</mat-icon>
+            <div>
+              <strong>{{ kp.name }}</strong>
+              <span class="kp-coords">({{ kp.latitude }}, {{ kp.longitude }})</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="details-card meetups-card" *ngIf="meetups && meetups.length > 0">
+        <h2 class="section-title">
+          <mat-icon>groups</mat-icon>
+          Related meetups
+        </h2>
+        <div class="meetup-grid">
+          <div
+            class="meetup-card-item"
+            *ngFor="let m of meetups"
+            (click)="openMeetup(m.id)">
+            <div class="meetup-card-header">
+              <strong>{{ m.title }}</strong>
+              <span class="meetup-date">{{ m.dateTime | date:'mediumDate' }}</span>
+            </div>
+            <p class="meetup-desc">{{ m.description | slice:0:120 }}{{ m.description.length > 120 ? '...' : '' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM: Reviews (full width) -->
+  <div class="details-card reviews-card">
+    <h2 class="section-title">
+      <mat-icon>rate_review</mat-icon>
+      Reviews
+    </h2>
+    <xp-tour-reviews
+      [tourId]="details.id"
+      [currentUserId]="currentUserId">
+    </xp-tour-reviews>
+  </div>
 
 </div>
 
+<!-- Fullscreen gallery -->
+<div class="fullscreen-gallery" *ngIf="isFullscreenOpen" (click)="closeFullscreen()">
+  <button class="fullscreen-close carousel-btn" (click)="closeFullscreen(); $event.stopPropagation()" aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </button>
+  <button *ngIf="(details?.images?.length ?? 0) > 1" class="fullscreen-prev carousel-btn"
+          (click)="prevImage(); $event.stopPropagation()" aria-label="Previous">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <img *ngIf="details?.images?.length"
+       [src]="details.images[currentImageIndex]"
+       [alt]="'Tour image ' + (currentImageIndex + 1)"
+       (click)="$event.stopPropagation()"
+       class="fullscreen-image" />
+  <button *ngIf="(details?.images?.length ?? 0) > 1" class="fullscreen-next carousel-btn"
+          (click)="nextImage(); $event.stopPropagation()" aria-label="Next">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
 
 <ng-template #loadingBlock>
-  <div class="loading">
-    <mat-spinner></mat-spinner>
+  <div class="loading-state">
+    <mat-spinner diameter="48"></mat-spinner>
+    <span>Loading tour details…</span>
   </div>
 </ng-template>

@@ -6,7 +6,8 @@ enum WalletTransactionType {
   AdminTopUp = 1,
   CheckoutPurchase = 2,
   WelcomeBonusAc = 3,
-  RankRewardAc = 4
+  RankRewardAc = 4,
+  TourCompletionRewardAc = 5
 }
 
 type TxFilter = 'all' | 'credit' | 'debit';
@@ -110,6 +111,7 @@ export class MyWalletTransactionsComponent implements OnInit {
       case WalletTransactionType.CheckoutPurchase: return 'Checkout purchase';
       case WalletTransactionType.WelcomeBonusAc: return 'Welcome bonus';
       case WalletTransactionType.RankRewardAc: return 'Rank reward';
+      case WalletTransactionType.TourCompletionRewardAc: return 'Tour completion reward';
       default: return 'Wallet transaction';
     }
   }
@@ -127,13 +129,11 @@ export class MyWalletTransactionsComponent implements OnInit {
 
       case WalletTransactionType.RankRewardAc:
         return 'You earned AC as a reward for reaching a new rank.';
+
+      case WalletTransactionType.TourCompletionRewardAc:
+        return 'You earned AC for completing a tour (base reward + completion bonuses).';
     }
 
-    // fallback: clean the raw text if something unexpected comes
-    const raw = (tx.description ?? '').toString();
-    const noParens = raw.replace(/\s*\([^)]*\)\s*/g, '').trim();
-    const noAmount = noParens.replace(/[:\-]?\s*[+\-]?\d+\s*AC\b/gi, '').trim();
-
-    return noAmount || 'Wallet transaction recorded.';
+    return 'Wallet transaction recorded.';
   }
 }
