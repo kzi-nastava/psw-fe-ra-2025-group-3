@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TourHistoryService } from '../tour-history.service';
 import { TourHistoryResponse, CompletedTour, TourStatistics, TourComparison } from '../tour-history.model';
@@ -9,7 +9,7 @@ import { TourService } from '../../tour-authoring/tour.service';
   templateUrl: './tour-history.component.html',
   styleUrls: ['./tour-history.component.css']
 })
-export class TourHistoryComponent implements OnInit {
+export class TourHistoryComponent implements OnInit, OnDestroy {
 
   loading = true;
   error = '';

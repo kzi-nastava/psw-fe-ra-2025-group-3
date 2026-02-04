@@ -6,7 +6,8 @@ import {
   TourExecution,
   TourExecutionCreateDto,
   LocationCheckDto,
-  LocationCheckResultDto
+  LocationCheckResultDto,
+  KeyPointDetailUnlockResult
 } from './model/tour-execution.model';
 import { Tour } from '../tour-authoring/model/tour.model';
 
@@ -44,5 +45,13 @@ export class TourExecutionService {
   abandonTour(): Observable<TourExecution> {
     console.log('[TourExecutionService] ⚠️ Abandoning tour');
     return this.http.post<TourExecution>(`${this.baseUrl}/abandon`, {});
+  }
+
+  /** Unlock detailed info (secret) for a key point by paying AC. Returns secret and new balance. */
+  unlockKeyPointDetails(keyPointId: number): Observable<KeyPointDetailUnlockResult> {
+    return this.http.post<KeyPointDetailUnlockResult>(
+      `${this.baseUrl}/keypoint/${keyPointId}/unlock-details`,
+      {}
+    );
   }
 }

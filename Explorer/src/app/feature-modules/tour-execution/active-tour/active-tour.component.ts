@@ -49,7 +49,19 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   // Position Simulator state
   tempSelectedPosition: { lat: number; lng: number } | null = null;
   currentTouristPosition: { lat: number; lng: number } | undefined;
-  
+
+  // Premium unlock: key point IDs for which user paid AC to see detailed info (secret). Persisted in localStorage.
+  unlockedDetailSecrets: Record<number, string> = {};
+  unlockDetailsLoadingId: number | null = null;
+  readonly UNLOCK_DETAIL_COST_AC = 5;
+
+  // Omiljena ključna tačka (srce) – jedna po turi, čuvana u localStorage.
+  favouriteKeyPointId: number | null = null;
+
+  // "Blizu si!" – prikaži jednom po key point kada je korisnik unutar BLIZU_SI_RADIUS_METERS (veće od otključavanja na 200 m).
+  private blizuSiShownForKeyPointIds = new Set<number>();
+  private readonly UNLOCK_RADIUS_METERS = 200;   // mora odgovarati backend TourExecution.KeyPointUnlockRadiusMeters
+  private readonly BLIZU_SI_RADIUS_METERS = 350;  // obaveštenje na većem pragu od otključavanja
 
   constructor(
     private tourExecutionService: TourExecutionService,
@@ -115,6 +127,8 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
       } as Tour; // dodato  as Tour
 
       console.log('[Active Tour] ✅ Mapped tour:', this.tour);
+      this.loadUnlockedDetailsFromStorage(tourId);
+      this.loadFavouriteFromStorage(tourId);
       this.loadKeyPoints(tourId);
     },
     error: (err) => {
@@ -224,24 +238,119 @@ private updateKeyPointsWithStatus(): void {
   
   console.log('[Active Tour] 🔍 Completed IDs from backend:', completedIds);
 
+  const unlockedSecrets = this.unlockedDetailSecrets;
   this.keyPointsWithStatus = this.keyPoints.map(kp => {
     const completion = this.execution!.completedKeyPoints?.find(c => c.keyPointId === kp.id);
-    
+    const detailsUnlockedWithAc = !!unlockedSecrets[kp.id];
+    const secretToShow = completion ? kp.secret : (unlockedSecrets[kp.id] ?? '');
     return {
       id: kp.id,
       name: kp.name,
       description: kp.description,
       imageUrl: kp.imageUrl,
-      secret: kp.secret,
+      secret: secretToShow || kp.secret,
       latitude: kp.latitude,
       longitude: kp.longitude,
       isCompleted: !!completion,
-      completedAt: completion?.completedAt
+      completedAt: completion?.completedAt,
+      detailsUnlockedWithAc
     };
   });
 
   console.log('[Active Tour] 🔓 KeyPoints with status:', this.keyPointsWithStatus);
 }
+
+  private loadUnlockedDetailsFromStorage(tourId: number): void {
+    const key = `unlocked_keypoints_${tourId}`;
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const arr = JSON.parse(raw) as { keyPointId: number; secret: string }[];
+        this.unlockedDetailSecrets = (arr || []).reduce((acc, x) => {
+          acc[x.keyPointId] = x.secret;
+          return acc;
+        }, {} as Record<number, string>);
+      } else {
+        this.unlockedDetailSecrets = {};
+      }
+    } catch {
+      this.unlockedDetailSecrets = {};
+    }
+  }
+
+  private saveUnlockedDetailsToStorage(tourId: number): void {
+    const key = `unlocked_keypoints_${tourId}`;
+    const arr = Object.entries(this.unlockedDetailSecrets).map(([id, secret]) => ({
+      keyPointId: +id,
+      secret
+    }));
+    localStorage.setItem(key, JSON.stringify(arr));
+  }
+
+  private loadFavouriteFromStorage(tourId: number): void {
+    const key = `favourite_keypoint_${tourId}`;
+    try {
+      const raw = localStorage.getItem(key);
+      this.favouriteKeyPointId = raw ? +raw : null;
+    } catch {
+      this.favouriteKeyPointId = null;
+    }
+  }
+
+  private saveFavouriteToStorage(tourId: number): void {
+    const key = `favourite_keypoint_${tourId}`;
+    if (this.favouriteKeyPointId == null) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, String(this.favouriteKeyPointId));
+    }
+  }
+
+  toggleFavourite(kp: KeyPointWithStatus): void {
+    if (!this.execution) return;
+    const tourId = this.execution.tourId;
+    if (this.favouriteKeyPointId === kp.id) {
+      this.favouriteKeyPointId = null;
+      this.snackBar.open('Removed from favourites', 'OK', { duration: 2000, panelClass: ['info-snackbar'] });
+    } else {
+      this.favouriteKeyPointId = kp.id;
+      this.snackBar.open('"' + kp.name + '" is now your highlight', 'OK', { duration: 2500, panelClass: ['info-snackbar'] });
+    }
+    this.saveFavouriteToStorage(tourId);
+  }
+
+  isFavourite(keyPointId: number): boolean {
+    return this.favouriteKeyPointId === keyPointId;
+  }
+
+  getFavouriteKeyPointName(): string | null {
+    if (this.favouriteKeyPointId == null) return null;
+    const kp = this.keyPointsWithStatus.find(k => k.id === this.favouriteKeyPointId);
+    return kp ? kp.name : null;
+  }
+
+  unlockKeyPointDetails(kp: KeyPointWithStatus): void {
+    if (kp.isCompleted || kp.detailsUnlockedWithAc || this.unlockDetailsLoadingId !== null) return;
+    this.unlockDetailsLoadingId = kp.id;
+    this.tourExecutionService.unlockKeyPointDetails(kp.id).subscribe({
+      next: (result) => {
+        this.unlockedDetailSecrets[kp.id] = result.secret;
+        if (this.execution) this.saveUnlockedDetailsToStorage(this.execution.tourId);
+        this.updateKeyPointsWithStatus();
+        this.unlockDetailsLoadingId = null;
+        this.snackBar.open(
+          `✨ Detailed info unlocked! (-${result.costAc} AC). Balance: ${result.newBalanceAc} AC`,
+          'Close',
+          { duration: 5000, panelClass: ['info-snackbar'] }
+        );
+      },
+      error: (err) => {
+        this.unlockDetailsLoadingId = null;
+        const msg = err?.error?.message || 'Failed to unlock. Check your AC balance.';
+        this.snackBar.open(msg, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
+      }
+    });
+  }
 
 // Ucitava restorane u blizini svih keypoint‑ova aktivne ture
 private loadNearbyRestaurants(): void {
@@ -448,6 +557,8 @@ private setupMapRouteFallback(): void {
         
         this.loadGroupSessionParticipants();
 
+        this.maybeShowBlizuSi(position.latitude, position.longitude);
+
         const dto: LocationCheckDto = {
           tourId: this.execution!.tourId,
           currentLatitude: position.latitude,
@@ -516,6 +627,36 @@ private updateMapWithCurrentPosition(lat: number, lng: number): void {
 
   console.log('[Active Tour] 🗺️ Map updated with tourist position:', this.currentTouristPosition);
 }
+
+  /** Haversine: rastojanje u metrima između dve GPS tačke. */
+  private haversineDistanceMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371000; // radijus Zemlje u m
+    const toRad = (deg: number) => (deg * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  /** Prikaži "Blizu si!" jednom po sledećoj key point kada je korisnik unutar BLIZU_SI_RADIUS_METERS ali još van UNLOCK_RADIUS_METERS. */
+  private maybeShowBlizuSi(lat: number, lng: number): void {
+    if (!this.nextKeyPoint) return;
+    const keyPointId = this.nextKeyPoint.id;
+    if (this.blizuSiShownForKeyPointIds.has(keyPointId)) return;
+
+    const distance = this.haversineDistanceMeters(lat, lng, this.nextKeyPoint.latitude, this.nextKeyPoint.longitude);
+    if (distance > this.UNLOCK_RADIUS_METERS && distance <= this.BLIZU_SI_RADIUS_METERS) {
+      this.blizuSiShownForKeyPointIds.add(keyPointId);
+      this.snackBar.open(
+        `Blizu si! Još malo do sledeće tačke: "${this.nextKeyPoint.name}".`,
+        'OK',
+        { duration: 5000, panelClass: ['info-snackbar'], horizontalPosition: 'center', verticalPosition: 'top' }
+      );
+    }
+  }
 
   private stopLocationCheck(): void {
     if (this.locationCheckSubscription) {

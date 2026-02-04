@@ -57,4 +57,14 @@ export interface KeyPointWithStatus {
   longitude: number;
   isCompleted: boolean;
   completedAt?: Date;
+  /** true if user paid AC to unlock detailed info (secret) before visiting */
+  detailsUnlockedWithAc?: boolean;
+}
+
+// Result of paying AC to unlock key point details
+export interface KeyPointDetailUnlockResult {
+  keyPointId: number;
+  secret: string;
+  costAc: number;
+  newBalanceAc: number;
 }
