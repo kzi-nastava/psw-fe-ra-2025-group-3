@@ -17,7 +17,7 @@ export class KeyPointListComponent {
   }
 
   onDeleteClick(kp: KeyPoint, event: MouseEvent) {
-    event.stopPropagation();           // da klik na kanticu ne trigeruje selekciju
+    event.stopPropagation();
     this.keyPointDelete.emit(kp);
   }
 }

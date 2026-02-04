@@ -1,14 +1,19 @@
 <div class="wizard">
   <div class="wizard__header">
     <div class="wizard__title-wrap">
-      <h2 class="wizard__title">Tour wizard</h2>
+      <h2 class="wizard__title">
+        {{ data.mode === 'edit' ? 'Edit Tour' : 'Create Tour' }}
+      </h2>
       <div class="wizard__subtitle">
-        {{ data.mode === 'edit' ? 'Edit existing tour and manage key points' : 'Create a new tour and add key points' }}
+        {{ data.mode === 'edit' ? 'Edit existing tour details' : 'Create a new tour step by step' }}
       </div>
     </div>
 
     <div class="wizard__actions">
-      <button mat-stroked-button (click)="cancel()">Cancel</button>
+      <button mat-stroked-button (click)="cancel()">
+        <mat-icon>close</mat-icon>
+        Cancel
+      </button>
     </div>
   </div>
 
@@ -18,7 +23,7 @@
     (selectedTabChange)="onTabChange($event)"
     [dynamicHeight]="false"
   >
-    <mat-tab label="Basic information">
+    <mat-tab label="Basic Information">
       <div class="step-content">
         <app-tour-form
           [mode]="data.mode"
@@ -30,7 +35,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Key points">
+    <mat-tab label="Key Points">
       <div class="step-content">
         <xp-key-point-page
           *ngIf="isOnKeyPoints && tourId as id"
@@ -38,29 +43,164 @@
         ></xp-key-point-page>
 
         <div *ngIf="isOnKeyPoints && !tourId" class="empty-state">
-          Please save the tour first in order to add key points.
+          <mat-icon>info</mat-icon>
+          <div>
+            <h3>Save tour first</h3>
+            <p>Please save the tour in the previous step to add key points.</p>
+          </div>
         </div>
       </div>
     </mat-tab>
+
+    <mat-tab label="Equipment">
+      <div class="step-content">
+        
+        <div *ngIf="isOnEquipment && tourId" class="equipment-dual-container" cdkDropListGroup>
+          
+          <div class="eq-list-wrapper">
+            <div class="eq-list-header">
+              <h3>Available Equipment</h3>
+              <div class="eq-search">
+                <mat-icon>search</mat-icon>
+                <input 
+                  type="text" 
+                  placeholder="Search equipment..." 
+                  [(ngModel)]="searchAvailable"
+                  aria-label="Search available equipment"
+                >
+              </div>
+            </div>
+
+            <div class="eq-list-container"
+              cdkDropList
+              [cdkDropListData]="availableEquipment"
+              (cdkDropListDropped)="drop($event)"
+            >
+              
+              <div class="eq-item" 
+                *ngFor="let item of availableEquipment" 
+                cdkDrag
+                [cdkDragData]="item"
+                [class.hidden]="!doesMatchSearch(item, searchAvailable)"
+                (click)="moveToSelected(item)"
+                [title]="item.name"
+              >
+                <div class="eq-item-content">
+                  <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+                  <span>{{ item.name }}</span>
+                </div>
+                <button 
+                  mat-icon-button 
+                  color="primary" 
+                  class="action-btn"
+                  [matTooltip]="'Add to tour'"
+                  matTooltipPosition="left"
+                >
+                  <mat-icon>add_circle_outline</mat-icon>
+                </button>
+              </div>
+
+              <div class="empty-list-placeholder" *ngIf="availableEquipment.length === 0">
+                No equipment available
+              </div>
+            </div>
+          </div>
+
+          <div class="eq-arrows">
+            <mat-icon>swap_horiz</mat-icon>
+          </div>
+
+          <div class="eq-list-wrapper selected-wrapper">
+            <div class="eq-list-header">
+              <h3>Selected Equipment</h3>
+              <div class="eq-search">
+                <mat-icon>search</mat-icon>
+                <input 
+                  type="text" 
+                  placeholder="Search selected..." 
+                  [(ngModel)]="searchSelected"
+                  aria-label="Search selected equipment"
+                >
+              </div>
+            </div>
+
+            <div class="eq-list-container"
+              cdkDropList
+              [cdkDropListData]="selectedEquipment"
+              (cdkDropListDropped)="drop($event)"
+            >
+              
+              <div class="eq-item selected-item" 
+                *ngFor="let item of selectedEquipment" 
+                cdkDrag
+                [cdkDragData]="item"
+                [class.hidden]="!doesMatchSearch(item, searchSelected)"
+                (click)="moveToAvailable(item)"
+                [title]="item.name"
+              >
+                <div class="eq-item-content">
+                  <mat-icon class="drag-handle" cdkDragHandle>drag_indicator</mat-icon>
+                  <span>{{ item.name }}</span>
+                </div>
+                <button 
+                  mat-icon-button 
+                  color="warn" 
+                  class="action-btn remove"
+                  [matTooltip]="'Remove from tour'"
+                  matTooltipPosition="left"
+                >
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </div>
+
+              <div class="empty-list-placeholder" *ngIf="selectedEquipment.length === 0">
+                Drag items here or click + to add to tour
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div *ngIf="isOnEquipment && !tourId" class="empty-state">
+          <mat-icon>info</mat-icon>
+          <div>
+            <h3>Save tour first</h3>
+            <p>Please save the tour in the first step to add equipment.</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
   </mat-tab-group>
 
   <div class="wizard__footer">
-    <button mat-stroked-button (click)="back()" [disabled]="isOnBasics">
+    <button 
+      mat-stroked-button 
+      (click)="back()" 
+      [disabled]="isOnBasics"
+    >
+      <mat-icon>arrow_back</mat-icon>
       Back
     </button>
 
     <div class="wizard__footer-actions">
-      <button
-        mat-raised-button
-        color="primary"
-        *ngIf="isOnBasics"
-        (click)="goToKeyPoints()"
-        [disabled]="!canOpenKeyPoints && data.mode !== 'edit'"
+      <button 
+        mat-raised-button 
+        color="primary" 
+        *ngIf="selectedIndex < 2" 
+        (click)="onNextClick()"
       >
         Next
+        <mat-icon>arrow_forward</mat-icon>
       </button>
 
-      <button mat-raised-button color="primary" *ngIf="isOnKeyPoints" (click)="finish()">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        *ngIf="isOnEquipment" 
+        (click)="finish()"
+      >
+        <mat-icon>check_circle</mat-icon>
         Finish
       </button>
     </div>

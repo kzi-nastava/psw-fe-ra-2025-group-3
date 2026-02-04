@@ -1,0 +1,158 @@
+<!-- author-profile.component.html -->
+<div class="author-profile-container">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-card">
+    <div class="loader"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div *ngIf="stats">
+
+    <!-- HEADER -->
+    <div class="header-card">
+      <div class="header-left">
+        <div class="header-text">
+          <h1 class="header-title">
+            {{ stats.authorName }} {{ stats.authorSurname }}
+          </h1>
+
+          <div class="header-meta">
+            <span class="pill">Author</span>
+            <span class="dot">•</span>
+            <span class="meta-item">{{ stats.totalTours }} tours</span>
+            <span class="dot">•</span>
+            <span class="meta-item">{{ stats.totalPurchases }} purchases</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="rating-badge">
+          <span class="star">★</span>
+          <span class="rating-value">{{ stats.averageRating }}</span>
+          <span class="rating-count">({{ stats.totalReviews }})</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label"><span class="ico">★</span> Average rating</div>
+        <div class="stat-value">
+          {{ stats.averageRating }}<span class="muted">/5</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label"><span class="ico">💬</span> Total reviews</div>
+        <div class="stat-value">{{ stats.totalReviews }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label"><span class="ico">🗺️</span> Total tours</div>
+        <div class="stat-value">{{ stats.totalTours }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label"><span class="ico">🎟️</span> Total purchases</div>
+        <div class="stat-value">{{ stats.totalPurchases }}</div>
+      </div>
+    </div>
+
+    <!-- TOURS -->
+    <div class="section-card" *ngIf="stats.tours?.length">
+
+      <h3 class="section-title">Author tours</h3>
+
+      <!-- INFO HINT -->
+      <div class="info-hint">
+        <div class="info-left">
+          <span class="info-ico">💡</span>
+          <div class="info-text">
+            <div class="info-title">Want full tour details?</div>
+            <div class="info-subtitle">
+              Open <b>Tours</b> in the navbar → <b>Tours Shop</b> to see the complete tour page.
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ ISPRAVAN LINK -->
+        <a class="info-cta" routerLink="/tourist/tours">
+          Go to Tours Shop →
+        </a>
+      </div>
+
+      <div class="author-tours-grid">
+        <div class="tour-card" *ngFor="let tour of stats.tours">
+          <div class="tour-header">
+            <h4 class="tour-title">{{ tour.name }}</h4>
+            <span class="tour-status" *ngIf="tour.status">{{ tour.status }}</span>
+          </div>
+
+          <p class="tour-description" *ngIf="tour.description">
+            {{ tour.description }}
+          </p>
+
+          <div class="tour-meta">
+            <span *ngIf="tour.durationMinutes">⏱ {{ tour.durationMinutes }} min</span>
+            <span *ngIf="tour.price">💰 {{ tour.price | number:'1.0-2' }}</span>
+            <span *ngIf="tour.difficulty">⚡ {{ tour.difficulty }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="section-card">
+      <h3 class="section-title">Most recent reviews</h3>
+
+      <div *ngIf="stats.recentReviews.length > 0" class="review-carousel">
+        <button class="carousel-arrow left"
+                (click)="prevReview()"
+                [disabled]="reviewIndex === 0">‹</button>
+
+        <div class="review-item featured">
+          <div class="review-top">
+            <div class="review-tour">
+              {{ stats.recentReviews[reviewIndex].tourName }}
+            </div>
+
+            <div class="review-rating">
+              <span class="stars">
+                <span *ngFor="let _ of [1,2,3,4,5]"
+                      class="s star-icon"
+                      [class.filled]="_ <= stats.recentReviews[reviewIndex].rating">★</span>
+              </span>
+              <span class="num">
+                {{ stats.recentReviews[reviewIndex].rating }}/5
+              </span>
+            </div>
+          </div>
+
+          <div class="review-comment">
+            {{ stats.recentReviews[reviewIndex].comment }}
+          </div>
+
+          <small class="review-date">
+            {{ stats.recentReviews[reviewIndex].createdAt | date:'medium' }}
+          </small>
+        </div>
+
+        <button class="carousel-arrow right"
+                (click)="nextReview()"
+                [disabled]="reviewIndex === stats.recentReviews.length - 1">›</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div *ngIf="!isLoading && !stats" class="empty-state">
+    <div class="empty-title">Author profile is not available</div>
+    <div class="empty-subtitle">Try again or go back to the top authors list.</div>
+  </div>
+
+</div>

@@ -1,7 +1,43 @@
+/* ==========================================================
+   1. POPRAVKA ZA DUPLU LINIJUI BOJU (MATERIAL OVERRIDES)
+   ========================================================== */
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+
+::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+    border-color: #B2EBF2 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: #00BCD4 !important;
+    border-width: 2px !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: #00BCD4 !important;
+}
+
+::ng-deep .mat-mdc-form-field-icon-prefix {
+  color: #00BCD4 !important;
+}
+
+/* ==========================================================
+   2. LAYOUT I STRUKTURA
+   ========================================================== */
+
 .kp-form {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding-bottom: 24px;
 }
 
 .kp-form-fields {
@@ -14,26 +50,33 @@
   width: 100%;
 }
 
+.full-width {
+  width: 100%;
+}
+
+.toggle-wrapper {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+}
+
 /* Dugmad */
 .kp-form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .kp-form {
-    gap: 16px;
-  }
+/* ==========================================================
+   3. UPLOAD BOX
+   ========================================================== */
 
-  .kp-form-actions {
-    justify-content: space-between;
-  }
+.upload-field {
+  display: flex;
+  flex-direction: column;
 }
-
-/* Upload image box styling */
 
 .upload-box {
   border: 2px dashed #4ba3f9;
@@ -43,10 +86,20 @@
   cursor: pointer;
   background-color: rgba(75,163,249,0.05);
   transition: .2s ease;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.upload-box.dragover {
+.upload-box:hover, .upload-box.dragover {
   background-color: rgba(75,163,249,0.15);
+  border-color: #00BCD4;
+}
+
+.upload-box.invalid {
+  border-color: #e53935 !important;
+  background-color: rgba(229, 57, 53, 0.04);
 }
 
 .upload-content {
@@ -61,12 +114,9 @@
 
 .upload-icon {
   font-size: 36px;
-  line-height: 1;
-  height: 36px;
   width: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 36px;
+  color: #4ba3f9;
 }
 
 .upload-text-main {
@@ -79,6 +129,14 @@
   color: #ffffff;
   padding: 2px 10px;
   border-radius: 12px;
+}
+
+.upload-error {
+  margin-top: 4px;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #e53935;
+  font-weight: 400;
 }
 
 .preview-item {
@@ -100,9 +158,12 @@
   background: #d9534f;
   border-radius: 50%;
   border: none;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
 }
 
@@ -112,20 +173,32 @@
   object-fit: contain;
 }
 
-.upload-box.invalid {
-  border-color: #e53935 !important;
-  background-color: rgba(229, 57, 53, 0.04);
+/* ==========================================================
+   4. ENCOUNTER EMBEDDED
+   ========================================================== */
+.encounter-embedded {
+    border: 1px solid #E0E0E0;
+    background: #FAFAFA;
+    padding: 16px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
 }
 
-.upload-field {
-  display: flex;
-  flex-direction: column;
+.encounter-title {
+    margin: 0 0 8px 0;
+    color: #00695C;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
 }
 
-.upload-error {
-  margin-top: 4px;
-  padding-left: 18px;
-  font-size: 12px;
-  color: #e53935;
-  font-weight: 400;
+.social-fields, .hidden-location-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }

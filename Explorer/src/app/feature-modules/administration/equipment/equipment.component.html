@@ -1,39 +1,76 @@
-<div id="equipment">
-    <p>Equipment</p>
-    <hr>
-    <div id="equipment-details">
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let eq of equipment">
-                    <td>{{eq.name}}</td>
-                    <td>{{eq.description}}</td>
-                    <td>
-                        <button color="accent" (click)="deleteEquipment(eq.id || 0)" mat-icon-button>
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                        <button color="primary" (click)="onEditClicked(eq)" mat-icon-button>
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-                <tr><button color="primary" (click)="onAddClicked()" mat-icon-button>
-                    <mat-icon>add</mat-icon>
-                </button></tr>
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <xp-equipment-form *ngIf="shouldRenderEquipmentForm" [shouldEdit]="shouldEdit" [equipment]="selectedEquipment" (equimpentUpdated)="getEquipment()"></xp-equipment-form>
-    </div>
-    </div>
-</div>
+<div class="equipment-list-container">
 
+  <div class="header">
+    <div class="header-title">
+      <h1>Equipment</h1>
+      <p class="subtitle">Manage hiking gear available for tours</p>
+    </div>
+    <button
+      mat-raised-button
+      class="add-equipment-button"
+      (click)="onAddClicked()"
+      *ngIf="!shouldRenderEquipmentForm">
+      <mat-icon>add</mat-icon>
+      Add Equipment
+    </button>
+  </div>
+
+  <div class="content-container">
+
+    <div class="form-container-wrapper" *ngIf="shouldRenderEquipmentForm">
+      <div class="form-header-row">
+        <h2>{{ shouldEdit ? 'Edit Equipment' : 'Create New Equipment' }}</h2>
+        <button mat-icon-button (click)="shouldRenderEquipmentForm = false" matTooltip="Close">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      
+      <xp-equipment-form 
+        [shouldEdit]="shouldEdit" 
+        [equipment]="selectedEquipment" 
+        (equimpentUpdated)="getEquipment()">
+      </xp-equipment-form>
+    </div>
+
+    <div class="grid-wrapper">
+      
+      <div *ngIf="equipment.length === 0 && !shouldRenderEquipmentForm" class="empty-state">
+        <mat-icon>backpack</mat-icon>
+        <h2>No equipment found</h2>
+        <p>Start adding gear to your inventory.</p>
+      </div>
+
+      <div class="equipment-grid" *ngIf="equipment.length > 0">
+        <mat-card *ngFor="let eq of equipment" class="equipment-card">
+          
+          <mat-card-header>
+            <div class="card-header-content">
+              <div class="icon-bg">
+                <mat-icon>hiking</mat-icon>
+              </div>
+              <div class="header-text">
+                <mat-card-title>{{ eq.name }}</mat-card-title>
+              </div>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="description">{{ eq.description || 'No description available.' }}</p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-icon-button class="action-btn edit-btn" (click)="onEditClicked(eq)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="action-btn delete-btn" (click)="deleteEquipment(eq.id || 0)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+          
+        </mat-card>
+      </div>
+    </div>
+
+  </div>
+
+</div>

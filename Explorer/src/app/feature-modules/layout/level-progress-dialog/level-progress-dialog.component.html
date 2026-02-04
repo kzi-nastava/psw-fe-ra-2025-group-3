@@ -1,0 +1,69 @@
+<div class="level-dialog-overlay" (click)="close()">
+  <div class="level-dialog-container" (click)="$event.stopPropagation()">
+    <div class="dialog-header" [style.background]="rankConfig.gradient">
+      <button mat-icon-button class="close-button" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="rank-icon">{{ rankConfig.icon }}</div>
+      <h2 class="rank-title">{{ data.rank }} - Level {{ data.level }}</h2>
+    </div>
+
+    <div class="dialog-content">
+      <div class="stats-section">
+        <div class="stat-card">
+          <mat-icon class="stat-icon">stars</mat-icon>
+          <div class="stat-info">
+            <span class="stat-label">Current Level</span>
+            <span class="stat-value">{{ data.level }}</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <mat-icon class="stat-icon">emoji_events</mat-icon>
+          <div class="stat-info">
+            <span class="stat-label">Total XP</span>
+            <span class="stat-value">{{ data.xp }}</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+          <div class="stat-info">
+            <span class="stat-label">Rank</span>
+            <span class="stat-value">{{ data.rank }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header">
+          <h3>Progress to Level {{ data.level + 1 }}</h3>
+          <span class="progress-text">{{ xpProgress }} / {{ xpForNextLevel }} XP</span>
+        </div>
+        
+        <div class="progress-bar-container">
+          <div class="progress-bar-background">
+            <div 
+              class="progress-bar-fill" 
+              [style.width.%]="progressPercentage"
+              [style.background]="rankConfig.gradient">
+            </div>
+          </div>
+          <span class="progress-percentage">{{ progressPercentage.toFixed(1) }}%</span>
+        </div>
+
+        <div class="xp-needed">
+          <mat-icon>info</mat-icon>
+          <span>{{ xpRemaining }} XP needed for next level</span>
+        </div>
+      </div>
+
+      <div class="level-up-guide-link">
+        <a routerLink="/level-up-guide" (click)="close()">
+          <mat-icon>help_outline</mat-icon>
+          <span>How to Level Up?</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

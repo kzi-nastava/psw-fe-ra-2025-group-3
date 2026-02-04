@@ -1,0 +1,74 @@
+<div class="achievements-card">
+  <div class="section-header">
+    <mat-icon class="section-icon">emoji_events</mat-icon>
+    <h2 class="section-title">Achievements</h2>
+  </div>
+
+  <div class="achievements-progress">
+    <div class="progress-text">
+      <span class="progress-label">Unlocked</span>
+      <span class="progress-value">{{ unlockedCount }} / {{ totalCount }} ({{ unlockedPercent }}%)</span>
+    </div>
+
+    <mat-progress-bar
+      mode="determinate"
+      [value]="unlockedPercent">
+    </mat-progress-bar>
+  </div>
+
+  <div class="groups-rows">
+    <!-- Row 1 -->
+    <div class="groups-row">
+      <div class="achievements-group">
+        <div class="group-title">Tours bought</div>
+        <div class="achievements-grid">
+          <div class="achievement-tile" *ngFor="let a of toursBought" [class.locked]="!isUnlocked(a.code)">
+            <div class="icon-wrap">
+              <img [src]="a.iconPath" [alt]="a.title" />
+            </div>
+            <div class="achievement-label">{{ a.title }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievements-group">
+        <div class="group-title">Tours completed</div>
+        <div class="achievements-grid">
+          <div class="achievement-tile" *ngFor="let a of toursCompleted" [class.locked]="!isUnlocked(a.code)">
+            <div class="icon-wrap">
+              <img [src]="a.iconPath" [alt]="a.title" />
+            </div>
+            <div class="achievement-label">{{ a.title }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="groups-row">
+      <div class="achievements-group">
+        <div class="group-title">Tour reviews</div>
+        <div class="achievements-grid">
+          <div class="achievement-tile" *ngFor="let a of tourReviews" [class.locked]="!isUnlocked(a.code)">
+            <div class="icon-wrap">
+              <img [src]="a.iconPath" [alt]="a.title" />
+            </div>
+            <div class="achievement-label">{{ a.title }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievements-group">
+        <div class="group-title">Other achievements</div>
+        <div class="achievements-grid">
+          <div class="achievement-tile" *ngFor="let a of otherAchievements" [class.locked]="!isUnlocked(a.code)">
+            <div class="icon-wrap">
+              <img [src]="a.iconPath" [alt]="a.title" />
+            </div>
+            <div class="achievement-label">{{ a.title }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

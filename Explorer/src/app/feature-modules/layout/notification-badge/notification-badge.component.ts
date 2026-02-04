@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { NotificationService } from '../notification.service';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -11,21 +11,22 @@ import { takeUntil } from 'rxjs/operators';
 export class NotificationBadgeComponent implements OnInit, OnDestroy {
   unreadCount: number = 0;
   isDropdownOpen: boolean = false;
+  @Output() dropdownOpened = new EventEmitter<void>();
   private destroy$ = new Subject<void>();
 
   constructor(private notificationService: NotificationService) {}
 
- ngOnInit(): void {
-  this.notificationService.startSignalRConnection();
+  ngOnInit(): void {
+    this.notificationService.startSignalRConnection();
 
-  this.notificationService.unreadCount$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(count => {
-      this.unreadCount = count;
-    });
+    this.notificationService.unreadCount$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(count => {
+        this.unreadCount = count;
+      });
 
-  this.notificationService.refreshUnreadCount();
-}
+    this.notificationService.refreshUnreadCount();
+  }
 
 
   ngOnDestroy(): void {
@@ -34,7 +35,11 @@ export class NotificationBadgeComponent implements OnInit, OnDestroy {
   }
 
   toggleDropdown(): void {
+    const wasOpen = this.isDropdownOpen;
     this.isDropdownOpen = !this.isDropdownOpen;
+    if (this.isDropdownOpen && !wasOpen) {
+      this.dropdownOpened.emit();
+    }
   }
 
   closeDropdown(): void {

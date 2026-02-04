@@ -166,8 +166,21 @@
 }
 
 .star {
+  position: relative;
+  display: inline-block;
   color: var(--color-neutral-100);
   font-size: var(--font-size-lg);
+  line-height: 1;
+}
+
+.star::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--fill, 0%);
+  overflow: hidden;
+  color: var(--color-warning);
 }
 
 .star.filled {
@@ -213,7 +226,8 @@
 .tour-footer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  gap: var(--spacing-4);
 }
 
 .tour-price {
@@ -229,8 +243,31 @@
 
 .price-row {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.tour-price > .price-row {
+  color: var(--color-primary-500); 
+}
+
+.price-currency {
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  opacity: 0.9;
+  line-height: 1;
+  vertical-align: baseline;
+  color: inherit;
+}
+
+.price-row-sale {
+  display: flex;       
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  white-space: nowrap;
 }
 
 .price-amount {
@@ -240,17 +277,19 @@
   color: var(--color-primary-500);
 }
 
-.price-amount.original-price {
+.original-price {
   text-decoration: line-through;
   color: var(--color-neutral-600);
   font-size: var(--font-size-base);
-  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.1;
 }
 
-.price-amount.discounted-price {
+.discounted-price {
   color: var(--color-error);
   font-size: var(--font-size-3xl);
   font-weight: 700;
+  line-height: 1.1;
 }
 
 .price-label {
@@ -299,6 +338,9 @@
   background: linear-gradient(135deg, #00BCD4, #00ACC1);
   color: #FFFFFF;
   box-shadow: 0 6px 25px rgba(0, 188, 212, 0.4);
+  padding: 0.45rem 1rem;   
+  font-size: 0.85rem;     
+  border-radius: 10px;
 }
 
 .btn-primary:hover {

@@ -1,58 +1,350 @@
-<div class="profile-container">
-  <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
-    
-    <div class="profile-header">
-      <div class="image-container">
+<!-- Tourist Profile with Sidebar -->
+<div *ngIf="isTourist()" class="profile-layout">
+  <xp-profile-sidebar></xp-profile-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="profile-content">
+    <div class="profile-container">
+      <!-- Profile Header Card -->
+      <div class="profile-header-card">
+        <div class="profile-header-content">
+          <div class="image-container" 
+               [class.editing]="isEditing"
+               [class.dragging]="isDragging"
+               (dragover)="onDragOver($event)" 
+               (dragleave)="onDragLeave($event)" 
+               (drop)="onDrop($event)"
+               (click)="isEditing ? fileInputHeader.click() : null">
+            
+            <img [src]="profileForm.value.profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
+                 alt="Profile Picture" 
+                 class="profile-image">
+            <div class="upload-overlay" *ngIf="isEditing">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Change Photo</span>
+            </div>
+            <input #fileInputHeader type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+          </div>
+
+          <div class="profile-header-info">
+            <h1 class="profile-name">{{ profileForm.value.name }} {{ profileForm.value.surname }}</h1>
+            <p class="profile-email">
+              <mat-icon class="info-icon">email</mat-icon>
+              {{ profileForm.value.email }}
+            </p>
+            <!-- Vista Exclusive Badge -->
+            <div *ngIf="isVistaRank()" class="vista-exclusive-badge">
+              <span class="crown-icon">👑</span>
+              <span class="badge-text">VISTA EXCLUSIVE</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-header-actions">
+          <button class="edit-button" type="button" mat-raised-button color="primary" (click)="toggleEdit()" *ngIf="!isEditing">
+            <mat-icon>edit</mat-icon>
+            Edit Profile
+          </button>
+          <button *ngIf="isEditing" type="button" mat-raised-button (click)="toggleEdit()">
+            <mat-icon>close</mat-icon>
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <div class="section-header">
+            <mat-icon class="section-icon">person</mat-icon>
+            <h2 class="section-title">Personal Information</h2>
+          </div>
+          <div class="form-fields-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <mat-icon matPrefix>badge</mat-icon>
+              <input matInput formControlName="name">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Surname</mat-label>
+              <mat-icon matPrefix>badge</mat-icon>
+              <input matInput formControlName="surname">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <mat-icon matPrefix>email</mat-icon>
+              <input matInput formControlName="email" type="email">
+            </mat-form-field>
+
+            <div class="full-width upload-container" *ngIf="isEditing">
+              <label class="upload-label">Profile Picture</label>
+              
+              <div class="upload-box" 
+                   [class.dragging]="isDragging"
+                   (dragover)="onDragOver($event)" 
+                   (dragleave)="onDragLeave($event)" 
+                   (drop)="onDrop($event)"
+                   (click)="fileInputForm.click()">
+                
+                <div class="upload-content">
+                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                  
+                  <div class="upload-text">
+                    <span *ngIf="!profileForm.value.profilePictureUrl">Click or Drag image here to upload</span>
+                    <span *ngIf="profileForm.value.profilePictureUrl" class="file-success">
+                      <mat-icon>check_circle</mat-icon> New image selected
+                    </span>
+                  </div>
+                  
+                  <p class="upload-hint">Supported formats: JPG, PNG</p>
+                </div>
+            
+                <input #fileInputForm type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+              </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- About Me Section -->
+        <div class="form-section">
+          <div class="section-header">
+            <mat-icon class="section-icon">info</mat-icon>
+            <h2 class="section-title">About Me</h2>
+          </div>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Biography</mat-label>
+            <mat-icon matPrefix>description</mat-icon>
+            <textarea matInput formControlName="biography" rows="5" placeholder="Tell us about yourself..."></textarea>
+          </mat-form-field>
+
+          <div class="quote-card" *ngIf="profileForm.value.quote || isEditing">
+            <div class="quote-header">
+              <mat-icon class="quote-icon">format_quote</mat-icon>
+              <span class="quote-label">Favorite Quote</span>
+            </div>
+            <mat-form-field appearance="outline" class="full-width quote-field">
+              <input matInput formControlName="quote" placeholder="Your favorite quote or motto...">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="isEditing" class="save-button">
+          <button class="save-button" mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">
+            <mat-icon>save</mat-icon>
+            Save Changes
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Welcome Bonus Section -->
+      <div class="bonus-section">
+        <h3>My Bonuses</h3>
+        <div *ngIf="isLoadingBonus" class="loading">Loading...</div>
+        <div *ngIf="!isLoadingBonus && welcomeBonus" class="bonus-card">
+          <div class="bonus-header">
+            <span class="bonus-title">Welcome Bonus</span>
+          </div>
+          <div class="bonus-details">
+            <p class="bonus-description">{{ getBonusDescription() }}</p>
+            <p class="bonus-status" [class.used]="welcomeBonus.isUsed" [class.active]="!welcomeBonus.isUsed">
+              {{ getBonusStatus() }}
+            </p>
+            <p *ngIf="welcomeBonus.isUsed && welcomeBonus.usedAt" class="bonus-used-date">
+              Used: {{ welcomeBonus.usedAt | date:'dd.MM.yyyy' }}
+            </p>
+            <p *ngIf="!welcomeBonus.isUsed" class="bonus-expiry">
+              Valid until: {{ welcomeBonus.expiresAt | date:'dd.MM.yyyy' }}
+            </p>
+          </div>
+        </div>
+        <div *ngIf="!isLoadingBonus && !welcomeBonus" class="no-bonus">
+          <p>You don't have a welcome bonus.</p>
+        </div>
+      </div>
+      
+      <div id="achievements"></div>
+      <xp-achievements></xp-achievements>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Author/Admin Profile (without sidebar) -->
+<div *ngIf="!isTourist()" class="profile-container">
+  <!-- Profile Header Card -->
+  <div class="profile-header-card">
+    <div class="profile-header-content">
+      <div class="image-container" 
+           [class.editing]="isEditing"
+           [class.dragging]="isDragging"
+           (dragover)="onDragOver($event)" 
+           (dragleave)="onDragLeave($event)" 
+           (drop)="onDrop($event)"
+           (click)="isEditing ? fileInputAuthorHeader.click() : null">
+           
         <img [src]="profileForm.value.profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
              alt="Profile Picture" 
              class="profile-image">
+             
+         <div class="upload-overlay" *ngIf="isEditing">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Change Photo</span>
+          </div>
+
+         <input #fileInputAuthorHeader type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+      </div>
+      <div class="profile-header-info">
+        <h1 class="profile-name">{{ profileForm.value.name }} {{ profileForm.value.surname }}</h1>
+        <p class="profile-email">
+          <mat-icon class="info-icon">email</mat-icon>
+          {{ profileForm.value.email }}
+        </p>
       </div>
     </div>
-
-    <div class="edit-toggle">
+    <div class="profile-header-actions">
       <button class="edit-button" *ngIf="!isEditing" type="button" mat-raised-button color="primary" (click)="toggleEdit()">
+        <mat-icon>edit</mat-icon>
         Edit Profile
       </button>
       <button *ngIf="isEditing" type="button" mat-raised-button (click)="toggleEdit()">
+        <mat-icon>close</mat-icon>
         Cancel
       </button>
     </div>
+  </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
-    </mat-form-field>
+  <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+    <!-- Personal Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon class="section-icon">person</mat-icon>
+        <h2 class="section-title">Personal Information</h2>
+      </div>
+      <div class="form-fields-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
+          <input matInput formControlName="name">
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Surname</mat-label>
-      <input matInput formControlName="surname">
-    </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Surname</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
+          <input matInput formControlName="surname">
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email">
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input matInput formControlName="email" type="email">
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Profile Picture URL (paste link here)</mat-label>
-      <input matInput formControlName="profilePictureUrl" placeholder="https://example.com/my-photo.jpg">
-    </mat-form-field>
+        <div class="full-width upload-container" *ngIf="isEditing">
+          <label class="upload-label">Profile Picture</label>
+          
+          <div class="upload-box" 
+               [class.dragging]="isDragging"
+               (dragover)="onDragOver($event)" 
+               (dragleave)="onDragLeave($event)" 
+               (drop)="onDrop($event)"
+               (click)="fileInputAuthorForm.click()">
+            
+            <div class="upload-content">
+              <mat-icon class="upload-icon">cloud_upload</mat-icon>
+              
+              <div class="upload-text">
+                <span *ngIf="!profileForm.value.profilePictureUrl">Click or Drag image here to upload</span>
+                <span *ngIf="profileForm.value.profilePictureUrl" class="file-success">
+                  <mat-icon>check_circle</mat-icon> New image selected
+                </span>
+              </div>
+              
+              <p class="upload-hint">Supported formats: JPG, PNG</p>
+            </div>
+        
+            <input #fileInputAuthorForm type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+          </div>
+        </div>
+        </div>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Biography (optional)</mat-label>
-      <textarea matInput formControlName="biography" rows="4"></textarea>
-    </mat-form-field>
+    <!-- About Me Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon class="section-icon">info</mat-icon>
+        <h2 class="section-title">About Me</h2>
+      </div>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Biography</mat-label>
+        <mat-icon matPrefix>description</mat-icon>
+        <textarea matInput formControlName="biography" rows="5" placeholder="Tell us about yourself..."></textarea>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Quote (optional)</mat-label>
-      <input matInput formControlName="quote">
-    </mat-form-field>
+      <div class="quote-card" *ngIf="profileForm.value.quote || isEditing">
+        <div class="quote-header">
+          <mat-icon class="quote-icon">format_quote</mat-icon>
+          <span class="quote-label">Favorite Quote</span>
+        </div>
+        <mat-form-field appearance="outline" class="full-width quote-field">
+          <input matInput formControlName="quote" placeholder="Your favorite quote or motto...">
+        </mat-form-field>
+      </div>
+    </div>
 
     <div *ngIf="isEditing" class="save-button">
       <button class="save-button" mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">
+        <mat-icon>save</mat-icon>
         Save Changes
       </button>
     </div>
 
   </form>
+  
+  <!-- AUTHOR STATS -->
+  <div *ngIf="isAuthor && authorStats as s" class="author-stats-container">
+    <h2 class="section-title">Author Statistics</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Average rating</div>
+        <div class="stat-value">⭐ {{ s.averageRating }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total tours</div>
+        <div class="stat-value">{{ s.totalTours }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total reviews</div>
+        <div class="stat-value">{{ s.totalReviews }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total purchases</div>
+        <div class="stat-value">{{ s.totalPurchases }}</div>
+      </div>
+    </div>
+
+    <h3 class="section-title">Recent reviews</h3>
+
+    <div *ngIf="s.recentReviews?.length; else noReviews">
+      <div class="review-card" *ngFor="let r of s.recentReviews">
+        <div class="review-header">
+          <div class="review-tour">{{ r.tourName }}</div>
+          <div class="review-rating">⭐ {{ r.rating }}</div>
+        </div>
+        <div class="review-date">{{ r.createdAt | date:'medium' }}</div>
+        <div class="review-comment">{{ r.comment || 'No comment' }}</div>
+      </div>
+    </div>
+
+    <ng-template #noReviews>
+      <p>No reviews yet.</p>
+    </ng-template>
+  </div>
 </div>

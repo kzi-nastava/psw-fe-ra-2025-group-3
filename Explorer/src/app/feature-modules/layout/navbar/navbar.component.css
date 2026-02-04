@@ -8,25 +8,50 @@
   color: #FFFFFF !important;
   padding: 0 !important;
   height: auto !important;
-  min-height: 110px;
+  min-height: 80px;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
 }
 
 .explorer-navbar {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 9999;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  overflow: visible !important;
+  display: flex !important;
 }
 
 .navbar-container {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 110px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 80px;
+  overflow: visible;
+}
+
+.navbar-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px;
+  flex: 1 1 auto !important;
+  min-width: 0;
+  justify-content: flex-start !important;
+}
+
+.navbar-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+  overflow: visible;
+  flex: 0 0 auto !important;
+  flex-shrink: 0;
 }
 
 /* ============================================================================
@@ -91,7 +116,7 @@
 .navbar-buttons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
 }
 
 .btn-login .btn-icon-img {
@@ -112,14 +137,16 @@
 .nav-menu-button {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  gap: 4px !important;
   color: rgba(255, 255, 255, 0.95) !important;
-  font-size: 0.95rem !important;
+  font-size: 0.85rem !important;
   font-weight: 600 !important;
-  padding: 10px 18px !important;
+  padding: 8px 12px !important;
   border-radius: 8px !important;
   transition: all 0.2s ease !important;
   background: rgba(255, 255, 255, 0.08) !important;
+  position: relative;
+  min-width: auto !important;
 }
 
 .nav-menu-button:hover {
@@ -128,16 +155,36 @@
 }
 
 .nav-menu-button mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .dropdown-icon {
   margin-right: -4px;
-  font-size: 18px !important;
-  width: 18px !important;
-  height: 18px !important;
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* ============================================================================
+   NAV ICON BUTTONS (Icon-only buttons)
+   ============================================================================ */
+
+.nav-icon-button {
+  color: rgba(255, 255, 255, 0.95) !important;
+  transition: all 0.2s ease;
+}
+
+.nav-icon-button:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+}
+
+.nav-icon-button mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 :host ::ng-deep .mat-mdc-button {
@@ -168,6 +215,21 @@
   margin-top: 8px;
 }
 
+
+/* Ensure Material menu panels appear above navbar */
+::ng-deep .cdk-overlay-pane {
+  z-index: 10000 !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  z-index: 10000 !important;
+}
+
+/* Force cart and notification dropdowns to use same z-index as Material menus */
+::ng-deep .cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
 ::ng-deep .custom-menu .mat-mdc-menu-content {
   padding: 8px 0 !important;
   background: var(--color-neutral-0) !important;
@@ -186,6 +248,16 @@
 ::ng-deep .custom-menu .mat-mdc-menu-item:hover {
   background: rgba(0, 188, 212, 0.08) !important;
   color: var(--color-primary-700) !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item.router-link-active {
+  background: rgba(0, 188, 212, 0.15) !important;
+  color: var(--color-primary-700) !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item.router-link-active mat-icon {
+  color: var(--color-primary-600) !important;
 }
 
 ::ng-deep .custom-menu .mat-mdc-menu-item mat-icon {
@@ -275,6 +347,124 @@
   transform: scale(1.1);
 }
 
+/* ============================================================================
+   LOGOUT ICON BUTTON
+   ============================================================================ */
+
+.btn-logout-icon {
+  color: rgba(255, 255, 255, 0.9) !important;
+  transition: all 0.2s ease;
+}
+
+.btn-logout-icon:hover {
+  color: #FFFFFF !important;
+  background: rgba(244, 67, 54, 0.15) !important;
+}
+
+.btn-logout-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================================================
+   CART BUTTON & BADGE
+   ============================================================================ */
+
+.cart-badge-container {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  z-index: 10000;
+}
+
+.cart-button {
+  position: relative;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.cart-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+  line-height: 14px;
+}
+
+.cart-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 999;
+}
+
+/* ============================================================================
+   PROFILE PICTURE
+   ============================================================================ */
+
+.profile-picture-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 0;
+}
+
+.profile-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  margin-top: 0;
+  line-height: 1;
+}
+
+.profile-picture-link:hover .profile-picture {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture-link:hover .profile-label {
+  color: rgba(255, 255, 255, 1);
+}
+
 @media (max-width: 1200px) {
   .navbar-buttons {
     gap: 8px;
@@ -324,6 +514,11 @@
     padding: 8px 12px !important;
     font-size: 0.85rem !important;
   }
+
+  .profile-picture {
+    width: 35px;
+    height: 35px;
+  }
   
   .brand-logo {
     width: 60px;
@@ -365,4 +560,148 @@
     padding: 8px !important;
     min-width: 40px;
   }
+
+  .profile-picture {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ============================================================================
+   LEVEL & RANK BUTTON STYLES
+   ============================================================================ */
+
+.level-rank-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  font-weight: 600;
+  min-height: 48px;
+}
+
+.level-rank-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.level-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.level-rank-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.rank-name {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.level-text {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.rank-emoji {
+  font-size: 24px;
+  line-height: 1;
+  animation: rankFloat 3s infinite ease-in-out;
+}
+
+@keyframes rankFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Responsive adjustments for level & rank button */
+@media (max-width: 768px) {
+  .level-rank-button {
+    padding: 6px 12px;
+    gap: 8px;
+    min-height: 42px;
+  }
+
+  .level-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .rank-name {
+    font-size: 12px;
+  }
+
+  .level-text {
+    font-size: 10px;
+  }
+
+  .rank-emoji {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .level-rank-button {
+    padding: 6px 10px;
+    gap: 6px;
+    min-height: 38px;
+  }
+
+  .level-rank-info {
+    display: none;
+  }
+
+  .level-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .rank-emoji {
+    font-size: 18px;
+  }
+}
+
+/* Global dialog styling */
+::ng-deep .level-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Lock icon for disabled menu items */
+.lock-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #999 !important;
+  margin-left: 8px !important;
+}
+
+::ng-deep .mat-mdc-menu-item[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
 }

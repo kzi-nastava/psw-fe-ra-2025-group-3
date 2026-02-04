@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Tour, TourStatus } from 'src/app/feature-modules/tour-authoring/model/tour.model';
+import { Tour, TourStatus, TourDifficulty } from 'src/app/feature-modules/tour-authoring/model/tour.model';
 import { TourService } from 'src/app/feature-modules/tour-authoring/tour.service';
 import { TourExecutionService } from '../../tour-execution/tour-execution.service';
 import { TourExecutionCreateDto } from '../../tour-execution/model/tour-execution.model';
@@ -21,6 +21,7 @@ export class MyPurchasedToursComponent implements OnInit {
   startingTourId: number | null = null;
   hasActiveTour = false;
   TourStatus = TourStatus;
+  TourDifficulty = TourDifficulty;
   expandedTourId: number | null = null;
   currentUserId?: number;
 
@@ -243,5 +244,25 @@ export class MyPurchasedToursComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/default-tour.jpg';
+    }
+  }
+
+  getDifficultyLabel(difficulty: TourDifficulty): string {
+    switch (difficulty) {
+      case TourDifficulty.Easy:
+        return 'Easy';
+      case TourDifficulty.Medium:
+        return 'Medium';
+      case TourDifficulty.Hard:
+        return 'Hard';
+      default:
+        return 'Unknown';
+    }
   }
 }

@@ -8,6 +8,7 @@ import {
   LocationCheckDto,
   LocationCheckResultDto
 } from './model/tour-execution.model';
+import { Tour } from '../tour-authoring/model/tour.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class TourExecutionService {
 
   getActiveTourExecution(): Observable<TourExecution | null> {
     return this.http.get<TourExecution | null>(`${this.baseUrl}/active`);
+  }
+  
+  getActiveTourByTouristId(touristId : number) : Observable<Tour> {
+    return this.http.get<Tour>(`${this.baseUrl}/active/${touristId}`);
   }
 
   checkLocation(dto: LocationCheckDto): Observable<LocationCheckResultDto> {

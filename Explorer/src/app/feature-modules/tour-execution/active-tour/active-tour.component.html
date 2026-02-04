@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container active-tour-page">
   <div class="active-tour-container">
     
     <!-- LOADING STATE -->
@@ -7,109 +7,163 @@
     </div>
     
     <!-- ACTIVE TOUR CONTENT -->
-    <div *ngIf="!isLoading && execution && tour">
+    <div *ngIf="!isLoading && execution && tour" class="active-tour-content">
       
-      <!-- SUCCESS BANNER -->
+      <!-- COMPACT SUCCESS BANNER + LIVE TIMER (demo) -->
       <div class="success-banner">
         <mat-icon>check_circle</mat-icon>
-        <div>
+        <div class="banner-text">
           <h2>Tour in Progress</h2>
-          <p>Started at {{ getFormattedStartTime() }}</p>
+          <p>Started {{ getFormattedStartTime() }}</p>
+        </div>
+        <!-- DEMO: Live elapsed timer -->
+        <div class="tour-timer" aria-label="Elapsed tour time">
+          <mat-icon>schedule</mat-icon>
+          <span class="timer-label">Tour time</span>
+          <span class="timer-value">{{ getElapsedTourTime() }}</span>
         </div>
       </div>
 
-      <!-- TOUR INFO CARD -->
-      <mat-card class="tour-info-card">
+      <!-- 1. MAP FIRST -->
+      <mat-card class="map-card card-elevated">
+        <mat-card-header>
+          <mat-card-title>Route to Next Key Point</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="map-wrapper">
+            <xp-map
+              [mode]="'route-view'"
+              [center]="[execution.startLatitude, execution.startLongitude]"
+              [zoom]="14"
+              [waypoints]="routeWaypoints"
+              [points]="routePoints"
+              [initialPoint]="currentTouristPosition"
+              (pointSelected)="onMapClick($event)">
+            </xp-map>
+            <div class="map-legend">
+              <div class="legend-item"><img src="assets/icons/tourist.png" alt=""> You</div>
+              <div class="legend-item"><img src="assets/icons/checkpoint.png" alt=""> Checkpoint</div>
+              <div class="legend-item"><img src="assets/icons/fast-food.png" alt=""> Restaurant</div>
+              <div class="legend-item"><img src="assets/icons/group-tourist.png" alt=""> Tourist from your group</div>
+            </div>
+          </div>
+          <div class="position-controls" [class.position-ready]="tempSelectedPosition">
+            <p class="position-hint">
+              <mat-icon>{{ tempSelectedPosition ? 'check_circle' : 'info' }}</mat-icon>
+              <span *ngIf="!tempSelectedPosition">Click on the map to select your current location</span>
+              <span *ngIf="tempSelectedPosition">New position ready — click "Save my position" to confirm</span>
+            </p>
+            <button
+              mat-raised-button
+              color="primary"
+              class="save-position-btn"
+              [disabled]="!tempSelectedPosition"
+              (click)="savePosition()">
+              <mat-icon>save</mat-icon>
+              Save my position
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- 2. TOUR INFO (compact) - demo ready -->
+      <mat-card class="tour-info-card card-elevated" [class.tour-complete-ready]="canCompleteTour()">
         <mat-card-header>
           <mat-card-title>{{ tour.name }}</mat-card-title>
-         <mat-card-subtitle>
-  <span 
-    class="status-badge" 
-    [ngClass]="{
-      'status-published': tour.status === 1,
-      'status-archived': tour.status === 2
-    }">
-    {{ tour.status === 1 ? 'PUBLISHED' : tour.status === 2 ? 'ARCHIVED' : 'UNKNOWN' }}
-  </span>
-</mat-card-subtitle>
+          <mat-card-subtitle>
+            <span
+              class="status-badge"
+              [ngClass]="{
+                'status-published': tour.status === 1,
+                'status-archived': tour.status === 2
+              }">
+              {{ tour.status === 1 ? 'PUBLISHED' : tour.status === 2 ? 'ARCHIVED' : 'UNKNOWN' }}
+            </span>
+          </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <p class="tour-description">{{ tour.description }}</p>
-              
-              <!-- STATISTICS -->
-              <div class="tour-stats">
-                      <div class="stat-item">
-      <mat-icon>check_circle_outline</mat-icon>
-      <span>Completed: {{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }}</span>
-    </div>
-
-   <!-- Progress -->
-<div class="stat-item progress-stat">
-  <mat-icon>insights</mat-icon>
-  <span>Progress: {{ (execution.progressPercentage || 0) | number:'1.0-0' }}%</span>
-</div>
-            
+          <!-- Live timer – uvek vidljiv u kartici ture -->
+          <div class="live-timer-in-card">
+            <mat-icon>schedule</mat-icon>
+            <span class="live-timer-label">Live tour time</span>
+            <span class="live-timer-value">{{ getElapsedTourTime() }}</span>
+          </div>
+          <!-- Visual progress bar (cyan) -->
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" [style.width.%]="execution.progressPercentage || 0"></div>
+            <span class="progress-bar-label">{{ (execution.progressPercentage || 0) | number:'1.0-0' }}% complete</span>
+          </div>
+          <!-- Kontekstualna poruka + Next stop pill (samo prikaz) -->
+          <div class="tour-status-row">
+            <p class="tour-status-message">{{ getTourStatusMessage() }}</p>
+            <span *ngIf="nextKeyPoint" class="next-stop-pill">
+              <mat-icon>place</mat-icon>
+              {{ getNextKeyPointName() }}
+            </span>
+          </div>
+          <div class="tour-stats">
+            <div class="stat-item">
+              <mat-icon>check_circle_outline</mat-icon>
+              <span>Completed: {{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }}</span>
+            </div>
+            <div class="stat-item progress-stat">
+              <mat-icon>insights</mat-icon>
+              <span>Progress: {{ (execution.progressPercentage || 0) | number:'1.0-0' }}%</span>
+            </div>
             <div class="stat-item">
               <mat-icon>flag</mat-icon>
               <span>Next: {{ getNextKeyPointName() }}</span>
             </div>
-            
             <div class="stat-item">
               <mat-icon>location_on</mat-icon>
               <span>Key Points: {{ getTotalKeyPoints() }}</span>
             </div>
-            
             <div class="stat-item">
               <mat-icon>schedule</mat-icon>
               <span>Last Check: {{ getFormattedLastActivity() }}</span>
             </div>
-            
             <div class="stat-item" [class.checking]="isCheckingLocation">
               <mat-icon>sync</mat-icon>
               <span>{{ isCheckingLocation ? 'Checking location...' : 'Monitoring active' }}</span>
             </div>
           </div>
-
-                  <!-- ACTION BUTTONS -->
           <div class="action-buttons">
-            <button 
-              mat-raised-button 
-              color="primary" 
+            <button
+              mat-raised-button
+              color="primary"
+              class="complete-btn"
               (click)="completeTour()"
               [disabled]="!canCompleteTour()">
               <mat-icon>check_circle</mat-icon>
               Complete Tour
             </button>
-            <button mat-stroked-button color="warn" (click)="abandonTour()">
+            <button mat-stroked-button color="warn" class="abandon-btn" (click)="abandonTour()">
               <mat-icon>close</mat-icon>
               Abandon Tour
             </button>
           </div>
-
-          <!-- PORUKA -->
           <p *ngIf="!canCompleteTour()" class="completion-warning">
-            ⚠️ Complete all {{ getTotalKeyPoints() }} key points to finish the tour 
-            ({{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }} completed)
+            Complete all {{ getTotalKeyPoints() }} key points to finish ({{ getCompletedKeyPointsCount() }}/{{ getTotalKeyPoints() }} completed).
           </p>
+        </mat-card-content>
+      </mat-card>
 
-              </mat-card-content> 
-      </mat-card> 
-
-      <!-- ✅ NOVA SEKCIJA - KEY POINTS LISTA -->
-      <mat-card class="keypoints-card">
+      <!-- 3. KEY POINTS BELOW - demo ready -->
+      <mat-card class="keypoints-card card-elevated">
         <mat-card-header>
-          <mat-card-title>🎯 Key Points & Secrets</mat-card-title>
+          <mat-card-title>Key Points &amp; Secrets</mat-card-title>
+          <mat-card-subtitle class="keypoints-subtitle">Unlock a secret at each key point when you reach it</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="keypoints-list">
-            <div 
+            <div
               *ngFor="let kp of keyPointsWithStatus; let i = index"
               [id]="'keypoint-' + kp.id"
               class="keypoint-item"
               [class.completed]="kp.isCompleted"
-              [class.locked]="!kp.isCompleted">
-              
-              <!-- HEADER -->
+              [class.locked]="!kp.isCompleted"
+              [style.animation-delay]="(i * 0.08) + 's'">
               <div class="keypoint-header">
                 <div class="keypoint-number">{{ i + 1 }}</div>
                 <div class="keypoint-info">
@@ -121,22 +175,14 @@
                   <mat-icon *ngIf="!kp.isCompleted" class="icon-locked">lock</mat-icon>
                 </div>
               </div>
-
-              <!-- SECRET (samo ako je completed) -->
               <div *ngIf="kp.isCompleted" class="keypoint-secret">
                 <div class="secret-header">
                   <mat-icon>vpn_key</mat-icon>
-                  <span>Secret Unlocked</span>
-                  <span class="completed-time" *ngIf="kp.completedAt">
-                    at {{ getFormattedCompletedAt(kp.completedAt) }}
-                  </span>
+                  <span class="secret-label">Secret Unlocked</span>
+                  <span class="completed-time" *ngIf="kp.completedAt">at {{ getFormattedCompletedAt(kp.completedAt) }}</span>
                 </div>
-                <div class="secret-content">
-                  {{ kp.secret }}
-                </div>
+                <div class="secret-content">{{ kp.secret }}</div>
               </div>
-
-              <!-- LOCKED MESSAGE -->
               <div *ngIf="!kp.isCompleted" class="keypoint-locked">
                 <mat-icon>lock</mat-icon>
                 <p>Complete this key point to unlock the secret</p>
@@ -145,43 +191,6 @@
           </div>
         </mat-card-content>
       </mat-card>
-      <!-- MAP CARD -->
-      <mat-card class="map-card">
-        <mat-card-header>
-          <mat-card-title>Route to Next Key Point</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="map-wrapper">
-<xp-map
-  [mode]="'route-view'"
-  [center]="[execution.startLatitude, execution.startLongitude]"
-  [zoom]="14"
-  [waypoints]="routeWaypoints"
-  [points]="routePoints"
-  [initialPoint]="currentTouristPosition"
-  (pointSelected)="onMapClick($event)">
-</xp-map>
-</div>
-
-      <!-- POSITION SIMULATOR CONTROLS -->
-<div class="position-controls" [class.position-ready]="tempSelectedPosition">
-  <p class="position-hint">
-    <mat-icon>{{tempSelectedPosition ? 'check_circle' : 'info'}}</mat-icon>
-    <span *ngIf="!tempSelectedPosition">Click or drag the "Your Current Position" marker to change your test location</span>
-    <span *ngIf="tempSelectedPosition">📍 New position ready - click "Save my position" to confirm</span>
-  </p>
-  <button 
-    mat-raised-button 
-    color="primary"
-    class="save-position-btn"
-    [disabled]="!tempSelectedPosition"
-    (click)="savePosition()">
-    <mat-icon>save</mat-icon>
-    Save my position
-  </button>
-</div>
-    </mat-card-content>
-  </mat-card>
     </div>
   </div>
 </div>

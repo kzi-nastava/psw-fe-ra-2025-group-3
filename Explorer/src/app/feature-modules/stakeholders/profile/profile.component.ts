@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StakeholderService } from '../stakeholder.service';
 import { Person } from '../model/person.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { WelcomeBonusService } from '../welcome-bonus.service';
+import { WelcomeBonus, BonusType } from '../model/welcome-bonus.model';
+import { AuthorProfileStatsDto } from '../model/author-profile-stats.model';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { TouristStats, RANK_CONFIGS } from '../model/tourist-stats.model';
+import  { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'xp-profile',
@@ -11,6 +18,13 @@ import { Person } from '../model/person.model';
 export class ProfileComponent implements OnInit {
 
   isEditing = false;
+  welcomeBonus: WelcomeBonus | null = null;
+  isLoadingBonus = false;
+  authorStats: AuthorProfileStatsDto | null = null;
+  isAuthor = false;
+  touristStats: TouristStats | null = null;
+
+  isDragging = false;
   
   profileForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -21,10 +35,39 @@ export class ProfileComponent implements OnInit {
     profilePictureUrl: new FormControl('')
   });
 
-  constructor(private service: StakeholderService) { }
+ 
+  constructor(
+    private service: StakeholderService,
+    private welcomeBonusService: WelcomeBonusService,
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) { }
+ 
 
   ngOnInit(): void {
     this.loadProfile();
+    if (this.isTourist()) {
+      this.loadWelcomeBonus();
+      this.loadTouristStats();
+    }
+    
+    this.authService.user$.subscribe((user: User | undefined) => {
+      this.isAuthor = user?.role === 'author';
+      if (this.isAuthor) {
+        this.loadAuthorStats();
+      } else {
+        this.authorStats = null;
+      }
+    });
+
+    this.route.fragment.subscribe(fragment => {
+      if (fragment === 'achievements') {
+        setTimeout(() => {
+          document.getElementById('achievements')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+      }
+    });
+    
   }
 
   loadProfile(): void {
@@ -40,12 +83,27 @@ export class ProfileComponent implements OnInit {
         });
         this.profileForm.disable();
         this.isEditing = false;
+        this.isDragging = false;
       },
       error: (err) => {
         console.error('Failed to load profile:', err);
       }
     });
   }
+
+  // ===== DODATO =====
+  loadAuthorStats(): void {
+    this.service.getMyAuthorProfileStats().subscribe({
+      next: (stats) => {
+        this.authorStats = stats;
+      },
+      error: (err) => {
+        console.error('Failed to load author stats:', err);
+        this.authorStats = null;
+      }
+    });
+  }
+  // ==================
 
   toggleEdit(): void {
     if (this.isEditing) {
@@ -58,6 +116,58 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  onDragOver(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    if (!this.isEditing) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      this.handleFile(file);
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    if (!this.isEditing) return;
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.handleFile(input.files[0]);
+    }
+  }
+
+  private handleFile(file: File): void {
+    // Basic validation
+    if (!file.type.match('image.*')) {
+      alert('Only image files are allowed!');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      // Postavljamo Base64 string u formu
+      this.profileForm.patchValue({
+        profilePictureUrl: e.target.result
+      });
+      this.profileForm.markAsDirty();
+    };
+    reader.readAsDataURL(file);
+  }
+
   saveChanges(): void {
     if (this.profileForm.invalid) {
       return;
@@ -65,7 +175,7 @@ export class ProfileComponent implements OnInit {
 
     const updatedProfile: Person = {
       id: 0,
-      userId: 0, 
+      userId: 0,
       name: this.profileForm.value.name || '',
       surname: this.profileForm.value.surname || '',
       email: this.profileForm.value.email || '',
@@ -78,10 +188,81 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.profileForm.disable();
         this.isEditing = false;
+        // Notifikuj da se profil promenio (ažurira navbar sliku)
+        this.service.notifyProfileUpdated();
+        // Notifikuj da se stats promenio (samo za turiste)
+        this.authService.user$.subscribe(user => {
+          if (user && user.role === 'tourist') {
+            this.service.notifyTouristStatsUpdated();
+          }
+        });
       },
       error: (err) => {
         console.error('Failed to update profile:', err);
       }
     });
+  }
+
+
+  loadWelcomeBonus(): void {
+    this.isLoadingBonus = true;
+    this.welcomeBonusService.getWelcomeBonus().subscribe({
+      next: (bonus) => {
+        this.welcomeBonus = bonus;
+        this.isLoadingBonus = false;
+      },
+      error: () => {
+        this.welcomeBonus = null;
+        this.isLoadingBonus = false;
+      }
+    });
+  }
+
+  loadTouristStats(): void {
+    this.service.getTouristStats().subscribe({
+      next: (stats) => {
+        this.touristStats = stats;
+      },
+      error: () => {
+        this.touristStats = null;
+      }
+    });
+  }
+
+  isVistaRank(): boolean {
+    if (!this.touristStats) return false;
+    return this.touristStats.level >= 30; // Vista rank starts at level 30
+  }
+
+  getBonusStatus(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.isUsed) {
+      return 'Used';
+    }
+    
+    if (this.welcomeBonus.bonusType === BonusType.Discount10 || 
+        this.welcomeBonus.bonusType === BonusType.Discount20 || 
+        this.welcomeBonus.bonusType === BonusType.Discount30) {
+      return 'Active - Valid until first purchase';
+    }
+    
+    return 'Active';
+  }
+
+  getBonusDescription(): string {
+    if (!this.welcomeBonus) return '';
+    
+    if (this.welcomeBonus.bonusType === BonusType.AC100 || 
+        this.welcomeBonus.bonusType === BonusType.AC250 || 
+        this.welcomeBonus.bonusType === BonusType.AC500) {
+      return `${this.welcomeBonus.value} Adventure Coins`;
+    } else {
+      return `${this.welcomeBonus.value}% discount on first purchase`;
+    }
+  }
+
+  isTourist(): boolean {
+    return this.authService.isTourist();
   }
 }

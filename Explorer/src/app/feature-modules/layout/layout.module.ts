@@ -10,11 +10,15 @@ import { TouristMapComponent } from './tourist-map/tourist-map.component';
 import { NotificationBadgeComponent } from './notification-badge/notification-badge.component';
 import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
+import { AcRewardNotificationComponent } from './ac-reward-notification/ac-reward-notification.component';
+import { CartDropdownComponent } from './cart-dropdown/cart-dropdown.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FormsModule } from '@angular/forms';
 import { FeaturedToursComponent } from './featured-tours/featured-tours.component';
 import { TourPreviewComponent } from './tour-preview/tour-preview.component';
+import { LevelProgressDialogComponent } from './level-progress-dialog/level-progress-dialog.component';
+import { LevelUpGuideComponent } from './level-up-guide/level-up-guide.component';
 
 
 @NgModule({
@@ -26,8 +30,12 @@ import { TourPreviewComponent } from './tour-preview/tour-preview.component';
     NotificationBadgeComponent,
     NotificationDropdownComponent,
     NotificationItemComponent,
+    AcRewardNotificationComponent,
+    CartDropdownComponent,
     FeaturedToursComponent,
-    TourPreviewComponent
+    TourPreviewComponent,
+    LevelProgressDialogComponent,
+    LevelUpGuideComponent
   ],
   imports: [
     CommonModule,

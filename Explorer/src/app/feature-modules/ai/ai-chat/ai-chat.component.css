@@ -1,0 +1,322 @@
+/* ============================================
+   DESKTOP VERZIJA (default)
+   ============================================ */
+
+/* Floating button */
+.ai-chat-float {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  background: var(--color-primary-700);
+  color: var(--color-neutral-0);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: grab;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+  z-index: 1001;
+  user-select: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ai-chat-float:hover {
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+
+.ai-chat-float:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+.ai-chat-float.dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+/* Chat window - Desktop */
+.ai-chat {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  width: 360px;
+  height: 330px;
+  background: var(--color-neutral-0);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-base);
+  overflow: hidden;
+  z-index: 1000;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Chat header */
+.ai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
+  color: var(--color-neutral-0);
+  font-weight: 700;
+  font-size: var(--font-size-base);
+}
+
+.ai-header button {
+  background: transparent;
+  border: none;
+  color: var(--color-neutral-0);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.ai-header button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Messages */
+.messages {
+  flex: 1;
+  padding: var(--spacing-4);
+  overflow-y: auto;
+  background: #f5f5f5;
+}
+
+.messages .user,
+.messages .bot {
+  padding: 10px 14px;
+  border-radius: 18px;
+  margin-bottom: 8px;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.messages .user {
+  margin-left: auto;
+  background: var(--color-primary-700);
+  color: var(--color-neutral-0);
+  text-align: right;
+  border-bottom-right-radius: 4px;
+}
+
+.messages .bot {
+  margin-right: auto;
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-800);
+  text-align: left;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.typing {
+  font-style: italic;
+  color: var(--color-neutral-500);
+}
+
+/* Input container */
+.input {
+  display: flex;
+  border-top: 1px solid var(--color-neutral-200);
+  background: var(--color-neutral-0);
+  align-items: center;
+  gap: 0; /* Nema razmaka između dugmadi */
+}
+
+.input input {
+  flex: 1;
+  padding: var(--spacing-3);
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Dugme Pošalji -DesktopRežim */
+.send-btn {
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  background: var(--color-primary-700);
+  color: var(--color-neutral-0);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  min-width: 80px; /* Fiksna širina za desktop */
+  height: 48px; /* Identična visina kao mikrofon */
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--color-primary-800);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mikrofon dugme - Desktop */
+.voice-btn {
+  background: var(--color-primary-600);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s;
+  min-width: 48px; /* Identična širina */
+  height: 48px; /* Identična visina kao Pošalji */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.2); /* Razdvajač */
+}
+
+.voice-btn svg {
+  width: 20px;
+  height: 20px;
+  color: white; /* Bela ikonica */
+}
+
+.voice-btn:hover {
+  background: var(--color-primary-700);
+}
+
+.voice-btn.listening {
+  background: #ef4444; /* Crvena kada sluša */
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   MOBILNA VERZIJA (telefoni)
+   ============================================ */
+
+@media (max-width: 768px) {
+  
+  /* Floating button - manji i uvek u donjem desnom uglu */
+  .ai-chat-float {
+    width: 60px;
+    height: 60px;
+    font-size: 0.75rem;
+    bottom: 20px !important;
+    right: 20px !important;
+    top: auto !important;
+    left: auto !important;
+  }
+
+  /* Chat window - preko celog ekrana kao pravi messenger */
+  .ai-chat {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    max-height: calc(100vh - 100px);
+  }
+
+  /* Header - malo veći za lakše dodirovanje */
+  .ai-header {
+    padding: var(--spacing-4);
+    font-size: 1.1rem;
+  }
+
+  .ai-header button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.8rem;
+  }
+
+  /* Messages - prilagođeno za mobilni */
+  .messages {
+    padding: var(--spacing-3);
+  }
+
+  .messages .user,
+  .messages .bot {
+    max-width: 85%;
+    font-size: 0.95rem;
+  }
+
+  /* Input - veći za lakše kucanje */
+  .input {
+    gap: var(--spacing-2); /* Mali razmak na mobilnom */
+  }
+
+  .input input {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: 1.05rem; /* Veći font na mobilnom */
+  }
+
+  /* Dugme Pošalji - MOBILNI (veće) */
+  .send-btn {
+    padding: var(--spacing-4) var(--spacing-5);
+    font-size: 1rem;
+    min-width: 80px; /* Šire na mobilnom */
+    height: 56px; /* Veće za lakše dodirovanje */
+    font-weight: 700;
+    border-radius: 8px; /* Zaobljeni uglovi na mobilnom */
+
+  }
+
+  /* Mikrofon dugme - MOBILNI (veće) */
+  .voice-btn {
+    min-width: 56px; /* Veće za lakše dodirovanje */
+    height: 56px;
+    border-radius: 8px; /* Zaobljeni uglovi na mobilnom */
+  }
+
+  .voice-btn svg {
+    width: 24px; /* Veća ikonica */
+    height: 24px;
+  }
+}
+
+/* ============================================
+   EXTRA MALI TELEFONI (< 400px)
+   ============================================ */
+
+@media (max-width: 400px) {
+  .ai-chat-float {
+    width: 55px;
+    height: 55px;
+    font-size: 0.7rem;
+    bottom: 15px !important;
+    right: 15px !important;
+  }
+
+  .messages .user,
+  .messages .bot {
+    max-width: 90%;
+  }
+
+  /* I dalje velika dugmad za male telefone */
+  .send-btn,
+  .voice-btn {
+    height: 52px;
+  }
+}

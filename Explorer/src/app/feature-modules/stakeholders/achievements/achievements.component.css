@@ -1,0 +1,202 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Glavna kartica kao form-section / author-stats-container */
+.achievements-card {
+  margin-top: var(--spacing-8);
+  padding: var(--spacing-6);
+  background: var(--color-neutral-0);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 188, 212, 0.1);
+  transition: all var(--transition-normal);
+}
+
+.achievements-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(0, 188, 212, 0.2);
+}
+
+/* Preuzmi isti header stil koji već imaš na profilu */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-6);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 2px solid rgba(0, 188, 212, 0.1);
+}
+
+.section-icon {
+  color: var(--color-primary-700);
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.section-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-primary-800);
+    margin: 0;
+}
+
+/* Grupe */
+.achievements-group {
+  margin-top: var(--spacing-6);
+}
+
+.group-title {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  margin-bottom: var(--spacing-4);
+}
+
+
+/* Grid */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--spacing-4);
+}
+
+/* Tile kao mini-card */
+.achievement-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.05) 0%,
+    rgba(0, 150, 136, 0.05) 100%
+  );
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.achievement-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-500);
+}
+
+.icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.achievement-tile img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.achievement-label {
+  font-size: var(--font-size-xs);
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--color-primary-800);
+}
+
+/* Locked stil */
+.locked {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.locked:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(0, 188, 212, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .achievements-card {
+    padding: var(--spacing-4);
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: var(--spacing-3);
+  }
+
+  .icon-wrap {
+    width: 64px;
+    height: 64px;
+  }
+
+  .achievement-tile img {
+    width: 50px;
+    height: 50px;
+  }
+}
+.groups-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.groups-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-8);
+  align-items: start;
+}
+
+/* u 2 kolone grupe, ali grid unutar grupe ostaje kao pre */
+.achievements-group {
+  margin-top: 0;
+}
+
+/* na manjim ekranima sklizne u 1 kolonu */
+@media (max-width: 1024px) {
+  .groups-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+}
+.achievements-progress {
+  margin-top: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 188, 212, 0.04) 0%,
+    rgba(0, 150, 136, 0.04) 100%
+  );
+  border: 1px solid rgba(0, 188, 212, 0.15);
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--spacing-3);
+}
+
+.progress-label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-800);
+}
+
+.progress-value {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-neutral-800);
+  opacity: 0.9;
+}

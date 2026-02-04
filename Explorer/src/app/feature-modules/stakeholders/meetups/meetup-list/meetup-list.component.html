@@ -16,18 +16,35 @@
   </div>
 
   <div *ngIf="!isLoading && meetups.length > 0" class="meetups-grid">
+    <div class="map-item">
+      <xp-map 
+        [points]="mapPoints" 
+        [center]="[45.2396, 19.8227]" 
+        [zoom]="12"
+        [mode]="'object-view'"
+        (markerClicked)="onMarkerClicked($event)">
+      </xp-map>
+    </div>
     <div *ngFor="let meetup of meetups" class="meetup-card">
       <div class="meetup-header" (click)="viewDetails(meetup.id)">
         <h3>{{ meetup.title }}</h3>
       </div>
 
       <div class="meetup-content" (click)="viewDetails(meetup.id)">
-        <p class="datetime">
-          <strong>Date:</strong> {{ meetup.dateTime | date:'short' }}
-        </p>
-        <p class="location">
-          <strong>Location:</strong> {{ meetup.latitude }}, {{ meetup.longitude }}
-        </p>
+        <div class="info-row">
+          <mat-icon class="card-icon">schedule</mat-icon>
+          <span>Date: {{ meetup.dateTime | date:'medium' }}</span>
+        </div>
+        
+        <div class="info-row">
+          <mat-icon class="card-icon">location_on</mat-icon>
+          <span class="location-text">Address: {{ meetup.address }}</span>
+        </div>
+
+        <div class="info-row description-row">
+          <mat-icon class="card-icon">info</mat-icon>
+          <p class="description-text">Description: {{ meetup.description }}</p>
+        </div>
       </div>
 
       <div class="meetup-actions" *ngIf="isCreator(meetup)">

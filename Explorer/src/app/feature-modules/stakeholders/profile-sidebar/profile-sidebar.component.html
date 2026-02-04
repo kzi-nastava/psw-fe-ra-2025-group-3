@@ -1,0 +1,38 @@
+<div class="profile-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-profile-image">
+      <img [src]="getProfileImageUrl()" 
+           alt="Profile Picture" 
+           class="sidebar-image">
+    </div>
+    <h3 class="sidebar-name">{{ profile?.name }} {{ profile?.surname }}</h3>
+    <p class="sidebar-email">{{ profile?.email }}</p>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <a routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidebar-nav-item">
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </a>
+    <a routerLink="/tourist/wallet" routerLinkActive="active" class="sidebar-nav-item">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <span>Wallet</span>
+    </a>
+    <a routerLink="/tourist/wishlist" routerLinkActive="active" class="sidebar-nav-item">
+      <mat-icon>favorite</mat-icon>
+      <span>Wishlist</span>
+    </a>
+    <a routerLink="/tourist/app-rating" routerLinkActive="active" class="sidebar-nav-item">
+      <mat-icon>star</mat-icon>
+      <span>App Review</span>
+    </a>
+    <a routerLink="/tourist/equipment" routerLinkActive="active" class="sidebar-nav-item">
+      <mat-icon>backpack</mat-icon>
+      <span>Equipment</span>
+    </a>
+    <a routerLink="/tourist/preferences" routerLinkActive="active" class="sidebar-nav-item">
+      <mat-icon>tune</mat-icon>
+      <span>Preferences</span>
+    </a>
+  </nav>
+</div>

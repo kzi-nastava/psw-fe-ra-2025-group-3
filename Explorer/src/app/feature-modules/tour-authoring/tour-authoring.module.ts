@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { TourListComponent } from './tour-list/tour-list.component';
 import { TourFormComponent } from './tour-form/tour-form.component';
@@ -20,6 +20,8 @@ import { CouponListComponent } from './coupon-list/coupon-list.component';
 import { CouponFormComponent } from './coupon-form/coupon-form.component';
 import { SaleListComponent } from './sale-list/sale-list.component';
 import { SaleFormComponent } from './sale-form/sale-form.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { SaleFormComponent } from './sale-form/sale-form.component';
     MaterialModule,
     SharedModule,
     TourExecutionModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    FormsModule,
+    DragDropModule
   ],
   exports: [
     TourListComponent,

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AppRatingService } from '../app-rating.service';
 import { AppRatingResponse } from '../model/app-rating.model';
+import { StakeholderService } from '../stakeholder.service';
 
 @Component({
   selector: 'xp-my-app-rating',
@@ -16,11 +17,13 @@ export class MyAppRatingComponent implements OnInit {
   role!: 'author' | 'tourist';
 
   stars: number[] = [1, 2, 3, 4, 5];
+  hoveredStar: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private appRatingService: AppRatingService
+    private appRatingService: AppRatingService,
+    private stakeholderService: StakeholderService
   ) {
     this.form = this.fb.group({
       rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -69,23 +72,13 @@ export class MyAppRatingComponent implements OnInit {
     request$.subscribe({
       next: (res) => {
         this.existingRating = res;
+        // Notifikuj da se stats promenio (samo za turiste)
+        if (this.role === 'tourist') {
+          this.stakeholderService.notifyTouristStatsUpdated();
+        }
       },
       error: (err) => {
         console.error('Error while saving rating', err);
-      }
-    });
-  }
-
-  onDelete(): void {
-    if (!this.existingRating) return;
-
-    this.appRatingService.deleteRating(this.role).subscribe({
-      next: () => {
-        this.existingRating = null;
-        this.form.reset();
-      },
-      error: (err) => {
-        console.error('Error while deleting rating', err);
       }
     });
   }

@@ -1,0 +1,66 @@
+<div class="cart-dropdown">
+  <div class="dropdown-header">
+    <h3>My Cart</h3>
+    <div class="header-info">
+      <span class="balance-info" *ngIf="wallet">
+        <mat-icon class="balance-icon">account_balance_wallet</mat-icon>
+        Balance: {{ wallet.balanceAc }} AC
+      </span>
+      <span class="items-count" *ngIf="cart && getTotalItemsCount() > 0">
+        {{ getTotalItemsCount() }} {{ getTotalItemsCount() === 1 ? 'item' : 'items' }}
+      </span>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && (!cart || (cart.items.length === 0 && cart.bundleItems.length === 0))" class="empty-state">
+    <mat-icon class="empty-icon">shopping_cart</mat-icon>
+    <p>Your cart is empty</p>
+  </div>
+
+  <div *ngIf="!isLoading && cart && (cart.items.length > 0 || cart.bundleItems.length > 0)" class="cart-content">
+    <div class="cart-items-list">
+      <!-- TOUR ITEMS -->
+      <div class="cart-item" *ngFor="let item of cart.items">
+        <div class="item-info">
+          <span class="item-type">TOUR</span>
+          <span class="item-name">{{ item.tourName }}</span>
+        </div>
+        <div class="item-right">
+          <span class="item-price">{{ item.price }} AC</span>
+          <button mat-icon-button class="remove-btn" (click)="removeTour(item.tourId, $event)" matTooltip="Remove from cart">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- BUNDLE ITEMS -->
+      <div class="cart-item" *ngFor="let bundleItem of cart.bundleItems">
+        <div class="item-info">
+          <span class="item-type bundle">BUNDLE</span>
+          <span class="item-name">{{ bundleItem.bundleName }}</span>
+        </div>
+        <div class="item-right">
+          <span class="item-price">{{ bundleItem.price }} AC</span>
+          <button mat-icon-button class="remove-btn" (click)="removeBundle(bundleItem.bundleId, $event)" matTooltip="Remove from cart">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="total-row">
+        <span class="total-label">Total</span>
+        <span class="total-amount">{{ cart.totalPrice }} AC</span>
+      </div>
+      <button mat-raised-button color="primary" class="checkout-btn" (click)="goToCheckout()">
+        <mat-icon>shopping_bag</mat-icon>
+        Go to Checkout
+      </button>
+    </div>
+  </div>
+</div>

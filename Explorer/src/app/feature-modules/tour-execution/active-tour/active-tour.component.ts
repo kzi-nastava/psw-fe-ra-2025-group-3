@@ -13,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TouristMapService, TouristPositionDto } from '../../layout/tourist-map/tourist-map.service';
 import { FacilityService } from '../../administration/facility.service';
 import { Facility } from '../../administration/model/facility.model';
+import { GroupTourSessionService } from '../group-tour-session.service';
+import { GroupTourSessionParticipantDto } from '../model/group-tour-session.model';
 
 @Component({
   selector: 'xp-active-tour',
@@ -30,12 +32,16 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   keyPointsWithStatus: KeyPointWithStatus[] = [];
 
   // Map data
-  routeWaypoints: { lat: number; lng: number }[] = [];
-  routePoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+  routeWaypoints: { lat: number; lng: number, iconUrl? : string }[] = [];
+  routePoints: { lat: number; lng: number; name?: string; iconUrl? : string; color?: string; id?: number }[] = [];
 
   // Restaurants
   nearbyRestaurants: Facility[] = [];
-  restaurantPoints: { lat: number; lng: number; name?: string; color?: string; id?: number }[] = [];
+  restaurantPoints: { lat: number; lng: number; name?: string; iconUrl?: string; color?: string; id?: number }[] = [];
+
+  // Group session participants
+  groupSessionParticipants: GroupTourSessionParticipantDto[] = [];
+  groupSessionParticipantPoints: { lat: number; lng: number; name?: string; iconUrl?: string; color?: string; id?: number }[] = [];
 
   private locationCheckSubscription: Subscription | null = null;
   lastCheckTime: Date | null = null;
@@ -43,7 +49,9 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
   // Position Simulator state
   tempSelectedPosition: { lat: number; lng: number } | null = null;
   currentTouristPosition: { lat: number; lng: number } | undefined;
-  
+  // Live tour timer (demo) – triggers template refresh every second
+  private timerInterval: ReturnType<typeof setInterval> | null = null;
+  nowForTimer: number = Date.now();
 
   constructor(
     private tourExecutionService: TourExecutionService,
@@ -53,7 +61,8 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
     private positionSimulator: PositionSimulatorService,
     private snackBar: MatSnackBar,
     private touristMapService: TouristMapService,
-    private facilityService: FacilityService
+    private facilityService: FacilityService,
+    private groupTourSessionService: GroupTourSessionService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +71,10 @@ export class ActiveTourComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopLocationCheck();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
   }
 
   loadActiveExecution(): void {
@@ -151,6 +164,7 @@ loadKeyPoints(tourId: number): void {
 
       // Ucitaj restorane u blizini svih keypointova
       this.loadNearbyRestaurants();
+      this.loadGroupSessionParticipants();
 
       this.positionSimulator.getCurrentPosition().subscribe({
         next: (currentPosition) => {
@@ -170,6 +184,7 @@ loadKeyPoints(tourId: number): void {
             this.isLoading = false;
             console.log('[Active Tour] ✅ Map rendered - drag should work now');
             this.startLocationCheck();
+            this.startElapsedTimer();
           }, 100);
         },
         error: (err) => {
@@ -185,6 +200,7 @@ loadKeyPoints(tourId: number): void {
           setTimeout(() => {
             this.isLoading = false;
             this.startLocationCheck();
+            this.startElapsedTimer();
           }, 100);
         }
       });
@@ -263,6 +279,7 @@ private loadNearbyRestaurants(): void {
         lng: r.longitude,
         name: `${r.name}`,
         color: 'green',
+        iconUrl: 'assets/icons/fast-food.png',
         id: r.id
       }));
 
@@ -272,6 +289,38 @@ private loadNearbyRestaurants(): void {
     error: (err) => {
     }
   });
+}
+
+private loadGroupSessionParticipants(): void {
+    if (!this.execution) return;
+
+    this.groupTourSessionService
+      .getOtherGroupParticipantsByTouristId(this.execution.touristId)
+      .subscribe({
+        next: (participants) => {          
+          const valid = (participants || []).filter(p => !!p.position);
+
+          const byId = new Map<number, GroupTourSessionParticipantDto>();
+          valid.forEach(p => {
+            if (!byId.has(p.touristId)) {
+              byId.set(p.touristId, p);
+            }
+          });
+
+          this.groupSessionParticipants = Array.from(byId.values());
+
+          this.groupSessionParticipantPoints = this.groupSessionParticipants.map(p => ({
+            lat: p.position!.latitude,
+            lng: p.position!.longitude,
+            iconUrl: 'assets/icons/group-tourist.png',
+            id: p.touristId
+          }));
+
+          this.setupMapRoute();
+        },
+        error: () => {          
+        }
+      });
 }
 
 private setupMapRoute(): void {
@@ -296,8 +345,8 @@ private setupMapRoute(): void {
   // ✅ Crtaj putanju do NEXT KeyPoint
   if (this.nextKeyPoint) {
     this.routeWaypoints = [
-      { lat: touristLat, lng: touristLng },
-      { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude }
+      { lat: touristLat, lng: touristLng, iconUrl: 'assets/icons/tourist.png' },
+      { lat: this.nextKeyPoint.latitude, lng: this.nextKeyPoint.longitude, iconUrl: 'assets/icons/checkpoint.png' }
     ];
   } else {
     this.routeWaypoints = [];
@@ -318,14 +367,16 @@ private setupMapRoute(): void {
   return {
     lat: kp.latitude,
     lng: kp.longitude,
-    name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback ako nema name
+    name: `${icon} ${kp.name || 'Key Point'}`, // ✅ Fallback ako nema name
+    iconUrl: 'assets/icons/checkpoint.png'
   };
 });
 
   // Restorani kao dodatni markeri (narandzasta boja)
   const restaurantMarkers = this.restaurantPoints || [];
+  const groupSessionParticipantMarkers = this.groupSessionParticipantPoints || [];
 
-  this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
+  this.routePoints = [...keyPointMarkers, ...restaurantMarkers, ...groupSessionParticipantMarkers];
 
   console.log('[Active Tour] 📍 Created routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Map route setup complete');
@@ -363,13 +414,15 @@ private setupMapRouteFallback(): void {
         return {
             lat: kp.latitude,
             lng: kp.longitude,
-            name: `${icon} ${kp.name || 'Key Point'}` // ✅ Fallback
+            name: `${icon} ${kp.name || 'Key Point'}`, // ✅ Fallback
+            iconUrl: 'assets/icons/checkpoint.png'
         };
     });
 
       const restaurantMarkers = this.restaurantPoints || [];
+      const groupSessionParticipantMarkers = this.groupSessionParticipantPoints || [];
 
-      this.routePoints = [...keyPointMarkers, ...restaurantMarkers];
+      this.routePoints = [...keyPointMarkers, ...restaurantMarkers, ...groupSessionParticipantMarkers];
 
   console.log('[Active Tour] 📍 Created fallback routePoints:', this.routePoints.length, 'KeyPoints');
   console.log('[Active Tour] ✅ Fallback route setup complete');
@@ -399,6 +452,9 @@ private setupMapRouteFallback(): void {
 
         // AŽURIRANJE MAPE SA TRENUTNOM POZICIJOM 
         this.updateMapWithCurrentPosition(position.latitude, position.longitude);
+
+        
+        this.loadGroupSessionParticipants();
 
         const dto: LocationCheckDto = {
           tourId: this.execution!.tourId,
@@ -505,7 +561,7 @@ private updateMapWithCurrentPosition(lat: number, lng: number): void {
           console.log('[Active Tour] ✅ All KeyPoints completed - clearing route');
           this.routeWaypoints = [];
           // routePoints ostaju - prikazuju se svi markeri
-        }
+        }   
       }
     },
     error: (err) => {
@@ -617,11 +673,8 @@ private updateMapWithCurrentPosition(lat: number, lng: number): void {
 
 getFormattedStartTime(): string {
   if (!this.execution) return '';
-  
-  //  Parsuj datum i dodaj 1h (UTC+1 za Srbiju)
   const date = new Date(this.execution.startTime);
-  date.setHours(date.getHours() + 1);  // Dodaj 1h za UTC+1
-  
+  date.setHours(date.getHours() + 1);
   return date.toLocaleString('sr-RS', {
     day: '2-digit',
     month: '2-digit',
@@ -630,6 +683,35 @@ getFormattedStartTime(): string {
     minute: '2-digit',
     hour12: false
   });
+}
+
+/** Demo: live elapsed tour time (updates every second). */
+getElapsedTourTime(): string {
+  if (!this.execution) return '0m';
+  const start = this.parseStartTimeAsUtc(this.execution.startTime);
+  const elapsedMs = this.nowForTimer - start;
+  if (elapsedMs < 0) return '0m';
+  const totalMinutes = Math.floor(elapsedMs / 60000);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
+}
+
+/** Backend šalje startTime često u UTC bez 'Z'; parsiraj kao UTC da elapsed ne bude +1h. */
+private parseStartTimeAsUtc(startTime: Date | string): number {
+  if (!startTime) return Date.now();
+  const s = typeof startTime === 'string' ? startTime : startTime.toISOString();
+  const asUtc = s.endsWith('Z') || /[+-]\d{2}:?\d{2}$/.test(s) ? s : s.replace(/\.\d{3}$/, '') + 'Z';
+  return new Date(asUtc).getTime();
+}
+
+private startElapsedTimer(): void {
+  if (this.timerInterval) return;
+  this.nowForTimer = Date.now();
+  this.timerInterval = setInterval(() => {
+    this.nowForTimer = Date.now();
+  }, 1000);
 }
 
 getFormattedLastActivity(): string {
@@ -663,6 +745,14 @@ getFormattedLastActivity(): string {
   }
   getNextKeyPointName(): string {
     return this.nextKeyPoint?.name || 'N/A';
+  }
+
+  /** Poruka u zavisnosti od napretka (samo prikaz, ne menja logiku). */
+  getTourStatusMessage(): string {
+    if (this.canCompleteTour()) return 'All key points visited — tap Complete Tour to finish.';
+    const pct = this.execution?.progressPercentage ?? 0;
+    if (pct === 0) return 'Head to the first key point to get started.';
+    return `Next stop: ${this.getNextKeyPointName()}`;
   }
 
   getTotalKeyPoints(): number {

@@ -31,6 +31,12 @@ export class NotificationItemComponent {
         return 'cancel';
       case NotificationType.WalletTopUp:
         return 'account_balance_wallet';
+      case NotificationType.TourOnSale:
+        return 'local_offer';
+      case NotificationType.TourRewardAc:
+        return 'stars';
+      case NotificationType.Achievement:
+        return 'emoji_events';
       default:
         return 'notifications';
     }
@@ -46,6 +52,12 @@ export class NotificationItemComponent {
         return '#f44336';
       case NotificationType.WalletTopUp:
         return 'var(--color-primary-500)';
+      case NotificationType.TourOnSale:
+        return '#ff6f00';
+      case NotificationType.TourRewardAc:
+        return '#ffd700';
+      case NotificationType.Achievement:
+        return 'var(--color-primary-700)';
       default:
         return '#757575';
     }
@@ -90,6 +102,27 @@ export class NotificationItemComponent {
 
       if (user) {
         if (this.notification.type === NotificationType.WalletTopUp) {
+          if (user.role === 'tourist') {
+            this.router.navigate(['/tourist/wallet']);
+          }
+          this.notificationClicked.emit();
+          return;
+        }
+        if (this.notification.type === NotificationType.Achievement) {
+          if (user.role === 'tourist') {
+            this.router.navigate(['/profile'], { fragment: 'achievements' });
+          }
+          this.notificationClicked.emit();
+          return;
+        }
+
+        if (this.notification.type === NotificationType.TourOnSale) {
+          this.router.navigate(['/tourist/tours']); 
+          this.notificationClicked.emit();
+          return;
+        }
+
+        if (this.notification.type === NotificationType.TourRewardAc) {
           if (user.role === 'tourist') {
             this.router.navigate(['/tourist/wallet']);
           }
