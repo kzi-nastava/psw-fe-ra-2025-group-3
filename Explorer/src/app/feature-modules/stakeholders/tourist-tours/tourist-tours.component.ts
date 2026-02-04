@@ -407,7 +407,40 @@ export class TouristToursComponent implements OnInit {
   loadPopularTours(): void {
     this.tourService.getHighlightedTours().subscribe({
       next: (tours) => {
-        this.popularTours = tours;
+        // Filtriranje kupljenih tura
+        const filteredTours: HighlightedTour[] = [];
+        let checkedCount = 0;
+        
+        if (tours.length === 0) {
+          this.popularTours = [];
+          return;
+        }
+        
+        tours.forEach(tour => {
+          this.tourService.getTourDetails(tour.id).subscribe({
+            next: (details) => {
+              // Ako tura ima keyPoints, znači da je kupljena - preskoci je
+              if (!details.keyPoints) {
+                filteredTours.push(tour);
+              }
+              checkedCount++;
+              
+              // Kada su sve ture proverene, azuriraj popularTours
+              if (checkedCount === tours.length) {
+                this.popularTours = filteredTours;
+              }
+            },
+            error: () => {
+              // U slučaju greške ukljuci turu 
+              filteredTours.push(tour);
+              checkedCount++;
+              
+              if (checkedCount === tours.length) {
+                this.popularTours = filteredTours;
+              }
+            }
+          });
+        });
       },
       error: (error) => {
         console.error('Error loading popular tours:', error);
