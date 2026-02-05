@@ -348,17 +348,289 @@ mat-card-actions button[disabled] {
     flex-direction: column;
     gap: var(--spacing-2);
   }
-  
+
   .header h1 {
     font-size: var(--font-size-xl);
   }
 
+  .header button {
+    width: 100%;
+    justify-content: center;
+  }
 
-/* ============================================================================ 
-   REVIEWS SECTION
+  mat-card-actions {
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+  }
+
+  mat-card-actions button {
+    flex: 1 1 45%;
+    min-width: 100px;
+    font-size: 0.8rem;
+    padding: var(--spacing-2);
+  }
+
+  .show-more-container button {
+    width: 100%;
+    padding: var(--spacing-3) var(--spacing-6);
+  }
+}
+
+/* ============================================================================
+   SMALL PHONES (480px and below)
    ============================================================================ */
-/* View Reviews dugme */
-/* ============================================================================ 
+
+@media (max-width: 480px) {
+  .tour-list-container {
+    padding: var(--spacing-2);
+  }
+
+  .header {
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-lg);
+    text-align: center;
+  }
+
+  .header button {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+    min-height: 44px;
+  }
+
+  .tour-card {
+    border-radius: var(--border-radius-lg);
+  }
+
+  .tour-card mat-card-header {
+    padding: var(--spacing-3);
+  }
+
+  .tour-card mat-card-title {
+    font-size: 1.1rem !important;
+  }
+
+  .tour-card mat-card-content {
+    padding: var(--spacing-3);
+  }
+
+  .description {
+    font-size: 0.85rem;
+    min-height: 50px;
+  }
+
+  .tour-details {
+    padding: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .detail-item {
+    font-size: 0.85rem;
+  }
+
+  .detail-item mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .tags mat-chip {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  mat-card-actions {
+    padding: var(--spacing-2) var(--spacing-3);
+    flex-direction: column;
+  }
+
+  mat-card-actions button {
+    width: 100%;
+    flex: none;
+    min-height: 40px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-8) var(--spacing-4);
+  }
+
+  .empty-state mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .empty-state h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .empty-state p {
+    font-size: var(--font-size-sm);
+  }
+
+  .show-more-container {
+    margin-top: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .show-more-container button {
+    padding: var(--spacing-3) var(--spacing-8);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ============================================================================
+   EXTRA SMALL PHONES (375px and below)
+   ============================================================================ */
+
+@media (max-width: 375px) {
+  .header h1 {
+    font-size: var(--font-size-base);
+  }
+
+  .tour-card mat-card-title {
+    font-size: 1rem !important;
+  }
+
+  .description {
+    font-size: 0.8rem;
+  }
+
+  .detail-item {
+    font-size: 0.8rem;
+  }
+
+  mat-card-actions button {
+    font-size: 0.75rem;
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+
+  .tour-card mat-card-actions .edit-button {
+    font-size: 12px !important;
+    padding: var(--spacing-1) var(--spacing-2) !important;
+  }
+}
+
+/* ============================================================================
+   VERY SMALL PHONES (360px and below)
+   ============================================================================ */
+
+@media (max-width: 360px) {
+  .tour-list-container {
+    padding: 0.5rem;
+  }
+
+  .header {
+    padding: var(--spacing-2);
+  }
+
+  .tour-card mat-card-header {
+    padding: var(--spacing-2);
+  }
+
+  .tour-card mat-card-content {
+    padding: var(--spacing-2);
+  }
+
+  .status-badge {
+    font-size: 0.6rem;
+    padding: 3px 10px;
+  }
+}
+
+/* ============================================================================
+   MINIMUM SUPPORTED (320px)
+   ============================================================================ */
+
+@media (max-width: 320px) {
+  .header h1 {
+    font-size: 0.9rem;
+  }
+
+  .tour-card mat-card-title {
+    font-size: 0.9rem !important;
+  }
+
+  .description {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+/* ============================================================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .tour-card:hover {
+    transform: none;
+  }
+
+  .tour-card:active {
+    transform: scale(0.98);
+  }
+
+  .header button,
+  mat-card-actions button,
+  .show-more-container button {
+    min-height: 44px;
+  }
+
+  .show-more-container button:hover {
+    transform: none;
+  }
+
+  .show-more-container button:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ============================================================================
+   SAFE AREA INSETS
+   ============================================================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .tour-list-container {
+    padding-left: calc(var(--spacing-3) + env(safe-area-inset-left));
+    padding-right: calc(var(--spacing-3) + env(safe-area-inset-right));
+    padding-bottom: calc(var(--spacing-6) + env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================================================
+   LANDSCAPE MODE ON MOBILE
+   ============================================================================ */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .tours-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .header button {
+    width: auto;
+  }
+
+  mat-card-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  mat-card-actions button {
+    width: auto;
+    flex: 1 1 auto;
+  }
+}
+
+/* ============================================================================
    REVIEWS SECTION
    ============================================================================ */
 
@@ -398,6 +670,20 @@ mat-card-actions button[disabled] {
   background-color: rgba(2, 119, 189, 0.08) !important;
 }
 
+/* Reviews buttons responsive */
+@media (max-width: 480px) {
+  .reviews-preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+  }
+
+  .reviews-preview button {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 @keyframes slideDown {
   from {
@@ -409,5 +695,4 @@ mat-card-actions button[disabled] {
     opacity: 1;
     max-height: 2000px;
   }
-}
 }

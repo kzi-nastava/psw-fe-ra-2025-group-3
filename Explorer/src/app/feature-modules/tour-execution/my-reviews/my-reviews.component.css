@@ -350,20 +350,537 @@ mat-card-actions {
   .page-header h1 {
     font-size: var(--font-size-3xl);
   }
-  
+
   .review-header {
     flex-direction: column;
     gap: var(--spacing-4);
   }
-  
+
   .images-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
-  
+
   .review-footer {
     flex-direction: column;
     gap: var(--spacing-3);
     align-items: flex-start;
+  }
+}
+
+/* ============================================================================
+   PHONE RESPONSIVE - 480px and below
+   ============================================================================ */
+@media (max-width: 480px) {
+  .my-reviews-container {
+    padding: var(--spacing-4) var(--spacing-3);
+  }
+
+  .header {
+    padding: var(--spacing-3) var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .cart-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .reviews-list {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+
+  .review-card {
+    border-radius: var(--border-radius-xl);
+  }
+
+  .review-header {
+    padding: var(--spacing-4);
+  }
+
+  .tour-info h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  .meta {
+    gap: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+
+  .rating-badge {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-base);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .rating-badge mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  mat-card-content {
+    padding: var(--spacing-4) !important;
+  }
+
+  .stars-display mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .comment {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .progress-info {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .progress-info mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  mat-card-actions {
+    padding: var(--spacing-3) var(--spacing-4) !important;
+  }
+
+  ::ng-deep .review-card .mat-mdc-raised-button {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .no-reviews {
+    padding: var(--spacing-10);
+    max-width: 100%;
+  }
+
+  .no-reviews mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .no-reviews h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .no-reviews p {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Lightbox mobile */
+  .lightbox-container {
+    width: 95%;
+    height: 60%;
+    padding: var(--spacing-2);
+  }
+
+  .lightbox-nav-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .lightbox-counter {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+}
+
+/* ============================================================================
+   iPhone 15 Pro Max - 430px
+   ============================================================================ */
+@media (max-width: 430px) {
+  .my-reviews-container {
+    padding: 12px 10px;
+  }
+
+  .header {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 1.1rem;
+  }
+
+  .reviews-list {
+    gap: 12px;
+  }
+
+  .review-header {
+    padding: 12px;
+  }
+
+  .tour-info h3 {
+    font-size: 1.1rem;
+  }
+
+  mat-card-content {
+    padding: 12px !important;
+  }
+}
+
+/* ============================================================================
+   iPhone 15 - 393px
+   ============================================================================ */
+@media (max-width: 393px) {
+  .my-reviews-container {
+    padding: 10px 8px;
+  }
+
+  .header {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-left-width: 3px;
+    border-radius: 12px;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+  }
+
+  .cart-subtitle {
+    font-size: 0.7rem;
+    margin-top: 2px;
+  }
+
+  .reviews-list {
+    gap: 10px;
+  }
+
+  .review-card {
+    border-radius: 16px;
+  }
+
+  .review-header {
+    padding: 10px 12px;
+    gap: 10px;
+    border-bottom-width: 1.5px;
+  }
+
+  .tour-info h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .meta {
+    gap: 8px;
+    font-size: 0.7rem;
+  }
+
+  .edited-badge {
+    padding: 2px 8px;
+    font-size: 0.6rem;
+    gap: 4px;
+  }
+
+  .edited-badge mat-icon {
+    font-size: 0.8rem;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  .rating-badge {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    gap: 6px;
+  }
+
+  .rating-badge mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  mat-card-content {
+    padding: 10px 12px !important;
+  }
+
+  .stars-display {
+    margin-bottom: 10px;
+    gap: 3px;
+  }
+
+  .stars-display mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .comment {
+    padding: 10px;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    border-left-width: 3px;
+    border-radius: 10px;
+    line-height: 1.5;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .image-thumbnail {
+    border-radius: 8px;
+  }
+
+  .review-footer {
+    padding-top: 10px;
+    gap: 8px;
+  }
+
+  .progress-info {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    gap: 6px;
+  }
+
+  .progress-info mat-icon {
+    font-size: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  mat-card-actions {
+    padding: 10px 12px !important;
+  }
+
+  ::ng-deep .review-card .mat-mdc-raised-button {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    gap: 6px;
+  }
+
+  ::ng-deep .review-card .mat-mdc-raised-button mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .no-reviews {
+    padding: var(--spacing-8) var(--spacing-3);
+    border-radius: 16px;
+  }
+
+  .no-reviews mat-icon {
+    font-size: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--spacing-4);
+  }
+
+  .no-reviews h2 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  .no-reviews p {
+    font-size: 0.8rem;
+    margin-bottom: var(--spacing-6);
+  }
+
+  .edit-section {
+    padding: var(--spacing-4);
+    border-radius: 10px;
+  }
+
+  .cancel-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    gap: 6px;
+  }
+
+  .cancel-btn mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Lightbox iPhone 15 */
+  .lightbox-container {
+    width: 94%;
+    max-width: none;
+    height: 55%;
+    max-height: none;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  .lightbox-close-btn {
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .lightbox-close-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .lightbox-nav {
+    padding-top: 8px;
+    gap: 10px;
+  }
+
+  .lightbox-nav-btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .lightbox-nav-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .lightbox-counter {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+}
+
+/* ============================================================================
+   iPhone SE / Small phones - 375px
+   ============================================================================ */
+@media (max-width: 375px) {
+  .my-reviews-container {
+    padding: 8px 6px;
+  }
+
+  .header {
+    padding: 8px 10px;
+  }
+
+  .header h1 {
+    font-size: 0.95rem;
+  }
+
+  .tour-info h3 {
+    font-size: 0.95rem;
+  }
+
+  .rating-badge {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .stars-display mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .comment {
+    font-size: 0.75rem;
+    padding: 8px;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 6px;
+  }
+
+  .no-reviews h2 {
+    font-size: 1rem;
+  }
+
+  .no-reviews p {
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================================
+   Extra small phones - 360px
+   ============================================================================ */
+@media (max-width: 360px) {
+  .my-reviews-container {
+    padding: 6px 4px;
+  }
+
+  .header {
+    padding: 8px;
+  }
+
+  .header h1 {
+    font-size: 0.9rem;
+  }
+
+  .cart-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .tour-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .meta {
+    font-size: 0.65rem;
+  }
+
+  .rating-badge {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+
+  .stars-display mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .comment {
+    font-size: 0.7rem;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+  }
+
+  ::ng-deep .review-card .mat-mdc-raised-button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .no-reviews mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .no-reviews h2 {
+    font-size: 0.95rem;
+  }
+
+  .no-reviews p {
+    font-size: 0.7rem;
   }
 }
 

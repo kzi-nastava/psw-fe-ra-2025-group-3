@@ -165,10 +165,126 @@
   --mdc-checkbox-selected-pressed-icon-color: var(--color-primary-700);
 }
 
-/* Responzivnost */
+/* ============================================================================
+   RESPONSIVE STYLES
+   ============================================================================ */
+
+/* Tablet - 768px */
 @media (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
   .equipment-table {
     font-size: var(--font-size-sm);
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: var(--spacing-3);
+  }
+
+  .btn-delete {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-2) var(--spacing-3) !important;
+  }
+}
+
+/* Mobile - 480px */
+@media (max-width: 480px) {
+  .profile-layout {
+    padding: var(--spacing-3);
+    gap: var(--spacing-3);
+  }
+
+  .profile-content .container {
+    padding: 0;
+  }
+
+  .profile-content .card {
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+
+  .flex-between h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Table wrapper for horizontal scroll */
+  .equipment-list {
+    margin-top: var(--spacing-4);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .equipment-table {
+    font-size: var(--font-size-sm);
+    min-width: 500px;
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: var(--spacing-2) var(--spacing-3);
+    white-space: nowrap;
+  }
+
+  .equipment-table td.text-muted {
+    white-space: normal;
+    min-width: 150px;
+    max-width: 200px;
+  }
+
+  .btn-delete {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2) !important;
+    white-space: nowrap;
+  }
+
+  /* Tab styling for mobile */
+  ::ng-deep .mat-mdc-tab-labels {
+    gap: 0;
+  }
+
+  ::ng-deep .mat-mdc-tab {
+    min-width: 0 !important;
+    padding: 0 var(--spacing-3) !important;
+    flex: 1;
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* iPhone 15 Pro Max - 430px */
+@media (max-width: 430px) {
+  .profile-layout {
+    padding: var(--spacing-2);
+  }
+
+  .profile-content .card {
+    padding: var(--spacing-3);
+  }
+
+  .flex-between h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .badge {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+
+  .equipment-table {
+    min-width: 450px;
   }
 
   .equipment-table th,
@@ -176,8 +292,154 @@
     padding: var(--spacing-2);
   }
 
+  ::ng-deep .mat-mdc-tab {
+    padding: 0 var(--spacing-2) !important;
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    font-size: 13px;
+  }
+}
+
+/* iPhone 15 - 393px */
+@media (max-width: 393px) {
+  .profile-layout {
+    padding: 10px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .profile-content .container {
+    padding: 0;
+  }
+
+  .profile-content .card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .flex-between h2 {
+    font-size: 18px;
+  }
+
+  .badge {
+    font-size: 11px;
+  }
+
+  .equipment-table {
+    min-width: 420px;
+    font-size: 13px;
+  }
+
+  .equipment-table thead tr {
+    font-size: 12px;
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: 8px 10px;
+  }
+
   .btn-delete {
-    font-size: var(--font-size-xs);
-    padding: var(--spacing-1) var(--spacing-2) !important;
+    font-size: 11px;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+  }
+
+  .notification {
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-8);
+  }
+
+  .empty-state p {
+    font-size: var(--font-size-base);
+  }
+
+  ::ng-deep .mat-mdc-tab {
+    padding: 0 8px !important;
+    min-width: 0 !important;
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    font-size: 12px;
+    letter-spacing: 0;
+  }
+
+  ::ng-deep .mat-mdc-tab-body-content {
+    padding-top: var(--spacing-2);
+  }
+}
+
+/* iPhone SE / Small phones - 375px */
+@media (max-width: 375px) {
+  .profile-layout {
+    padding: 8px;
+  }
+
+  .profile-content .card {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .flex-between h2 {
+    font-size: 16px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .equipment-table {
+    min-width: 400px;
+    font-size: 12px;
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: 6px 8px;
+  }
+
+  .btn-delete {
+    font-size: 10px;
+    padding: 3px 6px !important;
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    font-size: 11px;
+  }
+}
+
+/* Extra small phones - 360px */
+@media (max-width: 360px) {
+  .profile-layout {
+    padding: 6px;
+  }
+
+  .profile-content .card {
+    padding: 8px;
+  }
+
+  .flex-between h2 {
+    font-size: 15px;
+  }
+
+  .equipment-table {
+    min-width: 380px;
+    font-size: 11px;
+  }
+
+  .equipment-table th,
+  .equipment-table td {
+    padding: 5px 6px;
+  }
+
+  .btn-delete {
+    font-size: 9px;
+    padding: 2px 5px !important;
   }
 }

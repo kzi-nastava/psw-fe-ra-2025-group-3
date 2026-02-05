@@ -537,33 +537,296 @@
 }
 
 @media (max-width: 480px) {
+  :host ::ng-deep .mat-toolbar {
+    min-height: 60px;
+  }
+
+  .navbar-container {
+    padding: 0 8px;
+    min-height: 60px;
+  }
+
   .brand-text-container {
     display: none;
   }
-  
+
   .brand-logo {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
   }
-  
+
+  .navbar-buttons {
+    gap: 4px;
+  }
+
   .nav-menu-button span,
   .btn-home span,
   .btn-login span,
   .btn-logout span {
     display: none;
   }
-  
+
   .nav-menu-button,
   .btn-home,
   .btn-login,
   .btn-logout {
     padding: 8px !important;
-    min-width: 40px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nav-menu-button mat-icon,
+  .btn-icon-img {
+    margin-right: 0;
   }
 
   .profile-picture {
     width: 32px;
     height: 32px;
+  }
+
+  .profile-label {
+    display: none;
+  }
+
+  .navbar-right {
+    gap: 4px;
+  }
+
+  .cart-icon {
+    font-size: 22px;
+  }
+
+  .cart-badge {
+    font-size: 10px;
+    padding: 1px 4px;
+    min-width: 16px;
+  }
+}
+
+/* ============================================================================
+   EXTRA SMALL PHONES (375px and below)
+   ============================================================================ */
+
+@media (max-width: 375px) {
+  :host ::ng-deep .mat-toolbar {
+    min-height: 56px;
+  }
+
+  .navbar-container {
+    padding: 0 6px;
+    min-height: 56px;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar-buttons {
+    gap: 2px;
+  }
+
+  .nav-menu-button,
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 6px !important;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .nav-menu-button mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .profile-picture {
+    width: 28px;
+    height: 28px;
+  }
+
+  .navbar-right {
+    gap: 2px;
+  }
+
+  .cart-icon {
+    font-size: 20px;
+  }
+
+  .level-rank-button {
+    padding: 4px 8px;
+    min-height: 34px;
+  }
+
+  .level-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .rank-emoji {
+    font-size: 16px;
+  }
+}
+
+/* ============================================================================
+   VERY SMALL PHONES (360px and below)
+   ============================================================================ */
+
+@media (max-width: 360px) {
+  .navbar-container {
+    padding: 0 4px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-menu-button,
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 5px !important;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .profile-picture {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* Hide some menu buttons on very small screens to save space */
+  .navbar-buttons .nav-menu-button:nth-child(n+4) {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   MINIMUM SUPPORTED (320px)
+   ============================================================================ */
+
+@media (max-width: 320px) {
+  :host ::ng-deep .mat-toolbar {
+    min-height: 50px;
+  }
+
+  .navbar-container {
+    min-height: 50px;
+    padding: 0 3px;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-menu-button,
+  .btn-home,
+  .btn-login,
+  .btn-logout {
+    padding: 4px !important;
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .profile-picture {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Only show first 2 menu buttons on smallest screens */
+  .navbar-buttons .nav-menu-button:nth-child(n+3) {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .nav-menu-button,
+  .btn-home,
+  .btn-login,
+  .btn-logout,
+  .cart-button,
+  .profile-picture-link,
+  .level-rank-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .navbar-brand:hover,
+  .nav-menu-button:hover,
+  .btn-home:hover,
+  .btn-login:hover,
+  .btn-logout:hover {
+    transform: none;
+  }
+
+  .navbar-brand:active,
+  .nav-menu-button:active,
+  .btn-home:active,
+  .btn-login:active,
+  .btn-logout:active {
+    opacity: 0.8;
+  }
+}
+
+/* ============================================================================
+   SAFE AREA INSETS (for notched phones)
+   ============================================================================ */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .explorer-navbar {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .navbar-container {
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================================================
+   LANDSCAPE MODE ON MOBILE
+   ============================================================================ */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  :host ::ng-deep .mat-toolbar {
+    min-height: 50px;
+  }
+
+  .navbar-container {
+    min-height: 50px;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-text-container {
+    display: flex;
+  }
+
+  .brand-text-main {
+    font-size: 1.2rem;
+  }
+
+  .brand-text-sub {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+  }
+
+  .nav-menu-button span,
+  .btn-home span,
+  .btn-login span {
+    display: inline;
   }
 }
 
@@ -704,4 +967,599 @@
 ::ng-deep .mat-mdc-menu-item[disabled] {
   opacity: 0.5 !important;
   cursor: not-allowed !important;
+}
+
+/* ============================================================================
+   HAMBURGER BUTTON
+   ============================================================================ */
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 5px;
+}
+
+.hamburger-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ============================================================================
+   MOBILE MENU OVERLAY
+   ============================================================================ */
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 99999;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================================================
+   MOBILE MENU DRAWER
+   ============================================================================ */
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 85%;
+  max-width: 320px;
+  height: 100%;
+  background: linear-gradient(180deg, #00695C 0%, #004D40 100%);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100000;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu.active {
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+}
+
+.mobile-menu-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 1px;
+}
+
+.mobile-menu-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-close:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-content {
+  padding: 10px 0;
+}
+
+.mobile-menu-section {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-menu-section:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu-section-title {
+  display: block;
+  padding: 8px 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-menu-item:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-item mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-menu-item.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.lock-icon-mobile {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Mobile Menu Footer */
+.mobile-menu-footer {
+  position: sticky;
+  bottom: 0;
+  padding: 15px 20px;
+  background: #004D40;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.profile-item {
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.mobile-profile-pic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.mobile-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-logout-btn:active {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.mobile-logout-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Desktop only class */
+.desktop-only {
+  display: flex;
+}
+
+/* Mobile only class */
+.mobile-only {
+  display: none;
+}
+
+/* Navbar Center */
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Cart Badge in Menu */
+.mobile-cart-badge {
+  margin-left: auto;
+  background: #ff4444;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin: 0 10px;
+}
+
+/* ============================================================================
+   MOBILE RESPONSIVE - iPhone 15 (393px) and other phones
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: flex !important;
+  }
+
+  .navbar-container {
+    position: relative;
+  }
+
+  .navbar-left {
+    gap: 12px;
+    flex: 0 0 auto;
+  }
+
+  .navbar-right {
+    gap: 8px;
+    flex: 0 0 auto;
+  }
+
+  /* Hide level info text on mobile, keep icon and emoji */
+  .level-rank-info {
+    display: none;
+  }
+
+  .level-rank-button {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+}
+
+/* iPhone 15 Pro Max, iPhone 14 Pro Max (430px) */
+@media (max-width: 430px) {
+  .navbar-container {
+    padding: 0 12px;
+    min-height: 60px;
+  }
+
+  :host ::ng-deep .mat-toolbar {
+    min-height: 60px;
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brand-text-container {
+    display: none;
+  }
+
+  .hamburger-btn {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+  }
+
+  .hamburger-line {
+    width: 20px;
+  }
+
+  .profile-picture {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profile-label {
+    display: none;
+  }
+
+  .cart-icon {
+    font-size: 22px;
+  }
+
+  .level-rank-button {
+    padding: 6px 10px;
+    min-height: 36px;
+  }
+
+  .level-icon,
+  .rank-emoji {
+    font-size: 18px;
+  }
+}
+
+/* iPhone 15, iPhone 14, iPhone 13 (393px) */
+@media (max-width: 393px) {
+  .navbar-container {
+    padding: 0 10px;
+    min-height: 56px;
+  }
+
+  :host ::ng-deep .mat-toolbar {
+    min-height: 56px;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hamburger-btn {
+    width: 38px;
+    height: 38px;
+    gap: 4px;
+  }
+
+  .hamburger-line {
+    width: 18px;
+    height: 2px;
+  }
+
+  .profile-picture {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cart-icon {
+    font-size: 20px;
+  }
+
+  .cart-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+    min-width: 14px;
+  }
+
+  .level-rank-button {
+    padding: 5px 8px;
+    min-height: 34px;
+  }
+
+  .level-icon,
+  .rank-emoji {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Mobile menu adjustments */
+  .mobile-menu {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .mobile-menu-item {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .mobile-menu-section-title {
+    padding: 6px 16px;
+    font-size: 0.65rem;
+  }
+}
+
+/* iPhone SE, iPhone 8 and smaller (375px) */
+@media (max-width: 375px) {
+  .navbar-container {
+    padding: 0 8px;
+    min-height: 54px;
+  }
+
+  :host ::ng-deep .mat-toolbar {
+    min-height: 54px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hamburger-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-picture {
+    width: 28px;
+    height: 28px;
+  }
+
+  .navbar-right {
+    gap: 4px;
+  }
+
+  .level-rank-button {
+    padding: 4px 6px;
+    min-height: 32px;
+    border-radius: 16px;
+  }
+
+  .level-icon,
+  .rank-emoji {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .mobile-menu {
+    width: 92%;
+  }
+
+  .mobile-menu-header {
+    padding: 16px;
+  }
+
+  .mobile-menu-title {
+    font-size: 1.1rem;
+  }
+
+  .mobile-menu-item {
+    padding: 11px 14px;
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+
+  .mobile-menu-item mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Very small phones (360px) */
+@media (max-width: 360px) {
+  .navbar-container {
+    padding: 0 6px;
+    min-height: 52px;
+  }
+
+  :host ::ng-deep .mat-toolbar {
+    min-height: 52px;
+  }
+
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hamburger-btn {
+    width: 34px;
+    height: 34px;
+    gap: 3px;
+  }
+
+  .hamburger-line {
+    width: 16px;
+  }
+
+  .profile-picture {
+    width: 26px;
+    height: 26px;
+  }
+
+  .level-rank-button {
+    padding: 3px 5px;
+  }
+
+  .mobile-menu-item {
+    padding: 10px 12px;
+  }
+}
+
+/* Minimum supported (320px) */
+@media (max-width: 320px) {
+  .navbar-container {
+    padding: 0 5px;
+    min-height: 50px;
+  }
+
+  :host ::ng-deep .mat-toolbar {
+    min-height: 50px;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hamburger-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .profile-picture {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Hide rank button on very small screens */
+  .level-rank-button {
+    display: none;
+  }
 }

@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <div class="navbar-left">
       <!-- Logo -->
-      <a routerLink="/home" class="navbar-brand">
+      <a routerLink="/home" class="navbar-brand" (click)="closeMobileMenu()">
         <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="brand-logo">
         <div class="brand-text-container">
           <span class="brand-text-main">TRAVEL</span>
@@ -10,8 +10,8 @@
         </div>
       </a>
 
-      <!-- Navigation Buttons -->
-      <div class="navbar-buttons">
+      <!-- Navigation Buttons - Desktop Only -->
+      <div class="navbar-buttons desktop-only">
 
       <!-- Administrator Dropdowns -->
       <ng-container *ngIf="user && user.role === 'administrator'">
@@ -257,17 +257,33 @@
       </div>
     </div>
 
+    <!-- Center - Rank Badge (Mobile) -->
+    <div class="navbar-center mobile-only">
+      <button *ngIf="user && user.role === 'tourist' && touristStats"
+              class="level-rank-button"
+              (click)="openLevelDialog()"
+              [style.background]="rankConfig?.gradient"
+              matTooltip="Click to view your progress">
+        <mat-icon class="level-icon">military_tech</mat-icon>
+        <div class="level-rank-info">
+          <span class="rank-name">{{ touristStats.rank }}</span>
+          <span class="level-text">Level {{ touristStats.level }}</span>
+        </div>
+        <span class="rank-emoji">{{ rankConfig?.icon }}</span>
+      </button>
+    </div>
+
     <!-- Right Side Buttons -->
     <div class="navbar-right">
-      <!-- My Cart Button (only for tourists) -->
-      <div *ngIf="user && user.role === 'tourist'" class="cart-badge-container">
+      <!-- My Cart Button (only for tourists) - Desktop Only -->
+      <div *ngIf="user && user.role === 'tourist'" class="cart-badge-container desktop-only">
         <button mat-icon-button class="cart-button" (click)="toggleCartDropdown()">
           <mat-icon class="cart-icon">shopping_cart</mat-icon>
           <span *ngIf="cartItemsCount > 0" class="cart-badge">{{ cartItemsCount > 99 ? '99+' : cartItemsCount }}</span>
         </button>
-        
+
         <div *ngIf="isCartDropdownOpen" class="cart-dropdown-overlay" (click)="closeCartDropdown()"></div>
-        <xp-cart-dropdown 
+        <xp-cart-dropdown
           *ngIf="isCartDropdownOpen"
           (closeDropdown)="closeCartDropdown()">
         </xp-cart-dropdown>
@@ -275,10 +291,10 @@
 
       <xp-notification-badge *ngIf="user && user.username !== ''" (dropdownOpened)="onNotificationDropdownOpened()"></xp-notification-badge>
 
-      <!-- Tourist Level & Rank Badge (only for tourists) -->
-      <button *ngIf="user && user.role === 'tourist' && touristStats" 
-              class="level-rank-button" 
-              (click)="openLevelDialog()" 
+      <!-- Tourist Level & Rank Badge (only for tourists) - Desktop Only -->
+      <button *ngIf="user && user.role === 'tourist' && touristStats"
+              class="level-rank-button desktop-only"
+              (click)="openLevelDialog()"
               [style.background]="rankConfig?.gradient"
               matTooltip="Click to view your progress">
         <mat-icon class="level-icon">military_tech</mat-icon>
@@ -301,20 +317,262 @@
         <span>Login</span>
       </button>
 
-      <!-- Profile Picture (when authenticated) -->
-      <a *ngIf="user && user.username !== ''" routerLink="/profile" class="profile-picture-link">
+      <!-- Profile Picture (when authenticated) - Desktop Only -->
+      <a *ngIf="user && user.username !== ''" routerLink="/profile" class="profile-picture-link desktop-only">
         <div class="profile-picture-container">
-          <img [src]="profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
+          <img [src]="profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
                (error)="onImageError($event)"
-               alt="Profile" 
+               alt="Profile"
                class="profile-picture">
           <span class="profile-label">My Profile</span>
         </div>
       </a>
 
-      <!-- Logout Button (when authenticated) -->
-      <button *ngIf="user && user.username !== ''" mat-icon-button class="btn-logout-icon" (click)="onLogout()" matTooltip="Logout">
+      <!-- Logout Button (when authenticated) - Desktop Only -->
+      <button *ngIf="user && user.username !== ''" mat-icon-button class="btn-logout-icon desktop-only" (click)="onLogout()" matTooltip="Logout">
         <mat-icon>logout</mat-icon>
+      </button>
+
+      <!-- Hamburger Button - Mobile Only (Far Right) -->
+      <button *ngIf="user && user.username !== ''"
+              class="hamburger-btn"
+              (click)="toggleMobileMenu()"
+              [class.active]="isMobileMenuOpen">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay"
+       [class.active]="isMobileMenuOpen"
+       (click)="closeMobileMenu()"></div>
+
+  <!-- Mobile Menu Drawer -->
+  <div class="mobile-menu" [class.active]="isMobileMenuOpen">
+    <div class="mobile-menu-header">
+      <span class="mobile-menu-title">Menu</span>
+      <button class="mobile-menu-close" (click)="closeMobileMenu()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="mobile-menu-content">
+      <!-- Tourist Mobile Menu -->
+      <ng-container *ngIf="user && user.role === 'tourist'">
+        <!-- Cart Section -->
+        <div class="mobile-menu-section">
+          <a class="mobile-menu-item cart-item" routerLink="/tourist/cart" (click)="onMobileNavClick()">
+            <mat-icon>shopping_cart</mat-icon>
+            <span>My Cart</span>
+            <span *ngIf="cartItemsCount > 0" class="mobile-cart-badge">{{ cartItemsCount }}</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Tours</span>
+          <a class="mobile-menu-item" routerLink="/tour-execution/active" (click)="onMobileNavClick()">
+            <mat-icon>play_circle</mat-icon>
+            <span>Active Tour</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/tours" (click)="onMobileNavClick()">
+            <mat-icon>shopping_bag</mat-icon>
+            <span>Tours Shop</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/bundles" (click)="onMobileNavClick()">
+            <mat-icon>inventory_2</mat-icon>
+            <span>Tour Bundles</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/my-tours" (click)="onMobileNavClick()">
+            <mat-icon>list</mat-icon>
+            <span>Purchased Tours</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/tour-history" (click)="onMobileNavClick()">
+            <mat-icon>history</mat-icon>
+            <span>Tour History</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">My Activity</span>
+          <a class="mobile-menu-item" routerLink="/tourist/my-reviews" (click)="onMobileNavClick()">
+            <mat-icon>rate_review</mat-icon>
+            <span>Reviews</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/diaries" (click)="onMobileNavClick()">
+            <mat-icon>menu_book</mat-icon>
+            <span>Diaries</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/my-clubs" (click)="onMobileNavClick()">
+            <mat-icon>groups</mat-icon>
+            <span>My Clubs</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/blogs" (click)="onMobileNavClick()">
+            <mat-icon>article</mat-icon>
+            <span>My Blogs</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tour-execution/tour-problems" (click)="onMobileNavClick()">
+            <mat-icon>report_problem</mat-icon>
+            <span>Problems</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Explore</span>
+          <a class="mobile-menu-item" (click)="goToTopAuthors(); onMobileNavClick()">
+            <mat-icon>person</mat-icon>
+            <span>Top Authors</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/encounters" (click)="onMobileNavClick()">
+            <mat-icon>stars</mat-icon>
+            <span>Encounters</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/tourist/map" (click)="onMobileNavClick()">
+            <mat-icon>map</mat-icon>
+            <span>Map</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Social</span>
+          <a class="mobile-menu-item" routerLink="/blogs" (click)="onMobileNavClick()">
+            <mat-icon>article</mat-icon>
+            <span>Blogs</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/clubs" (click)="onMobileNavClick()">
+            <mat-icon>groups</mat-icon>
+            <span>Clubs</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/meetups" (click)="onMobileNavClick()"
+             [class.disabled]="touristStats && touristStats.level < 2">
+            <mat-icon>event</mat-icon>
+            <span>Meetups</span>
+            <mat-icon *ngIf="touristStats && touristStats.level < 2" class="lock-icon-mobile">lock</mat-icon>
+          </a>
+        </div>
+      </ng-container>
+
+      <!-- Author Mobile Menu -->
+      <ng-container *ngIf="user && user.role === 'author'">
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">My Content</span>
+          <a class="mobile-menu-item" routerLink="/author/tours" (click)="onMobileNavClick()">
+            <mat-icon>map</mat-icon>
+            <span>My Tours</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/author/bundles" (click)="onMobileNavClick()">
+            <mat-icon>inventory</mat-icon>
+            <span>My Bundles</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/author/coupons" (click)="onMobileNavClick()">
+            <mat-icon>local_offer</mat-icon>
+            <span>My Coupons</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/author/sales" (click)="onMobileNavClick()">
+            <mat-icon>sell</mat-icon>
+            <span>My Sales</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/author/blogs" (click)="onMobileNavClick()">
+            <mat-icon>article</mat-icon>
+            <span>My Blogs</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/meetups" (click)="onMobileNavClick()">
+            <mat-icon>group</mat-icon>
+            <span>My Meetups</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Browse</span>
+          <a class="mobile-menu-item" routerLink="/blogs" (click)="onMobileNavClick()">
+            <mat-icon>article</mat-icon>
+            <span>Blogs</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Settings</span>
+          <a class="mobile-menu-item" routerLink="/author/tour-problems" (click)="onMobileNavClick()">
+            <mat-icon>report_problem</mat-icon>
+            <span>Tour Problems</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/profile" (click)="onMobileNavClick()">
+            <mat-icon>account_circle</mat-icon>
+            <span>My Profile</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/author/app-rating" (click)="onMobileNavClick()">
+            <mat-icon>star</mat-icon>
+            <span>Rate App</span>
+          </a>
+        </div>
+      </ng-container>
+
+      <!-- Administrator Mobile Menu -->
+      <ng-container *ngIf="user && user.role === 'administrator'">
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Users</span>
+          <a class="mobile-menu-item" routerLink="/administration/profiles" (click)="onMobileNavClick()">
+            <mat-icon>person</mat-icon>
+            <span>My Profiles</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/administration/tourists" (click)="onMobileNavClick()">
+            <mat-icon>group</mat-icon>
+            <span>Tourists</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Content</span>
+          <a class="mobile-menu-item" routerLink="/equipment" (click)="onMobileNavClick()">
+            <mat-icon>backpack</mat-icon>
+            <span>Equipment</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/administration/facilities" (click)="onMobileNavClick()">
+            <mat-icon>business</mat-icon>
+            <span>Facilities</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/administration/encounters" (click)="onMobileNavClick()">
+            <mat-icon>explore</mat-icon>
+            <span>Encounters</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/administration/monuments" (click)="onMobileNavClick()">
+            <mat-icon>castle</mat-icon>
+            <span>Monuments</span>
+          </a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <span class="mobile-menu-section-title">Management</span>
+          <a class="mobile-menu-item" routerLink="/administration/award-events" (click)="onMobileNavClick()">
+            <mat-icon>emoji_events</mat-icon>
+            <span>Awards</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/administration/tour-problems" (click)="onMobileNavClick()">
+            <mat-icon>report_problem</mat-icon>
+            <span>Tour Problems</span>
+          </a>
+          <a class="mobile-menu-item" routerLink="/app-ratings" (click)="onMobileNavClick()">
+            <mat-icon>star_rate</mat-icon>
+            <span>App Ratings</span>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Mobile Menu Footer -->
+    <div class="mobile-menu-footer">
+      <a class="mobile-menu-item profile-item" routerLink="/profile" (click)="onMobileNavClick()">
+        <img [src]="profilePictureUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'"
+             (error)="onImageError($event)"
+             alt="Profile"
+             class="mobile-profile-pic">
+        <span>My Profile</span>
+      </a>
+      <button class="mobile-logout-btn" (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
       </button>
     </div>
   </div>

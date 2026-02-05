@@ -275,3 +275,438 @@ mat-card-actions button[mat-stroked-button] mat-icon {
     padding: var(--spacing-4);
   }
 }
+
+/* ============================================================================
+   PHONE RESPONSIVE - 480px and below
+   ============================================================================ */
+@media (max-width: 480px) {
+  .tour-list-container {
+    padding: var(--spacing-4) var(--spacing-3);
+  }
+
+  .header {
+    padding: var(--spacing-3) var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .cart-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .tours-grid {
+    gap: var(--spacing-4);
+  }
+
+  .tour-card {
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .tour-card mat-card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .tour-details {
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .detail-item {
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-1);
+  }
+
+  .detail-item mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .detail-item.price-highlight {
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+
+  .price-value {
+    font-size: var(--font-size-base);
+  }
+
+  .tour-badge {
+    padding: 3px 8px;
+    font-size: 10px;
+    margin: 6px 0;
+  }
+
+  .status-badge {
+    padding: 2px var(--spacing-2);
+    font-size: 10px;
+  }
+
+  .insufficient-warning {
+    padding: var(--spacing-2);
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+  }
+
+  .insufficient-warning mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .warning-text strong {
+    font-size: var(--font-size-xs);
+  }
+
+  .warning-text p {
+    font-size: var(--font-size-xs);
+  }
+
+  mat-card-actions {
+    margin-top: var(--spacing-3);
+  }
+
+  mat-card-actions button {
+    margin-top: var(--spacing-2);
+  }
+
+  mat-card-actions button[mat-stroked-button] {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .badge-action {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .badge-action mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-6) var(--spacing-3);
+  }
+
+  .empty-state mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .empty-state h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .empty-state p {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ============================================================================
+   iPhone 15 Pro Max - 430px
+   ============================================================================ */
+@media (max-width: 430px) {
+  .tour-list-container {
+    padding: 12px 10px;
+  }
+
+  .header {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 1.1rem;
+  }
+
+  .tours-grid {
+    gap: 12px;
+  }
+
+  .tour-card {
+    padding: 12px;
+  }
+}
+
+/* ============================================================================
+   iPhone 15 - 393px
+   ============================================================================ */
+@media (max-width: 393px) {
+  .tour-list-container {
+    padding: 10px 8px;
+    min-height: auto;
+  }
+
+  .header {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-left-width: 3px;
+    border-radius: 12px;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+  }
+
+  .cart-subtitle {
+    font-size: 0.7rem;
+    margin-top: 2px;
+    max-width: 100%;
+  }
+
+  .tours-grid {
+    gap: 10px;
+  }
+
+  .tour-card {
+    padding: 10px;
+    border-radius: 10px;
+    border-top-width: 3px;
+  }
+
+  .tour-card mat-card-header {
+    margin-bottom: 10px;
+  }
+
+  .tour-card mat-card-title {
+    font-size: 0.95rem;
+  }
+
+  .tour-card mat-card-subtitle {
+    margin-top: 6px;
+    font-size: 0.8rem;
+  }
+
+  .status-badge {
+    padding: 2px 8px;
+    font-size: 9px;
+  }
+
+  .tour-details {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .detail-item {
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  .detail-item mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .detail-item.price-highlight {
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+
+  .price-value {
+    font-size: 0.9rem;
+  }
+
+  .tour-badge {
+    padding: 2px 6px;
+    font-size: 9px;
+    margin: 4px 0;
+    border-radius: 4px;
+  }
+
+  .insufficient-warning {
+    padding: 8px;
+    gap: 8px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  .insufficient-warning mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .warning-text strong {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .warning-text p {
+    font-size: 0.7rem;
+  }
+
+  mat-card-actions {
+    margin-top: 10px;
+  }
+
+  mat-card-actions button {
+    margin-top: 8px;
+  }
+
+  mat-card-actions button[mat-stroked-button] {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  mat-card-actions button[mat-stroked-button] mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+
+  .badge-action {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+    border-radius: 6px;
+  }
+
+  .badge-action mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .locked-msg {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-5) var(--spacing-3);
+    border-radius: 16px;
+  }
+
+  .empty-state mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 12px;
+  }
+
+  .empty-state h2 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+
+  .empty-state p {
+    font-size: 0.8rem;
+    max-width: 100%;
+  }
+}
+
+/* ============================================================================
+   iPhone SE / Small phones - 375px
+   ============================================================================ */
+@media (max-width: 375px) {
+  .tour-list-container {
+    padding: 8px 6px;
+  }
+
+  .header {
+    padding: 8px 10px;
+  }
+
+  .header h1 {
+    font-size: 0.95rem;
+  }
+
+  .tour-card {
+    padding: 8px;
+  }
+
+  .tour-card mat-card-title {
+    font-size: 0.9rem;
+  }
+
+  .detail-item {
+    font-size: 0.7rem;
+  }
+
+  .price-value {
+    font-size: 0.85rem;
+  }
+
+  mat-card-actions button[mat-stroked-button] {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================================
+   Extra small phones - 360px
+   ============================================================================ */
+@media (max-width: 360px) {
+  .tour-list-container {
+    padding: 6px 4px;
+  }
+
+  .header {
+    padding: 8px;
+  }
+
+  .header h1 {
+    font-size: 0.9rem;
+  }
+
+  .cart-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .tour-card {
+    padding: 6px;
+  }
+
+  .tour-card mat-card-title {
+    font-size: 0.85rem;
+  }
+
+  .detail-item {
+    font-size: 0.65rem;
+  }
+
+  .detail-item mat-icon {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .price-value {
+    font-size: 0.8rem;
+  }
+
+  .tour-badge {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+
+  mat-card-actions button[mat-stroked-button] {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+
+  .empty-state mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .empty-state h2 {
+    font-size: 1rem;
+  }
+
+  .empty-state p {
+    font-size: 0.75rem;
+  }
+}

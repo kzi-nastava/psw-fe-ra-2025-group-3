@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   isCartDropdownOpen: boolean = false;
   touristStats: TouristStats | null = null;
   rankConfig: any = null;
+  isMobileMenuOpen: boolean = false;
   private destroy$ = new Subject<void>();
 
   @ViewChildren(MatMenuTrigger) menuTriggers!: QueryList<MatMenuTrigger>;
@@ -252,5 +253,25 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
 }
   onLogout(): void {
     this.authService.logout();
+    this.closeMobileMenu();
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    // Prevent body scroll when menu is open
+    if (this.isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+    document.body.style.overflow = '';
+  }
+
+  onMobileNavClick(): void {
+    this.closeMobileMenu();
   }
 }

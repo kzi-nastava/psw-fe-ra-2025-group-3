@@ -1,9 +1,14 @@
 /* ============================================================================
    TRAVEL VISTA - Globalni CSS Stilovi
-   
+
    Centralizovani stilovi za konzistentan izgled aplikacije.
    Teal/Cyan tema za travel/adventure osećaj.
    ============================================================================ */
+
+/* Swiper CSS */
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+@import 'swiper/css/effect-cards';
 
 /* ============================================================================
    CSS PROMENLJIVE
@@ -50,8 +55,10 @@
   --spacing-2: 0.5rem;      /* 8px */
   --spacing-3: 0.75rem;     /* 12px */
   --spacing-4: 1rem;        /* 16px */
+  --spacing-5: 1.25rem;     /* 20px */
   --spacing-6: 1.5rem;      /* 24px */
   --spacing-8: 2rem;        /* 32px */
+  --spacing-10: 2.5rem;     /* 40px */
   --spacing-12: 3rem;       /* 48px */
   --spacing-16: 4rem;       /* 64px */
   
@@ -477,61 +484,17 @@ a:hover {
 }
 
 /* ============================================================================
-   RESPONZIVNOST
+   RESPONZIVNOST - ALL PHONE SIZES
    ============================================================================ */
 
 @media (max-width: 1024px) {
   .grid-3 {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* ============================================================================
-   TOUR LIST - CUSTOM BUTTON COLORS
-   ============================================================================ */
-
-/* View Reviews Button */
-.view-reviews-btn.mat-mdc-button,
-.view-reviews-btn.mat-mdc-stroked-button {
-  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
-  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
-  border-color: rgb(0, 188, 212) !important;
-}
-
-.view-reviews-btn .mdc-button__label {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-reviews-btn mat-icon {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-reviews-btn:hover {
-  background-color: rgba(2, 119, 189, 0.08) !important;
-}
-
-/* View Problems Button */
-.view-problems-btn.mat-mdc-button,
-.view-problems-btn.mat-mdc-stroked-button {
-  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
-  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
-  border-color: rgb(0, 188, 212) !important;
-}
-
-.view-problems-btn .mdc-button__label {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-problems-btn mat-icon {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-problems-btn:hover {
-  background-color: rgba(2, 119, 189, 0.08) !important;
 }
 
 @media (max-width: 768px) {
@@ -540,65 +503,276 @@ a:hover {
   .grid-4 {
     grid-template-columns: 1fr;
   }
-  
+
   .flex-row {
     flex-direction: column;
   }
-  
+
   .hide-mobile {
     display: none;
   }
-  
-  h1 {
-    font-size: var(--font-size-3xl);
+
+  .container {
+    padding: 0 var(--spacing-3);
   }
-  
-  h2 {
+
+  h1 {
     font-size: var(--font-size-2xl);
   }
 
-  /* ============================================================================
-   TOUR LIST - CUSTOM BUTTON COLORS
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .btn-lg,
+  .btn-xl {
+    padding: var(--spacing-3) var(--spacing-6);
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Small phones (480px and below) */
+@media (max-width: 480px) {
+  :root {
+    --spacing-4: 0.875rem;
+    --spacing-6: 1.25rem;
+    --spacing-8: 1.5rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-2);
+  }
+
+  h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  p {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-3);
+  }
+}
+
+/* iPhone 15 Pro Max (430px and below) */
+@media (max-width: 430px) {
+  .container {
+    padding: 0 var(--spacing-2);
+  }
+
+  .card {
+    padding: var(--spacing-5);
+    border-radius: var(--border-radius-xl);
+  }
+
+  h1 {
+    font-size: 1.375rem;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+}
+
+/* iPhone 15 (393px and below) */
+@media (max-width: 393px) {
+  :root {
+    --spacing-4: 0.75rem;
+    --spacing-6: 1rem;
+    --spacing-8: 1.25rem;
+  }
+
+  .container {
+    padding: 0 10px;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  h3 {
+    font-size: 0.9375rem;
+  }
+
+  p {
+    font-size: 0.8125rem;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    min-height: 40px;
+  }
+
+  .badge {
+    font-size: 0.6875rem;
+    padding: 3px 6px;
+  }
+
+  .grid-2 {
+    gap: var(--spacing-3);
+  }
+
+  .flex-row.gap-4 {
+    gap: 10px;
+  }
+}
+
+/* Extra small phones (375px and below) */
+@media (max-width: 375px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  h1 {
+    font-size: var(--font-size-lg);
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .btn {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Very small phones (360px and below) */
+@media (max-width: 360px) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Minimum supported (320px) */
+@media (max-width: 320px) {
+  body {
+    font-size: 0.85rem;
+  }
+
+  .container {
+    padding: 0 0.35rem;
+  }
+}
+
+/* ============================================================================
+   TOUCH-FRIENDLY IMPROVEMENTS
    ============================================================================ */
 
-/* View Reviews Button */
-.view-reviews-btn.mat-mdc-button,
-.view-reviews-btn.mat-mdc-stroked-button {
-  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
-  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
-  border-color: rgb(0, 188, 212) !important;
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .btn:hover {
+    transform: none;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .card:active {
+    transform: scale(0.98);
+  }
+
+  /* Ensure touch targets are at least 44px */
+  .btn,
+  button,
+  a {
+    min-height: 44px;
+  }
+
+  /* Prevent text selection on interactive elements */
+  button,
+  .btn {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-.view-reviews-btn .mdc-button__label {
-  color: rgb(0, 188, 212) !important;
+/* ============================================================================
+   SAFE AREA INSETS (for notched phones like iPhone X+)
+   ============================================================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 }
 
-.view-reviews-btn mat-icon {
-  color: rgb(0, 188, 212) !important;
+/* ============================================================================
+   LANDSCAPE MODE ON MOBILE
+   ============================================================================ */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flex-row {
+    flex-direction: row;
+  }
 }
 
-.view-reviews-btn:hover {
-  background-color: rgba(2, 119, 189, 0.08) !important;
+/* ============================================================================
+   PREVENT HORIZONTAL SCROLL
+   ============================================================================ */
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
-/* View Problems Button */
-.view-problems-btn.mat-mdc-button,
-.view-problems-btn.mat-mdc-stroked-button {
-  --mdc-text-button-label-text-color: rgb(0, 188, 212) !important;
-  --mdc-outlined-button-label-text-color: rgb(0, 188, 212) !important;
-  border-color: rgb(0, 188, 212) !important;
-}
+/* ============================================================================
+   IMPROVE MOBILE SCROLLING
+   ============================================================================ */
 
-.view-problems-btn .mdc-button__label {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-problems-btn mat-icon {
-  color: rgb(0, 188, 212) !important;
-}
-
-.view-problems-btn:hover {
-  background-color: rgba(2, 119, 189, 0.08) !important;
-}
-
+@media (max-width: 768px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
 }

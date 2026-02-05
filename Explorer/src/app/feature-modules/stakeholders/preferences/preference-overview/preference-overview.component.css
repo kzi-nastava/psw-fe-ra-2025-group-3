@@ -197,11 +197,18 @@
    RESPONSIVE
    ============================================================================ */
 
+/* Tablet - 768px */
 @media (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
   .grid-2 {
     grid-template-columns: 1fr;
   }
-  
+
   .flex-between {
     flex-direction: column;
     align-items: flex-start;
@@ -216,5 +223,391 @@
     font-size: 24px;
     width: 24px;
     height: 24px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-4);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Mobile - 480px */
+@media (max-width: 480px) {
+  .profile-layout {
+    padding: var(--spacing-3);
+    gap: var(--spacing-3);
+  }
+
+  .profile-content .container {
+    padding: 0;
+  }
+
+  .header {
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-lg);
+  }
+
+  .cart-subtitle {
+    font-size: var(--font-size-xs);
+  }
+
+  .card {
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .card h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .transport-item {
+    padding: var(--spacing-3);
+  }
+
+  .transport-item mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .transport-item strong {
+    font-size: var(--font-size-sm);
+  }
+
+  .rating-stars mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .badge {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+
+  .flex-row.gap-4 {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .flex-row.gap-4 .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-lg.btn-block {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .btn-lg.btn-block mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* iPhone 15 Pro Max - 430px */
+@media (max-width: 430px) {
+  .profile-layout {
+    padding: var(--spacing-2);
+  }
+
+  .header {
+    padding: 12px 14px;
+    border-left-width: 3px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  .cart-subtitle {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .card {
+    padding: 14px;
+    margin-bottom: var(--spacing-4);
+  }
+
+  .card h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .transport-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .transport-item mat-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .grid-2 {
+    gap: var(--spacing-3);
+  }
+
+  .flex-row.gap-2 {
+    gap: 6px;
+  }
+
+  .badge.badge-primary {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+
+/* iPhone 15 - 393px */
+@media (max-width: 393px) {
+  .profile-layout {
+    padding: 10px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .profile-content .container {
+    padding: 0;
+  }
+
+  .header {
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .header h1 {
+    font-size: 16px;
+  }
+
+  .cart-subtitle {
+    font-size: 11px;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .card h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .card p.text-muted {
+    font-size: 12px;
+  }
+
+  .transport-item {
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
+
+  .transport-item mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .transport-item strong {
+    font-size: 13px;
+  }
+
+  .transport-item .flex-row {
+    gap: 10px;
+  }
+
+  .rating-stars mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .grid-2 {
+    gap: 10px;
+  }
+
+  .flex-row.gap-2 {
+    gap: 5px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+
+  .badge.badge-primary {
+    font-size: 10px;
+    padding: 3px 7px;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
+
+  .btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .btn-lg.btn-block {
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .btn-lg.btn-block mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .flex-row.gap-4 {
+    gap: 10px;
+  }
+
+  hr {
+    margin: 12px 0 !important;
+  }
+}
+
+/* iPhone SE / Small phones - 375px */
+@media (max-width: 375px) {
+  .profile-layout {
+    padding: 8px;
+  }
+
+  .header {
+    padding: 8px 10px;
+  }
+
+  .header h1 {
+    font-size: 15px;
+  }
+
+  .cart-subtitle {
+    font-size: 10px;
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .card h3 {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .transport-item {
+    padding: 6px 8px;
+  }
+
+  .transport-item mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .transport-item strong {
+    font-size: 12px;
+  }
+
+  .rating-stars mat-icon {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .btn mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-lg.btn-block {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+
+/* Extra small phones - 360px */
+@media (max-width: 360px) {
+  .profile-layout {
+    padding: 6px;
+  }
+
+  .header {
+    padding: 6px 8px;
+  }
+
+  .header h1 {
+    font-size: 14px;
+  }
+
+  .cart-subtitle {
+    font-size: 9px;
+  }
+
+  .card {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  .card h3 {
+    font-size: 12px;
+  }
+
+  .transport-item {
+    padding: 5px 6px;
+  }
+
+  .transport-item mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .transport-item strong {
+    font-size: 11px;
+  }
+
+  .btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .btn-lg.btn-block {
+    font-size: 11px;
+    padding: 8px 10px;
   }
 }

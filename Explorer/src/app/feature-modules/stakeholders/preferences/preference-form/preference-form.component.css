@@ -236,12 +236,506 @@
   }
 }
 
+/* Mobile - 480px */
 @media (max-width: 480px) {
+  .container {
+    padding: var(--spacing-3) !important;
+  }
+
+  .card {
+    padding: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .card h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .card h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .card p.text-muted {
+    font-size: var(--font-size-sm);
+  }
+
+  .difficulty-grid {
+    gap: var(--spacing-3);
+  }
+
+  .difficulty-card {
+    padding: var(--spacing-4);
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--spacing-3);
+  }
+
+  .difficulty-card mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .difficulty-card strong {
+    font-size: var(--font-size-base);
+  }
+
   .rating-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-2);
+  }
+
+  .rating-card {
+    padding: var(--spacing-3);
+  }
+
+  .rating-number {
+    font-size: var(--font-size-lg);
+  }
+
+  .rating-stars {
+    font-size: var(--font-size-sm);
   }
 
   .tags-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+  }
+
+  .tag-card {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .check-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    top: -6px;
+    right: -6px;
+  }
+
+  .selected-tags-info {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .transport-section .flex-row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .transport-icon {
+    font-size: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .btn-lg {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--font-size-base);
+  }
+}
+
+/* iPhone 15 Pro Max - 430px */
+@media (max-width: 430px) {
+  .container {
+    padding: 12px !important;
+  }
+
+  .card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .card h2 {
+    font-size: 17px;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .card > .flex-row.items-center {
+    flex-direction: row !important;
+    gap: 12px;
+  }
+
+  .card > .flex-row.items-center mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .difficulty-card {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .difficulty-card mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .difficulty-card strong {
+    font-size: 14px;
+  }
+
+  .rating-grid {
+    gap: 8px;
+  }
+
+  .rating-card {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .rating-number {
+    font-size: 18px;
+  }
+
+  .rating-stars {
+    font-size: 12px;
+  }
+
+  .tags-grid {
+    gap: 8px;
+  }
+
+  .tag-card {
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .transport-icon {
+    font-size: 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .transport-section strong {
+    font-size: 15px;
+  }
+
+  .transport-section p.text-muted {
+    font-size: 12px;
+  }
+
+  .divider {
+    margin: 14px 0;
+  }
+}
+
+/* iPhone 15 - 393px */
+@media (max-width: 393px) {
+  .container {
+    padding: 10px !important;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .card h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .card p.text-muted {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .card > .flex-row.items-center mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .inline-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+  }
+
+  .difficulty-grid {
+    gap: 10px;
+  }
+
+  .difficulty-card {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border-width: 2px;
+  }
+
+  .difficulty-card mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .difficulty-card strong {
+    font-size: 13px;
+  }
+
+  .rating-grid {
+    gap: 6px;
+  }
+
+  .rating-card {
+    padding: 8px;
+    border-radius: 8px;
+    border-width: 2px;
+  }
+
+  .rating-number {
+    font-size: 16px;
+  }
+
+  .rating-stars {
+    font-size: 11px;
+  }
+
+  .tags-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .tag-card {
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border-width: 2px;
+  }
+
+  .check-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .selected-tags-info {
+    padding: 10px;
+    font-size: 12px;
+    margin-top: 12px;
+    border-left-width: 3px;
+  }
+
+  .selected-tags-info mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .transport-icon {
+    font-size: 26px !important;
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .transport-section strong {
+    font-size: 14px !important;
+  }
+
+  .transport-section p.text-muted {
+    font-size: 11px;
+  }
+
+  .transport-section .flex-row {
+    gap: 10px;
+  }
+
+  .transport-section .mb-4 {
+    margin-bottom: 10px !important;
+  }
+
+  .divider {
+    margin: 12px 0;
+  }
+
+  .btn-lg {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .btn-lg mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .flex-row.gap-4 {
+    gap: 10px;
+  }
+}
+
+/* iPhone SE / Small phones - 375px */
+@media (max-width: 375px) {
+  .container {
+    padding: 8px !important;
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .card h2 {
+    font-size: 15px;
+  }
+
+  .card h3 {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .card p.text-muted {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .card > .flex-row.items-center mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .difficulty-card {
+    padding: 8px 10px;
+  }
+
+  .difficulty-card mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .difficulty-card strong {
+    font-size: 12px;
+  }
+
+  .rating-card {
+    padding: 6px;
+  }
+
+  .rating-number {
+    font-size: 14px;
+  }
+
+  .rating-stars {
+    font-size: 10px;
+  }
+
+  .tag-card {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .check-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    top: -4px;
+    right: -4px;
+  }
+
+  .transport-icon {
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .transport-section strong {
+    font-size: 13px !important;
+  }
+
+  .btn-lg {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Extra small phones - 360px */
+@media (max-width: 360px) {
+  .container {
+    padding: 6px !important;
+  }
+
+  .card {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  .card h2 {
+    font-size: 14px;
+  }
+
+  .card h3 {
+    font-size: 12px;
+  }
+
+  .card p.text-muted {
+    font-size: 10px;
+  }
+
+  .difficulty-card {
+    padding: 6px 8px;
+  }
+
+  .difficulty-card mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .difficulty-card strong {
+    font-size: 11px;
+  }
+
+  .rating-card {
+    padding: 5px;
+  }
+
+  .rating-number {
+    font-size: 13px;
+  }
+
+  .rating-stars {
+    font-size: 9px;
+  }
+
+  .tag-card {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .transport-icon {
+    font-size: 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .transport-section strong {
+    font-size: 12px !important;
+  }
+
+  .btn-lg {
+    padding: 6px 10px;
+    font-size: 11px;
   }
 }

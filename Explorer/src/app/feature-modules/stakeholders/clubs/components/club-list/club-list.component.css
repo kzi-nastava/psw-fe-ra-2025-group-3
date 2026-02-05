@@ -160,6 +160,301 @@ mat-paginator {
   }
 }
 
+/* ============================================================================
+   PHONE RESPONSIVE - 480px and below
+   ============================================================================ */
+@media (max-width: 480px) {
+  .club-list-container {
+    padding: var(--spacing-4) var(--spacing-3);
+  }
+
+  .header {
+    padding: var(--spacing-3) var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .header button {
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .clubs-grid {
+    gap: var(--spacing-3);
+  }
+
+  .club-card {
+    border-radius: var(--border-radius-lg);
+  }
+
+  .club-header {
+    padding: var(--spacing-3);
+    gap: var(--spacing-2);
+  }
+
+  .club-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .club-avatar img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .club-content {
+    padding: var(--spacing-3);
+  }
+
+  .club-content p {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+
+  .club-actions {
+    padding: var(--spacing-3) !important;
+    gap: var(--spacing-1);
+  }
+
+  .member-badge, .owner-badge {
+    padding: 2px var(--spacing-2);
+    font-size: 10px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-10) var(--spacing-4);
+  }
+
+  mat-paginator {
+    margin-top: var(--spacing-4);
+  }
+}
+
+/* ============================================================================
+   iPhone 15 Pro Max - 430px
+   ============================================================================ */
+@media (max-width: 430px) {
+  .club-list-container {
+    padding: 12px 10px;
+  }
+
+  .header {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 1.1rem;
+  }
+
+  .clubs-grid {
+    gap: 10px;
+  }
+
+  .club-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .club-content {
+    padding: 12px;
+  }
+}
+
+/* ============================================================================
+   iPhone 15 - 393px
+   ============================================================================ */
+@media (max-width: 393px) {
+  .club-list-container {
+    padding: 10px 8px;
+    min-height: auto;
+  }
+
+  .header {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-left-width: 3px;
+    border-radius: 12px;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+  }
+
+  .header button {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .clubs-grid {
+    gap: 10px;
+  }
+
+  .club-card {
+    border-radius: 12px;
+  }
+
+  .club-header {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .club-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .club-avatar img {
+    width: 32px;
+    height: 32px;
+    border-width: 1.5px;
+  }
+
+  .club-content {
+    padding: 10px 12px;
+  }
+
+  .club-content p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .club-actions {
+    padding: 10px 12px !important;
+    gap: 6px;
+  }
+
+  .member-badge, .owner-badge {
+    padding: 2px 8px;
+    font-size: 9px;
+    letter-spacing: 0.3px;
+  }
+
+  ::ng-deep .club-list-container .club-card .mat-mdc-outlined-button.mat-primary {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-8) var(--spacing-3);
+    border-radius: 16px;
+    border-width: 1.5px;
+  }
+
+  .loading-container {
+    min-height: 300px;
+  }
+
+  mat-paginator {
+    margin-top: 12px;
+  }
+
+  ::ng-deep mat-paginator .mat-mdc-paginator-container {
+    padding: 0 8px;
+    min-height: 48px;
+  }
+
+  ::ng-deep mat-paginator .mat-mdc-paginator-page-size-label,
+  ::ng-deep mat-paginator .mat-mdc-paginator-range-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================================================================
+   iPhone SE / Small phones - 375px
+   ============================================================================ */
+@media (max-width: 375px) {
+  .club-list-container {
+    padding: 8px 6px;
+  }
+
+  .header {
+    padding: 8px 10px;
+  }
+
+  .header h1 {
+    font-size: 0.95rem;
+  }
+
+  .club-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .club-avatar img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .club-content p {
+    font-size: 0.75rem;
+  }
+
+  .club-actions {
+    padding: 8px 10px !important;
+  }
+
+  ::ng-deep .club-list-container .club-card .mat-mdc-outlined-button.mat-primary {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================================================================
+   Extra small phones - 360px
+   ============================================================================ */
+@media (max-width: 360px) {
+  .club-list-container {
+    padding: 6px 4px;
+  }
+
+  .header {
+    padding: 8px;
+  }
+
+  .header h1 {
+    font-size: 0.9rem;
+  }
+
+  .header button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .club-header {
+    padding: 8px 10px;
+  }
+
+  .club-header h3 {
+    font-size: 0.85rem;
+  }
+
+  .club-avatar img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .club-content {
+    padding: 8px 10px;
+  }
+
+  .club-content p {
+    font-size: 0.7rem;
+  }
+
+  .member-badge, .owner-badge {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  ::ng-deep .club-list-container .club-card .mat-mdc-outlined-button.mat-primary {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+}
+
 .club-actions {
   padding: var(--spacing-4) !important;
   display: flex;

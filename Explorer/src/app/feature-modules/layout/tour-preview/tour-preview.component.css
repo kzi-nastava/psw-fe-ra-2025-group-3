@@ -339,31 +339,486 @@
   flex-wrap: wrap;
 }
 
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS - ALL PHONES
+   ============================================================================ */
+
 @media (max-width: 768px) {
+  .modal-backdrop {
+    padding: var(--spacing-2);
+    align-items: flex-start;
+    padding-top: env(safe-area-inset-top, var(--spacing-2));
+  }
+
   .modal-content {
     max-height: 95vh;
-    margin: var(--spacing-2);
+    margin: 0;
+    border-radius: var(--border-radius-xl);
+  }
+
+  .close-btn {
+    top: var(--spacing-3);
+    right: var(--spacing-3);
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-size-2xl);
+  }
+
+  .tour-image-large {
+    height: 220px;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+  }
+
+  .tour-header-info {
+    padding: var(--spacing-4);
   }
 
   .tour-name {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .tour-rating-large {
+    flex-wrap: wrap;
+    gap: var(--spacing-1);
+  }
+
+  .star {
+    font-size: var(--font-size-lg);
+  }
+
+  .rating-value {
+    font-size: var(--font-size-base);
+  }
+
+  .review-count {
+    font-size: var(--font-size-sm);
   }
 
   .tour-details-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-3);
     padding: 0 var(--spacing-4) var(--spacing-4);
+  }
+
+  .detail-card {
+    padding: var(--spacing-3);
+    border-radius: var(--border-radius-md);
+  }
+
+  .detail-icon {
+    font-size: var(--font-size-xl);
+  }
+
+  .detail-label {
+    font-size: 0.7rem;
+  }
+
+  .detail-value {
+    font-size: var(--font-size-base);
   }
 
   .info-section {
     padding: var(--spacing-4);
   }
 
+  .section-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .starting-point {
+    font-size: var(--font-size-base);
+  }
+
+  .description {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+  }
+
+  .tags-container {
+    gap: var(--spacing-1);
+  }
+
+  .tag {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: 0.75rem;
+  }
+
   .cta-container {
-    padding: var(--spacing-6);
+    padding: var(--spacing-6) var(--spacing-4);
+    border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+  }
+
+  .lock-icon {
+    font-size: var(--font-size-3xl);
+  }
+
+  .lock-text {
+    font-size: var(--font-size-base);
   }
 
   .cta-buttons {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--spacing-3);
   }
+
+  .cta-buttons button {
+    width: 100%;
+    min-height: 48px;
+    font-size: var(--font-size-base);
+  }
+}
+
+/* ============================================================================
+   SMALL PHONES (480px and below)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .modal-backdrop {
+    padding: 0;
+  }
+
+  .modal-content {
+    max-height: 100vh;
+    max-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .close-btn {
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-xl);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .tour-image-large {
+    height: 180px;
+    border-radius: 0;
+  }
+
+  .tour-header-info {
+    padding: var(--spacing-3);
+  }
+
+  .tour-name {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-2);
+  }
+
+  .star {
+    font-size: var(--font-size-base);
+  }
+
+  .rating-value {
+    font-size: var(--font-size-sm);
+  }
+
+  .review-count {
+    font-size: 0.75rem;
+  }
+
+  .tour-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2);
+    padding: 0 var(--spacing-3) var(--spacing-3);
+  }
+
+  .detail-card {
+    padding: var(--spacing-2);
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-1);
+  }
+
+  .detail-icon {
+    font-size: var(--font-size-lg);
+  }
+
+  .detail-label {
+    font-size: 0.6rem;
+  }
+
+  .detail-value {
+    font-size: 0.85rem;
+  }
+
+  .original-price {
+    font-size: var(--font-size-sm);
+  }
+
+  .discounted-price {
+    font-size: var(--font-size-lg);
+  }
+
+  .discount-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .info-section {
+    padding: var(--spacing-3);
+  }
+
+  .section-title {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .starting-point {
+    font-size: var(--font-size-sm);
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
+
+  .tag {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+
+  .cta-container {
+    padding: var(--spacing-4) var(--spacing-3);
+    border-radius: 0;
+  }
+
+  .cta-message {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .lock-icon {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-1);
+  }
+
+  .lock-text {
+    font-size: var(--font-size-sm);
+  }
+
+  .cta-buttons {
+    gap: var(--spacing-2);
+  }
+
+  .cta-buttons button {
+    min-height: 44px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ============================================================================
+   EXTRA SMALL PHONES (375px and below)
+   ============================================================================ */
+
+@media (max-width: 375px) {
+  .tour-image-large {
+    height: 160px;
+  }
+
+  .tour-name {
+    font-size: 1.1rem;
+  }
+
+  .tour-details-grid {
+    gap: var(--spacing-1);
+  }
+
+  .detail-card {
+    padding: 6px;
+  }
+
+  .detail-icon {
+    font-size: var(--font-size-base);
+  }
+
+  .detail-value {
+    font-size: 0.8rem;
+  }
+
+  .info-section {
+    padding: var(--spacing-2);
+  }
+
+  .description {
+    font-size: 0.8rem;
+  }
+
+  .cta-container {
+    padding: var(--spacing-3) var(--spacing-2);
+  }
+
+  .lock-text {
+    font-size: 0.8rem;
+  }
+
+  .cta-buttons button {
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================================================
+   VERY SMALL PHONES (360px and below)
+   ============================================================================ */
+
+@media (max-width: 360px) {
+  .tour-image-large {
+    height: 150px;
+  }
+
+  .tour-name {
+    font-size: 1rem;
+  }
+
+  .tour-header-info {
+    padding: var(--spacing-2);
+  }
+
+  .detail-label {
+    font-size: 0.55rem;
+  }
+
+  .detail-value {
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================================
+   MINIMUM SUPPORTED (320px)
+   ============================================================================ */
+
+@media (max-width: 320px) {
+  .tour-image-large {
+    height: 130px;
+  }
+
+  .tour-name {
+    font-size: 0.95rem;
+  }
+
+  .close-btn {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-lg);
+  }
+
+  .tour-details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .detail-card {
+    padding: 4px;
+  }
+
+  .detail-icon {
+    font-size: 0.9rem;
+  }
+
+  .detail-value {
+    font-size: 0.7rem;
+  }
+}
+
+/* ============================================================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .close-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .close-btn:hover {
+    transform: none;
+  }
+
+  .close-btn:active {
+    background: var(--color-neutral-200);
+  }
+
+  .cta-buttons button {
+    min-height: 48px;
+  }
+
+  .tag {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ============================================================================
+   SAFE AREA INSETS (for notched phones)
+   ============================================================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .modal-backdrop {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  @media (max-width: 480px) {
+    .cta-container {
+      padding-bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ============================================================================
+   LANDSCAPE MODE ON MOBILE
+   ============================================================================ */
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .modal-backdrop {
+    padding: var(--spacing-2);
+  }
+
+  .modal-content {
+    max-height: 90vh;
+    border-radius: var(--border-radius-xl);
+  }
+
+  .tour-image-large {
+    height: 150px;
+  }
+
+  .tour-details-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .detail-card {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-2);
+  }
+
+  .cta-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .cta-buttons button {
+    width: auto;
+    flex: 1;
+    max-width: 200px;
+  }
+}
+
+/* ============================================================================
+   PREVENT BODY SCROLL WHEN MODAL IS OPEN
+   ============================================================================ */
+
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
 }

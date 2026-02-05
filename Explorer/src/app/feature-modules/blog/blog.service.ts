@@ -28,6 +28,11 @@ export class BlogService {
     return this.http.get<Blog[]>(`${this.baseUrl}/all`);
   }
 
+  // Public endpoint za blogove (za neautentifikovane korisnike)
+  getPublicBlogs(): Observable<Blog[]> {
+    return this.http.get<Blog[]>(`${this.baseUrl}/public`);
+  }
+
   getBlogById(id: number): Observable<Blog> {
     return this.http.get<Blog>(`${this.baseUrl}/${id}`);
   }

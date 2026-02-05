@@ -55,57 +55,129 @@
   <app-featured-tours *ngIf="!isLoggedIn"></app-featured-tours>
 
   <!-- ============================================================
-       VALUE PROPOSITION - For Tourists
+       LATEST BLOGS - Travel Stories
        ============================================================ -->
-  <section class="value-section">
+  <section class="blog-section">
     <div class="container">
       <div class="section-header text-center">
         <div class="section-logo-badge">
           <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="section-logo">
-          <span class="logo-badge-text">WHY TRAVEL VISTA</span>
+          <span class="logo-badge-text">TRAVEL STORIES</span>
         </div>
-        <h2 class="section-title-large">Travel Differently</h2>
+        <h2 class="section-title-large">Latest from Our Community</h2>
         <p class="section-description-enhanced">
-          Discover what makes Travel Vista the platform for authentic travel experiences
+          Read inspiring stories and travel experiences shared by our community
         </p>
       </div>
 
-      <div class="value-grid">
-        <div class="value-card">
-          <div class="value-image-wrapper">
-            <img src="assets/images/slika1.jpg" alt="Local Guides" class="value-image">
+      <!-- Loading State -->
+      <div *ngIf="isLoadingBlogs" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading blogs...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length === 0" class="empty-blogs">
+        <p>No blogs available yet. Be the first to share your travel story!</p>
+      </div>
+
+      <!-- Blog Grid - Desktop Only -->
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0 && !isMobile" class="blog-grid">
+        <div *ngFor="let blog of latestBlogs" class="blog-card" (click)="viewBlog(blog.id)">
+          <!-- Blog Image -->
+          <div class="blog-image-container">
+            <img [src]="getImageUrl(blog)" [alt]="blog.title" class="blog-image">
+            <div class="blog-overlay">
+              <span *ngIf="getBlogStatus(blog.status)"
+                    class="blog-status"
+                    [ngClass]="{
+                      'status-active': getBlogStatus(blog.status) === 'ACTIVE',
+                      'status-famous': getBlogStatus(blog.status) === 'FAMOUS',
+                      'status-readonly': getBlogStatus(blog.status) === 'READ-ONLY'
+                    }">
+                {{ getBlogStatus(blog.status) }}
+              </span>
+              <span class="blog-date">
+                {{ formatDate(blog.creationDate) }}
+              </span>
+            </div>
           </div>
-          <div class="value-content">
-            <h3 class="value-title">Connect With Local Guides</h3>
-            <p class="value-text">
-              Meet passionate locals who share their city's hidden gems and authentic stories
-            </p>
+
+          <!-- Blog Content -->
+          <div class="blog-content">
+            <h3 class="blog-title">{{ blog.title }}</h3>
+            <p class="blog-description">{{ truncateMarkdown(blog.description, 100) }}</p>
+            <div class="blog-meta">
+              <span class="meta-item">
+                <span class="meta-icon">📷</span>
+                {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+              </span>
+              <span class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                {{ blog.estimatedReadMinutes || 1 }} min read
+              </span>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Blog Swiper - Mobile Only -->
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0 && isMobile" class="blog-swiper-container">
+        <div class="swiper blog-swiper">
+          <div class="swiper-wrapper">
+            <div *ngFor="let blog of latestBlogs; let i = index" class="swiper-slide">
+              <div class="blog-card-mobile" (click)="viewBlog(blog.id)">
+                <!-- Blog Image -->
+                <div class="blog-image-container-mobile">
+                  <img [src]="getImageUrl(blog)" [alt]="blog.title" class="blog-image">
+                  <div class="blog-overlay-mobile">
+                    <span *ngIf="getBlogStatus(blog.status)"
+                          class="blog-status"
+                          [ngClass]="{
+                            'status-active': getBlogStatus(blog.status) === 'ACTIVE',
+                            'status-famous': getBlogStatus(blog.status) === 'FAMOUS',
+                            'status-readonly': getBlogStatus(blog.status) === 'READ-ONLY'
+                          }">
+                      {{ getBlogStatus(blog.status) }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Blog Content -->
+                <div class="blog-content-mobile">
+                  <span class="blog-date-mobile">{{ formatDate(blog.creationDate) }}</span>
+                  <h3 class="blog-title-mobile">{{ blog.title }}</h3>
+                  <p class="blog-description-mobile">{{ truncateMarkdown(blog.description, 150) }}</p>
+                  <div class="blog-meta-mobile">
+                    <span class="meta-item-mobile">
+                      <span class="meta-icon">📷</span>
+                      {{ blog.images.length }} {{ blog.images.length === 1 ? 'image' : 'images' }}
+                    </span>
+                    <span class="meta-item-mobile">
+                      <span class="meta-icon">⏱️</span>
+                      {{ blog.estimatedReadMinutes || 1 }} min read
+                    </span>
+                  </div>
+                  <button class="read-more-btn">
+                    Read Story
+                    <span class="btn-arrow">→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pagination dots -->
+          <div class="swiper-pagination"></div>
         </div>
 
-        <div class="value-card">
-          <div class="value-image-wrapper">
-            <img src="assets/images/slika2.jpg" alt="Unique Experiences" class="value-image">
-          </div>
-          <div class="value-content">
-            <h3 class="value-title">Unique Experiences</h3>
-            <p class="value-text">
-              Go beyond typical tourist spots and discover places only locals know about
-            </p>
-          </div>
-        </div>
+      </div>
 
-        <div class="value-card">
-          <div class="value-image-wrapper">
-            <img src="assets/images/slika3.jpg" alt="Your Way" class="value-image">
-          </div>
-          <div class="value-content">
-            <h3 class="value-title">Travel Your Way</h3>
-            <p class="value-text">
-              Flexible tours designed around your interests, schedule, and travel style
-            </p>
-          </div>
-        </div>
+      <!-- View All Blogs Button -->
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0" class="view-all-blogs">
+        <button class="btn btn-outline-primary btn-lg" routerLink="/blogs">
+          <span>View All Blogs</span>
+          <span class="btn-icon">→</span>
+        </button>
       </div>
     </div>
   </section>
@@ -197,41 +269,6 @@
       </div>
     </div>
   </section>
-  <!-- ============================================================
-       NEWSLETTER CTA – only for non-logged users
-       ============================================================ -->
-  <section class="newsletter-section" *ngIf="!isLoggedIn">
-    <div class="container newsletter-container">
-      <div class="newsletter-content">
-        <h2>Stay Inspired ✈️</h2>
-        <p>
-          Get the latest travel stories, guides and hidden gems
-          delivered straight to your inbox.
-        </p>
-
-        <div class="newsletter-form">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            [(ngModel)]="newsletterEmail"
-            [disabled]="isSubscribing"
-          />
-
-          <button
-            class="btn btn-primary"
-            (click)="subscribeToNewsletter()"
-            [disabled]="isSubscribing">
-            {{ isSubscribing ? 'Subscribing...' : 'Subscribe' }}
-          </button>
-        </div>
-
-        <span class="newsletter-note">
-          No account needed. No spam. Unsubscribe anytime.
-        </span>
-      </div>
-    </div>
-  </section>
-
 
   <!-- ============================================================
        FOOTER
