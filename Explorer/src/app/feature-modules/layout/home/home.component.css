@@ -1979,6 +1979,54 @@
 }
 
 /* ============================================================================
+   MID-RANGE PHONES (390px - iPhone 12/13/14, Pixel 5, Galaxy S21)
+   ============================================================================ */
+
+@media (max-width: 390px) {
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+
+  .hero-cta .btn {
+    padding: 0.95rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .section-title-large {
+    font-size: 1.55rem;
+  }
+
+  .blog-grid {
+    gap: 0.7rem;
+  }
+
+  .blog-image-container {
+    height: 95px;
+  }
+
+  .blog-title {
+    font-size: 0.82rem;
+  }
+
+  .blog-description {
+    font-size: 0.72rem;
+  }
+
+  .guides-text .section-title {
+    font-size: 1.65rem;
+  }
+
+  .feature-icon-large {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ============================================================================
    EXTRA SMALL PHONES (375px and below - iPhone SE, older Android)
    ============================================================================ */
 
@@ -1998,6 +2046,7 @@
   .hero-cta .btn {
     padding: 0.9rem 1.25rem;
     font-size: 0.9rem;
+    min-height: 48px;
   }
 
   .hero-illustration {
@@ -2038,7 +2087,7 @@
   }
 
   .guides-image-container {
-    height: 220px;
+    height: 190px;
   }
 
   .guides-visual-title {
@@ -2126,6 +2175,7 @@
   .hero-cta .btn {
     padding: 0.85rem 1rem;
     font-size: 0.85rem;
+    min-height: 48px;
   }
 
   .hero-illustration {
@@ -2254,7 +2304,9 @@
   }
 
   .blog-description {
-    display: none;
+    font-size: 0.65rem;
+    margin-bottom: 0.3rem;
+    -webkit-line-clamp: 1;
   }
 
   .blog-meta {
@@ -2321,6 +2373,17 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  .hero-section {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .blog-section,
+  .guides-section {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
   .landing-footer {
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   }
@@ -2375,6 +2438,201 @@
 
   .blog-image-container {
     height: 100px;
+  }
+}
+
+@media (max-width: 480px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto;
+    padding: 40px 0 30px;
+  }
+
+  .hero-illustration {
+    max-width: 150px;
+  }
+
+  .illustration-image {
+    max-width: 140px;
+    bottom: 0;
+  }
+
+  .hero-cta {
+    flex-direction: row;
+  }
+
+  .hero-cta .btn {
+    width: auto;
+  }
+
+  .guides-image-container {
+    height: 180px;
+  }
+}
+
+/* ============================================================================
+   SCROLL INDICATOR
+   ============================================================================ */
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  animation: scrollFadeIn 1.5s ease 1.5s both;
+}
+
+.scroll-mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+
+.scroll-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+@keyframes scrollWheel {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes scrollFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ============================================================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================================================ */
+
+.reveal {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.reveal-up {
+  transform: translateY(60px);
+}
+
+.reveal.reveal-left {
+  transform: translateX(-80px);
+}
+
+.reveal.reveal-right {
+  transform: translateX(80px);
+}
+
+.reveal.reveal-zoom {
+  transform: scale(0.85);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Staggered delays for blog cards inside reveal container */
+.reveal.revealed .blog-card:nth-child(1) {
+  animation: cardReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+.reveal.revealed .blog-card:nth-child(2) {
+  animation: cardReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+.reveal.revealed .blog-card:nth-child(3) {
+  animation: cardReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Staggered feature highlights */
+.reveal.revealed .feature-highlight:nth-child(1) {
+  animation: featureReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+.reveal.revealed .feature-highlight:nth-child(2) {
+  animation: featureReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+.reveal.revealed .feature-highlight:nth-child(3) {
+  animation: featureReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+}
+
+@keyframes featureReveal {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================================
+   SCROLL INDICATOR RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .scroll-indicator {
+    bottom: 1.5rem;
+  }
+
+  .scroll-mouse {
+    width: 22px;
+    height: 36px;
+  }
+
+  .scroll-text {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-indicator {
+    bottom: 1rem;
   }
 }
 

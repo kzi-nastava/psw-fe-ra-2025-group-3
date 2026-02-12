@@ -19,6 +19,7 @@ import { FeaturedToursComponent } from './featured-tours/featured-tours.componen
 import { TourPreviewComponent } from './tour-preview/tour-preview.component';
 import { LevelProgressDialogComponent } from './level-progress-dialog/level-progress-dialog.component';
 import { LevelUpGuideComponent } from './level-up-guide/level-up-guide.component';
+import { DemoPageComponent } from './demo-page/demo-page.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { LevelUpGuideComponent } from './level-up-guide/level-up-guide.component
     FeaturedToursComponent,
     TourPreviewComponent,
     LevelProgressDialogComponent,
-    LevelUpGuideComponent
+    LevelUpGuideComponent,
+    DemoPageComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,72 @@
+<div class="demo-page">
+  <!-- Background -->
+  <div class="demo-backgrounds">
+    <div class="demo-background"
+         *ngFor="let image of backgroundImages; let i = index"
+         [class.active]="i === currentBackgroundIndex"
+         [style.background-image]="'url(' + image + ')'">
+    </div>
+    <div class="demo-overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="demo-content">
+    <!-- Logo -->
+    <div class="demo-logo-container">
+      <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="demo-logo">
+    </div>
+
+    <!-- Glassmorphism Card -->
+    <div class="demo-card">
+      <!-- Decorative top accent -->
+      <div class="card-accent"></div>
+
+      <!-- Icon -->
+      <div class="demo-icon-wrapper">
+        <div class="demo-icon-circle">
+          <img src="assets/icons/icon4.png" alt="Demo" class="demo-icon-img">
+        </div>
+      </div>
+
+      <!-- Message -->
+      <h1 class="demo-title">Demo je u toku</h1>
+
+      <div class="demo-divider">
+        <span class="divider-dot"></span>
+        <span class="divider-line"></span>
+        <span class="divider-dot"></span>
+      </div>
+
+      <p class="demo-message">
+        Zbog toga te ne možemo pustiti da švrljaš dalje po stranici.
+      </p>
+      <p class="demo-thanks">
+        Hvala na pažnji.
+      </p>
+
+      <!-- Decorative illustrations -->
+      <div class="demo-illustrations">
+        <div class="illustration-item">
+          <img src="assets/icons/icon1.png" alt="" class="illustration-icon">
+        </div>
+        <div class="illustration-item">
+          <img src="assets/icons/icon2.png" alt="" class="illustration-icon">
+        </div>
+        <div class="illustration-item">
+          <img src="assets/icons/icon3.png" alt="" class="illustration-icon">
+        </div>
+      </div>
+
+      <!-- Back button -->
+      <a routerLink="/home" class="demo-back-btn">
+        <span class="back-arrow">←</span>
+        <span>Nazad na početnu</span>
+      </a>
+    </div>
+
+    <!-- Bottom illustration -->
+    <div class="demo-bottom-illustration">
+      <img src="assets/images/layout.png" alt="Travel" class="bottom-img">
+    </div>
+  </div>
+</div>

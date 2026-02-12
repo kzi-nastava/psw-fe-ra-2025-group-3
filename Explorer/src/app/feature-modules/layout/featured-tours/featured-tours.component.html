@@ -1,9 +1,13 @@
 <div class="featured-tours-section">
   <div class="container">
     <!-- Header -->
-    <div class="section-header">
+    <div class="section-header ft-reveal">
+      <div class="section-logo-badge">
+        <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="section-logo">
+        <span class="logo-badge-text">POPULAR PICKS</span>
+      </div>
       <h2 class="section-title">Highlighted Tours</h2>
-      <p class="section-subtitle">Explore our best-rated experiences</p>
+      <p class="section-subtitle">Explore our best-rated experiences curated by our community</p>
     </div>
 
     <!-- Loading State -->
@@ -20,8 +24,11 @@
     </div>
 
     <!-- Tours Grid -->
-    <div *ngIf="!isLoading && highlightedTours.length > 0" class="tours-grid">
-      <div *ngFor="let tour of highlightedTours" class="tour-card" (click)="openTourPreview(tour)">
+    <div *ngIf="!isLoading && highlightedTours.length > 0" class="tours-grid ft-reveal">
+      <div *ngFor="let tour of highlightedTours; let i = index"
+           class="tour-card"
+           [style.--card-index]="i"
+           (click)="openTourPreview(tour)">
         <!-- Tour Image -->
         <div class="tour-image">
           <img [src]="tour.firstKeyPoint?.imageUrl || 'assets/images/pozadina.jpg'" 

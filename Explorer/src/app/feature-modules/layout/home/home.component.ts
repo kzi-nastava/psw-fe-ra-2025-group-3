@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Swiper se inicijalizuje nakon što se blogovi učitaju
+    setTimeout(() => this.initScrollReveal(), 500);
   }
 
   ngOnDestroy(): void {
@@ -213,6 +213,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   viewBlog(blogId: number): void {
-    this.router.navigate(['/blogs', blogId]);
+    this.router.navigate(['/demo']);
+  }
+
+  private initScrollReveal(): void {
+    const observerOptions: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '0px 0px -80px 0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   }
 }

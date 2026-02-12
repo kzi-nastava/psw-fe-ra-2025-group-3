@@ -29,11 +29,11 @@
 
         <!-- Dugmad vidljiva samo kada korisnik NIJE ulogovan -->
         <div class="hero-cta" *ngIf="!isLoggedIn">
-          <button class="btn btn-primary btn-xl" routerLink="/login">
+          <button class="btn btn-primary btn-xl" routerLink="/demo">
             <span>Explore Tours</span>
             <span class="btn-icon">✈</span>
           </button>
-          <button class="btn btn-secondary-outline btn-xl" routerLink="/register">
+          <button class="btn btn-secondary-outline btn-xl" routerLink="/demo">
             <span>Become a Guide</span>
             <span class="btn-icon">→</span>
           </button>
@@ -47,6 +47,7 @@
         <img src="assets/images/layout.png" alt="Travel Adventure" class="illustration-image">
       </div>
     </div>
+
   </section>
 
   <!-- ============================================================
@@ -59,7 +60,7 @@
        ============================================================ -->
   <section class="blog-section">
     <div class="container">
-      <div class="section-header text-center">
+      <div class="section-header text-center reveal reveal-up">
         <div class="section-logo-badge">
           <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="section-logo">
           <span class="logo-badge-text">TRAVEL STORIES</span>
@@ -82,7 +83,7 @@
       </div>
 
       <!-- Blog Grid - Desktop Only -->
-      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0 && !isMobile" class="blog-grid">
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0 && !isMobile" class="blog-grid reveal reveal-up">
         <div *ngFor="let blog of latestBlogs" class="blog-card" (click)="viewBlog(blog.id)">
           <!-- Blog Image -->
           <div class="blog-image-container">
@@ -173,8 +174,8 @@
       </div>
 
       <!-- View All Blogs Button -->
-      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0" class="view-all-blogs">
-        <button class="btn btn-outline-primary btn-lg" routerLink="/blogs">
+      <div *ngIf="!isLoadingBlogs && latestBlogs.length > 0" class="view-all-blogs reveal reveal-zoom">
+        <button class="btn btn-outline-primary btn-lg" routerLink="/demo">
           <span>View All Blogs</span>
           <span class="btn-icon">→</span>
         </button>
@@ -190,7 +191,7 @@
     <div class="guides-overlay"></div>
     <div class="container guides-container">
       <div class="guides-content">
-        <div class="guides-visual">
+        <div class="guides-visual reveal reveal-left">
           <div class="guides-image-container guides-logo-container">
             <img src="assets/images/travel-vista-logo.svg" alt="Travel Vista" class="guides-main-logo">
           </div>
@@ -206,7 +207,7 @@
           </div>
         </div>
 
-        <div class="guides-text">
+        <div class="guides-text reveal reveal-right">
           <div class="guides-header">
             <span class="section-badge light"> FOR LOCAL EXPERTS</span>
             <h2 class="section-title text-white">Become a Travel Vista Guide</h2>
@@ -259,7 +260,7 @@
 
           <!-- Dugme vidljivo samo kada korisnik NIJE ulogovan -->
           <div class="guides-cta-section" *ngIf="!isLoggedIn">
-            <button class="btn btn-white btn-xl" routerLink="/register">
+            <button class="btn btn-white btn-xl" routerLink="/demo">
               <span>Start Your Journey</span>
               <span class="btn-icon">→</span>
             </button>

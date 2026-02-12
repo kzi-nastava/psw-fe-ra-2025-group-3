@@ -22,8 +22,6 @@ import { MyWalletComponent } from './feature-modules/stakeholders/my-wallet/my-w
 import { MyWalletTransactionsComponent } from './feature-modules/stakeholders/my-wallet-transactions/my-wallet-transactions.component';
 import { TourHistoryComponent } from './feature-modules/tour-history/tour-history/tour-history.component';
 
-// **UBACENO**: AiModule
-import { AiModule } from './feature-modules/ai/ai.module';
 
 @NgModule({
   declarations: [
@@ -51,8 +49,6 @@ import { AiModule } from './feature-modules/ai/ai.module';
     StakeholdersModule,
     MarkdownModule.forRoot(),
 
-    // **UBACENO**: tvoj AiModule
-    AiModule,
     TourHistoryModule
   ],
   providers: [
