@@ -176,8 +176,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       .slice(0, 3);
     this.isLoadingBlogs = false;
 
-    // Inicijalizuj swiper nakon što se blogovi učitaju
-    setTimeout(() => this.initBlogSwiper(), 300);
+    // Ponovo pokreni scroll reveal i swiper nakon što se blogovi renderuju
+    setTimeout(() => {
+      this.initScrollReveal();
+      this.initBlogSwiper();
+    }, 300);
   }
 
   // 🔹 Blog Helper Methods

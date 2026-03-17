@@ -95,7 +95,7 @@
 /* Glassmorphism Card */
 .demo-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 77, 64, 0.65);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border-radius: 32px;
@@ -236,6 +236,30 @@
   width: 80px;
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(77, 208, 225, 0.6), transparent);
+}
+
+.demo-links {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin-bottom: 0.4rem;
+  text-align: left;
+  word-break: break-word;
+}
+
+.demo-links:last-child {
+  margin-bottom: 0;
+}
+
+.demo-links a {
+  color: #80DEEA;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.demo-links a:hover {
+  color: #B2EBF2;
 }
 
 /* Message */

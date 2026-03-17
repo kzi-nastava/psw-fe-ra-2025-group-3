@@ -147,8 +147,8 @@
 
 .tours-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
   margin-bottom: var(--spacing-16);
   align-items: stretch;
 }
@@ -173,7 +173,7 @@
 
 .tour-image {
   position: relative;
-  height: 220px;
+  height: 160px;
   overflow: hidden;
 }
 
@@ -225,7 +225,7 @@
 }
 
 .tour-content {
-  padding: 1.75rem 1.5rem;
+  padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -233,12 +233,12 @@
 
 .tour-title {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-xl);
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-primary-800);
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--spacing-2);
   line-height: 1.3;
-  min-height: 3.25rem;
+  min-height: 2.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -365,7 +365,7 @@
 
 .price-amount {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-primary-500);
 }
@@ -380,7 +380,7 @@
 
 .discounted-price {
   color: var(--color-error);
-  font-size: var(--font-size-3xl);
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.1;
 }
@@ -469,8 +469,19 @@
 
 @media (max-width: 1024px) {
   .tours-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .tour-image {
+    height: 140px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tours-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 }
 
